@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" width="100%" height="100%">
+  <defs>
+    <linearGradient id="pgGradientMain" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1B396A" />
+      <stop offset="100%" stop-color="#0F2447" />
+    </linearGradient>
+    <linearGradient id="pgGradientAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E75C3" />
+      <stop offset="100%" stop-color="#0D4B8B" />
+    </linearGradient>
+  </defs>
+
+  <g transform="translate(10, 10)">
+    <!-- Outer P Curve -->
+    <path d="M 50 15 
+             C 85 15, 125 25, 125 60 
+             C 125 90, 95 105, 65 105 
+             L 65 135 
+             C 65 145, 45 145, 45 135 
+             L 45 35 
+             C 45 20, 48 15, 50 15 Z" 
+          fill="url(#pgGradientMain)" />
+
+    <!-- Inner P Hole -->
+    <path d="M 65 38 
+             L 80 38 
+             C 98 38, 102 48, 102 60 
+             C 102 72, 92 82, 75 82 
+             L 65 82 Z" 
+          fill="#FFFFFF" />
+
+    <!-- G Loop / Swoosh -->
+    <path d="M 70 85 
+             C 100 85, 130 95, 130 118 
+             C 130 140, 95 148, 65 148 
+             C 40 148, 25 132, 28 112 
+             C 30 102, 44 102, 47 110 
+             C 50 120, 58 128, 72 128 
+             C 90 128, 105 120, 105 110 
+             C 105 102, 90 98, 70 98 Z" 
+          fill="url(#pgGradientAccent)" />
+
+    <!-- Top Left Feather / Curve Accent -->
+    <path d="M 38 45 
+             C 32 30, 42 18, 58 14 
+             C 48 20, 42 30, 44 42 Z" 
+          fill="#1E75C3" />
+  </g>
+</svg>
