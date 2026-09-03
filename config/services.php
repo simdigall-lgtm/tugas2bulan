@@ -31,4 +31,9 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'turnstile' => [
+        'site_key' => env('TURNSTILE_SITE_KEY', '0x4AAAAAAElX-y-BGcmshHBP'),
+        'secret_key' => env('TURNSTILE_SECRET_KEY', '0x4AAAAAAElX-4ZoZduubMkixNOHAGTnqqQ'),
+    ],
+
 ];

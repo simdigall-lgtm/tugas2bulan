@@ -3,12 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Pembayaran - CV Prima Grafika</title>
+    <title>Kelola Pembayaran - SIPEKAN</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        /* Hide number input spin buttons (up/down arrows) */
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none !important;
+            margin: 0 !important;
+        }
+        input[type=number] {
+            -moz-appearance: textfield !important;
+            appearance: textfield !important;
+        }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif; }
         body { background-color:#F8FAFC; color:#1E293B; display:flex; min-height:100vh; }
 
@@ -57,8 +67,8 @@
         .filter-search .search-icon { left:11px; font-size:13px; }
 
         .custom-table { width:100%; border-collapse:collapse; text-align:left; }
-        .custom-table th { background:#FFFFFF; padding:12px 14px; font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #E2E8F0; white-space:nowrap; }
-        .custom-table td { padding:14px; font-size:13px; color:#334155; border-bottom:1px solid #F1F5F9; font-weight:500; vertical-align:middle; }
+        .custom-table th { background:#FFFFFF; padding:12px 16px; font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #E2E8F0; white-space:nowrap; }
+        .custom-table td { padding:14px 16px; font-size:13px; color:#334155; border-bottom:1px solid #F1F5F9; font-weight:500; vertical-align:middle; white-space:nowrap; }
         .custom-table tr:last-child td { border-bottom:none; }
         .custom-table tr:hover td { background:#F8FAFC; }
 
@@ -71,9 +81,9 @@
 
         .table-footer { padding-top:16px; margin-top:8px; display:flex; align-items:center; justify-content:space-between; border-top:1px solid #E2E8F0; }
         .entry-info { font-size:12px; color:#64748B; font-weight:500; }
-        .pagination { display:flex; align-items:center; gap:4px; }
-        .page-btn { min-width:80px; height:32px; padding:0 12px; border-radius:6px; border:1px solid #E2E8F0; background:#FFFFFF; color:#475569; font-size:12.5px; font-weight:600; cursor:pointer; }
-        .page-btn.active { background:#1B3B6F; border-color:#1B3B6F; color:#FFFFFF; font-weight:700; min-width:32px; }
+        .pagination { display:flex; align-items:center; gap:6px; }
+        .page-btn { min-width:32px; height:32px; padding:0 8px; border-radius:6px; border:1px solid #E2E8F0; background:#FFFFFF; color:#475569; font-size:12.5px; font-weight:600; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+        .page-btn.active { background:#1B3B6F; border-color:#1B3B6F; color:#FFFFFF; font-weight:700; }
 
         /* Responsive Adjustments */
         @media (max-width: 768px) {
@@ -98,6 +108,20 @@
                 <p class="page-subtitle">Catat dan lacak pembayaran pelanggan.</p>
             </div>
 
+            @if(session('error'))
+                <div class="alert alert-danger" style="padding: 12px 16px; background: #FEF2F2; color: #991B1B; border: 1px solid #FCA5A5; border-radius: 8px; margin-bottom: 20px; font-weight: 600; font-size: 13.5px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span>{{ session('error') }}</span>
+                </div>
+            @endif
+
+            @if(session('success'))
+                <div class="alert alert-success" style="padding: 12px 16px; background: #F0FDF4; color: #166534; border: 1px solid #86EFAC; border-radius: 8px; margin-bottom: 20px; font-weight: 600; font-size: 13.5px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+
             <div class="grid-2col">
                 <!-- Left Card - Form Pembayaran Baru -->
                 <div class="card">
@@ -106,37 +130,41 @@
                         <h2 class="card-title" style="margin-bottom:0;">Pembayaran Baru</h2>
                     </div>
 
-                    <form>
+                    <form action="{{ route('pembayaran.store') }}" method="POST">
+                        @csrf
                         <div class="form-group">
                             <label for="payOrder">Pilih Pesanan</label>
-                            <select id="payOrder" class="form-control">
+                            <select name="kode_pesanan" id="payOrder" class="form-control" required>
                                 <option value="">Pilih pesanan...</option>
-                                <option value="ORD-2023-045">ORD-2023-045 – PT. Abadi Jaya</option>
-                                <option value="ORD-2023-042">ORD-2023-042 – CV. Karya Abadi</option>
-                                <option value="ORD-2023-039">ORD-2023-039 – Ibu Hani</option>
-                                <option value="ORD-2023-035">ORD-2023-035 – UD. Sumber Rejeki</option>
+                                @foreach($pesanans ?? [] as $p)
+                                    @php
+                                        $isAlreadyLunas = in_array($p->kode_pesanan, $lunasOrderCodes ?? []) || strtolower($p->status ?? '') === 'lunas' || strtolower($p->status ?? '') === 'selesai';
+                                    @endphp
+                                    <option value="{{ $p->kode_pesanan }}" data-harga="{{ $p->total_harga }}" {{ $isAlreadyLunas ? 'disabled style=color:#94A3B8;background:#F1F5F9;' : '' }}>
+                                        {{ $p->kode_pesanan }} – {{ $p->nama_pelanggan }} (Rp {{ number_format($p->total_harga, 0, ',', '.') }}) {{ $isAlreadyLunas ? ' [LUNAS]' : '' }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label for="payDate">Tanggal Pembayaran</label>
-                            <input type="date" id="payDate" class="form-control">
+                            <input type="date" name="tanggal_bayar" id="payDate" class="form-control" value="{{ date('Y-m-d') }}" required>
                         </div>
 
                         <div class="form-group">
                             <label for="payMethod">Metode Pembayaran</label>
-                            <select id="payMethod" class="form-control">
+                            <select name="metode_pembayaran" id="payMethod" class="form-control" required>
                                 <option value="">Pilih metode...</option>
                                 <option value="Transfer Bank">Transfer Bank</option>
                                 <option value="QRIS">QRIS</option>
                                 <option value="Tunai">Tunai</option>
-                                <option value="Kartu Debit">Kartu Debit</option>
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label for="payAmount">Jumlah (IDR)</label>
-                            <input type="text" id="payAmount" class="form-control" placeholder="Rp 0">
+                            <input type="number" name="jumlah" id="payAmount" class="form-control" min="0" step="1000" placeholder="900000" required>
                         </div>
 
                         <button type="submit" class="btn-submit">
@@ -152,12 +180,12 @@
                         <h2 class="card-title" style="margin-bottom:0;">Pembayaran Terbaru</h2>
                         <div class="filter-search">
                             <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                            <input type="text" placeholder="Cari pembayaran...">
+                            <input type="text" id="paySearchInput" placeholder="Cari pembayaran...">
                         </div>
                     </div>
 
                     <div class="table-responsive">
-                        <table class="custom-table">
+                        <table class="custom-table" id="payTable">
                             <thead>
                                 <tr>
                                     <th>NO. PEMBAYARAN</th>
@@ -166,76 +194,57 @@
                                     <th>METODE</th>
                                     <th>JUMLAH</th>
                                     <th>STATUS</th>
+                                    <th style="text-align:right;">AKSI</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @forelse($pembayarans ?? [] as $pem)
                                 <tr>
-                                    <td class="pay-id">PAY-1007</td>
-                                    <td><a href="#" class="order-link">ORD-2023-045</a></td>
-                                    <td>27 Okt 2023</td>
-                                    <td>Transfer Bank</td>
-                                    <td>Rp 2.450.000</td>
-                                    <td><span class="status-badge status-menunggu">Menunggu Verifikasi</span></td>
+                                    <td class="pay-id">{{ $pem->kode_pembayaran }}</td>
+                                    <td><a href="{{ route('pesanan') }}" class="order-link">{{ $pem->kode_pesanan }}</a></td>
+                                    <td>{{ $pem->tanggal_bayar ? \Carbon\Carbon::parse($pem->tanggal_bayar)->format('d M Y') : ($pem->tanggal ? \Carbon\Carbon::parse($pem->tanggal)->format('d M Y') : '-') }}</td>
+                                    <td>{{ $pem->metode_pembayaran ?? $pem->metode }}</td>
+                                    <td>Rp {{ number_format($pem->jumlah, 0, ',', '.') }}</td>
+                                    <td><span class="status-badge {{ strtolower($pem->status) == 'lunas' ? 'status-lunas' : 'status-menunggu' }}">{{ $pem->status }}</span></td>
+                                    <td style="text-align:right;">
+                                        @if(strtolower($pem->status) == 'lunas')
+                                            <span style="color: #94A3B8; font-weight: 500;">-</span>
+                                        @else
+                                            <div class="action-dropdown" style="position:relative; display:inline-block;">
+                                                <button type="button" class="action-icon-btn action-toggle" title="Aksi" style="background:none; border:none; color:#94A3B8; font-size:16px; cursor:pointer; width:32px; height:32px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center;"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                                <div class="dropdown-menu">
+                                                    <form action="{{ route('pembayaran.update', $pem->id) }}" method="POST" style="display:block;">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <input type="hidden" name="status" value="Lunas">
+                                                        <button type="submit" class="dropdown-item" style="color:#16A34A; font-weight:600;"><i class="fa-solid fa-circle-check" style="color:#16A34A;"></i> Tandai Lunas</button>
+                                                    </form>
+                                                    <form action="{{ route('pembayaran.destroy', $pem->id) }}" method="POST" style="display:block;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data pembayaran ini?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="dropdown-item danger"><i class="fa-regular fa-trash-can"></i> Hapus</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </td>
                                 </tr>
+                                @empty
                                 <tr>
-                                    <td class="pay-id">PAY-1006</td>
-                                    <td><a href="#" class="order-link">ORD-2023-042</a></td>
-                                    <td>27 Okt 2023</td>
-                                    <td>QRIS</td>
-                                    <td>Rp 125.000</td>
-                                    <td><span class="status-badge status-lunas">Lunas</span></td>
+                                    <td colspan="7" style="text-align:center; padding:20px; color:#64748B;">Belum ada data pembayaran di database.</td>
                                 </tr>
-                                <tr>
-                                    <td class="pay-id">PAY-1005</td>
-                                    <td><a href="#" class="order-link">ORD-2023-039</a></td>
-                                    <td>26 Okt 2023</td>
-                                    <td>Tunai</td>
-                                    <td>Rp 500.000</td>
-                                    <td><span class="status-badge status-lunas">Lunas</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="pay-id">PAY-1004</td>
-                                    <td><a href="#" class="order-link">ORD-2023-035</a></td>
-                                    <td>25 Okt 2023</td>
-                                    <td>Transfer Bank</td>
-                                    <td>Rp 3.200.000</td>
-                                    <td><span class="status-badge status-lunas">Lunas</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="pay-id">PAY-1003</td>
-                                    <td><a href="#" class="order-link">ORD-2023-018</a></td>
-                                    <td>23 Okt 2023</td>
-                                    <td>QRIS</td>
-                                    <td>Rp 75.000</td>
-                                    <td><span class="status-badge status-menunggu">Menunggu Verifikasi</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="pay-id">PAY-1002</td>
-                                    <td><a href="#" class="order-link">ORD-2023-014</a></td>
-                                    <td>24 Okt 2023</td>
-                                    <td>Tunai</td>
-                                    <td>Rp 250.000</td>
-                                    <td><span class="status-badge status-lunas">Lunas</span></td>
-                                </tr>
-                                <tr>
-                                    <td class="pay-id">PAY-1001</td>
-                                    <td><a href="#" class="order-link">ORD-2023-001</a></td>
-                                    <td>24 Okt 2023</td>
-                                    <td>Transfer Bank</td>
-                                    <td>Rp 1.500.000</td>
-                                    <td><span class="status-badge status-lunas">Lunas</span></td>
-                                </tr>
+                                @endforelse
                             </tbody>
                         </table>
                     </div>
 
                     <div class="table-footer">
-                        <div class="entry-info">Menampilkan 1 hingga 7 dari 42 data</div>
+                        <div class="entry-info">Menampilkan {{ count($pembayarans ?? []) }} data pembayaran</div>
                         <div class="pagination">
-                            <button class="page-btn">Sebelumnya</button>
+                            <button class="page-btn"><i class="fa-solid fa-chevron-left" style="font-size: 11px;"></i></button>
                             <button class="page-btn active">1</button>
-                            <button class="page-btn" style="min-width:32px;">2</button>
-                            <button class="page-btn">Selanjutnya</button>
+                            <button class="page-btn">2</button>
+                            <button class="page-btn"><i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i></button>
                         </div>
                     </div>
                 </div>
@@ -243,6 +252,120 @@
             </div>
         </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const payForm = document.querySelector('form');
+            const payTable = document.getElementById('payTable');
+            const tbody = payTable ? payTable.querySelector('tbody') : null;
+            const entryInfo = document.querySelector('.entry-info');
+            const paginationEl = document.querySelector('.pagination');
+            const paySearchInput = document.getElementById('paySearchInput');
+            const payOrderSelect = document.getElementById('payOrder');
+            const payAmountInput = document.getElementById('payAmount');
+
+            if (payOrderSelect && payAmountInput) {
+                payOrderSelect.addEventListener('change', function() {
+                    const selectedOption = this.options[this.selectedIndex];
+                    const harga = selectedOption ? selectedOption.getAttribute('data-harga') : '';
+                    if (harga) {
+                        payAmountInput.value = harga;
+                    }
+                });
+            }
+
+            let payCounter = 8;
+            let currentPage = 1;
+            const itemsPerPage = 5;
+
+            function updatePagination() {
+                if (!tbody) return;
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                const visibleRows = rows.filter(r => r.getAttribute('data-search-hidden') !== 'true');
+                const totalItems = visibleRows.length;
+                const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+
+                if (currentPage > totalPages) currentPage = totalPages;
+
+                const startIdx = (currentPage - 1) * itemsPerPage;
+                const endIdx = startIdx + itemsPerPage;
+
+                rows.forEach(r => r.style.display = 'none');
+                visibleRows.slice(startIdx, endIdx).forEach(r => r.style.display = '');
+
+                if (entryInfo) {
+                    const startShow = totalItems === 0 ? 0 : startIdx + 1;
+                    const endShow = Math.min(endIdx, totalItems);
+                    entryInfo.textContent = `Menampilkan ${startShow} hingga ${endShow} dari ${totalItems} data`;
+                }
+
+                if (paginationEl) {
+                    paginationEl.innerHTML = '';
+
+                    const prevBtn = document.createElement('button');
+                    prevBtn.className = 'page-btn';
+                    prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left" style="font-size: 11px;"></i>';
+                    prevBtn.disabled = currentPage === 1;
+                    prevBtn.style.opacity = currentPage === 1 ? '0.5' : '1';
+                    prevBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; updatePagination(); } });
+                    paginationEl.appendChild(prevBtn);
+
+                    for (let i = 1; i <= totalPages; i++) {
+                        const pBtn = document.createElement('button');
+                        pBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                        pBtn.textContent = i;
+                        pBtn.addEventListener('click', () => { currentPage = i; updatePagination(); });
+                        paginationEl.appendChild(pBtn);
+                    }
+
+                    const nextBtn = document.createElement('button');
+                    nextBtn.className = 'page-btn';
+                    nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i>';
+                    nextBtn.disabled = currentPage === totalPages;
+                    nextBtn.style.opacity = currentPage === totalPages ? '0.5' : '1';
+                    nextBtn.addEventListener('click', () => { if (currentPage < totalPages) { currentPage++; updatePagination(); } });
+                    paginationEl.appendChild(nextBtn);
+                }
+            }
+
+            // Let payForm submit natively to controller route
+
+            if (tbody) {
+                updatePagination();
+            }
+
+            if (paySearchInput && payTable) {
+                paySearchInput.addEventListener('keyup', function() {
+                    const q = this.value.toLowerCase();
+                    const rows = payTable.querySelectorAll('tbody tr');
+                    rows.forEach(r => {
+                        if (r.textContent.toLowerCase().includes(q)) {
+                            r.removeAttribute('data-search-hidden');
+                        } else {
+                            r.setAttribute('data-search-hidden', 'true');
+                        }
+                    });
+                    currentPage = 1;
+                    updatePagination();
+                });
+            }
+
+            // Dropdown toggle handler
+            document.addEventListener('click', function(e) {
+                const toggle = e.target.closest('.action-toggle');
+                if (toggle) {
+                    e.stopPropagation();
+                    const menu = toggle.nextElementSibling;
+                    document.querySelectorAll('.dropdown-menu').forEach(m => {
+                        if (m !== menu) m.classList.remove('show');
+                    });
+                    if (menu) menu.classList.toggle('show');
+                } else {
+                    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+                }
+            });
+        });
+    </script>
 
     @include('layouts.navbar_assets')
 </body>

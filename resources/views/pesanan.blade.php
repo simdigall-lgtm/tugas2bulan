@@ -3,11 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Pesanan - CV Prima Grafika</title>
+    <title>Kelola Pesanan - SIPEKAN</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
+        /* Hide number input spin buttons (up/down arrows) */
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none !important;
+            margin: 0 !important;
+        }
+        input[type=number] {
+            -moz-appearance: textfield !important;
+            appearance: textfield !important;
+        }
         *{margin:0;padding:0;box-sizing:border-box;font-family:'Plus Jakarta Sans',sans-serif;}
         body{background:#F8FAFC;color:#1E293B;display:flex;min-height:100vh;}
         .sidebar{width:250px;background:#fff;border-right:1px solid #E2E8F0;display:flex;flex-direction:column;justify-content:space-between;position:fixed;top:0;bottom:0;left:0;z-index:100;}
@@ -39,8 +49,8 @@
         .btn-primary{background:#1B3B6F;color:#fff;border:none;padding:10px 18px;border-radius:8px;font-size:13.5px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;}
         .card{background:#fff;border-radius:12px;border:1px solid #E2E8F0;overflow:hidden;}
         table{width:100%;border-collapse:collapse;text-align:left;}
-        thead th{padding:13px 20px;font-size:11.5px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #E2E8F0;background:#fff;}
-        tbody td{padding:16px 20px;font-size:13.5px;color:#334155;font-weight:500;border-bottom:1px solid #F1F5F9;vertical-align:middle;}
+        thead th{padding:13px 20px;font-size:11.5px;font-weight:700;color:#64748B;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid #E2E8F0;background:#fff;white-space:nowrap;}
+        tbody td{padding:16px 20px;font-size:13.5px;color:#334155;font-weight:500;border-bottom:1px solid #F1F5F9;vertical-align:middle;white-space:nowrap;}
         tbody tr:last-child td{border-bottom:none;}
         tbody tr:hover td{background:#F8FAFC;}
         .order-code{color:#1E3A8A;font-weight:700;white-space:nowrap;}
@@ -51,8 +61,15 @@
         .badge-menunggu{background:#FEF3C7;color:#D97706;}
         .badge-diproses{background:#DBEAFE;color:#2563EB;}
         .badge-selesai{background:#DCFCE7;color:#16A34A;}
-        .action-btn{background:none;border:none;color:#94A3B8;font-size:16px;cursor:pointer;width:30px;height:30px;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;}
-        .action-btn:hover{background:#F1F5F9;color:#1E3A8A;}
+        .action-dropdown { position: relative; display: inline-block; text-align: left; }
+        .action-icon-btn { background: none; border: none; color: #94A3B8; font-size: 16px; cursor: pointer; width: 32px; height: 32px; border-radius: 6px; display: inline-flex; align-items: center; justify-content: center; transition: all 0.2s ease; }
+        .action-icon-btn:hover { color: #1E3A8A; background-color: #F1F5F9; }
+        .dropdown-menu { position: absolute; right: 0; top: 100%; margin-top: 4px; background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); min-width: 120px; z-index: 50; display: none; flex-direction: column; padding: 4px 0; }
+        .dropdown-menu.show { display: flex; }
+        .dropdown-item { display: flex; align-items: center; gap: 8px; padding: 8px 14px; font-size: 13px; font-weight: 600; color: #334155; text-decoration: none; transition: background 0.15s ease; text-align: left; background: none; border: none; width: 100%; cursor: pointer; }
+        .dropdown-item:hover { background-color: #F1F5F9; color: #1E3A8A; }
+        .dropdown-item.danger { color: #EF4444; }
+        .dropdown-item.danger:hover { background-color: #FEF2F2; color: #DC2626; }
         .table-footer{padding:16px 20px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #E2E8F0;}
         .entry-info{font-size:12.5px;color:#64748B;}
         .pagination{display:flex;align-items:center;gap:4px;}
@@ -65,6 +82,20 @@
             .btn-primary { width: 100%; justify-content: center; }
             .table-footer { flex-direction: column; gap: 16px; }
         }
+        /* Modal Styling */
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; opacity: 0; visibility: hidden; transition: all 0.2s ease; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal-box { background: #FFFFFF; border-radius: 12px; width: 100%; max-width: 500px; padding: 28px; box-shadow: 0 20px 40px rgba(0,0,0,0.15); transform: translateY(-10px); transition: transform 0.2s ease; }
+        .modal-overlay.active .modal-box { transform: translateY(0); }
+        .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+        .modal-title { font-size: 18px; font-weight: 800; color: #0F172A; }
+        .close-modal-btn { background: none; border: none; color: #94A3B8; font-size: 18px; cursor: pointer; }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px; }
+        .form-group input, .form-group select { width: 100%; border: 1px solid #CBD5E1; border-radius: 8px; padding: 10px 14px; font-size: 13.5px; color: #0F172A; outline: none; background: #fff; }
+        .modal-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; }
+        .btn-cancel { background: #F1F5F9; color: #475569; border: none; padding: 9px 18px; border-radius: 8px; font-weight: 600; font-size: 13.5px; cursor: pointer; }
+        .btn-save { background: #1B3B6F; color: #FFFFFF; border: none; padding: 9px 20px; border-radius: 8px; font-weight: 700; font-size: 13.5px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -84,7 +115,7 @@
                     <i class="fa-solid fa-magnifying-glass"></i>
                     <input type="text" placeholder="Cari kode, pelanggan...">
                 </div>
-                <button class="btn-primary"><i class="fa-solid fa-plus"></i> Buat Pesanan Baru</button>
+                <button class="btn-primary" id="openOrderModal"><i class="fa-solid fa-plus"></i> Buat Pesanan Baru</button>
             </div>
         </div>
 
@@ -96,126 +127,381 @@
                         <th>KODE</th>
                         <th>PELANGGAN</th>
                         <th>PRODUK</th>
-                        <th>JML &amp; UKURAN</th>
+                        <th>JUMLAH</th>
+                        <th>UKURAN</th>
                         <th>TOTAL HARGA</th>
                         <th>STATUS</th>
                         <th style="text-align:right;">AKSI</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @forelse($pesanans ?? [] as $pesanan)
+                    @php
+                        $rawJU = $pesanan->jumlah_ukuran ?? '-';
+                        preg_match('/^(.*?)(?:\s*\((.*?)\))?$/', $rawJU, $m);
+                        $jVal = !empty($m[1]) ? trim($m[1]) : $rawJU;
+                        $uVal = !empty($m[2]) ? trim($m[2]) : '';
+                        if (is_numeric($jVal)) {
+                            $jVal .= ' Pcs';
+                        }
+                    @endphp
                     <tr>
-                        <td class="order-code">ORD-2023-007</td>
+                        <td class="order-code">{{ $pesanan->kode_pesanan }}</td>
                         <td>
                             <div class="customer-cell">
-                                <div class="avatar-init" style="background:#DBEAFE;color:#1D4ED8;">PT</div>
-                                <span>PT. Maju Bersama</span>
+                                <div class="avatar-init" style="background:#DBEAFE;color:#1D4ED8;">
+                                    {{ strtoupper(substr($pesanan->nama_pelanggan, 0, 2)) }}
+                                </div>
+                                <span>{{ $pesanan->nama_pelanggan }}</span>
                             </div>
                         </td>
-                        <td>Brosur A4 Lipat 3</td>
-                        <td><div>1000 pcs</div><div class="product-sub">A4 (21 × 29,7 cm)</div></td>
-                        <td>Rp 1.500.000</td>
-                        <td><span class="badge badge-diproses">Diproses</span></td>
-                        <td style="text-align:right;"><button class="action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
+                        <td>{{ $pesanan->nama_produk }}</td>
+                        <td style="font-weight: 700; color: #0F172A;">{{ $jVal }}</td>
+                        <td>
+                            <span class="size-badge" style="display:inline-flex; align-items:center; gap:4px; font-size:11.5px; font-weight:700; color:#475569; background:#F1F5F9; border:1px solid #CBD5E1; padding:3px 8px; border-radius:6px;">
+                                <i class="fa-solid fa-ruler-combined" style="font-size:10px; color:#64748B;"></i> {{ $uVal ?: 'Standard' }}
+                            </span>
+                        </td>
+                        <td>Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}</td>
+                        <td>
+                            <span class="badge {{ strtolower($pesanan->status) == 'selesai' ? 'badge-selesai' : (strtolower($pesanan->status) == 'diproses' ? 'badge-diproses' : 'badge-menunggu') }}">
+                                {{ $pesanan->status }}
+                            </span>
+                        </td>
+                        <td style="text-align:right;">
+                            <div class="action-dropdown">
+                                <button type="button" class="action-icon-btn action-toggle" title="Aksi"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                <div class="dropdown-menu">
+                                    <button type="button" class="dropdown-item" onclick="editPesanan({{ json_encode($pesanan) }})"><i class="fa-regular fa-pen-to-square"></i> Edit</button>
+                                    <form action="{{ route('pesanan.destroy', $pesanan->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pesanan {{ $pesanan->kode_pesanan }}?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="dropdown-item danger"><i class="fa-regular fa-trash-can"></i> Hapus</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </td>
                     </tr>
+                    @empty
                     <tr>
-                        <td class="order-code">ORD-2023-006</td>
-                        <td>
-                            <div class="customer-cell">
-                                <div class="avatar-init" style="background:#DCFCE7;color:#15803D;">CV</div>
-                                <span>CV. Karya Abadi</span>
-                            </div>
-                        </td>
-                        <td>Kartu Nama 2 Sisi</td>
-                        <td><div>5 box</div><div class="product-sub">9 × 5,5 cm</div></td>
-                        <td>Rp 125.000</td>
-                        <td><span class="badge badge-selesai">Selesai</span></td>
-                        <td style="text-align:right;"><button class="action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
+                        <td colspan="8" style="text-align:center; padding:20px; color:#64748B;">Belum ada pesanan di database.</td>
                     </tr>
-                    <tr>
-                        <td class="order-code">ORD-2023-005</td>
-                        <td>
-                            <div class="customer-cell">
-                                <div class="avatar-init" style="background:#FEF3C7;color:#D97706;">IH</div>
-                                <span>Ibu Hani</span>
-                            </div>
-                        </td>
-                        <td>Spanduk Vinyl 280gr</td>
-                        <td><div>1 pcs</div><div class="product-sub">400 × 100 cm</div></td>
-                        <td>Rp 80.000</td>
-                        <td><span class="badge badge-menunggu">Menunggu</span></td>
-                        <td style="text-align:right;"><button class="action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
-                    </tr>
-                    <tr>
-                        <td class="order-code">ORD-2023-004</td>
-                        <td>
-                            <div class="customer-cell">
-                                <div class="avatar-init" style="background:#EDE9FE;color:#7C3AED;">UD</div>
-                                <span>UD. Sumber Rejeki</span>
-                            </div>
-                        </td>
-                        <td>Stiker Kromo A3+</td>
-                        <td><div>50 lembar</div><div class="product-sub">32 × 48 cm</div></td>
-                        <td>Rp 350.000</td>
-                        <td><span class="badge badge-diproses">Diproses</span></td>
-                        <td style="text-align:right;"><button class="action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
-                    </tr>
-                    <tr>
-                        <td class="order-code">ORD-2023-003</td>
-                        <td>
-                            <div class="customer-cell">
-                                <div class="avatar-init" style="background:#DBEAFE;color:#1D4ED8;">PT</div>
-                                <span>PT. Global Tech</span>
-                            </div>
-                        </td>
-                        <td>Company Profile</td>
-                        <td><div>20 buku</div><div class="product-sub">A4, 12 Halaman</div></td>
-                        <td>Rp 2.400.000</td>
-                        <td><span class="badge badge-selesai">Selesai</span></td>
-                        <td style="text-align:right;"><button class="action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
-                    </tr>
-                    <tr>
-                        <td class="order-code">ORD-2023-002</td>
-                        <td>
-                            <div class="customer-cell">
-                                <div class="avatar-init" style="background:#FEF3C7;color:#D97706;">BP</div>
-                                <span>Bpk. Budi</span>
-                            </div>
-                        </td>
-                        <td>Undangan Pernikahan</td>
-                        <td><div>300 pcs</div><div class="product-sub">Custom 15×15 cm</div></td>
-                        <td>Rp 1.800.000</td>
-                        <td><span class="badge badge-menunggu">Menunggu</span></td>
-                        <td style="text-align:right;"><button class="action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
-                    </tr>
-                    <tr>
-                        <td class="order-code">ORD-2023-001</td>
-                        <td>
-                            <div class="customer-cell">
-                                <div class="avatar-init" style="background:#DCFCE7;color:#15803D;">CV</div>
-                                <span>CV. Media Kreatif</span>
-                            </div>
-                        </td>
-                        <td>Poster A2 Glossy</td>
-                        <td><div>10 pcs</div><div class="product-sub">42 × 59,4 cm</div></td>
-                        <td>Rp 450.000</td>
-                        <td><span class="badge badge-selesai">Selesai</span></td>
-                        <td style="text-align:right;"><button class="action-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
-                     </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
             <div class="table-footer">
-                <div class="entry-info">Menampilkan 1-7 dari 24 pesanan</div>
+                <div class="entry-info">Menampilkan {{ count($pesanans ?? []) }} pesanan</div>
                 <div class="pagination">
                     <button class="page-btn"><i class="fa-solid fa-chevron-left" style="font-size:11px;"></i></button>
                     <button class="page-btn active">1</button>
-                    <button class="page-btn">2</button>
                     <button class="page-btn"><i class="fa-solid fa-chevron-right" style="font-size:11px;"></i></button>
                 </div>
             </div>
         </div>
     </main>
 </div>
-@include('layouts.navbar_assets')
+
+    <!-- Modal Form Buat & Edit Pesanan -->
+    <div class="modal-overlay" id="orderModalOverlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 class="modal-title" id="orderModalTitle">Buat Pesanan Baru</h3>
+                <button class="close-modal-btn" id="closeOrderModalBtn">&times;</button>
+            </div>
+            <form id="addOrderForm" action="{{ route('pesanan.store') }}" method="POST">
+                @csrf
+                <input type="hidden" name="_method" id="orderFormMethod" value="POST">
+                <div class="form-group">
+                    <label for="ordCustomer">Nama Pelanggan</label>
+                    <input type="text" name="nama_pelanggan" id="ordCustomer" list="pelangganList" required placeholder="Pilih atau ketik nama pelanggan..." autocomplete="off">
+                    <datalist id="pelangganList">
+                        @foreach($pelanggans ?? [] as $pel)
+                            <option value="{{ $pel->nama }}">{{ $pel->kode_pelanggan }} - {{ $pel->nama }}</option>
+                        @endforeach
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label for="ordProduct">Nama Produk</label>
+                    <input type="text" name="nama_produk" id="ordProduct" list="productList" required placeholder="Pilih dari daftar produk atau ketik sendiri..." autocomplete="off">
+                    <datalist id="productList">
+                        @foreach($produks ?? [] as $prod)
+                            <option value="{{ $prod->nama_produk }}">{{ $prod->kode_produk }} - {{ $prod->nama_produk }} (Rp {{ number_format($prod->harga, 0, ',', '.') }})</option>
+                        @endforeach
+                    </datalist>
+                </div>
+                <!-- Split Jumlah & Ukuran Fields -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="ordJumlah">Jumlah Pesanan (Qty)</label>
+                        <div style="display: flex; gap: 6px;">
+                            <input type="number" name="jumlah_val" id="ordJumlah" min="1" required placeholder="100" style="flex: 1;">
+                            <select name="jumlah_unit" id="ordJumlahUnit" style="width: 90px; border: 1px solid #CBD5E1; border-radius: 8px; padding: 9px 8px; font-size: 13.5px; font-weight: 600; color: #1E293B; outline: none; background: #F8FAFC; cursor: pointer;">
+                                <option value="Pcs">Pcs</option>
+                                <option value="Box">Box</option>
+                                <option value="Rim">Rim</option>
+                                <option value="Lembar">Lembar</option>
+                                <option value="Meter">Meter</option>
+                                <option value="Set">Set</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label for="ordUkuran">Ukuran Produk (Size)</label>
+                        <input type="text" name="ukuran_val" id="ordUkuran" placeholder="Contoh: A4, A3+, 3x1 m" list="ukuranList" autocomplete="off">
+                        <datalist id="ukuranList">
+                            <option value="A4 (21 x 29.7 cm)">
+                            <option value="A5 (14.8 x 21 cm)">
+                            <option value="A3+ (32 x 48 cm)">
+                            <option value="Kartu Nama (9 x 5.5 cm)">
+                            <option value="3 x 1 Meter">
+                            <option value="2 x 1 Meter">
+                            <option value="Standard">
+                        </datalist>
+                    </div>
+                </div>
+                <input type="hidden" name="jumlah_ukuran" id="ordJumlahUkuran">
+                <div class="form-group">
+                    <label for="ordPrice">Total Harga (IDR)</label>
+                    <input type="number" name="total_harga" id="ordPrice" min="0" step="1000" required placeholder="900000">
+                </div>
+                <div class="form-group">
+                    <label for="ordStatus">Status Pesanan</label>
+                    <select name="status" id="ordStatus" required>
+                        <option value="Menunggu">Menunggu</option>
+                        <option value="Diproses" selected>Diproses</option>
+                        <option value="Selesai">Selesai</option>
+                    </select>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" id="cancelOrderModalBtn">Batal</button>
+                    <button type="submit" class="btn-save" id="saveOrderBtn">Simpan Pesanan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const modalOverlay = document.getElementById('orderModalOverlay');
+            const openBtn = document.getElementById('openOrderModal');
+            const closeBtn = document.getElementById('closeOrderModalBtn');
+            const cancelBtn = document.getElementById('cancelOrderModalBtn');
+            const form = document.getElementById('addOrderForm');
+            const modalTitle = document.getElementById('orderModalTitle');
+            const saveBtn = document.getElementById('saveOrderBtn');
+            const methodInput = document.getElementById('orderFormMethod');
+            const tbody = document.querySelector('tbody');
+            const entryInfo = document.querySelector('.entry-info');
+            const paginationEl = document.querySelector('.pagination');
+            const searchInput = document.querySelector('.search-filter input');
+
+            let currentPage = 1;
+            const itemsPerPage = 5;
+
+            function parseJumlahUkuran(str) {
+                if (!str || str === '-') return { qty: '100', unit: 'Pcs', size: '' };
+                str = String(str).trim();
+                let size = '';
+                const parenMatch = str.match(/\((.*?)\)/);
+                if (parenMatch) {
+                    size = parenMatch[1].trim();
+                    str = str.replace(/\(.*?\)/, '').trim();
+                }
+
+                let qty = '100';
+                let unit = 'Pcs';
+                const parts = str.split(/\s+/);
+                if (parts.length >= 1 && !isNaN(parts[0]) && parts[0] !== '') {
+                    qty = parts[0];
+                    if (parts.length >= 2) {
+                        unit = parts.slice(1).join(' ');
+                    }
+                } else if (!isNaN(str) && str !== '') {
+                    qty = str;
+                } else if (str) {
+                    size = str;
+                }
+
+                const stdUnits = ['Pcs', 'Box', 'Rim', 'Lembar', 'Meter', 'Set', 'PCS', 'pcs'];
+                const matched = stdUnits.find(u => u.toLowerCase() === unit.toLowerCase());
+                if (matched) {
+                    unit = matched.toLowerCase() === 'pcs' ? 'Pcs' : matched;
+                } else if (!unit) {
+                    unit = 'Pcs';
+                }
+
+                return { qty, unit, size };
+            }
+
+            window.editPesanan = function(p) {
+                if (!form || !modalOverlay) return;
+                form.action = `/pesanan/${p.id}`;
+                if (methodInput) methodInput.value = 'PUT';
+                if (modalTitle) modalTitle.textContent = `Edit Pesanan: ${p.kode_pesanan}`;
+                if (saveBtn) saveBtn.textContent = 'Update Pesanan';
+
+                document.getElementById('ordCustomer').value = p.nama_pelanggan || '';
+                document.getElementById('ordProduct').value = p.nama_produk || '';
+
+                const parsed = parseJumlahUkuran(p.jumlah_ukuran);
+                if (document.getElementById('ordJumlah')) document.getElementById('ordJumlah').value = parsed.qty;
+                if (document.getElementById('ordJumlahUnit')) document.getElementById('ordJumlahUnit').value = parsed.unit;
+                if (document.getElementById('ordUkuran')) document.getElementById('ordUkuran').value = parsed.size;
+                if (document.getElementById('ordJumlahUkuran')) document.getElementById('ordJumlahUkuran').value = p.jumlah_ukuran || '';
+
+                document.getElementById('ordPrice').value = p.total_harga || 0;
+                document.getElementById('ordStatus').value = p.status || 'Diproses';
+
+                modalOverlay.classList.add('active');
+            };
+
+            if (form) {
+                form.addEventListener('submit', function() {
+                    const qInput = document.getElementById('ordJumlah');
+                    const uSelect = document.getElementById('ordJumlahUnit');
+                    const szInput = document.getElementById('ordUkuran');
+                    const juHidden = document.getElementById('ordJumlahUkuran');
+
+                    const qVal = qInput ? qInput.value.trim() : '100';
+                    const uVal = uSelect ? uSelect.value : 'Pcs';
+                    const szVal = szInput ? szInput.value.trim() : '';
+
+                    if (juHidden) {
+                        juHidden.value = `${qVal} ${uVal}${szVal ? ' (' + szVal + ')' : ''}`;
+                    }
+                });
+            }
+
+            function updatePagination() {
+                if (!tbody) return;
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                const visibleRows = rows.filter(r => r.getAttribute('data-search-hidden') !== 'true');
+                const totalItems = visibleRows.length;
+                const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+
+                if (currentPage > totalPages) currentPage = totalPages;
+
+                const startIdx = (currentPage - 1) * itemsPerPage;
+                const endIdx = startIdx + itemsPerPage;
+
+                rows.forEach(r => r.style.display = 'none');
+                visibleRows.slice(startIdx, endIdx).forEach(r => r.style.display = '');
+
+                if (entryInfo) {
+                    const startShow = totalItems === 0 ? 0 : startIdx + 1;
+                    const endShow = Math.min(endIdx, totalItems);
+                    entryInfo.textContent = `Menampilkan ${startShow} hingga ${endShow} dari ${totalItems} pesanan`;
+                }
+
+                if (paginationEl) {
+                    paginationEl.innerHTML = '';
+
+                    const prevBtn = document.createElement('button');
+                    prevBtn.className = 'page-btn';
+                    prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left" style="font-size: 11px;"></i>';
+                    prevBtn.disabled = currentPage === 1;
+                    prevBtn.style.opacity = currentPage === 1 ? '0.5' : '1';
+                    prevBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; updatePagination(); } });
+                    paginationEl.appendChild(prevBtn);
+
+                    for (let i = 1; i <= totalPages; i++) {
+                        const pBtn = document.createElement('button');
+                        pBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                        pBtn.textContent = i;
+                        pBtn.addEventListener('click', () => { currentPage = i; updatePagination(); });
+                        paginationEl.appendChild(pBtn);
+                    }
+
+                    const nextBtn = document.createElement('button');
+                    nextBtn.className = 'page-btn';
+                    nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i>';
+                    nextBtn.disabled = currentPage === totalPages;
+                    nextBtn.style.opacity = currentPage === totalPages ? '0.5' : '1';
+                    nextBtn.addEventListener('click', () => { if (currentPage < totalPages) { currentPage++; updatePagination(); } });
+                    paginationEl.appendChild(nextBtn);
+                }
+            }
+
+            if (openBtn) {
+                openBtn.addEventListener('click', () => {
+                    form.reset();
+                    if (document.getElementById('ordJumlah')) document.getElementById('ordJumlah').value = '100';
+                    if (document.getElementById('ordJumlahUnit')) document.getElementById('ordJumlahUnit').value = 'Pcs';
+                    if (document.getElementById('ordUkuran')) document.getElementById('ordUkuran').value = '';
+                    form.action = "{{ route('pesanan.store') }}";
+                    if (methodInput) methodInput.value = 'POST';
+                    if (modalTitle) modalTitle.textContent = 'Buat Pesanan Baru';
+                    if (saveBtn) saveBtn.textContent = 'Simpan Pesanan';
+                    modalOverlay.classList.add('active');
+                });
+            }
+            if (closeBtn) closeBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
+            if (cancelBtn) cancelBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
+
+            // Auto open & prefill modal if URL contains ?pelanggan=...
+            const urlParams = new URLSearchParams(window.location.search);
+            const prefillCustomer = urlParams.get('pelanggan');
+            if (prefillCustomer && openBtn) {
+                openBtn.click();
+                const ordCustomer = document.getElementById('ordCustomer');
+                if (ordCustomer) ordCustomer.value = prefillCustomer;
+            }
+
+            // Auto-fill total harga when selecting an existing product
+            const productPrices = {
+                @foreach($produks ?? [] as $prod)
+                    "{!! addslashes($prod->nama_produk) !!}": {{ $prod->harga ?? 0 }},
+                @endforeach
+            };
+
+            const ordProductInput = document.getElementById('ordProduct');
+            const ordPriceInput = document.getElementById('ordPrice');
+            if (ordProductInput && ordPriceInput) {
+                ordProductInput.addEventListener('input', function() {
+                    const val = this.value.trim();
+                    if (productPrices[val] !== undefined && productPrices[val] > 0) {
+                        ordPriceInput.value = productPrices[val];
+                    }
+                });
+            }
+
+            if (tbody) {
+                updatePagination();
+            }
+
+            if (searchInput && tbody) {
+                searchInput.addEventListener('keyup', function() {
+                    const q = this.value.toLowerCase();
+                    const rows = tbody.querySelectorAll('tr');
+                    rows.forEach(r => {
+                        if (r.textContent.toLowerCase().includes(q)) {
+                            r.removeAttribute('data-search-hidden');
+                        } else {
+                            r.setAttribute('data-search-hidden', 'true');
+                        }
+                    });
+                    currentPage = 1;
+                    updatePagination();
+                });
+            }
+
+            // Dropdown toggle handler
+            document.addEventListener('click', function(e) {
+                const toggle = e.target.closest('.action-toggle');
+                if (toggle) {
+                    e.stopPropagation();
+                    const menu = toggle.nextElementSibling;
+                    document.querySelectorAll('.dropdown-menu').forEach(m => {
+                        if (m !== menu) m.classList.remove('show');
+                    });
+                    if (menu) menu.classList.toggle('show');
+                } else {
+                    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+                }
+            });
+        });
+    </script>
+    @include('layouts.navbar_assets')
 </body>
 </html>

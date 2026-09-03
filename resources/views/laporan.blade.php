@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Laporan & Statistik - CV Prima Grafika</title>
+    <title>Laporan & Statistik - SIPEKAN</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -54,7 +54,8 @@
 
         /* Stat Cards */
         .stats-row { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; margin-bottom:24px; }
-        .stat-card { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:20px 24px; display:flex; align-items:center; gap:16px; }
+        .stat-card { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:20px 24px; display:flex; align-items:center; gap:16px; text-decoration:none; color:inherit; cursor:pointer; transition:transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+        .stat-card:hover { transform:translateY(-4px); box-shadow:0 10px 24px rgba(30, 58, 138, 0.1); border-color:#1E3A8A; }
         .stat-icon { width:48px; height:48px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
         .stat-icon.blue { background:#DBEAFE; color:#1D4ED8; }
         .stat-icon.green { background:#DCFCE7; color:#15803D; }
@@ -72,8 +73,8 @@
         .card-header-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
         .card-link { font-size:13px; font-weight:700; color:#1E3A8A; text-decoration:none; }
         .custom-table { width:100%; border-collapse:collapse; text-align:left; }
-        .custom-table th { background:#FFFFFF; padding:11px 14px; font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #E2E8F0; }
-        .custom-table td { padding:14px; font-size:13px; color:#334155; border-bottom:1px solid #F1F5F9; font-weight:500; vertical-align:middle; }
+        .custom-table th { background:#FFFFFF; padding:11px 14px; font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #E2E8F0; white-space:nowrap; }
+        .custom-table td { padding:14px; font-size:13px; color:#334155; border-bottom:1px solid #F1F5F9; font-weight:500; vertical-align:middle; white-space:nowrap; }
         .custom-table tr:last-child td { border-bottom:none; }
         .inv-code { color:#1E3A8A; font-weight:700; white-space:nowrap; }
 
@@ -81,6 +82,76 @@
         .status-selesai { background:#DCFCE7; color:#16A34A; }
         .status-proses { background:#FEF3C7; color:#D97706; }
         .status-desain { background:#DBEAFE; color:#1D4ED8; }
+
+        /* Pagination Controls Styling */
+        .table-pagination-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 16px;
+            margin-top: 14px;
+            border-top: 1px solid #F1F5F9;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .pagination-info {
+            font-size: 13px;
+            font-weight: 600;
+            color: #64748B;
+        }
+        .pagination-controls {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .pag-btn {
+            padding: 7px 14px;
+            border: 1px solid #CBD5E1;
+            background: #FFFFFF;
+            border-radius: 8px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .pag-btn:hover:not(:disabled) {
+            background-color: #F1F5F9;
+            color: #1E3A8A;
+            border-color: #94A3B8;
+        }
+        .pag-btn:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+        .page-num-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #CBD5E1;
+            background: #FFFFFF;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .page-num-btn:hover {
+            background-color: #F1F5F9;
+            color: #1E3A8A;
+        }
+        .page-num-btn.active {
+            background-color: #1B3B6F !important;
+            color: #FFFFFF !important;
+            border-color: #1B3B6F !important;
+            box-shadow: 0 2px 4px rgba(27, 59, 111, 0.2);
+        }
 
         /* Responsive Adjustments */
         @media (max-width: 768px) {
@@ -117,53 +188,53 @@
 
             <!-- Date Range Filter -->
             <div class="filter-card">
-                <div class="form-group">
-                    <label>Tanggal Awal</label>
-                    <input type="date" value="2023-10-01">
+                <div class="date-input-group">
+                    <label>Dari Tanggal</label>
+                    <input type="date" value="2026-01-01">
                 </div>
-                <div class="form-group">
-                    <label>Tanggal Akhir</label>
-                    <input type="date" value="2023-10-31">
+                <div class="date-input-group">
+                    <label>Sampai Tanggal</label>
+                    <input type="date" value="2026-12-31">
                 </div>
                 <button class="btn-filter">Tampilkan</button>
             </div>
 
             <!-- Stat Cards -->
             <div class="stats-row">
-                <div class="stat-card">
+                <a href="{{ route('pesanan') }}" class="stat-card" title="Klik untuk membuka Kelola Pesanan">
                     <div class="stat-icon blue"><i class="fa-solid fa-file-invoice"></i></div>
                     <div>
                         <div class="stat-label">TOTAL PESANAN</div>
-                        <div class="stat-value">1,248</div>
+                        <div class="stat-value">{{ \App\Models\Pesanan::count() }}</div>
                     </div>
-                </div>
-                <div class="stat-card">
+                </a>
+                <a href="{{ route('pembayaran') }}" class="stat-card" title="Klik untuk membuka Kelola Pembayaran">
                     <div class="stat-icon green"><i class="fa-solid fa-money-bill-trend-up"></i></div>
                     <div>
                         <div class="stat-label">TOTAL PENDAPATAN</div>
-                        <div class="stat-value">Rp 48,5 jt</div>
+                        <div class="stat-value">Rp {{ number_format($totalPendapatan ?? 0, 0, ',', '.') }}</div>
                     </div>
-                </div>
-                <div class="stat-card">
+                </a>
+                <a href="{{ route('pelanggan') }}" class="stat-card" title="Klik untuk membuka Kelola Pelanggan">
                     <div class="stat-icon purple"><i class="fa-solid fa-users"></i></div>
                     <div>
                         <div class="stat-label">TOTAL PELANGGAN</div>
-                        <div class="stat-value">342</div>
+                        <div class="stat-value">{{ \App\Models\Pelanggan::count() }}</div>
                     </div>
-                </div>
+                </a>
             </div>
 
             <!-- Charts Row: Monthly Performance + Category Revenue -->
             <div class="charts-row-laporan">
-                <!-- Pendapatan & Profit Line Chart -->
+                <!-- Pendapatan Line Chart -->
                 <div class="card">
-                    <h2 class="card-title">Tren Pendapatan & Laba Bersih (2024)</h2>
+                    <h2 class="card-title">Tren Pendapatan</h2>
                     <div class="chart-container-laporan">
                         <canvas id="laporanTrendChart"></canvas>
                     </div>
                 </div>
 
-                <!-- Product Revenue Doughnut Chart -->
+                <!-- Product Revenue Bar Chart -->
                 <div class="card">
                     <h2 class="card-title">Kontribusi Omzet Produk</h2>
                     <div class="chart-container-laporan">
@@ -174,66 +245,72 @@
 
             <!-- Detail Transaksi Table -->
             <div class="card">
-                <div class="card-header-row">
-                    <h2 class="card-title" style="margin-bottom:0;">Detail Transaksi Terbaru</h2>
-                    <a href="{{ route('pesanan') }}" class="card-link">Lihat Semua Pesanan</a>
+                <div class="card-header-row" style="flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <h2 class="card-title" style="margin-bottom:2px;">Detail Transaksi Terbaru</h2>
+                        <p style="font-size:12.5px; color:#64748B;">Daftar rincian riwayat transaksi yang tercatat di sistem.</p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                        <!-- Limit Rows Selector -->
+                        <div style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #475569; font-weight: 600;">
+                            <span>Tampilkan:</span>
+                            <select id="tableLimitSelect" style="padding: 6px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; font-weight: 700; color: #1E293B; background: #F8FAFC; outline: none; cursor: pointer; transition: all 0.15s ease;">
+                                <option value="5" selected>5 data</option>
+                                <option value="10">10 data</option>
+                                <option value="25">25 data</option>
+                                <option value="50">50 data</option>
+                                <option value="all">Semua</option>
+                            </select>
+                        </div>
+                        <a href="{{ route('pesanan') }}" class="card-link" style="padding: 6px 14px; background: #EFF6FF; border-radius: 8px; border: 1px solid #DBEAFE; transition: background 0.15s ease;">Lihat Semua Pesanan <i class="fa-solid fa-arrow-right" style="font-size:11px; margin-left:4px;"></i></a>
+                    </div>
                 </div>
 
                 <div class="table-responsive">
                     <table class="custom-table">
                         <thead>
                             <tr>
-                                <th>NO. FAKTUR</th>
+                                <th>KODE PESANAN</th>
                                 <th>PELANGGAN</th>
-                                <th>TANGGAL SELESAI</th>
+                                <th>TANGGAL</th>
                                 <th>PRODUK</th>
                                 <th>NILAI TRANSAKSI</th>
                                 <th>STATUS</th>
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse($pesananSelesai ?? [] as $pes)
                             <tr>
-                                <td class="inv-code">INV/23/10/085</td>
-                                <td>PT. Mega Bangun</td>
-                                <td>24 Okt 2023</td>
-                                <td>Cetak Biru (A0)</td>
-                                <td>Rp 1.250.000</td>
-                                <td><span class="status-badge status-selesai">Selesai</span></td>
+                                <td class="inv-code">{{ $pes->kode_pesanan }}</td>
+                                <td>{{ $pes->nama_pelanggan }}</td>
+                                <td>{{ $pes->tanggal_pesan ? \Carbon\Carbon::parse($pes->tanggal_pesan)->format('d M Y') : '-' }}</td>
+                                <td>{{ $pes->nama_produk }}</td>
+                                <td>Rp {{ number_format($pes->total_harga, 0, ',', '.') }}</td>
+                                <td><span class="status-badge {{ strtolower($pes->status) == 'selesai' ? 'status-selesai' : 'status-proses' }}">{{ $pes->status }}</span></td>
                             </tr>
+                            @empty
                             <tr>
-                                <td class="inv-code">INV/23/10/084</td>
-                                <td>Dinas Pendidikan</td>
-                                <td>24 Okt 2023</td>
-                                <td>Buku Panduan 50hlm</td>
-                                <td>Rp 12.500.000</td>
-                                <td><span class="status-badge status-proses">Proses Jilid</span></td>
+                                <td colspan="6" style="text-align:center; padding:20px; color:#64748B;">Belum ada data transaksi di database.</td>
                             </tr>
-                            <tr>
-                                <td class="inv-code">INV/23/10/083</td>
-                                <td>Toko Makmur Jaya</td>
-                                <td>23 Okt 2023</td>
-                                <td>Brosur Promosi</td>
-                                <td>Rp 850.000</td>
-                                <td><span class="status-badge status-selesai">Selesai</span></td>
-                            </tr>
-                            <tr>
-                                <td class="inv-code">INV/23/10/082</td>
-                                <td>CV. Karya Cipta</td>
-                                <td>22 Okt 2023</td>
-                                <td>Spanduk 3x1m</td>
-                                <td>Rp 150.000</td>
-                                <td><span class="status-badge status-desain">Proses Desain</span></td>
-                            </tr>
-                            <tr>
-                                <td class="inv-code">INV/23/10/081</td>
-                                <td>Rumah Sakit Bunda</td>
-                                <td>21 Okt 2023</td>
-                                <td>Form Rekam Medis</td>
-                                <td>Rp 3.400.000</td>
-                                <td><span class="status-badge status-selesai">Selesai</span></td>
-                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
+                </div>
+
+                <!-- Pagination Footer -->
+                <div class="table-pagination-footer">
+                    <div class="pagination-info" id="tablePaginationInfo">
+                        Menampilkan <strong id="pageStartIdx" style="color: #0F172A;">0</strong> - <strong id="pageEndIdx" style="color: #0F172A;">0</strong> dari <strong id="totalRowsCount" style="color: #0F172A;">0</strong> total transaksi
+                    </div>
+                    <div class="pagination-controls">
+                        <button class="pag-btn" id="prevPageBtn" title="Halaman Sebelumnya">
+                            <i class="fa-solid fa-chevron-left" style="font-size:11px;"></i> Sebelum
+                        </button>
+                        <div id="pageNumbersList" style="display: flex; gap: 4px;"></div>
+                        <button class="pag-btn" id="nextPageBtn" title="Halaman Selanjutnya">
+                            Lanjut <i class="fa-solid fa-chevron-right" style="font-size:11px;"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
         </main>
@@ -248,7 +325,7 @@
             // 1. Laporan Trend Line Chart
             const ctxTrend = document.getElementById('laporanTrendChart').getContext('2d');
             const gradientBlue = ctxTrend.createLinearGradient(0, 0, 0, 250);
-            gradientBlue.addColorStop(0, 'rgba(30, 58, 138, 0.15)');
+            gradientBlue.addColorStop(0, 'rgba(30, 58, 138, 0.18)');
             gradientBlue.addColorStop(1, 'rgba(30, 58, 138, 0.0)');
 
             new Chart(ctxTrend, {
@@ -256,21 +333,13 @@
                 data: {
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'],
                     datasets: [{
-                        label: 'Pendapatan Kotor (Jt)',
-                        data: [28, 35, 30, 42, 38, 55, 62, 58, 70, 78, 85, 98],
+                        label: 'Pendapatan',
+                        data: [28000000, 35000000, 30000000, 42000000, 38000000, 55000000, 62000000, 58000000, 70000000, 78000000, 85000000, 98000000],
                         borderColor: '#1E3A8A',
                         backgroundColor: gradientBlue,
                         fill: true,
                         tension: 0.35,
                         borderWidth: 3
-                    }, {
-                        label: 'Laba Bersih (Jt)',
-                        data: [12, 16, 14, 20, 18, 26, 30, 27, 34, 38, 42, 50],
-                        borderColor: '#2563EB',
-                        backgroundColor: 'transparent',
-                        borderDash: [5, 5],
-                        tension: 0.35,
-                        borderWidth: 2.5
                     }]
                 },
                 options: {
@@ -278,13 +347,29 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: { position: 'top', align: 'end', labels: { usePointStyle: true, font: { weight: '600' } } },
-                        tooltip: { backgroundColor: '#0F172A', padding: 12 }
+                        tooltip: {
+                            backgroundColor: '#0F172A',
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || 'Pendapatan';
+                                    let val = context.raw || 0;
+                                    return ' ' + label + ': Rp ' + val.toLocaleString('id-ID');
+                                }
+                            }
+                        }
                     },
                     scales: {
                         x: { grid: { display: false } },
                         y: {
                             grid: { color: '#F1F5F9' },
-                            ticks: { callback: function(val) { return 'Rp ' + val + 'M'; } }
+                            ticks: {
+                                callback: function(val) {
+                                    if (val >= 1000000000) return 'Rp ' + (val / 1000000000) + ' M';
+                                    if (val >= 1000000) return 'Rp ' + (val / 1000000) + ' Juta';
+                                    return 'Rp ' + val.toLocaleString('id-ID');
+                                }
+                            }
                         }
                     }
                 }
@@ -295,11 +380,11 @@
             new Chart(ctxShare, {
                 type: 'bar',
                 data: {
-                    labels: ['Digital', 'Offset', 'Large Format', 'Sablon'],
+                    labels: ['Brosur', 'Banner', 'Kartu Nama', 'Stiker', 'Dokumen', 'Kalender'],
                     datasets: [{
                         label: 'Persentase Omzet (%)',
-                        data: [42, 28, 18, 12],
-                        backgroundColor: ['#1E3A8A', '#2563EB', '#3B82F6', '#60A5FA'],
+                        data: [35, 25, 15, 12, 8, 5],
+                        backgroundColor: ['#1E3A8A', '#2563EB', '#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE'],
                         borderRadius: 8,
                         barThickness: 24
                     }]
@@ -320,6 +405,154 @@
                     }
                 }
             });
+
+            // 3. Export Excel Download Event
+            const btnExportExcel = document.querySelector('.btn-export.primary');
+            if (btnExportExcel) {
+                btnExportExcel.addEventListener('click', function() {
+                    let csvContent = "data:text/csv;charset=utf-8,";
+                    csvContent += "KODE PESANAN,PELANGGAN,TANGGAL SELESAI,PRODUK,NILAI TRANSAKSI,STATUS\n";
+                    const rows = document.querySelectorAll('.custom-table tbody tr');
+                    rows.forEach(r => {
+                        const cols = Array.from(r.querySelectorAll('td')).map(td => `"${td.textContent.trim().replace(/"/g, '""')}"`);
+                        csvContent += cols.join(",") + "\n";
+                    });
+                    const encodedUri = encodeURI(csvContent);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("download", "Laporan_Transaksi_SIPEKAN_2026.csv");
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    if (window.showAppToast) {
+                        window.showAppToast('File Excel laporan (.csv) berhasil di-download!', 'success');
+                    }
+                });
+            }
+
+            // 4. Cetak PDF Event
+            const btnCetakPdf = document.querySelector('.btn-export:not(.primary)');
+            if (btnCetakPdf) {
+                btnCetakPdf.addEventListener('click', function() {
+                    if (window.showAppToast) {
+                        window.showAppToast('Membuka tampilan cetak PDF...', 'info');
+                    }
+                    setTimeout(() => { window.print(); }, 500);
+                });
+            }
+
+            // 5. Date Filter Event
+            const btnFilter = document.querySelector('.btn-filter');
+            if (btnFilter) {
+                btnFilter.addEventListener('click', function() {
+                    const inputs = document.querySelectorAll('.filter-card input');
+                    const startDate = inputs[0] ? inputs[0].value : '2026-01-01';
+                    const endDate = inputs[1] ? inputs[1].value : '2026-12-31';
+                    if (window.showAppToast) {
+                        window.showAppToast(`Data laporan berhasil diperbarui untuk periode ${startDate} s/d ${endDate}`, 'success');
+                    }
+                    if (typeof renderTablePagination === 'function') {
+                        renderTablePagination();
+                    }
+                });
+            }
+
+            // 6. Transaction Table Pagination & Limit Rows Control Engine
+            const limitSelect = document.getElementById('tableLimitSelect');
+            const tableRows = Array.from(document.querySelectorAll('.custom-table tbody tr')).filter(r => !r.querySelector('td[colspan]'));
+            const prevBtn = document.getElementById('prevPageBtn');
+            const nextBtn = document.getElementById('nextPageBtn');
+            const pageNumbersList = document.getElementById('pageNumbersList');
+            const startIdxEl = document.getElementById('pageStartIdx');
+            const endIdxEl = document.getElementById('pageEndIdx');
+            const totalRowsEl = document.getElementById('totalRowsCount');
+
+            let currentPage = 1;
+            let rowsPerPage = parseInt(limitSelect ? limitSelect.value : 5);
+
+            function renderTablePagination() {
+                const totalRows = tableRows.length;
+                if (totalRowsEl) totalRowsEl.textContent = totalRows;
+
+                if (totalRows === 0) {
+                    if (startIdxEl) startIdxEl.textContent = 0;
+                    if (endIdxEl) endIdxEl.textContent = 0;
+                    if (prevBtn) prevBtn.disabled = true;
+                    if (nextBtn) nextBtn.disabled = true;
+                    if (pageNumbersList) pageNumbersList.innerHTML = '';
+                    return;
+                }
+
+                const effectiveRowsPerPage = (rowsPerPage === -1 || isNaN(rowsPerPage)) ? totalRows : rowsPerPage;
+                const totalPages = Math.ceil(totalRows / effectiveRowsPerPage);
+
+                if (currentPage > totalPages) currentPage = totalPages;
+                if (currentPage < 1) currentPage = 1;
+
+                const start = (currentPage - 1) * effectiveRowsPerPage;
+                const end = Math.min(start + effectiveRowsPerPage, totalRows);
+
+                if (startIdxEl) startIdxEl.textContent = start + 1;
+                if (endIdxEl) endIdxEl.textContent = end;
+
+                tableRows.forEach((row, idx) => {
+                    if (idx >= start && idx < end) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+
+                if (prevBtn) prevBtn.disabled = (currentPage === 1);
+                if (nextBtn) nextBtn.disabled = (currentPage === totalPages || totalPages === 0);
+
+                // Render Numbered Page Buttons
+                if (pageNumbersList) {
+                    pageNumbersList.innerHTML = '';
+                    for (let i = 1; i <= totalPages; i++) {
+                        const btn = document.createElement('button');
+                        btn.className = `page-num-btn ${i === currentPage ? 'active' : ''}`;
+                        btn.textContent = i;
+                        btn.addEventListener('click', function() {
+                            currentPage = i;
+                            renderTablePagination();
+                        });
+                        pageNumbersList.appendChild(btn);
+                    }
+                }
+            }
+
+            if (limitSelect) {
+                limitSelect.addEventListener('change', function() {
+                    const val = this.value;
+                    rowsPerPage = val === 'all' ? -1 : parseInt(val);
+                    currentPage = 1;
+                    renderTablePagination();
+                });
+            }
+
+            if (prevBtn) {
+                prevBtn.addEventListener('click', function() {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        renderTablePagination();
+                    }
+                });
+            }
+
+            if (nextBtn) {
+                nextBtn.addEventListener('click', function() {
+                    const effectiveRowsPerPage = rowsPerPage === -1 ? tableRows.length : rowsPerPage;
+                    const totalPages = Math.ceil(tableRows.length / effectiveRowsPerPage);
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        renderTablePagination();
+                    }
+                });
+            }
+
+            // Initial render call
+            renderTablePagination();
         });
     </script>
     @include('layouts.navbar_assets')

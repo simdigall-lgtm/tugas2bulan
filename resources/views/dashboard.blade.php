@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - CV Prima Grafika</title>
+    <title>Dashboard - SIPEKAN</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -244,12 +244,23 @@
             padding: 22px;
             border: 1px solid #E2E8F0;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            text-decoration: none;
+            display: block;
+            color: inherit;
+            cursor: pointer;
         }
 
         .metric-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.04);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 24px rgba(30, 58, 138, 0.1);
+            border-color: #1E3A8A;
+        }
+
+        .metric-card:hover .metric-icon-box {
+            background-color: #1E3A8A;
+            color: #FFFFFF;
+            transition: all 0.2s ease;
         }
 
         .metric-top {
@@ -404,6 +415,7 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             border-bottom: 1px solid #E2E8F0;
+            white-space: nowrap;
         }
 
         .custom-table td {
@@ -412,6 +424,8 @@
             color: #334155;
             border-bottom: 1px solid #F1F5F9;
             font-weight: 500;
+            vertical-align: middle;
+            white-space: nowrap;
         }
 
         .custom-table tr:last-child td {
@@ -499,70 +513,70 @@
             
             <div class="page-header">
                 <h1 class="page-title">Ringkasan Dashboard</h1>
-                <p class="page-subtitle">Metrik dan kinerja untuk CV Prima Grafika.</p>
+                <p class="page-subtitle">Metrik dan kinerja untuk SIPEKAN.</p>
             </div>
 
             <!-- Metrics Cards Grid -->
             <div class="metrics-grid">
-                <!-- Card 1 -->
-                <div class="metric-card">
+                <!-- Card 1: TOTAL PELANGGAN -->
+                <a href="{{ route('pelanggan') }}" class="metric-card" title="Klik untuk membuka Kelola Pelanggan">
                     <div class="metric-top">
                         <span class="metric-label">TOTAL PELANGGAN</span>
                         <div class="metric-icon-box">
                             <i class="fa-solid fa-users"></i>
                         </div>
                     </div>
-                    <div class="metric-value">1,248</div>
+                    <div class="metric-value">{{ $totalPelanggan ?? 0 }}</div>
                     <div class="metric-footer">
-                        <span class="trend-up">↑12%</span>
+                        <span class="trend-up"><i class="fa-solid fa-arrow-up" style="font-size: 11px;"></i> +12%</span>
                         <span class="trend-period">vs bulan lalu</span>
                     </div>
-                </div>
+                </a>
 
-                <!-- Card 2 -->
-                <div class="metric-card">
+                <!-- Card 2: TOTAL PRODUK -->
+                <a href="{{ route('produk') }}" class="metric-card" title="Klik untuk membuka Katalog Produk">
                     <div class="metric-top">
                         <span class="metric-label">TOTAL PRODUK</span>
                         <div class="metric-icon-box">
                             <i class="fa-solid fa-box-archive"></i>
                         </div>
                     </div>
-                    <div class="metric-value">342</div>
+                    <div class="metric-value">{{ $totalProduk ?? 0 }}</div>
                     <div class="metric-footer">
-                        <span class="trend-up">↑4%</span>
-                        <span class="trend-period">vs bulan lalu</span>
+                        <span class="trend-up"><i class="fa-solid fa-circle-check" style="font-size: 11px;"></i> Aktif</span>
+                        <span class="trend-period">di katalog</span>
                     </div>
-                </div>
+                </a>
 
-                <!-- Card 3 -->
-                <div class="metric-card">
+                <!-- Card 3: TOTAL PESANAN -->
+                <a href="{{ route('pesanan') }}" class="metric-card" title="Klik untuk membuka Kelola Pesanan">
                     <div class="metric-top">
                         <span class="metric-label">TOTAL PESANAN</span>
                         <div class="metric-icon-box">
                             <i class="fa-solid fa-file-invoice"></i>
                         </div>
                     </div>
-                    <div class="metric-value">8,930</div>
+                    <div class="metric-value">{{ $totalPesanan ?? 0 }}</div>
                     <div class="metric-footer">
-                        <span class="trend-up">↑18%</span>
+                        <span class="trend-up"><i class="fa-solid fa-arrow-up" style="font-size: 11px;"></i> +8.5%</span>
                         <span class="trend-period">vs bulan lalu</span>
                     </div>
-                </div>
+                </a>
 
-                <!-- Card 4 -->
-                <div class="metric-card">
+                <!-- Card 4: TOTAL PEMBAYARAN -->
+                <a href="{{ route('pembayaran') }}" class="metric-card" title="Klik untuk membuka Kelola Pembayaran">
                     <div class="metric-top">
                         <span class="metric-label">TOTAL PEMBAYARAN</span>
                         <div class="metric-icon-box">
                             <i class="fa-solid fa-money-bill-trend-up"></i>
                         </div>
                     </div>
-                    <div class="metric-value">$124,500</div>
+                    <div class="metric-value">Rp {{ number_format($totalPendapatan ?? 0, 0, ',', '.') }}</div>
                     <div class="metric-footer">
-                        <span class="trend-up">↑22%</span>
+                        <span class="trend-up"><i class="fa-solid fa-arrow-up" style="font-size: 11px;"></i> +15.3%</span>
                         <span class="trend-period">vs bulan lalu</span>
                     </div>
-                </div>
+                </a>
             </div>
 
             <!-- Unified Charts Row: Sales Performance Trend & Product Categories -->
@@ -571,8 +585,8 @@
                 <div class="chart-card">
                     <div class="chart-header">
                         <div>
-                            <h2 class="chart-title">Statistik Penjualan Bulanan</h2>
-                            <p class="chart-subtitle">Perbandingan pendapatan dan volume transaksi tahun 2024</p>
+                            <h3 class="chart-title">Tren Penjualan &amp; Pesanan</h3>
+                            <p class="chart-subtitle">Performa pendapatan tahun 2026</p>
                         </div>
                     </div>
                     <div class="chart-container">
@@ -613,41 +627,23 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @forelse($pesananTerbaru as $pesanan)
                             <tr>
-                                <td class="order-code">ORD-2023-001</td>
-                                <td>Acme Corp</td>
-                                <td>Business Cards x 1000</td>
-                                <td>Okt 24, 2023</td>
-                                <td><span class="status-badge status-selesai">Selesai</span></td>
+                                <td class="order-code">{{ $pesanan->kode_pesanan }}</td>
+                                <td>{{ $pesanan->nama_pelanggan }}</td>
+                                <td>{{ $pesanan->nama_produk }}</td>
+                                <td>{{ $pesanan->tanggal_pesan ? \Carbon\Carbon::parse($pesanan->tanggal_pesan)->format('d M Y') : '-' }}</td>
+                                <td>
+                                    <span class="status-badge {{ strtolower($pesanan->status) == 'selesai' ? 'status-selesai' : (strtolower($pesanan->status) == 'diproses' ? 'status-diproses' : 'status-menunggu') }}">
+                                        {{ $pesanan->status }}
+                                    </span>
+                                </td>
                             </tr>
+                            @empty
                             <tr>
-                                <td class="order-code">ORD-2023-002</td>
-                                <td>TechStart Inc</td>
-                                <td>Banners x 5</td>
-                                <td>Okt 24, 2023</td>
-                                <td><span class="status-badge status-diproses">Diproses</span></td>
+                                <td colspan="5" style="text-align: center; padding: 20px; color: #64748B;">Belum ada data pesanan</td>
                             </tr>
-                            <tr>
-                                <td class="order-code">ORD-2023-003</td>
-                                <td>Local Bakery</td>
-                                <td>Flyers x 5000</td>
-                                <td>Okt 23, 2023</td>
-                                <td><span class="status-badge status-selesai">Selesai</span></td>
-                            </tr>
-                            <tr>
-                                <td class="order-code">ORD-2023-004</td>
-                                <td>City Event Org</td>
-                                <td>Posters x 200</td>
-                                <td>Okt 22, 2023</td>
-                                <td><span class="status-badge status-menunggu">Menunggu</span></td>
-                            </tr>
-                            <tr>
-                                <td class="order-code">ORD-2023-005</td>
-                                <td>Mega Store</td>
-                                <td>Vinyl Stickers x 1000</td>
-                                <td>Okt 21, 2023</td>
-                                <td><span class="status-badge status-selesai">Selesai</span></td>
-                            </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
@@ -660,16 +656,20 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Global Chart Defaults for Consistency
-            Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
-            Chart.defaults.color = '#64748B';
+            if (typeof Chart !== 'undefined') {
+                Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
+                Chart.defaults.color = '#64748B';
+            }
 
             // 1. Main Sales Line Chart
-            const ctxMain = document.getElementById('mainSalesChart').getContext('2d');
-            
-            // Create Gradient
-            const gradientBlue = ctxMain.createLinearGradient(0, 0, 0, 300);
-            gradientBlue.addColorStop(0, 'rgba(30, 58, 138, 0.16)');
-            gradientBlue.addColorStop(1, 'rgba(30, 58, 138, 0.0)');
+            const canvasMain = document.getElementById('mainSalesChart');
+            if (canvasMain && typeof Chart !== 'undefined') {
+                const ctxMain = canvasMain.getContext('2d');
+                
+                // Create Gradient
+                const gradientBlue = ctxMain.createLinearGradient(0, 0, 0, 300);
+                gradientBlue.addColorStop(0, 'rgba(30, 58, 138, 0.16)');
+                gradientBlue.addColorStop(1, 'rgba(30, 58, 138, 0.0)');
 
             new Chart(ctxMain, {
                 type: 'line',
@@ -677,8 +677,8 @@
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'],
                     datasets: [
                         {
-                            label: 'Pendapatan (Juta Rp)',
-                            data: [32, 45, 38, 52, 48, 65, 74, 68, 82, 88, 95, 112],
+                            label: 'Pendapatan',
+                            data: [32000000, 45000000, 38000000, 52000000, 48000000, 65000000, 74000000, 68000000, 82000000, 88000000, 95000000, 112000000],
                             borderColor: '#1E3A8A',
                             backgroundColor: gradientBlue,
                             fill: true,
@@ -689,8 +689,8 @@
                             pointHoverRadius: 6
                         },
                         {
-                            label: 'Target Pendapatan (Juta Rp)',
-                            data: [30, 40, 40, 50, 50, 60, 70, 70, 80, 85, 90, 100],
+                            label: 'Target Pendapatan',
+                            data: [30000000, 40000000, 40000000, 50000000, 50000000, 60000000, 70000000, 70000000, 80000000, 85000000, 90000000, 100000000],
                             borderColor: '#94A3B8',
                             borderDash: [5, 5],
                             fill: false,
@@ -710,7 +710,10 @@
                             align: 'end',
                             labels: {
                                 usePointStyle: true,
-                                boxWidth: 6,
+                                pointStyleWidth: 8,
+                                boxWidth: 8,
+                                boxHeight: 8,
+                                padding: 16,
                                 font: { size: 12, weight: '600' }
                             }
                         },
@@ -718,7 +721,14 @@
                             backgroundColor: '#0F172A',
                             padding: 12,
                             titleFont: { size: 13, weight: '700' },
-                            bodyFont: { size: 12 }
+                            bodyFont: { size: 12 },
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || 'Pendapatan';
+                                    let val = context.raw || 0;
+                                    return ' ' + label + ': Rp ' + val.toLocaleString('id-ID');
+                                }
+                            }
                         }
                     },
                     scales: {
@@ -728,50 +738,58 @@
                         y: {
                             grid: { color: '#F1F5F9' },
                             ticks: {
-                                callback: function(value) { return 'Rp ' + value + 'M'; }
+                                callback: function(val) {
+                                    if (val >= 1000000000) return 'Rp ' + (val / 1000000000) + ' M';
+                                    if (val >= 1000000) return 'Rp ' + (val / 1000000) + ' Juta';
+                                    return 'Rp ' + val.toLocaleString('id-ID');
+                                }
                             }
                         }
                     }
                 }
             });
+            }
 
             // 2. Category Sales Bar Chart
-            const ctxCategory = document.getElementById('categoryBarChart').getContext('2d');
-            new Chart(ctxCategory, {
-                type: 'bar',
-                data: {
-                    labels: ['Banner/Spanduk', 'Brosur', 'Kartu Nama', 'Stiker', 'Buku/Kalender'],
-                    datasets: [{
-                        label: 'Total Pesanan',
-                        data: [340, 260, 210, 185, 120],
-                        backgroundColor: [
-                            '#1E3A8A',
-                            '#2563EB',
-                            '#3B82F6',
-                            '#60A5FA',
-                            '#93C5FD'
-                        ],
-                        borderRadius: 8,
-                        borderSkipped: false,
-                        barThickness: 28
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: '#0F172A',
-                            padding: 12
-                        }
+            const canvasCategory = document.getElementById('categoryBarChart');
+            if (canvasCategory && typeof Chart !== 'undefined') {
+                const ctxCategory = canvasCategory.getContext('2d');
+                new Chart(ctxCategory, {
+                    type: 'bar',
+                    data: {
+                        labels: ['Banner/Spanduk', 'Brosur', 'Kartu Nama', 'Stiker', 'Buku/Kalender'],
+                        datasets: [{
+                            label: 'Total Pesanan',
+                            data: [340, 260, 210, 185, 120],
+                            backgroundColor: [
+                                '#1E3A8A',
+                                '#2563EB',
+                                '#3B82F6',
+                                '#60A5FA',
+                                '#93C5FD'
+                            ],
+                            borderRadius: 8,
+                            borderSkipped: false,
+                            barThickness: 28
+                        }]
                     },
-                    scales: {
-                        x: { grid: { display: false } },
-                        y: { grid: { color: '#F1F5F9' } }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: '#0F172A',
+                                padding: 12
+                            }
+                        },
+                        scales: {
+                            x: { grid: { display: false } },
+                            y: { grid: { color: '#F1F5F9' } }
+                        }
                     }
-                }
-            });
+                });
+            }
         });
     </script>
     @include('layouts.navbar_assets')

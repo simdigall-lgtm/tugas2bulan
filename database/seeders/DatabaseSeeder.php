@@ -12,11 +12,19 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // \App\Models\User::factory(10)->create();
+        \App\Models\User::updateOrCreate(
+            ['email' => 'admin@primagrafika.com'],
+            [
+                'name' => 'admin',
+                'password' => bcrypt('123'),
+            ]
+        );
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->call([
+            PelangganSeeder::class,
+            ProdukSeeder::class,
+            PesananSeeder::class,
+            PembayaranSeeder::class,
+        ]);
     }
 }

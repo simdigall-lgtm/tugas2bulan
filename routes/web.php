@@ -2,6 +2,16 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PelangganController;
+use App\Http\Controllers\ProdukController;
+use App\Http\Controllers\PesananController;
+use App\Http\Controllers\PembayaranController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\PengaturanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -9,65 +19,75 @@ use Illuminate\Http\Request;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', function (Request $request) {
-    if (session()->has('user')) {
-        return redirect()->route('dashboard');
-    }
-    return view('login');
-})->name('login');
+class AuthCheckSession
+{
+    public function handle(Request $request, Closure $next)
+    {
+        if (session()->has('2fa_pending')) {
+            return redirect()->route('login.2fa')->with('info', 'Silakan selesaikan verifikasi Google Authenticator 2FA terlebih dahulu.');
+        }
 
-Route::get('/login', function (Request $request) {
-    if (session()->has('user')) {
-        return redirect()->route('dashboard');
+        if (!session()->has('user')) {
+            return redirect()->route('login')->with('error', 'Silakan masuk terlebih dahulu untuk mengakses sistem.');
+        }
+
+        return $next($request);
     }
-    return view('login');
+}
+
+// Public Auth & 2FA Routes
+Route::get('/', [AuthController::class, 'showLoginForm'])->name('login');
+Route::get('/login', [AuthController::class, 'showLoginForm']);
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+Route::get('/login/captcha-refresh', [AuthController::class, 'refreshCaptcha'])->name('login.captcha.refresh');
+
+// Lupa Password / Reset Password Verification Routes
+Route::get('/forgot-password', [AuthController::class, 'showForgotPasswordForm'])->name('password.request');
+Route::post('/forgot-password/send-code', [AuthController::class, 'sendResetCode'])->name('password.send_code');
+Route::post('/forgot-password/verify-code', [AuthController::class, 'verifyResetCode'])->name('password.verify_code');
+Route::post('/forgot-password/reset-password', [AuthController::class, 'resetPasswordWithVerification'])->name('password.reset.post');
+
+// Google Authenticator 2FA Routes
+Route::get('/login/2fa', [AuthController::class, 'show2FAForm'])->name('login.2fa');
+Route::post('/login/2fa', [AuthController::class, 'verify2FA'])->name('login.2fa.verify');
+Route::post('/login/2fa/refresh', [AuthController::class, 'refresh2FA'])->name('login.2fa.refresh');
+
+Route::match(['get', 'post'], '/logout', [AuthController::class, 'logout'])->name('logout');
+
+
+// Protected Routes
+Route::middleware([AuthCheckSession::class])->group(function () {
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+    // Pelanggan
+    Route::get('/pelanggan', [PelangganController::class, 'index'])->name('pelanggan');
+    Route::post('/pelanggan', [PelangganController::class, 'store'])->name('pelanggan.store');
+    Route::put('/pelanggan/{id}', [PelangganController::class, 'update'])->name('pelanggan.update');
+    Route::delete('/pelanggan/{id}', [PelangganController::class, 'destroy'])->name('pelanggan.destroy');
+
+    // Produk
+    Route::get('/produk', [ProdukController::class, 'index'])->name('produk');
+    Route::post('/produk', [ProdukController::class, 'store'])->name('produk.store');
+    Route::put('/produk/{id}', [ProdukController::class, 'update'])->name('produk.update');
+    Route::delete('/produk/{id}', [ProdukController::class, 'destroy'])->name('produk.destroy');
+
+    // Pesanan
+    Route::get('/pesanan', [PesananController::class, 'index'])->name('pesanan');
+    Route::post('/pesanan', [PesananController::class, 'store'])->name('pesanan.store');
+    Route::put('/pesanan/{id}', [PesananController::class, 'update'])->name('pesanan.update');
+    Route::delete('/pesanan/{id}', [PesananController::class, 'destroy'])->name('pesanan.destroy');
+
+    // Pembayaran
+    Route::get('/pembayaran', [PembayaranController::class, 'index'])->name('pembayaran');
+    Route::post('/pembayaran', [PembayaranController::class, 'store'])->name('pembayaran.store');
+    Route::put('/pembayaran/{id}', [PembayaranController::class, 'update'])->name('pembayaran.update');
+    Route::delete('/pembayaran/{id}', [PembayaranController::class, 'destroy'])->name('pembayaran.destroy');
+
+    // Laporan & Pengaturan
+    Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
+    Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan');
 });
 
-Route::post('/login', function (Request $request) {
-    $request->validate([
-        'username' => 'required|string',
-        'password' => 'required|string',
-    ]);
 
-    $username = $request->input('username');
 
-    // Store user session upon login
-    session(['user' => $username]);
-
-    return redirect()->route('dashboard')->with('success', 'Berhasil masuk! Selamat datang di Dashboard.');
-})->name('login.post');
-
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
-
-Route::get('/pelanggan', function () {
-    return view('pelanggan');
-})->name('pelanggan');
-
-Route::get('/produk', function () {
-    return view('produk');
-})->name('produk');
-
-Route::get('/pesanan', function () {
-    return view('pesanan');
-})->name('pesanan');
-
-Route::get('/pembayaran', function () {
-    return view('pembayaran');
-})->name('pembayaran');
-
-Route::get('/laporan', function () {
-    return view('laporan');
-})->name('laporan');
-
-Route::get('/pengaturan', function () {
-    return view('pengaturan');
-})->name('pengaturan');
-
-Route::match(['get', 'post'], '/logout', function (Request $request) {
-    session()->forget('user');
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
-    return redirect()->route('login')->with('success', 'Anda telah berhasil keluar.');
-})->name('logout');

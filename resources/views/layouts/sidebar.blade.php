@@ -3,7 +3,7 @@
     <div>
         <div class="sidebar-brand">
             <a href="{{ route('dashboard') }}" title="Ke Dasbor Utama" style="text-decoration: none; color: inherit; display: block;">
-                <div class="brand-name">Prima Grafika</div>
+                <div class="brand-name">SIPEKAN</div>
                 <div class="brand-tag">Konsol Admin</div>
             </a>
         </div>

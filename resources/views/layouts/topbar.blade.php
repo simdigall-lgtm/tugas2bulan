@@ -8,10 +8,17 @@
         <div class="search-container">
             <i class="fa-solid fa-magnifying-glass search-icon"></i>
             <input type="text" class="search-input" id="globalSearchInput" placeholder="Cari menu, pelanggan, produk, pesanan... (Tekan '/')" autocomplete="off">
+            <button type="button" id="clearSearchBtn" class="clear-search-btn" title="Hapus pencarian" style="display:none;">&times;</button>
         </div>
     </div>
 
     <div class="topbar-right">
+        <!-- Jakarta Digital Clock Widget -->
+        <div class="jakarta-clock-widget" title="Waktu Indonesia Barat (WIB) - Jakarta">
+            <i class="fa-regular fa-clock" style="color: #2563EB; font-size: 14px;"></i>
+            <span id="digitalClockTime" style="font-weight: 700; color: #0F172A; font-size: 13px;">--:--:-- WIB</span>
+        </div>
+
         <!-- Notification Button & Dropdown -->
         <div style="position: relative;">
             <button class="icon-btn" id="notifBellBtn" title="Notifikasi Pemberitahuan">
@@ -28,21 +35,21 @@
                     <a href="{{ route('pesanan') }}" class="notif-item unread">
                         <div class="notif-icon blue"><i class="fa-solid fa-file-invoice"></i></div>
                         <div class="notif-content">
-                            <div class="notif-text">Pesanan Baru <strong>#ORD-2023-008</strong> dari Acme Corp</div>
+                            <div class="notif-text">Pesanan Baru <strong>#ORD-2026-007</strong> dari PT Mitra Jaya Makmur</div>
                             <div class="notif-time">5 menit yang lalu</div>
                         </div>
                     </a>
                     <a href="{{ route('pembayaran') }}" class="notif-item unread">
                         <div class="notif-icon green"><i class="fa-solid fa-credit-card"></i></div>
                         <div class="notif-content">
-                            <div class="notif-text">Pembayaran <strong>PAY-1006</strong> terverifikasi</div>
+                            <div class="notif-text">Pembayaran <strong>PAY-2026-006</strong> terverifikasi (Lunas)</div>
                             <div class="notif-time">20 menit yang lalu</div>
                         </div>
                     </a>
-                    <a href="{{ route('produk') }}" class="notif-item unread">
-                        <div class="notif-icon orange"><i class="fa-solid fa-box-archive"></i></div>
+                    <a href="{{ route('pesanan') }}" class="notif-item unread">
+                        <div class="notif-icon orange"><i class="fa-solid fa-circle-check"></i></div>
                         <div class="notif-content">
-                            <div class="notif-text">Stok <strong>Kartu Nama Premium</strong> menipis</div>
+                            <div class="notif-text">Pesanan <strong>#ORD-2026-001</strong> Klinik Sehat Bersama selesai</div>
                             <div class="notif-time">1 jam yang lalu</div>
                         </div>
                     </a>
@@ -61,17 +68,17 @@
         <!-- User Profile Dropdown Button -->
         <div class="user-profile-wrapper" style="position: relative;">
             <div class="user-profile" id="userProfileBtn" title="Menu Profil Admin">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" alt="Admin" class="avatar-img">
-                <span class="user-name-label">Admin Prima</span>
+                <img src="{{ asset('assets/images/admin-avatar.png') }}" alt="Admin" class="avatar-img">
+                <span class="user-name-label">Admin SIPEKAN</span>
                 <i class="fa-solid fa-chevron-down profile-chevron"></i>
             </div>
 
             <div class="profile-dropdown-card" id="userProfileDropdown">
                 <div class="profile-header-info">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&auto=format&fit=crop&q=80" alt="Admin" class="profile-header-avatar">
+                    <img src="{{ asset('assets/images/admin-avatar.png') }}" alt="Admin" class="profile-header-avatar">
                     <div>
-                        <div class="profile-header-name">Admin Prima</div>
-                        <div class="profile-header-email">admin@primagrafika.co.id</div>
+                        <div class="profile-header-name">Admin SIPEKAN</div>
+                        <div class="profile-header-email">admin@sipekan.co.id</div>
                     </div>
                 </div>
                 <div class="profile-menu-divider"></div>

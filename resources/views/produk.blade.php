@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kelola Produk - CV Prima Grafika</title>
+    <title>Kelola Produk - SIPEKAN</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,6 +14,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <style>
+        /* Hide number input spin buttons (up/down arrows) */
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            -webkit-appearance: none !important;
+            margin: 0 !important;
+        }
+        input[type=number] {
+            -moz-appearance: textfield !important;
+            appearance: textfield !important;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -288,6 +299,7 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             border-bottom: 1px solid #E2E8F0;
+            white-space: nowrap;
         }
 
         .custom-table td {
@@ -297,6 +309,7 @@
             border-bottom: 1px solid #F1F5F9;
             font-weight: 500;
             vertical-align: middle;
+            white-space: nowrap;
         }
 
         .custom-table tr:last-child td {
@@ -323,6 +336,27 @@
             font-size: 11.5px;
             font-weight: 700;
             white-space: nowrap;
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .status-badge.tersedia {
+            background-color: #DCFCE7;
+            color: #15803D;
+        }
+
+        .status-badge.habis, .status-badge.nonaktif {
+            background-color: #FEE2E2;
+            color: #B91C1C;
         }
 
         .price-text {
@@ -353,6 +387,29 @@
             color: #1E3A8A;
             background-color: #F1F5F9;
         }
+
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            margin-top: 4px;
+            background-color: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            min-width: 130px;
+            z-index: 50;
+            display: none;
+            flex-direction: column;
+            padding: 4px 0;
+        }
+        .dropdown-menu.show { display: flex; }
+        .dropdown-item {
+            display: flex; align-items: center; gap: 8px; padding: 8px 14px; font-size: 13px; font-weight: 600; color: #334155; text-decoration: none; transition: background 0.15s ease; text-align: left; cursor: pointer; border: none; background: none; width: 100%;
+        }
+        .dropdown-item:hover { background-color: #F1F5F9; color: #1E3A8A; }
+        .dropdown-item.danger { color: #EF4444; }
+        .dropdown-item.danger:hover { background-color: #FEF2F2; color: #DC2626; }
 
         /* Table Footer */
         .table-footer {
@@ -396,17 +453,82 @@
             font-weight: 700;
         }
 
-        /* Right Card - Detail Produk Form */
-        .form-card {
-            padding: 24px;
+        /* Modal Popup Styling */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(15, 23, 42, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.2s ease;
         }
 
-        .form-card .card-title {
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background-color: #FFFFFF;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 520px;
+            padding: 24px 28px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            transform: translateY(-10px);
+            transition: transform 0.2s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
             margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #F1F5F9;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0F172A;
+        }
+
+        .close-modal-btn {
+            background: none;
+            border: none;
+            color: #94A3B8;
+            font-size: 20px;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s ease;
+        }
+
+        .close-modal-btn:hover {
+            background-color: #F1F5F9;
+            color: #0F172A;
         }
 
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
 
         .form-group label {
@@ -448,8 +570,8 @@
         .btn-secondary {
             background-color: #FFFFFF;
             border: 1px solid #CBD5E1;
-            color: #1B3B6F;
-            padding: 10px 22px;
+            color: #475569;
+            padding: 9px 20px;
             border-radius: 8px;
             font-weight: 700;
             font-size: 13.5px;
@@ -460,7 +582,7 @@
             background-color: #1B3B6F;
             border: none;
             color: #FFFFFF;
-            padding: 10px 22px;
+            padding: 9px 22px;
             border-radius: 8px;
             font-weight: 700;
             font-size: 13.5px;
@@ -488,171 +610,306 @@
                     <h1 class="page-title">Kelola Produk</h1>
                     <p class="page-subtitle">Kelola katalog produk cetak, kategori, dan harga Anda.</p>
                 </div>
-                <button class="btn-add">
+                <button class="btn-add" id="openAddModalBtn">
                     <i class="fa-solid fa-plus"></i>
                     <span>Produk Baru</span>
                 </button>
             </div>
 
-            <!-- Two Column Layout -->
-            <div class="grid-2col">
-                
-                <!-- Left Column - Katalog Produk Table -->
-                <div class="card">
-                    <div class="card-header-row">
-                        <h2 class="card-title">Katalog Produk</h2>
-                        <div class="filter-input-box">
-                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                            <input type="text" placeholder="Filter produk...">
-                        </div>
-                    </div>
-
-                    <div class="table-responsive">
-                        <table class="custom-table">
-                            <thead>
-                                <tr>
-                                    <th>NAMA PRODUK</th>
-                                    <th>KATEGORI</th>
-                                    <th>HARGA DASAR</th>
-                                    <th style="text-align: right;">AKSI</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="product-name">Kartu Nama Premium (Laminasi)</td>
-                                    <td><span class="category-badge">Kartu Nama</span></td>
-                                    <td class="price-text">Rp 45.000 / box</td>
-                                    <td style="text-align: right;"><button class="action-icon-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td class="product-name">Brosur A5 Art Paper 120gr</td>
-                                    <td><span class="category-badge">Brosur</span></td>
-                                    <td class="price-text">Rp 450.000 / rim</td>
-                                    <td style="text-align: right;"><button class="action-icon-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td class="product-name">Spanduk Flexy Korea 440gr</td>
-                                    <td><span class="category-badge">Banner</span></td>
-                                    <td class="price-text">Rp 35.000 / m²</td>
-                                    <td style="text-align: right;"><button class="action-icon-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td class="product-name">Stiker Chromo A3+ (Die Cut)</td>
-                                    <td><span class="category-badge">Stiker</span></td>
-                                    <td class="price-text">Rp 10.000 / lembar</td>
-                                    <td style="text-align: right;"><button class="action-icon-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td class="product-name">Kalender Meja 2024 (Custom)</td>
-                                    <td><span class="category-badge">Merchandise</span></td>
-                                    <td class="price-text">Rp 25.000 / pcs</td>
-                                    <td style="text-align: right;"><button class="action-icon-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td class="product-name">Nota NCR 2 Rangkap (A5)</td>
-                                    <td><span class="category-badge">Dokumen</span></td>
-                                    <td class="price-text">Rp 185.000 / buku</td>
-                                    <td style="text-align: right;"><button class="action-icon-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td class="product-name">Roll Up Banner 60×160cm</td>
-                                    <td><span class="category-badge">Banner</span></td>
-                                    <td class="price-text">Rp 225.000 / set</td>
-                                    <td style="text-align: right;"><button class="action-icon-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td class="product-name">Sertifikat Linen 230gr</td>
-                                    <td><span class="category-badge">Dokumen</span></td>
-                                    <td class="price-text">Rp 5.000 / lembar</td>
-                                    <td style="text-align: right;"><button class="action-icon-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td class="product-name">Poster A2 Art Carton 260gr</td>
-                                    <td><span class="category-badge">Poster</span></td>
-                                    <td class="price-text">Rp 15.000 / lembar</td>
-                                    <td style="text-align: right;"><button class="action-icon-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
-                                </tr>
-                                <tr>
-                                    <td class="product-name">Undangan Pernikahan Softcover</td>
-                                    <td><span class="category-badge">Undangan</span></td>
-                                    <td class="price-text">Rp 3.500 / pcs</td>
-                                    <td style="text-align: right;"><button class="action-icon-btn"><i class="fa-solid fa-ellipsis-vertical"></i></button></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="table-footer">
-                        <div class="entry-info">Menampilkan 1 hingga 10 dari 48 entri</div>
-                        <div class="pagination">
-                            <button class="page-btn">Sebel</button>
-                            <button class="page-btn active">1</button>
-                            <button class="page-btn">2</button>
-                            <button class="page-btn">3</button>
-                            <button class="page-btn">Selan</button>
-                        </div>
+            <!-- Full Width Katalog Produk Table Card -->
+            <div class="card">
+                <div class="card-header-row">
+                    <h2 class="card-title">Katalog Produk</h2>
+                    <div class="filter-input-box">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" placeholder="Filter produk...">
                     </div>
                 </div>
 
-                <!-- Right Column - Detail Produk Form Card -->
-                <div class="card form-card">
-                    <h2 class="card-title">Detail Produk</h2>
+                <div class="table-responsive">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>NAMA PRODUK</th>
+                                <th>KATEGORI</th>
+                                <th>HARGA DASAR</th>
+                                <th>STOK</th>
+                                <th>STATUS</th>
+                                <th style="text-align: right;">AKSI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($produks ?? [] as $prod)
+                            <tr>
+                                <td class="product-name">{{ $prod->nama_produk }}</td>
+                                <td><span class="category-badge">{{ $prod->kategori }}</span></td>
+                                <td class="price-text">Rp {{ number_format($prod->harga, 0, ',', '.') }}</td>
+                                <td style="font-weight: 600; color: #475569;">{{ number_format($prod->stok ?? 0, 0, ',', '.') }}</td>
+                                <td><span class="status-badge {{ strtolower($prod->status ?? 'tersedia') }}">{{ $prod->status ?? 'Tersedia' }}</span></td>
+                                <td style="text-align: right;">
+                                    <div class="action-dropdown">
+                                        <button class="action-icon-btn action-toggle" title="Aksi"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                        <div class="dropdown-menu">
+                                            <button type="button" class="dropdown-item edit-prod-btn" onclick="editProduk({{ json_encode($prod) }})"><i class="fa-regular fa-pen-to-square"></i> Edit</button>
+                                            <form action="{{ route('produk.destroy', $prod->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="dropdown-item danger"><i class="fa-regular fa-trash-can"></i> Hapus</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="6" style="text-align:center; padding: 20px; color: #64748B;">Belum ada produk di database.</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
 
-                    <form>
+                <div class="table-footer">
+                    <div class="entry-info">Menampilkan {{ count($produks ?? []) }} entri produk</div>
+                    <div class="pagination"></div>
+                </div>
+            </div>
+
+            <!-- Modal Popup Form for Product -->
+            <div class="modal-overlay" id="productModal">
+                <div class="modal-box">
+                    <div class="modal-header">
+                        <h2 class="modal-title" id="formCardTitle">Tambah Produk Baru</h2>
+                        <button type="button" class="close-modal-btn" id="closeModalBtn">&times;</button>
+                    </div>
+
+                    <form id="productForm" action="{{ route('produk.store') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="_method" id="prodFormMethod" value="POST">
+
                         <div class="form-group">
                             <label for="prodName">Nama Produk</label>
-                            <input type="text" id="prodName" class="form-control" placeholder="mis. Spanduk Flexy 280gr">
+                            <input type="text" name="nama_produk" id="prodName" class="form-control" placeholder="mis. Spanduk Flexy 280gr" required>
                         </div>
 
                         <div class="form-group">
                             <label for="prodCategory">Kategori</label>
-                            <select id="prodCategory" class="form-control">
+                            <select name="kategori" id="prodCategory" class="form-control" required>
                                 <option value="">Pilih kategori</option>
-                                <option value="Kartu Nama">Kartu Nama</option>
-                                <option value="Brosur">Brosur</option>
-                                <option value="Banner">Banner</option>
-                                <option value="Stiker">Stiker</option>
+                                <option value="Banner & Outdoor">Banner & Outdoor</option>
+                                <option value="Digital Printing">Digital Printing</option>
+                                <option value="Promosi">Promosi</option>
+                                <option value="Stiker & Label">Stiker & Label</option>
                                 <option value="Merchandise">Merchandise</option>
-                                <option value="Dokumen">Dokumen</option>
-                                <option value="Poster">Poster</option>
-                                <option value="Undangan">Undangan</option>
                             </select>
                         </div>
 
                         <div class="form-group">
-                            <label for="prodBasePrice">Harga Dasar</label>
-                            <input type="text" id="prodBasePrice" class="form-control" placeholder="Rp 0">
+                            <label for="prodBasePrice">Harga Dasar (Rp)</label>
+                            <input type="number" name="harga" id="prodBasePrice" class="form-control" min="0" step="1000" placeholder="25000" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="prodPriceUnit">Satuan Harga</label>
-                            <select id="prodPriceUnit" class="form-control">
-                                <option value="per m²">per m²</option>
-                                <option value="box">box</option>
-                                <option value="rim">rim</option>
-                                <option value="pcs">pcs</option>
-                                <option value="lembar">lembar</option>
-                                <option value="buku">buku</option>
-                                <option value="set">set</option>
+                            <label for="prodStok">Stok (Maks 1.000.000 Pesanan/Unit)</label>
+                            <input type="number" name="stok" id="prodStok" class="form-control" value="100" min="0" max="1000000" placeholder="Contoh: 500" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="prodStatus">Status Produk</label>
+                            <select name="status" id="prodStatus" class="form-control" required>
+                                <option value="Tersedia">Tersedia (Aktif)</option>
+                                <option value="Habis">Habis</option>
+                                <option value="Nonaktif">Nonaktif</option>
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label for="prodDesc">Deskripsi (Opsional)</label>
-                            <textarea id="prodDesc" rows="4" class="form-control" placeholder="Detail teknis singkat..."></textarea>
+                            <textarea name="deskripsi" id="prodDesc" rows="3" class="form-control" placeholder="Detail teknis singkat..."></textarea>
                         </div>
 
                         <div class="form-actions">
-                            <button type="button" class="btn-secondary">Batal</button>
-                            <button type="submit" class="btn-primary">Simpan Produk</button>
+                            <button type="button" class="btn-secondary" id="btnCancelForm">Batal</button>
+                            <button type="submit" class="btn-primary" id="btnSubmitForm">Simpan Produk</button>
                         </div>
                     </form>
                 </div>
-
             </div>
 
         </main>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const productForm = document.getElementById('productForm');
+            const formTitle = document.getElementById('formCardTitle');
+            const submitBtn = document.getElementById('btnSubmitForm');
+            const cancelBtn = document.getElementById('btnCancelForm');
+            const tbody = document.querySelector('.custom-table tbody');
+            const entryInfo = document.querySelector('.entry-info');
+            const paginationEl = document.querySelector('.pagination');
+            const searchInput = document.querySelector('.filter-input-box input');
+            const btnAdd = document.getElementById('openAddModalBtn');
+            const modalEl = document.getElementById('productModal');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+
+            let currentPage = 1;
+            const itemsPerPage = 5;
+
+            function openModal() {
+                if (modalEl) modalEl.classList.add('active');
+            }
+
+            function closeModal() {
+                if (modalEl) modalEl.classList.remove('active');
+            }
+
+            function updatePagination() {
+                if (!tbody) return;
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                const visibleRows = rows.filter(r => r.getAttribute('data-search-hidden') !== 'true');
+                const totalItems = visibleRows.length;
+                const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+
+                if (currentPage > totalPages) currentPage = totalPages;
+
+                const startIdx = (currentPage - 1) * itemsPerPage;
+                const endIdx = startIdx + itemsPerPage;
+
+                rows.forEach(r => r.style.display = 'none');
+                visibleRows.slice(startIdx, endIdx).forEach(r => r.style.display = '');
+
+                if (entryInfo) {
+                    const startShow = totalItems === 0 ? 0 : startIdx + 1;
+                    const endShow = Math.min(endIdx, totalItems);
+                    entryInfo.textContent = `Menampilkan ${startShow} hingga ${endShow} dari ${totalItems} entri`;
+                }
+
+                if (paginationEl) {
+                    paginationEl.innerHTML = '';
+
+                    const prevBtn = document.createElement('button');
+                    prevBtn.className = 'page-btn';
+                    prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left" style="font-size: 11px;"></i>';
+                    prevBtn.disabled = currentPage === 1;
+                    prevBtn.style.opacity = currentPage === 1 ? '0.5' : '1';
+                    prevBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; updatePagination(); } });
+                    paginationEl.appendChild(prevBtn);
+
+                    for (let i = 1; i <= totalPages; i++) {
+                        const pBtn = document.createElement('button');
+                        pBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+                        pBtn.textContent = i;
+                        pBtn.addEventListener('click', () => { currentPage = i; updatePagination(); });
+                        paginationEl.appendChild(pBtn);
+                    }
+
+                    const nextBtn = document.createElement('button');
+                    nextBtn.className = 'page-btn';
+                    nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i>';
+                    nextBtn.disabled = currentPage === totalPages;
+                    nextBtn.style.opacity = currentPage === totalPages ? '0.5' : '1';
+                    nextBtn.addEventListener('click', () => { if (currentPage < totalPages) { currentPage++; updatePagination(); } });
+                    paginationEl.appendChild(nextBtn);
+                }
+            }
+
+            window.editProduk = function(prod) {
+                if (formTitle) formTitle.textContent = 'Edit Produk: ' + prod.nama_produk;
+                const form = document.getElementById('productForm');
+                form.action = '/produk/' + prod.id;
+                document.getElementById('prodFormMethod').value = 'PUT';
+                document.getElementById('prodName').value = prod.nama_produk;
+                document.getElementById('prodCategory').value = prod.kategori;
+                document.getElementById('prodBasePrice').value = prod.harga;
+                document.getElementById('prodStok').value = prod.stok !== undefined ? prod.stok : 100;
+                document.getElementById('prodStatus').value = prod.status || 'Tersedia';
+                document.getElementById('prodDesc').value = prod.deskripsi || '';
+                if (submitBtn) submitBtn.textContent = 'Update Produk';
+                openModal();
+                setTimeout(() => document.getElementById('prodName').focus(), 100);
+            };
+
+            function resetForm() {
+                const form = document.getElementById('productForm');
+                form.reset();
+                form.action = "{{ route('produk.store') }}";
+                document.getElementById('prodFormMethod').value = 'POST';
+                document.getElementById('prodStok').value = 100;
+                document.getElementById('prodStatus').value = 'Tersedia';
+                if (formTitle) formTitle.textContent = 'Tambah Produk Baru';
+                if (submitBtn) submitBtn.textContent = 'Simpan Produk';
+            }
+
+            if (btnAdd) {
+                btnAdd.addEventListener('click', function() {
+                    resetForm();
+                    openModal();
+                    setTimeout(() => document.getElementById('prodName').focus(), 100);
+                });
+            }
+
+            if (cancelBtn) {
+                cancelBtn.addEventListener('click', function() {
+                    closeModal();
+                });
+            }
+
+            if (closeModalBtn) {
+                closeModalBtn.addEventListener('click', function() {
+                    closeModal();
+                });
+            }
+
+            if (modalEl) {
+                modalEl.addEventListener('click', function(e) {
+                    if (e.target === modalEl) {
+                        closeModal();
+                    }
+                });
+            }
+
+            function bindRowActions(row) {
+                const toggleBtn = row.querySelector('.action-toggle');
+                const menu = row.querySelector('.dropdown-menu');
+
+                if (toggleBtn && menu) {
+                    toggleBtn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        document.querySelectorAll('.dropdown-menu').forEach(m => {
+                            if (m !== menu) m.classList.remove('show');
+                        });
+                        menu.classList.toggle('show');
+                    });
+                }
+            }
+
+            if (tbody) {
+                tbody.querySelectorAll('tr').forEach(row => bindRowActions(row));
+                updatePagination();
+            }
+
+            if (searchInput && tbody) {
+                searchInput.addEventListener('keyup', function() {
+                    const q = this.value.toLowerCase();
+                    const rows = tbody.querySelectorAll('tr');
+                    rows.forEach(r => {
+                        if (r.textContent.toLowerCase().includes(q)) {
+                            r.removeAttribute('data-search-hidden');
+                        } else {
+                            r.setAttribute('data-search-hidden', 'true');
+                        }
+                    });
+                    currentPage = 1;
+                    updatePagination();
+                });
+            }
+
+            document.addEventListener('click', function() {
+                document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+            });
+        });
+    </script>
 
     @include('layouts.navbar_assets')
 </body>

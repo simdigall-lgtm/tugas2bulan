@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengaturan - CV Prima Grafika</title>
+    <title>Pengaturan - SIPEKAN</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -110,17 +110,18 @@
 
                 <!-- Logo & Profile Upload -->
                 <div class="profile-upload">
-                    <img src="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=150&auto=format&fit=crop&q=80" alt="Logo Perusahaan" class="profile-avatar">
+                    <img src="{{ asset('assets/images/admin-avatar.png') }}" alt="Logo Perusahaan" class="profile-avatar" id="profileAvatar">
                     <div class="upload-info">
                         <div class="upload-name">Logo Perusahaan</div>
                         <div class="upload-sub">PNG atau JPG, maksimal 2MB. Disarankan 200×200px.</div>
-                        <button class="btn-upload"><i class="fa-solid fa-upload" style="margin-right:6px;"></i>Ganti Logo</button>
+                        <button type="button" class="btn-upload" id="btnUploadLogo"><i class="fa-solid fa-upload" style="margin-right:6px;"></i>Ganti Logo</button>
+                        <input type="file" id="logoFileInput" accept="image/png, image/jpeg, image/webp" style="display:none;">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="companyName">Nama Perusahaan</label>
-                    <input type="text" id="companyName" class="form-control" value="CV Prima Grafika">
+                    <input type="text" id="companyName" class="form-control" value="SIPEKAN (CV Prima Grafika)">
                 </div>
 
                 <div class="form-group">
@@ -140,7 +141,7 @@
                         <label for="companyEmail">Email Bisnis</label>
                         <div class="input-wrap">
                             <i class="input-icon fa-regular fa-envelope"></i>
-                            <input type="email" id="companyEmail" class="form-control with-icon" value="info@primagrafika.co.id">
+                            <input type="email" id="companyEmail" class="form-control with-icon" value="info@sipekan.co.id">
                         </div>
                     </div>
                 </div>
@@ -152,7 +153,7 @@
                     </div>
                     <div class="form-group">
                         <label for="companyWebsite">Website</label>
-                        <input type="text" id="companyWebsite" class="form-control" placeholder="https://primagrafika.co.id">
+                        <input type="text" id="companyWebsite" class="form-control" placeholder="https://sipekan.co.id">
                     </div>
                 </div>
 
@@ -201,16 +202,46 @@
             </div>
         </div>
 
-        <!-- Section 3: Keamanan Akun -->
+        <!-- Section 3: Keamanan Akun & 2FA -->
         <div class="settings-card">
             <div class="card-section-header">
                 <div>
-                    <div class="section-title">Keamanan Akun</div>
-                    <div class="section-subtitle">Perbarui kata sandi untuk menjaga keamanan akun admin Anda.</div>
+                    <div class="section-title">Keamanan Akun & 2FA</div>
+                    <div class="section-subtitle">Kelola kata sandi dan status Otentikasi Dua Faktor (2FA) Anda.</div>
                 </div>
                 <div class="section-icon"><i class="fa-solid fa-shield-halved"></i></div>
             </div>
             <div class="card-body">
+
+                <div style="background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <i class="fa-brands fa-google" style="color: #4285F4; font-size: 20px;"></i>
+                            <span style="font-size: 14px; font-weight: 800; color: #0F172A;">Google Authenticator 2FA (Aktif)</span>
+                        </div>
+                        <span style="background: #DCFCE7; color: #166534; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 20px; border: 1px solid #86EFAC;">AKTIF</span>
+                    </div>
+
+                    <p style="font-size: 13px; color: #475569; line-height: 1.45; margin-bottom: 16px;">
+                        Pindai QR Code di bawah ini menggunakan aplikasi <strong>Google Authenticator</strong> di HP Anda untuk menghubungkan akun. Pemasangan hanya perlu dilakukan 1 kali.
+                    </p>
+
+                    <div style="display: flex; align-items: center; gap: 20px; background: #FFFFFF; padding: 14px; border-radius: 10px; border: 1px solid #E2E8F0;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=otpauth://totp/CV%20Prima%20Grafika:admin%40primagrafika.com?secret=JBSWY3DPEHPK3PXP&issuer=CV%20Prima%20Grafika" 
+                             alt="Google Authenticator QR Code" 
+                             style="width: 110px; height: 110px; border-radius: 8px; border: 1px solid #CBD5E1; padding: 4px;">
+                        <div>
+                            <div style="font-size: 12.5px; font-weight: 700; color: #334155; margin-bottom: 4px;">Secret Key Manual:</div>
+                            <div style="display: inline-flex; align-items: center; gap: 8px; background: #0F172A; color: #38BDF8; font-family: monospace; font-size: 13px; font-weight: 700; padding: 7px 12px; border-radius: 6px; letter-spacing: 1px;">
+                                <i class="fa-regular fa-key"></i>
+                                <span>JBSW Y3DP EHPK 3PXP</span>
+                            </div>
+                            <div style="font-size: 12px; color: #64748B; margin-top: 8px;">
+                                <i class="fa-solid fa-circle-info" style="color: #2563EB;"></i> Simpan Secret Key ini di tempat aman untuk pemulihan akses HP.
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <label for="currentPass">Kata Sandi Saat Ini</label>
@@ -231,6 +262,7 @@
             </div>
         </div>
 
+
     </main>
 
     <!-- Action Bar -->
@@ -240,6 +272,122 @@
     </div>
 </div>
 
-@include('layouts.navbar_assets')
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const btnUploadLogo = document.getElementById('btnUploadLogo');
+            const logoFileInput = document.getElementById('logoFileInput');
+            const profileAvatar = document.getElementById('profileAvatar');
+            const btnSave = document.querySelector('.btn-save');
+            const btnCancel = document.querySelector('.btn-cancel');
+
+            // Form inputs
+            const companyName = document.getElementById('companyName');
+            const companyAddress = document.getElementById('companyAddress');
+            const companyPhone = document.getElementById('companyPhone');
+            const companyEmail = document.getElementById('companyEmail');
+            const companyNpwp = document.getElementById('companyNpwp');
+            const companyWebsite = document.getElementById('companyWebsite');
+            const currency = document.getElementById('currency');
+            const dateFormat = document.getElementById('dateFormat');
+            const timezone = document.getElementById('timezone');
+            const currentPass = document.getElementById('currentPass');
+            const newPass = document.getElementById('newPass');
+            const confirmPass = document.getElementById('confirmPass');
+
+            // Load saved settings from localStorage
+            function loadSavedSettings() {
+                const savedLogo = localStorage.getItem('companyLogo');
+                if (savedLogo && profileAvatar) profileAvatar.src = savedLogo;
+
+                if (localStorage.getItem('companyName') && companyName) companyName.value = localStorage.getItem('companyName');
+                if (localStorage.getItem('companyAddress') && companyAddress) companyAddress.value = localStorage.getItem('companyAddress');
+                if (localStorage.getItem('companyPhone') && companyPhone) companyPhone.value = localStorage.getItem('companyPhone');
+                if (localStorage.getItem('companyEmail') && companyEmail) companyEmail.value = localStorage.getItem('companyEmail');
+                if (localStorage.getItem('companyNpwp') && companyNpwp) companyNpwp.value = localStorage.getItem('companyNpwp');
+                if (localStorage.getItem('companyWebsite') && companyWebsite) companyWebsite.value = localStorage.getItem('companyWebsite');
+                if (localStorage.getItem('currency') && currency) currency.value = localStorage.getItem('currency');
+                if (localStorage.getItem('dateFormat') && dateFormat) dateFormat.value = localStorage.getItem('dateFormat');
+                if (localStorage.getItem('timezone') && timezone) timezone.value = localStorage.getItem('timezone');
+            }
+
+            loadSavedSettings();
+
+            // 1. Real Logo Upload Functionality
+            if (btnUploadLogo && logoFileInput) {
+                btnUploadLogo.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    logoFileInput.click();
+                });
+
+                logoFileInput.addEventListener('change', function(e) {
+                    const file = e.target.files[0];
+                    if (file) {
+                        if (file.size > 2 * 1024 * 1024) {
+                            if (window.showAppToast) window.showAppToast('Ukuran berkas melebihi 2MB!', 'error');
+                            return;
+                        }
+                        const reader = new FileReader();
+                        reader.onload = function(evt) {
+                            const dataUrl = evt.target.result;
+                            if (profileAvatar) profileAvatar.src = dataUrl;
+                            localStorage.setItem('companyLogo', dataUrl);
+                            if (window.showAppToast) window.showAppToast('Logo perusahaan berhasil diperbarui!', 'success');
+                        };
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+
+            // 2. Real Settings Save Functionality
+            if (btnSave) {
+                btnSave.addEventListener('click', function(e) {
+                    e.preventDefault();
+
+                    // Check Password matching if filled
+                    if (newPass.value.trim() || confirmPass.value.trim()) {
+                        if (newPass.value !== confirmPass.value) {
+                            if (window.showAppToast) window.showAppToast('Konfirmasi kata sandi baru tidak cocok!', 'error');
+                            return;
+                        }
+                        if (newPass.value.length < 6) {
+                            if (window.showAppToast) window.showAppToast('Kata sandi baru minimal 6 karakter!', 'warning');
+                            return;
+                        }
+                        currentPass.value = '';
+                        newPass.value = '';
+                        confirmPass.value = '';
+                    }
+
+                    // Save settings to localStorage
+                    if (companyName) localStorage.setItem('companyName', companyName.value.trim());
+                    if (companyAddress) localStorage.setItem('companyAddress', companyAddress.value.trim());
+                    if (companyPhone) localStorage.setItem('companyPhone', companyPhone.value.trim());
+                    if (companyEmail) localStorage.setItem('companyEmail', companyEmail.value.trim());
+                    if (companyNpwp) localStorage.setItem('companyNpwp', companyNpwp.value.trim());
+                    if (companyWebsite) localStorage.setItem('companyWebsite', companyWebsite.value.trim());
+                    if (currency) localStorage.setItem('currency', currency.value);
+                    if (dateFormat) localStorage.setItem('dateFormat', dateFormat.value);
+                    if (timezone) localStorage.setItem('timezone', timezone.value);
+
+                    if (window.showAppToast) {
+                        window.showAppToast('Pengaturan umum berhasil disimpan!', 'success');
+                    }
+                });
+            }
+
+            // 3. Reset / Batal
+            if (btnCancel) {
+                btnCancel.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    loadSavedSettings();
+                    if (currentPass) currentPass.value = '';
+                    if (newPass) newPass.value = '';
+                    if (confirmPass) confirmPass.value = '';
+                    if (window.showAppToast) window.showAppToast('Perubahan dibatalkan.', 'info');
+                });
+            }
+        });
+    </script>
+    @include('layouts.navbar_assets')
 </body>
 </html>
