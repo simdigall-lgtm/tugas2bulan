@@ -67,8 +67,8 @@
         .filter-search .search-icon { left:11px; font-size:13px; }
 
         .custom-table { width:100%; border-collapse:collapse; text-align:left; }
-        .custom-table th { background:#FFFFFF; padding:12px 16px; font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #E2E8F0; white-space:nowrap; }
-        .custom-table td { padding:14px 16px; font-size:13px; color:#334155; border-bottom:1px solid #F1F5F9; font-weight:500; vertical-align:middle; white-space:nowrap; }
+        .custom-table th { background:#FFFFFF; padding:11px 12px; font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #E2E8F0; white-space:nowrap; }
+        .custom-table td { padding:11px 12px; font-size:13px; color:#334155; border-bottom:1px solid #F1F5F9; font-weight:500; vertical-align:middle; }
         .custom-table tr:last-child td { border-bottom:none; }
         .custom-table tr:hover td { background:#F8FAFC; }
 

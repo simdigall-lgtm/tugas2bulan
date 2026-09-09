@@ -2,9 +2,12 @@
 <aside class="sidebar">
     <div>
         <div class="sidebar-brand">
-            <a href="{{ route('dashboard') }}" title="Ke Dasbor Utama" style="text-decoration: none; color: inherit; display: block;">
-                <div class="brand-name">SIPEKAN</div>
-                <div class="brand-tag">Konsol Admin</div>
+            <a href="{{ route('dashboard') }}" title="Ke Dasbor Utama" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px;">
+                <img src="{{ asset('assets/images/sipekan-logo.png') }}" alt="SIPEKAN Logo" style="height: 38px; width: auto; object-fit: contain; flex-shrink: 0; display: block;">
+                <div style="display: flex; flex-direction: column; justify-content: space-between; height: 38px;">
+                    <div class="brand-name" style="line-height: 1.1; font-size: 19px; font-weight: 800; margin: 0;">SIPEKAN</div>
+                    <div class="brand-tag" style="line-height: 1.2; font-size: 12px; margin: 0;">{{ ($isKasir ?? false) ? 'Konsol Kasir' : 'Konsol Admin' }}</div>
+                </div>
             </a>
         </div>
 
@@ -37,10 +40,12 @@
     </div>
 
     <div class="sidebar-bottom">
+        @if(!($isKasir ?? false))
         <a href="{{ route('pengaturan') }}" class="menu-item {{ request()->routeIs('pengaturan') ? 'active' : '' }}">
             <i class="fa-solid fa-gear"></i>
             <span>Pengaturan</span>
         </a>
+        @endif
         <a href="{{ route('logout') }}" class="menu-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
             <span>Keluar</span>

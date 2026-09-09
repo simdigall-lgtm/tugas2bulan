@@ -67,18 +67,18 @@
 
         <!-- User Profile Dropdown Button -->
         <div class="user-profile-wrapper" style="position: relative;">
-            <div class="user-profile" id="userProfileBtn" title="Menu Profil Admin">
-                <img src="{{ asset('assets/images/admin-avatar.png') }}" alt="Admin" class="avatar-img">
-                <span class="user-name-label">Admin SIPEKAN</span>
+            <div class="user-profile" id="userProfileBtn" title="Menu Profil {{ $authUserName ?? 'Admin SIPEKAN' }}">
+                <img src="{{ asset('assets/images/admin-avatar.png') }}" alt="{{ $authUserName ?? 'Admin' }}" class="avatar-img">
+                <span class="user-name-label">{{ $authUserName ?? 'Admin SIPEKAN' }}</span>
                 <i class="fa-solid fa-chevron-down profile-chevron"></i>
             </div>
 
             <div class="profile-dropdown-card" id="userProfileDropdown">
                 <div class="profile-header-info">
-                    <img src="{{ asset('assets/images/admin-avatar.png') }}" alt="Admin" class="profile-header-avatar">
+                    <img src="{{ asset('assets/images/admin-avatar.png') }}" alt="{{ $authUserName ?? 'Admin' }}" class="profile-header-avatar">
                     <div>
-                        <div class="profile-header-name">Admin SIPEKAN</div>
-                        <div class="profile-header-email">admin@sipekan.co.id</div>
+                        <div class="profile-header-name">{{ $authUserName ?? 'Admin SIPEKAN' }}</div>
+                        <div class="profile-header-email">{{ $authUserEmail ?? 'admin@sipekan.co.id' }}</div>
                     </div>
                 </div>
                 <div class="profile-menu-divider"></div>
@@ -86,10 +86,12 @@
                     <i class="fa-regular fa-user"></i>
                     <span>Profil Saya</span>
                 </a>
+                @if(!($isKasir ?? false))
                 <a href="{{ route('pengaturan') }}" class="profile-menu-item">
                     <i class="fa-solid fa-gear"></i>
                     <span>Pengaturan Sistem</span>
                 </a>
+                @endif
                 <a href="#" class="profile-menu-item" id="helpModalProfileLink">
                     <i class="fa-regular fa-circle-question"></i>
                     <span>Pusat Bantuan</span>

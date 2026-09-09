@@ -35,22 +35,24 @@
 
         .content-body { padding:32px; flex:1; }
 
-        .page-header-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:24px; }
         .page-title { font-size:26px; font-weight:800; color:#0F172A; letter-spacing:-0.5px; }
         .page-subtitle { font-size:14px; color:#64748B; margin-top:4px; }
-        .header-actions { display:flex; gap:12px; }
 
-        .btn-export { display:flex; align-items:center; gap:8px; padding:10px 18px; border-radius:8px; font-size:13.5px; font-weight:700; cursor:pointer; border:1.5px solid #CBD5E1; background:#FFFFFF; color:#334155; transition:all 0.2s ease; }
+        /* Filter Card with Left Date Inputs & Right Export Buttons */
+        .filter-card { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:18px 24px; margin-bottom:24px; display:flex; align-items:flex-end; justify-content:space-between; gap:16px; box-shadow:0 1px 3px rgba(0,0,0,0.02); flex-wrap:wrap; }
+        .filter-form-left { display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap; }
+        .date-input-group { display:flex; flex-direction:column; gap:6px; }
+        .date-input-group label { font-size:12.5px; font-weight:700; color:#334155; }
+        .date-input-group input[type="date"] { border:1px solid #CBD5E1; border-radius:8px; padding:9px 14px; font-size:13.5px; color:#0F172A; background:#FFFFFF; outline:none; transition:border-color 0.2s ease; }
+        .date-input-group input[type="date"]:focus { border-color:#1E3A8A; }
+        .btn-filter { background:#1B3B6F; color:#FFFFFF; border:none; padding:10px 22px; border-radius:8px; font-weight:700; font-size:13.5px; cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:6px; transition:background 0.2s ease; }
+        .btn-filter:hover { background:#142F5B; }
+        .export-actions-right { display:flex; align-items:center; gap:10px; }
+
+        .btn-export { display:flex; align-items:center; gap:8px; padding:10px 18px; border-radius:8px; font-size:13.5px; font-weight:700; cursor:pointer; border:1.5px solid #CBD5E1; background:#FFFFFF; color:#334155; transition:all 0.2s ease; white-space:nowrap; }
         .btn-export:hover { background:#F1F5F9; }
         .btn-export.primary { background:#1B3B6F; border-color:#1B3B6F; color:#FFFFFF; }
         .btn-export.primary:hover { background:#142F5B; }
-
-        /* Filter Date Bar */
-        .filter-card { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:20px 24px; margin-bottom:24px; display:flex; align-items:flex-end; gap:16px; }
-        .filter-card .form-group { flex:1; }
-        .filter-card label { display:block; font-size:12.5px; font-weight:700; color:#334155; margin-bottom:6px; }
-        .filter-card input { width:100%; border:1px solid #CBD5E1; border-radius:8px; padding:9px 14px; font-size:13.5px; color:#0F172A; outline:none; }
-        .btn-filter { background:#1B3B6F; color:#FFFFFF; border:none; padding:10px 24px; border-radius:8px; font-weight:700; font-size:13.5px; cursor:pointer; white-space:nowrap; }
 
         /* Stat Cards */
         .stats-row { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; margin-bottom:24px; }
@@ -74,7 +76,7 @@
         .card-link { font-size:13px; font-weight:700; color:#1E3A8A; text-decoration:none; }
         .custom-table { width:100%; border-collapse:collapse; text-align:left; }
         .custom-table th { background:#FFFFFF; padding:11px 14px; font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #E2E8F0; white-space:nowrap; }
-        .custom-table td { padding:14px; font-size:13px; color:#334155; border-bottom:1px solid #F1F5F9; font-weight:500; vertical-align:middle; white-space:nowrap; }
+        .custom-table td { padding:11px 14px; font-size:13px; color:#334155; border-bottom:1px solid #F1F5F9; font-weight:500; vertical-align:middle; }
         .custom-table tr:last-child td { border-bottom:none; }
         .inv-code { color:#1E3A8A; font-weight:700; white-space:nowrap; }
 
@@ -175,28 +177,49 @@
 
         <main class="content-body">
             <!-- Page Header -->
-            <div class="page-header-row">
-                <div>
-                    <h1 class="page-title">Laporan & Statistik</h1>
-                    <p class="page-subtitle">Ringkasan performa dan transaksi percetakan.</p>
-                </div>
-                <div class="header-actions">
-                    <button class="btn-export"><i class="fa-regular fa-file-pdf"></i> Cetak PDF</button>
-                    <button class="btn-export primary"><i class="fa-regular fa-file-excel"></i> Export Excel</button>
-                </div>
+            <div style="margin-bottom: 20px;">
+                <h1 class="page-title">Laporan & Statistik</h1>
+                <p class="page-subtitle">Ringkasan performa dan transaksi percetakan tahun 2026.</p>
             </div>
 
-            <!-- Date Range Filter -->
+            <!-- Filter Card: Date Inputs on Left, Export Buttons on Right -->
             <div class="filter-card">
-                <div class="date-input-group">
-                    <label>Dari Tanggal</label>
-                    <input type="date" value="2026-01-01">
+                <!-- Left: Date Filter Form -->
+                <form action="{{ route('laporan') }}" method="GET" class="filter-form-left">
+                    <div class="date-input-group">
+                        <label for="startDateInput">Dari Tanggal</label>
+                        <input type="date" 
+                               id="startDateInput" 
+                               name="start_date" 
+                               value="{{ $startDate ?? '2026-01-01' }}" 
+                               min="2026-01-01" 
+                               max="2026-12-31">
+                    </div>
+                    <div class="date-input-group">
+                        <label for="endDateInput">Sampai Tanggal</label>
+                        <input type="date" 
+                               id="endDateInput" 
+                               name="end_date" 
+                               value="{{ $endDate ?? '2026-12-31' }}" 
+                               min="2026-01-01" 
+                               max="2026-12-31">
+                    </div>
+                    <button type="submit" class="btn-filter">
+                        <i class="fa-solid fa-filter"></i>
+                        <span>Tampilkan</span>
+                    </button>
+                    @if(request()->has('start_date') || request()->has('end_date'))
+                        <a href="{{ route('laporan') }}" class="btn-export" style="text-decoration:none; padding: 10px 14px;" title="Reset Filter">
+                            <i class="fa-solid fa-rotate-left"></i> Reset
+                        </a>
+                    @endif
+                </form>
+
+                <!-- Right: Export Action Buttons -->
+                <div class="export-actions-right">
+                    <button class="btn-export" title="Cetak Ringkasan PDF"><i class="fa-regular fa-file-pdf"></i> Cetak PDF</button>
+                    <button class="btn-export primary" title="Download Format Excel / CSV"><i class="fa-regular fa-file-excel"></i> Export Excel</button>
                 </div>
-                <div class="date-input-group">
-                    <label>Sampai Tanggal</label>
-                    <input type="date" value="2026-12-31">
-                </div>
-                <button class="btn-filter">Tampilkan</button>
             </div>
 
             <!-- Stat Cards -->
@@ -262,7 +285,6 @@
                                 <option value="all">Semua</option>
                             </select>
                         </div>
-                        <a href="{{ route('pesanan') }}" class="card-link" style="padding: 6px 14px; background: #EFF6FF; border-radius: 8px; border: 1px solid #DBEAFE; transition: background 0.15s ease;">Lihat Semua Pesanan <i class="fa-solid fa-arrow-right" style="font-size:11px; margin-left:4px;"></i></a>
                     </div>
                 </div>
 
@@ -331,15 +353,18 @@
             new Chart(ctxTrend, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'],
+                    labels: {!! json_encode($trendLabels ?? ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des']) !!},
                     datasets: [{
                         label: 'Pendapatan',
-                        data: [28000000, 35000000, 30000000, 42000000, 38000000, 55000000, 62000000, 58000000, 70000000, 78000000, 85000000, 98000000],
+                        data: {!! json_encode($trendValues ?? array_fill(0, 12, 0)) !!},
                         borderColor: '#1E3A8A',
                         backgroundColor: gradientBlue,
                         fill: true,
                         tension: 0.35,
-                        borderWidth: 3
+                        borderWidth: 3,
+                        pointBackgroundColor: '#1E3A8A',
+                        pointRadius: 4,
+                        pointHoverRadius: 6
                     }]
                 },
                 options: {
@@ -366,7 +391,7 @@
                             ticks: {
                                 callback: function(val) {
                                     if (val >= 1000000000) return 'Rp ' + (val / 1000000000) + ' M';
-                                    if (val >= 1000000) return 'Rp ' + (val / 1000000) + ' Juta';
+                                    if (val >= 1000000) return 'Rp ' + (val / 1000000) + ' Jt';
                                     return 'Rp ' + val.toLocaleString('id-ID');
                                 }
                             }
@@ -375,32 +400,51 @@
                 }
             });
 
-            // 2. Laporan Share Bar Chart
+            // 2. Laporan Share Horizontal Bar Chart
             const ctxShare = document.getElementById('laporanShareChart').getContext('2d');
             new Chart(ctxShare, {
                 type: 'bar',
                 data: {
-                    labels: ['Brosur', 'Banner', 'Kartu Nama', 'Stiker', 'Dokumen', 'Kalender'],
+                    labels: {!! json_encode($shareLabels ?? ['Banner/Spanduk', 'Brosur', 'Kartu Nama', 'Stiker', 'Dokumen']) !!},
                     datasets: [{
                         label: 'Persentase Omzet (%)',
-                        data: [35, 25, 15, 12, 8, 5],
+                        data: {!! json_encode($sharePercentages ?? [0, 0, 0, 0, 0]) !!},
                         backgroundColor: ['#1E3A8A', '#2563EB', '#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE'],
-                        borderRadius: 8,
-                        barThickness: 24
+                        borderRadius: 6,
+                        barThickness: 18
                     }]
                 },
                 options: {
+                    animation: false,
+                    indexAxis: 'y',
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
                         legend: { display: false },
-                        tooltip: { backgroundColor: '#0F172A', padding: 12 }
+                        tooltip: {
+                            backgroundColor: '#0F172A',
+                            padding: 12,
+                            callbacks: {
+                                label: function(context) {
+                                    return ' Kontribusi: ' + context.raw + '%';
+                                }
+                            }
+                        }
                     },
                     scales: {
-                        x: { grid: { display: false } },
-                        y: {
+                        x: {
                             grid: { color: '#F1F5F9' },
-                            ticks: { callback: function(val) { return val + '%'; } }
+                            ticks: {
+                                callback: function(val) { return val + '%'; }
+                            },
+                            beginAtZero: true
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: {
+                                font: { size: 12, weight: '600' },
+                                color: '#334155'
+                            }
                         }
                     }
                 }

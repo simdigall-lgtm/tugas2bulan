@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Pelanggan - SIPEKAN</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -343,8 +345,8 @@
 
         .custom-table th {
             background-color: #FFFFFF;
-            padding: 14px 24px;
-            font-size: 11.5px;
+            padding: 12px 14px;
+            font-size: 11px;
             font-weight: 700;
             color: #64748B;
             text-transform: uppercase;
@@ -354,13 +356,12 @@
         }
 
         .custom-table td {
-            padding: 18px 24px;
-            font-size: 13.5px;
+            padding: 12px 14px;
+            font-size: 13px;
             color: #334155;
             border-bottom: 1px solid #F1F5F9;
             font-weight: 500;
             vertical-align: middle;
-            white-space: nowrap;
         }
 
         .custom-table tr:last-child td {
@@ -380,15 +381,23 @@
         .cus-name {
             font-weight: 700;
             color: #0F172A;
+            font-size: 13px;
+        }
+
+        .cus-sub {
+            font-size: 11.5px;
+            color: #64748B;
+            margin-top: 2px;
         }
 
         .contact-info {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 13px;
+            gap: 6px;
+            font-size: 12px;
             color: #475569;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
+            white-space: nowrap;
         }
 
         .contact-info:last-child {
@@ -396,10 +405,10 @@
         }
 
         .contact-info i {
-            width: 16px;
+            width: 14px;
             text-align: center;
             color: #64748B;
-            font-size: 13px;
+            font-size: 12px;
             flex-shrink: 0;
         }
 
@@ -448,6 +457,14 @@
             display: none;
             flex-direction: column;
             padding: 4px 0;
+        }
+
+        .dropdown-menu.dropup {
+            top: auto !important;
+            bottom: 100% !important;
+            margin-top: 0 !important;
+            margin-bottom: 6px !important;
+            box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.12) !important;
         }
 
         .dropdown-menu.show {
@@ -566,7 +583,7 @@
             width: 100%;
             max-width: 500px;
             padding: 28px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             transform: translateY(-10px);
             transition: transform 0.2s ease;
         }
@@ -608,7 +625,8 @@
             margin-bottom: 6px;
         }
 
-        .modal-form input, .modal-form textarea {
+        .modal-form input,
+        .modal-form textarea {
             width: 100%;
             border: 1px solid #CBD5E1;
             border-radius: 8px;
@@ -618,7 +636,8 @@
             outline: none;
         }
 
-        .modal-form input:focus, .modal-form textarea:focus {
+        .modal-form input:focus,
+        .modal-form textarea:focus {
             border-color: #1E3A8A;
             box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
         }
@@ -678,7 +697,8 @@
             transition: all 0.2s ease;
         }
 
-        .country-picker-btn:hover, .country-picker-btn:focus {
+        .country-picker-btn:hover,
+        .country-picker-btn:focus {
             border-color: #1E3A8A;
             background-color: #F8FAFC;
         }
@@ -733,7 +753,7 @@
             height: 15px;
             border-radius: 2px;
             object-fit: cover;
-            box-shadow: 0 0 2px rgba(0,0,0,0.25);
+            box-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
             flex-shrink: 0;
         }
 
@@ -744,16 +764,20 @@
                 align-items: flex-start;
                 gap: 16px;
             }
+
             .filter-toolbar {
                 flex-direction: column;
                 align-items: stretch;
             }
-            .customer-search-box, .customer-search-box input {
+
+            .customer-search-box,
+            .customer-search-box input {
                 width: 100%;
             }
         }
     </style>
 </head>
+
 <body>
 
     <!-- Sidebar Navigation -->
@@ -761,13 +785,13 @@
 
     <!-- Main Wrapper -->
     <div class="main-wrapper">
-        
+
         <!-- Top Navigation Bar -->
         @include('layouts.topbar')
 
         <!-- Content Body Area -->
         <main class="content-body">
-            
+
             <!-- Page Header Row -->
             <div class="page-header-row">
                 <div>
@@ -780,6 +804,41 @@
                 </button>
             </div>
 
+            @php
+                $extractedCities = [];
+                foreach ($pelanggans ?? [] as $pel) {
+                    if (!empty($pel->alamat)) {
+                        $parts = array_map('trim', explode(',', $pel->alamat));
+                        foreach ($parts as $part) {
+                            if (!empty($part) && strlen($part) >= 3 && !is_numeric($part)) {
+                                $extractedCities[] = ucwords(strtolower($part));
+                            }
+                        }
+                    }
+                }
+                $defaultCities = [
+                    'Buniseuri',
+                    'Ciamis',
+                    'Cijeungjing',
+                    'Margaluyu',
+                    'Gunung Asih',
+                    'Nasol',
+                    'Jati',
+                    'Kawali',
+                    'Kujang',
+                    'Sindangkasih',
+                    'Bandung',
+                    'Jakarta Pusat',
+                    'Jakarta Selatan',
+                    'Semarang',
+                    'Surabaya',
+                    'Tasikmalaya',
+                    'Yogyakarta'
+                ];
+                $allAvailableCities = array_unique(array_merge($extractedCities, $defaultCities));
+                sort($allAvailableCities);
+            @endphp
+
             <!-- Filter & Search Toolbar -->
             <div class="filter-toolbar">
                 <div class="customer-search-box">
@@ -788,7 +847,14 @@
                 </div>
 
                 <div class="filter-actions">
-                    <select class="filter-select" id="filterStatusSelect">
+                    <select class="filter-select" id="filterCityQuickSelect" title="Filter Cepat Kota / Wilayah">
+                        <option value="">Semua Wilayah</option>
+                        @foreach($allAvailableCities as $c)
+                            <option value="{{ $c }}">{{ $c }}</option>
+                        @endforeach
+                    </select>
+
+                    <select class="filter-select" id="filterStatusSelect" title="Filter Status Keanggotaan">
                         <option value="">Semua Status</option>
                         <option value="aktif">Aktif</option>
                         <option value="nonaktif">Nonaktif</option>
@@ -807,65 +873,85 @@
                     <table class="custom-table" id="customerTable">
                         <thead>
                             <tr>
-                                <th style="width: 40px;"><input type="checkbox" style="cursor:pointer;" id="selectAll"></th>
-                                <th>ID PELANGGAN</th>
+                                <th style="width: 36px; text-align: center;"><input type="checkbox"
+                                        style="cursor:pointer;" id="selectAll"></th>
+                                <th style="width: 105px;">ID PELANGGAN</th>
                                 <th>NAMA PELANGGAN</th>
-                                <th>KONTAK</th>
-                                <th>TOTAL PESANAN</th>
-                                <th>TANGGAL DAFTAR</th>
-                                <th>STATUS</th>
-                                <th>AKSI</th>
+                                <th style="width: 195px;">KONTAK</th>
+                                <th style="width: 95px; text-align: center;">TOTAL PESANAN</th>
+                                <th style="width: 110px;">TANGGAL DAFTAR</th>
+                                <th style="width: 85px; text-align: center;">STATUS</th>
+                                <th style="width: 50px; text-align: center;">AKSI</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($pelanggans ?? [] as $p)
-                            <tr class="customer-row" data-customer='@json($p)' style="cursor: pointer;">
-                                <td class="prevent-row-click"><input type="checkbox" style="cursor:pointer;"></td>
-                                <td class="cus-id">{{ $p->kode_pelanggan }}</td>
-                                <td>
-                                    <div class="customer-cell">
-                                        <div class="avatar-init" style="background-color: #DBEAFE; color: #1D4ED8;">
-                                            {{ strtoupper(substr($p->nama, 0, 2)) }}
-                                        </div>
-                                        <div>
-                                            <div class="cus-name" style="color:#1E3A8A; font-weight:700;">{{ $p->nama }}</div>
-                                            <div class="cus-sub">{{ Str::limit($p->alamat ?? 'Pelanggan', 30) }}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="contact-info"><i class="fa-solid fa-phone"></i><span>{{ $p->no_hp }}</span></div>
-                                    <div class="contact-info"><i class="fa-regular fa-envelope"></i><span>{{ $p->email }}</span></div>
-                                </td>
-                                <td style="font-weight: 700;">{{ $p->total_pesanan }}x</td>
-                                <td>{{ $p->tanggal_daftar ? \Carbon\Carbon::parse($p->tanggal_daftar)->format('d M Y') : '-' }}</td>
-                                <td><span class="badge {{ strtolower($p->status) == 'aktif' ? 'badge-active' : 'badge-inactive' }}">{{ $p->status }}</span></td>
-                                <td class="prevent-row-click">
-                                    <div class="action-btns">
-                                        <div class="action-dropdown">
-                                            <button class="action-icon-btn action-toggle" title="Aksi"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                                            <div class="dropdown-menu">
-                                                <a href="javascript:void(0)" class="dropdown-item btn-show-detail" data-customer='@json($p)'><i class="fa-solid fa-eye" style="color:#1E3A8A;"></i> Detail Pelanggan</a>
-                                                <a href="{{ route('pesanan') }}?pelanggan={{ urlencode($p->nama) }}" class="dropdown-item"><i class="fa-solid fa-cart-plus" style="color:#2563EB;"></i> Buat Pesanan</a>
-                                                <a href="javascript:void(0)" class="dropdown-item btn-edit-pelanggan" data-customer='@json($p)'><i class="fa-regular fa-pen-to-square"></i> Edit</a>
-                                                <form action="{{ route('pelanggan.destroy', $p->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Yakin ingin menghapus pelanggan ini?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="dropdown-item danger" style="background:none; border:none; width:100%; text-align:left; cursor:pointer;"><i class="fa-regular fa-trash-can"></i> Hapus</button>
-                                                </form>
+                                <tr class="customer-row" data-customer='@json($p)' style="cursor: pointer;">
+                                    <td class="prevent-row-click" style="text-align: center;"><input type="checkbox"
+                                            style="cursor:pointer;"></td>
+                                    <td class="cus-id">{{ $p->kode_pelanggan }}</td>
+                                    <td>
+                                        <div class="customer-cell">
+                                            <div class="avatar-init" style="background-color: #DBEAFE; color: #1D4ED8;">
+                                                {{ strtoupper(substr($p->nama, 0, 2)) }}
+                                            </div>
+                                            <div>
+                                                <div class="cus-name" style="color:#1E3A8A; font-weight:700;">{{ $p->nama }}
+                                                </div>
+                                                <div class="cus-sub">{{ Str::limit($p->alamat ?? 'Pelanggan', 30) }}</div>
                                             </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                    <td>
+                                        <div class="contact-info"><i
+                                                class="fa-solid fa-phone"></i><span>{{ $p->no_hp }}</span></div>
+                                        <div class="contact-info"><i
+                                                class="fa-regular fa-envelope"></i><span>{{ $p->email }}</span></div>
+                                    </td>
+                                    <td style="font-weight: 700; text-align: center;">{{ $p->total_pesanan }}x</td>
+                                    <td>{{ $p->tanggal_daftar ? \Carbon\Carbon::parse($p->tanggal_daftar)->format('d M Y') : '-' }}
+                                    </td>
+                                    <td style="text-align: center;"><span
+                                            class="badge {{ strtolower($p->status) == 'aktif' ? 'badge-active' : 'badge-inactive' }}">{{ $p->status }}</span>
+                                    </td>
+                                    <td class="prevent-row-click" style="text-align: center;">
+                                        <div class="action-btns" style="justify-content: center;">
+                                            <div class="action-dropdown">
+                                                <button class="action-icon-btn action-toggle" title="Aksi"><i
+                                                        class="fa-solid fa-ellipsis-vertical"></i></button>
+                                                <div class="dropdown-menu">
+                                                    <a href="javascript:void(0)" class="dropdown-item btn-show-detail"
+                                                        data-customer='@json($p)'><i class="fa-solid fa-eye"
+                                                            style="color:#1E3A8A;"></i> Detail Pelanggan</a>
+                                                    <a href="{{ route('pesanan') }}?pelanggan={{ urlencode($p->nama) }}"
+                                                        class="dropdown-item"><i class="fa-solid fa-cart-plus"
+                                                            style="color:#2563EB;"></i> Buat Pesanan</a>
+                                                    <a href="javascript:void(0)" class="dropdown-item btn-edit-pelanggan"
+                                                        data-customer='@json($p)'><i
+                                                            class="fa-regular fa-pen-to-square"></i> Edit</a>
+                                                    <form action="{{ route('pelanggan.destroy', $p->id) }}" method="POST"
+                                                        style="display:inline;"
+                                                        onsubmit="return confirm('Yakin ingin menghapus pelanggan ini?');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="dropdown-item danger"
+                                                            style="background:none; border:none; width:100%; text-align:left; cursor:pointer;"><i
+                                                                class="fa-regular fa-trash-can"></i> Hapus</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
                             @empty
-                            <tr>
-                                <td colspan="8" style="text-align:center; padding: 20px; color:#64748B;">Belum ada data pelanggan di database.</td>
-                            </tr>
+                                <tr>
+                                    <td colspan="8" style="text-align:center; padding: 20px; color:#64748B;">Belum ada data
+                                        pelanggan di database.</td>
+                                </tr>
                             @endforelse
                         </tbody>
-                </table>
-            </div>
+                    </table>
+                </div>
 
                 <!-- Pagination Footer -->
                 <div class="table-footer">
@@ -873,12 +959,14 @@
                         Menampilkan 1 hingga 8 dari 48 entri
                     </div>
                     <div class="pagination">
-                        <button class="page-btn"><i class="fa-solid fa-chevron-left" style="font-size: 11px;"></i></button>
+                        <button class="page-btn"><i class="fa-solid fa-chevron-left"
+                                style="font-size: 11px;"></i></button>
                         <button class="page-btn active">1</button>
                         <button class="page-btn">2</button>
                         <button class="page-btn">3</button>
                         <span class="page-ellipsis">...</span>
-                        <button class="page-btn"><i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i></button>
+                        <button class="page-btn"><i class="fa-solid fa-chevron-right"
+                                style="font-size: 11px;"></i></button>
                     </div>
                 </div>
             </div>
@@ -905,13 +993,15 @@
                         <div class="custom-country-picker" id="customCountryPicker">
                             <button type="button" class="country-picker-btn" id="countryPickerBtn">
                                 <div style="display: flex; align-items: center; gap: 8px;">
-                                    <img id="selectedFlagImg" src="https://flagcdn.com/w40/id.png" alt="ID" class="flag-img">
+                                    <img id="selectedFlagImg" src="https://flagcdn.com/w40/id.png" alt="ID"
+                                        class="flag-img">
                                     <span id="selectedCountryCode">+62</span>
                                 </div>
                                 <i class="fa-solid fa-chevron-down" style="font-size: 10px; color: #64748B;"></i>
                             </button>
                             <div class="country-picker-dropdown" id="countryPickerDropdown">
-                                <div class="country-option active" data-code="+62" data-flag="https://flagcdn.com/w40/id.png">
+                                <div class="country-option active" data-code="+62"
+                                    data-flag="https://flagcdn.com/w40/id.png">
                                     <img src="https://flagcdn.com/w40/id.png" alt="Indonesia" class="flag-img">
                                     <span>Indonesia (+62)</span>
                                 </div>
@@ -950,12 +1040,25 @@
                     <input type="email" id="cusEmail" required placeholder="info@perusahaan.com">
                 </div>
                 <div class="form-group">
-                    <label for="cusAddress">Alamat Umum Perusahaan (Kota/Kabupaten, Provinsi)</label>
-                    <textarea id="cusAddress" rows="2" required placeholder="Contoh: Jakarta Selatan, DKI Jakarta"></textarea>
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <label for="cusAddress" style="margin-bottom: 0;">Alamat (Kota/Kabupaten, Provinsi)</label>
+                        <span style="font-size: 11.5px; color: #64748B; font-weight: 600;">Pilih Cepat Kota:</span>
+                    </div>
+                    <select id="cusCityQuickSelect"
+                        style="width: 100%; border: 1px solid #CBD5E1; border-radius: 8px; padding: 9px 12px; font-size: 13.5px; background: #F8FAFC; outline: none; margin-bottom: 8px; cursor: pointer;">
+                        <option value="">-- Pilih Kota / Wilayah Langsung --</option>
+                        @foreach($allAvailableCities as $c)
+                            <option value="{{ $c }}">{{ $c }}</option>
+                        @endforeach
+                    </select>
+                    <textarea id="cusAddress" rows="2" required
+                        placeholder="Pilih kota di atas atau ketik alamat lengkap..."></textarea>
                 </div>
                 <div class="form-group">
                     <label for="cusStatus">Status Keanggotaan</label>
-                    <select id="cusStatus" required style="width: 100%; border: 1px solid #CBD5E1; border-radius: 8px; padding: 10px 14px; font-size: 13.5px; background: #fff; outline: none;">
+                    <select id="cusStatus" required
+                        style="width: 100%; border: 1px solid #CBD5E1; border-radius: 8px; padding: 10px 14px; font-size: 13.5px; background: #fff; outline: none;">
                         <option value="Aktif">Aktif</option>
                         <option value="Nonaktif">Nonaktif</option>
                     </select>
@@ -978,21 +1081,37 @@
             <div class="modal-form">
                 <div class="form-group">
                     <label for="advFilterCity">Filter Kota / Wilayah Alamat</label>
-                    <input type="text" id="advFilterCity" placeholder="Contoh: Jakarta, Bandung, Surabaya...">
+                    <select id="advFilterCity"
+                        style="width: 100%; border: 1px solid #CBD5E1; border-radius: 8px; padding: 10px 14px; font-size: 13.5px; background: #fff; outline: none; cursor: pointer;">
+                        <option value="">Semua Kota / Wilayah</option>
+                        @foreach($allAvailableCities as $c)
+                            <option value="{{ $c }}">{{ $c }}</option>
+                        @endforeach
+                    </select>
                 </div>
                 <div class="form-group">
                     <label for="advFilterStatus">Status Keanggotaan</label>
-                    <select id="advFilterStatus" style="width: 100%; border: 1px solid #CBD5E1; border-radius: 8px; padding: 10px 14px; font-size: 13.5px; background: #fff; outline: none;">
+                    <select id="advFilterStatus"
+                        style="width: 100%; border: 1px solid #CBD5E1; border-radius: 8px; padding: 10px 14px; font-size: 13.5px; background: #fff; outline: none; cursor: pointer;">
                         <option value="">Semua Status</option>
                         <option value="Aktif">Aktif</option>
                         <option value="Nonaktif">Nonaktif</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label>Rentang Tanggal Pendaftaran</label>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="date" id="advFilterStartDate" style="width: 50%;">
-                        <input type="date" id="advFilterEndDate" style="width: 50%;">
+                    <label for="advFilterDatePreset">Rentang Waktu Pendaftaran</label>
+                    <select id="advFilterDatePreset"
+                        style="width: 100%; border: 1px solid #CBD5E1; border-radius: 8px; padding: 10px 14px; font-size: 13.5px; background: #fff; outline: none; margin-bottom: 8px; cursor: pointer;">
+                        <option value="">Semua Rentang Waktu</option>
+                        <option value="today">Hari Ini</option>
+                        <option value="7days">7 Hari Terakhir</option>
+                        <option value="this_month">Bulan Ini</option>
+                        <option value="this_year">Tahun Ini</option>
+                        <option value="custom">Pilih Tanggal Manual...</option>
+                    </select>
+                    <div id="advDateRangeBox" style="display: flex; gap: 10px;">
+                        <input type="date" id="advFilterStartDate" style="width: 50%;" title="Dari Tanggal">
+                        <input type="date" id="advFilterEndDate" style="width: 50%;" title="Sampai Tanggal">
                     </div>
                 </div>
                 <div class="modal-actions">
@@ -1006,16 +1125,21 @@
     <!-- Modal Detail Pelanggan -->
     <div class="modal-overlay" id="detailModalOverlay">
         <div class="modal-box" style="max-width: 550px; padding: 0; overflow: hidden; border-radius: 16px;">
-            <div style="background: linear-gradient(135deg, #1B3B6F 0%, #1E3A8A 100%); padding: 24px; color: #fff; position: relative;">
-                <button class="close-modal-btn" id="closeDetailModalBtn" style="color: #fff; position: absolute; right: 20px; top: 20px; opacity: 0.8; font-size: 24px; background:none; border:none; cursor:pointer;">&times;</button>
+            <div
+                style="background: linear-gradient(135deg, #1B3B6F 0%, #1E3A8A 100%); padding: 24px; color: #fff; position: relative;">
+                <button class="close-modal-btn" id="closeDetailModalBtn"
+                    style="color: #fff; position: absolute; right: 20px; top: 20px; opacity: 0.8; font-size: 24px; background:none; border:none; cursor:pointer;">&times;</button>
                 <div style="display: flex; align-items: center; gap: 16px;">
-                    <div id="detAvatar" style="width: 56px; height: 56px; border-radius: 50%; background: #DBEAFE; color: #1D4ED8; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; border: 3px solid rgba(255,255,255,0.3); flex-shrink: 0;">
+                    <div id="detAvatar"
+                        style="width: 56px; height: 56px; border-radius: 50%; background: #DBEAFE; color: #1D4ED8; display: flex; align-items: center; justify-content: center; font-size: 22px; font-weight: 800; border: 3px solid rgba(255,255,255,0.3); flex-shrink: 0;">
                         EJ
                     </div>
                     <div>
-                        <h3 id="detNama" style="font-size: 20px; font-weight: 800; color: #ffffff; margin-bottom: 4px;">Nama Pelanggan</h3>
+                        <h3 id="detNama" style="font-size: 20px; font-weight: 800; color: #ffffff; margin-bottom: 4px;">
+                            Nama Pelanggan</h3>
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <span id="detKode" style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 6px; font-size: 11.5px; font-weight: 700; color: #ffffff;">CUST-000</span>
+                            <span id="detKode"
+                                style="background: rgba(255,255,255,0.2); padding: 2px 8px; border-radius: 6px; font-size: 11.5px; font-weight: 700; color: #ffffff;">CUST-000</span>
                             <span id="detStatusBadge" class="badge" style="font-size: 11px;">Aktif</span>
                         </div>
                     </div>
@@ -1023,18 +1147,27 @@
             </div>
 
             <div style="padding: 24px; display: flex; flex-direction: column; gap: 18px;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; background: #F8FAFC; padding: 16px; border-radius: 12px; border: 1px solid #E2E8F0;">
+                <div
+                    style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; background: #F8FAFC; padding: 16px; border-radius: 12px; border: 1px solid #E2E8F0;">
                     <div>
-                        <div style="font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 4px;">No. Telepon / WA</div>
-                        <div style="font-size: 14px; font-weight: 600; color: #0F172A; display: flex; align-items: center; gap: 8px;">
+                        <div
+                            style="font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 4px;">
+                            No. Telepon / WA</div>
+                        <div
+                            style="font-size: 14px; font-weight: 600; color: #0F172A; display: flex; align-items: center; gap: 8px;">
                             <i class="fa-solid fa-phone" style="color: #2563EB; font-size: 13px;"></i>
                             <span id="detNoHp">-</span>
-                            <a id="detWaLink" href="#" target="_blank" title="Chat WhatsApp" style="color: #16A34A; margin-left: 4px;"><i class="fa-brands fa-whatsapp" style="font-size: 17px;"></i></a>
+                            <a id="detWaLink" href="#" target="_blank" title="Chat WhatsApp"
+                                style="color: #16A34A; margin-left: 4px;"><i class="fa-brands fa-whatsapp"
+                                    style="font-size: 17px;"></i></a>
                         </div>
                     </div>
                     <div>
-                        <div style="font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 4px;">Email</div>
-                        <div style="font-size: 14px; font-weight: 600; color: #0F172A; display: flex; align-items: center; gap: 8px; word-break: break-all;">
+                        <div
+                            style="font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 4px;">
+                            Email</div>
+                        <div
+                            style="font-size: 14px; font-weight: 600; color: #0F172A; display: flex; align-items: center; gap: 8px; word-break: break-all;">
                             <i class="fa-regular fa-envelope" style="color: #2563EB; font-size: 13px;"></i>
                             <span id="detEmail">-</span>
                         </div>
@@ -1042,24 +1175,35 @@
                 </div>
 
                 <div style="background: #F8FAFC; padding: 16px; border-radius: 12px; border: 1px solid #E2E8F0;">
-                    <div style="font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 4px;">Alamat Lengkap</div>
-                    <div style="font-size: 14px; font-weight: 600; color: #0F172A; display: flex; align-items: flex-start; gap: 8px;">
-                        <i class="fa-solid fa-location-dot" style="color: #EF4444; font-size: 14px; margin-top: 2px;"></i>
+                    <div
+                        style="font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 4px;">
+                        Alamat Lengkap</div>
+                    <div
+                        style="font-size: 14px; font-weight: 600; color: #0F172A; display: flex; align-items: flex-start; gap: 8px;">
+                        <i class="fa-solid fa-location-dot"
+                            style="color: #EF4444; font-size: 14px; margin-top: 2px;"></i>
                         <span id="detAlamat" style="line-height: 1.4;">-</span>
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; background: #F8FAFC; padding: 16px; border-radius: 12px; border: 1px solid #E2E8F0;">
+                <div
+                    style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; background: #F8FAFC; padding: 16px; border-radius: 12px; border: 1px solid #E2E8F0;">
                     <div>
-                        <div style="font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 4px;">Total Transaksi</div>
-                        <div style="font-size: 16px; font-weight: 800; color: #1E3A8A; display: flex; align-items: center; gap: 8px;">
+                        <div
+                            style="font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 4px;">
+                            Total Transaksi</div>
+                        <div
+                            style="font-size: 16px; font-weight: 800; color: #1E3A8A; display: flex; align-items: center; gap: 8px;">
                             <i class="fa-solid fa-bag-shopping" style="color: #1E3A8A; font-size: 14px;"></i>
                             <span id="detTotalPesanan">0x Pesanan</span>
                         </div>
                     </div>
                     <div>
-                        <div style="font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 4px;">Tanggal Terdaftar</div>
-                        <div style="font-size: 13.5px; font-weight: 600; color: #0F172A; display: flex; align-items: center; gap: 8px;">
+                        <div
+                            style="font-size: 11.5px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 4px;">
+                            Tanggal Terdaftar</div>
+                        <div
+                            style="font-size: 13.5px; font-weight: 600; color: #0F172A; display: flex; align-items: center; gap: 8px;">
                             <i class="fa-regular fa-calendar-check" style="color: #16A34A; font-size: 13px;"></i>
                             <span id="detTanggalDaftar">-</span>
                         </div>
@@ -1067,16 +1211,20 @@
                 </div>
             </div>
 
-            <div style="padding: 16px 24px 24px; display: flex; justify-content: space-between; align-items: center; background: #FAF5FF; border-top: 1px solid #F1F5F9;">
-                <a id="detBuatPesananBtn" href="#" class="btn-add" style="text-decoration: none; font-size: 13px; padding: 8px 16px;">
+            <div
+                style="padding: 16px 24px 24px; display: flex; justify-content: space-between; align-items: center; background: #FAF5FF; border-top: 1px solid #F1F5F9;">
+                <a id="detBuatPesananBtn" href="#" class="btn-add"
+                    style="text-decoration: none; font-size: 13px; padding: 8px 16px;">
                     <i class="fa-solid fa-cart-plus"></i>
                     <span>Buat Pesanan</span>
                 </a>
                 <div style="display: flex; gap: 10px;">
-                    <button type="button" class="btn-cancel" id="detEditBtn" style="font-size: 13px; padding: 8px 16px;">
+                    <button type="button" class="btn-cancel" id="detEditBtn"
+                        style="font-size: 13px; padding: 8px 16px;">
                         <i class="fa-regular fa-pen-to-square"></i> Edit
                     </button>
-                    <button type="button" class="btn-cancel" id="closeDetailModalFooterBtn" style="font-size: 13px; padding: 8px 16px; background: #E2E8F0;">
+                    <button type="button" class="btn-cancel" id="closeDetailModalFooterBtn"
+                        style="font-size: 13px; padding: 8px 16px; background: #E2E8F0;">
                         Tutup
                     </button>
                 </div>
@@ -1108,7 +1256,7 @@
         // Select All Checkbox Handler
         const selectAllCb = document.getElementById('selectAll');
         if (selectAllCb) {
-            selectAllCb.addEventListener('change', function() {
+            selectAllCb.addEventListener('change', function () {
                 const checkboxes = tbody.querySelectorAll('input[type="checkbox"]');
                 checkboxes.forEach(cb => cb.checked = this.checked);
             });
@@ -1203,7 +1351,7 @@
             });
         }
 
-        window.setCustomCountryPickerValue = function(code) {
+        window.setCustomCountryPickerValue = function (code) {
             if (!countryPickerDropdown) return;
             const countryOptions = countryPickerDropdown.querySelectorAll('.country-option');
             let targetOpt = null;
@@ -1246,13 +1394,70 @@
         if (closeFilterMoreBtn) {
             closeFilterMoreBtn.addEventListener('click', () => filterMoreModalOverlay.classList.remove('active'));
         }
+        // Handler Quick City Select for Customer Address in Modal
+        const cusCityQuickSelect = document.getElementById('cusCityQuickSelect');
+        const cusAddressTextarea = document.getElementById('cusAddress');
+        if (cusCityQuickSelect && cusAddressTextarea) {
+            cusCityQuickSelect.addEventListener('change', function () {
+                if (this.value) {
+                    const currentVal = cusAddressTextarea.value.trim();
+                    if (!currentVal) {
+                        cusAddressTextarea.value = this.value;
+                    } else if (!currentVal.toLowerCase().includes(this.value.toLowerCase())) {
+                        cusAddressTextarea.value = currentVal + ', ' + this.value;
+                    }
+                }
+            });
+        }
+
+        // Handler Date Preset in Filter Modal
+        const advFilterDatePreset = document.getElementById('advFilterDatePreset');
+        const advFilterStartDate = document.getElementById('advFilterStartDate');
+        const advFilterEndDate = document.getElementById('advFilterEndDate');
+
+        if (advFilterDatePreset && advFilterStartDate && advFilterEndDate) {
+            advFilterDatePreset.addEventListener('change', function () {
+                const now = new Date();
+                const pad = n => String(n).padStart(2, '0');
+                const formatDate = d => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+
+                const todayStr = formatDate(now);
+
+                if (this.value === 'today') {
+                    advFilterStartDate.value = todayStr;
+                    advFilterEndDate.value = todayStr;
+                } else if (this.value === '7days') {
+                    const d7 = new Date();
+                    d7.setDate(now.getDate() - 7);
+                    advFilterStartDate.value = formatDate(d7);
+                    advFilterEndDate.value = todayStr;
+                } else if (this.value === 'this_month') {
+                    const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+                    advFilterStartDate.value = formatDate(firstDay);
+                    advFilterEndDate.value = todayStr;
+                } else if (this.value === 'this_year') {
+                    const firstYear = new Date(now.getFullYear(), 0, 1);
+                    advFilterStartDate.value = formatDate(firstYear);
+                    advFilterEndDate.value = todayStr;
+                } else if (this.value === '') {
+                    advFilterStartDate.value = '';
+                    advFilterEndDate.value = '';
+                }
+            });
+        }
+
         if (resetFilterBtn) {
             resetFilterBtn.addEventListener('click', () => {
-                document.getElementById('advFilterCity').value = '';
-                document.getElementById('advFilterStatus').value = '';
-                document.getElementById('advFilterStartDate').value = '';
-                document.getElementById('advFilterEndDate').value = '';
+                const advCityEl = document.getElementById('advFilterCity');
+                if (advCityEl) advCityEl.value = '';
+                const advStatusEl = document.getElementById('advFilterStatus');
+                if (advStatusEl) advStatusEl.value = '';
+                if (advFilterDatePreset) advFilterDatePreset.value = '';
+                if (advFilterStartDate) advFilterStartDate.value = '';
+                if (advFilterEndDate) advFilterEndDate.value = '';
                 if (filterStatusSelect) filterStatusSelect.value = '';
+                const quickCityEl = document.getElementById('filterCityQuickSelect');
+                if (quickCityEl) quickCityEl.value = '';
 
                 const rows = tbody.querySelectorAll('tr');
                 rows.forEach(r => r.removeAttribute('data-filter-hidden'));
@@ -1262,17 +1467,47 @@
                 if (window.showAppToast) window.showAppToast('Filter telah direset.', 'info');
             });
         }
+
         if (applyFilterBtn) {
             applyFilterBtn.addEventListener('click', () => {
-                const city = document.getElementById('advFilterCity').value.toLowerCase().trim();
-                const status = document.getElementById('advFilterStatus').value.toLowerCase().trim();
+                const cityEl = document.getElementById('advFilterCity');
+                const city = cityEl ? cityEl.value.toLowerCase().trim() : '';
+                const statusEl = document.getElementById('advFilterStatus');
+                const status = statusEl ? statusEl.value.toLowerCase().trim() : '';
+                const startDate = advFilterStartDate ? advFilterStartDate.value : '';
+                const endDate = advFilterEndDate ? advFilterEndDate.value : '';
+
+                // Also sync quick selects on toolbar if matching
+                const quickCityEl = document.getElementById('filterCityQuickSelect');
+                if (quickCityEl && cityEl) quickCityEl.value = cityEl.value;
+                if (filterStatusSelect && statusEl) filterStatusSelect.value = statusEl.value.toLowerCase();
+
                 const rows = tbody.querySelectorAll('tr');
 
                 rows.forEach(r => {
                     const text = r.textContent.toLowerCase();
+                    const custDataStr = r.getAttribute('data-customer');
+                    let custData = null;
+                    if (custDataStr) {
+                        try { custData = JSON.parse(custDataStr); } catch (e) { }
+                    }
+
                     let match = true;
-                    if (city && !text.includes(city)) match = false;
+                    if (city) {
+                        const alamat = (custData && custData.alamat ? custData.alamat : text).toLowerCase();
+                        if (!alamat.includes(city)) match = false;
+                    }
                     if (status && !text.includes(status)) match = false;
+
+                    // Filter Date Range
+                    if (startDate || endDate) {
+                        const rawDate = custData ? (custData.tanggal_daftar || custData.created_at) : '';
+                        if (rawDate) {
+                            const dStr = rawDate.substring(0, 10);
+                            if (startDate && dStr < startDate) match = false;
+                            if (endDate && dStr > endDate) match = false;
+                        }
+                    }
 
                     if (match) {
                         r.removeAttribute('data-filter-hidden');
@@ -1289,12 +1524,44 @@
 
         // Quick Filter Status Select
         if (filterStatusSelect) {
-            filterStatusSelect.addEventListener('change', function() {
+            filterStatusSelect.addEventListener('change', function () {
                 const selected = this.value.toLowerCase().trim();
+                const quickCityEl = document.getElementById('filterCityQuickSelect');
+                const selectedCity = quickCityEl ? quickCityEl.value.toLowerCase().trim() : '';
+
                 const rows = tbody.querySelectorAll('tr');
                 rows.forEach(r => {
                     const text = r.textContent.toLowerCase();
-                    if (!selected || text.includes(selected)) {
+                    let match = true;
+                    if (selected && !text.includes(selected)) match = false;
+                    if (selectedCity && !text.includes(selectedCity)) match = false;
+
+                    if (match) {
+                        r.removeAttribute('data-filter-hidden');
+                    } else {
+                        r.setAttribute('data-filter-hidden', 'true');
+                    }
+                });
+                currentPage = 1;
+                updatePagination();
+            });
+        }
+
+        // Quick Filter City Select
+        const filterCityQuickSelect = document.getElementById('filterCityQuickSelect');
+        if (filterCityQuickSelect) {
+            filterCityQuickSelect.addEventListener('change', function () {
+                const selectedCity = this.value.toLowerCase().trim();
+                const selectedStatus = filterStatusSelect ? filterStatusSelect.value.toLowerCase().trim() : '';
+
+                const rows = tbody.querySelectorAll('tr');
+                rows.forEach(r => {
+                    const text = r.textContent.toLowerCase();
+                    let match = true;
+                    if (selectedCity && !text.includes(selectedCity)) match = false;
+                    if (selectedStatus && !text.includes(selectedStatus)) match = false;
+
+                    if (match) {
                         r.removeAttribute('data-filter-hidden');
                     } else {
                         r.setAttribute('data-filter-hidden', 'true');
@@ -1308,7 +1575,7 @@
         // Function Detail Pelanggan Modal
         let currentDetailData = null;
 
-        window.showCustomerDetail = function(e, p) {
+        window.showCustomerDetail = function (e, p) {
             let data = p;
             if (!data && e && typeof e === 'object' && !e.target) {
                 data = e;
@@ -1318,7 +1585,7 @@
 
             document.getElementById('detNama').textContent = data.nama || '-';
             document.getElementById('detKode').textContent = data.kode_pelanggan || '-';
-            
+
             const avatarEl = document.getElementById('detAvatar');
             if (avatarEl) {
                 avatarEl.textContent = (data.nama || 'P').substring(0, 2).toUpperCase();
@@ -1331,7 +1598,7 @@
             }
 
             document.getElementById('detNoHp').textContent = data.no_hp || '-';
-            
+
             const waLink = document.getElementById('detWaLink');
             if (waLink) {
                 let cleanPhone = (data.no_hp || '').replace(/[^0-9]/g, '');
@@ -1380,7 +1647,7 @@
         // Backdrop click handler to close modals when clicking outside modal box
         [modalOverlay, filterMoreModalOverlay, detailModalOverlay].forEach(modal => {
             if (modal) {
-                modal.addEventListener('click', function(evt) {
+                modal.addEventListener('click', function (evt) {
                     if (evt.target === this) {
                         this.classList.remove('active');
                     }
@@ -1390,7 +1657,7 @@
 
         const detEditBtn = document.getElementById('detEditBtn');
         if (detEditBtn) {
-            detEditBtn.addEventListener('click', function() {
+            detEditBtn.addEventListener('click', function () {
                 if (detailModalOverlay) detailModalOverlay.classList.remove('active');
                 if (currentDetailData) {
                     window.editPelanggan(currentDetailData);
@@ -1399,7 +1666,7 @@
         }
 
         // Function edit pelanggan
-        window.editPelanggan = function(p) {
+        window.editPelanggan = function (p) {
             document.getElementById('cusIdVal').value = p.id;
             document.getElementById('cusName').value = p.nama;
             document.getElementById('cusEmail').value = p.email;
@@ -1412,7 +1679,7 @@
             const phoneInput = document.getElementById('cusPhone');
             let matchedCc = '+62';
             const countryCodes = ['+62', '+1', '+65', '+60', '+81', '+44', '+61'];
-            
+
             for (let code of countryCodes) {
                 if (rawPhone.startsWith(code)) {
                     matchedCc = code;
@@ -1430,7 +1697,7 @@
 
         // Handle Add & Edit submission to MySQL Database via AJAX Fetch
         if (addCustomerForm) {
-            addCustomerForm.addEventListener('submit', function(e) {
+            addCustomerForm.addEventListener('submit', function (e) {
                 e.preventDefault();
                 const editingId = document.getElementById('cusIdVal').value;
                 const name = document.getElementById('cusName').value.trim();
@@ -1459,18 +1726,18 @@
                         status: status
                     })
                 })
-                .then(res => res.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.reload();
-                    } else {
-                        alert(data.message || 'Gagal menyimpan data ke database.');
-                    }
-                })
-                .catch(err => {
-                    console.error(err);
-                    alert('Terjadi kesalahan saat menyimpan data.');
-                });
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.reload();
+                        } else {
+                            alert(data.message || 'Gagal menyimpan data ke database.');
+                        }
+                    })
+                    .catch(err => {
+                        console.error(err);
+                        alert('Terjadi kesalahan saat menyimpan data.');
+                    });
             });
         }
 
@@ -1480,18 +1747,33 @@
             const dropdownMenu = row.querySelector('.dropdown-menu');
 
             if (toggleBtn && dropdownMenu) {
-                toggleBtn.addEventListener('click', function(e) {
+                toggleBtn.addEventListener('click', function (e) {
                     e.stopPropagation();
+                    const isOpening = !dropdownMenu.classList.contains('show');
                     document.querySelectorAll('.dropdown-menu').forEach(menu => {
                         if (menu !== dropdownMenu) menu.classList.remove('show');
                     });
-                    dropdownMenu.classList.toggle('show');
+                    if (isOpening) {
+                        const rect = toggleBtn.getBoundingClientRect();
+                        const tbody = row.parentElement;
+                        const rows = tbody ? Array.from(tbody.children).filter(r => r.offsetParent !== null) : [];
+                        const index = rows.indexOf(row);
+                        const spaceBelow = window.innerHeight - rect.bottom;
+                        if (spaceBelow < 220 || (rows.length > 2 && index >= rows.length - 2)) {
+                            dropdownMenu.classList.add('dropup');
+                        } else {
+                            dropdownMenu.classList.remove('dropup');
+                        }
+                        dropdownMenu.classList.add('show');
+                    } else {
+                        dropdownMenu.classList.remove('show');
+                    }
                 });
             }
 
             const detailBtn = row.querySelector('.btn-show-detail');
             if (detailBtn) {
-                detailBtn.addEventListener('click', function(e) {
+                detailBtn.addEventListener('click', function (e) {
                     e.stopPropagation();
                     if (dropdownMenu) dropdownMenu.classList.remove('show');
                     const custDataStr = this.getAttribute('data-customer');
@@ -1503,7 +1785,7 @@
 
             const editBtn = row.querySelector('.btn-edit-pelanggan');
             if (editBtn) {
-                editBtn.addEventListener('click', function(e) {
+                editBtn.addEventListener('click', function (e) {
                     e.stopPropagation();
                     if (dropdownMenu) dropdownMenu.classList.remove('show');
                     const custDataStr = this.getAttribute('data-customer');
@@ -1513,7 +1795,7 @@
                 });
             }
 
-            row.addEventListener('click', function(e) {
+            row.addEventListener('click', function (e) {
                 if (e.target.closest('.prevent-row-click, .action-dropdown, input[type="checkbox"], button, a')) return;
                 const custDataStr = this.getAttribute('data-customer');
                 if (custDataStr) {
@@ -1529,7 +1811,7 @@
         // Client side search filter
         const customerSearchInput = document.getElementById('customerSearchInput');
         if (customerSearchInput) {
-            customerSearchInput.addEventListener('keyup', function() {
+            customerSearchInput.addEventListener('keyup', function () {
                 const query = this.value.toLowerCase();
                 const rows = tbody.querySelectorAll('tr');
                 rows.forEach(r => {
@@ -1545,10 +1827,11 @@
         }
 
         // Close dropdown when clicking outside
-        document.addEventListener('click', function() {
+        document.addEventListener('click', function () {
             document.querySelectorAll('.dropdown-menu').forEach(menu => menu.classList.remove('show'));
         });
     </script>
     @include('layouts.navbar_assets')
 </body>
+
 </html>

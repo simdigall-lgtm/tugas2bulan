@@ -104,16 +104,31 @@ class AuthController extends Controller
             // Hapus captcha session setelah berhasil
             session()->forget('login_captcha');
 
-            // Set status 2FA pending
+            $isAdmin = (strtolower($user->name) === 'admin' || str_contains(strtolower($user->email), 'admin'));
+
+            if ($isAdmin) {
+                // Set status 2FA pending khusus untuk admin
+                session([
+                    '2fa_pending' => true,
+                    '2fa_user_id' => $user->id,
+                    '2fa_user_name' => $user->name ?? $user->email,
+                    '2fa_user_email' => $user->email ?? 'admin@primagrafika.com',
+                    '2fa_attempts' => 0,
+                ]);
+
+                return redirect()->route('login.2fa')->with('info', 'Verifikasi CAPTCHA & Akun Berhasil. Silakan buka aplikasi Google Authenticator Anda.');
+            }
+
+            // Untuk kasir dan non-admin, langsung login tanpa 2FA
+            $this->clear2FASession();
             session([
-                '2fa_pending' => true,
-                '2fa_user_id' => $user->id,
-                '2fa_user_name' => $user->name ?? $user->email,
-                '2fa_user_email' => $user->email ?? 'admin@primagrafika.com',
-                '2fa_attempts' => 0,
+                'user' => $user->name,
+                'user_id' => $user->id,
+                'user_name' => $user->name,
+                'user_email' => $user->email,
             ]);
 
-            return redirect()->route('login.2fa')->with('info', 'Verifikasi CAPTCHA & Akun Berhasil. Silakan buka aplikasi Google Authenticator Anda.');
+            return redirect()->route('dashboard')->with('success', 'Selamat datang, ' . $user->name . '! Berhasil masuk ke sistem.');
         }
 
         // Jika login gagal, buat captcha baru
@@ -187,10 +202,18 @@ class AuthController extends Controller
 
         if ($isValid) {
             $userName = session('2fa_user_name');
+            $userEmail = session('2fa_user_email');
+            $userId = session('2fa_user_id');
             $this->clear2FASession();
 
             // Simpan Session Login Resmi
-            session(['user' => $userName]);
+            session([
+                'user' => $userName,
+                'user_id' => $userId,
+                'user_name' => $userName,
+                'user_email' => $userEmail,
+                'role' => (strtolower($userName) === 'kasir' || str_contains(strtolower($userEmail ?? ''), 'kasir')) ? 'kasir' : 'admin',
+            ]);
 
             return redirect()->route('dashboard')->with('success', 'Berhasil masuk! Otentikasi Google Authenticator terverifikasi.');
         }

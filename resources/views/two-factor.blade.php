@@ -42,17 +42,6 @@
             padding: 40px 36px;
         }
 
-        .brand-logo-wrapper {
-            margin-bottom: 16px;
-            margin-left: -15px;
-        }
-
-        .brand-logo {
-            height: 60px;
-            width: auto;
-            object-fit: contain;
-            display: block;
-        }
 
         .brand-title {
             font-size: 24px;
@@ -325,13 +314,15 @@
 <body>
 
     <div class="twofa-card">
-        <!-- Brand Header matching login page -->
-        <div class="brand-logo-wrapper">
-            <img src="{{ asset('assets/images/pg-logo.png') }}" alt="PG Logo" class="brand-logo">
-        </div>
 
-        <h1 class="brand-title">SIPEKAN</h1>
-        <p class="brand-subtitle">Verifikasi Keamanan Google Authenticator 2FA</p>
+        <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 22px;">
+            <img src="{{ asset('assets/images/sipekan-logo.png') }}" alt="SIPEKAN Logo"
+                style="height: 46px; width: auto; object-fit: contain; flex-shrink: 0; display: block;">
+            <div style="display: flex; flex-direction: column; justify-content: space-between; height: 46px;">
+                <h1 class="brand-title" style="margin: 0; font-size: 22px; font-weight: 800; line-height: 1.1; letter-spacing: -0.4px;">SIPEKAN</h1>
+                <p class="brand-subtitle" style="margin: 0; font-size: 12.5px; font-weight: 500; line-height: 1.25; color: #4B5563;">Verifikasi Keamanan Google Authenticator</p>
+            </div>
+        </div>
 
         <div class="user-pill">
             <img src="{{ asset('assets/images/admin-avatar.png') }}" alt="Admin Avatar" style="width: 26px; height: 26px; border-radius: 50%; object-fit: cover; border: 1.5px solid #CBD5E1;">

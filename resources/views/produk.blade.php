@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kelola Produk - SIPEKAN</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -20,6 +22,7 @@
             -webkit-appearance: none !important;
             margin: 0 !important;
         }
+
         input[type=number] {
             -moz-appearance: textfield !important;
             appearance: textfield !important;
@@ -245,7 +248,7 @@
             border-radius: 12px;
             border: 1px solid #E2E8F0;
             overflow: hidden;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
         }
 
         .card-header-row {
@@ -292,8 +295,8 @@
 
         .custom-table th {
             background-color: #FFFFFF;
-            padding: 14px 24px;
-            font-size: 11.5px;
+            padding: 12px 14px;
+            font-size: 11px;
             font-weight: 700;
             color: #64748B;
             text-transform: uppercase;
@@ -303,13 +306,12 @@
         }
 
         .custom-table td {
-            padding: 16px 24px;
-            font-size: 13.5px;
+            padding: 12px 14px;
+            font-size: 13px;
             color: #334155;
             border-bottom: 1px solid #F1F5F9;
             font-weight: 500;
             vertical-align: middle;
-            white-space: nowrap;
         }
 
         .custom-table tr:last-child td {
@@ -354,7 +356,8 @@
             color: #15803D;
         }
 
-        .status-badge.habis, .status-badge.nonaktif {
+        .status-badge.habis,
+        .status-badge.nonaktif {
             background-color: #FEE2E2;
             color: #B91C1C;
         }
@@ -403,13 +406,49 @@
             flex-direction: column;
             padding: 4px 0;
         }
-        .dropdown-menu.show { display: flex; }
-        .dropdown-item {
-            display: flex; align-items: center; gap: 8px; padding: 8px 14px; font-size: 13px; font-weight: 600; color: #334155; text-decoration: none; transition: background 0.15s ease; text-align: left; cursor: pointer; border: none; background: none; width: 100%;
+
+        .dropdown-menu.show {
+            display: flex;
         }
-        .dropdown-item:hover { background-color: #F1F5F9; color: #1E3A8A; }
-        .dropdown-item.danger { color: #EF4444; }
-        .dropdown-item.danger:hover { background-color: #FEF2F2; color: #DC2626; }
+
+        .dropdown-menu.dropup {
+            top: auto !important;
+            bottom: 100% !important;
+            margin-top: 0 !important;
+            margin-bottom: 6px !important;
+            box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.12) !important;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+            text-decoration: none;
+            transition: background 0.15s ease;
+            text-align: left;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+        }
+
+        .dropdown-item:hover {
+            background-color: #F1F5F9;
+            color: #1E3A8A;
+        }
+
+        .dropdown-item.danger {
+            color: #EF4444;
+        }
+
+        .dropdown-item.danger:hover {
+            background-color: #FEF2F2;
+            color: #DC2626;
+        }
 
         /* Table Footer */
         .table-footer {
@@ -481,7 +520,7 @@
             width: 100%;
             max-width: 520px;
             padding: 24px 28px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
             transform: translateY(-10px);
             transition: transform 0.2s ease;
             max-height: 90vh;
@@ -590,6 +629,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <!-- Sidebar Navigation -->
@@ -597,13 +637,13 @@
 
     <!-- Main Wrapper -->
     <div class="main-wrapper">
-        
+
         <!-- Top Navigation Bar -->
         @include('layouts.topbar')
 
         <!-- Content Body Area -->
         <main class="content-body">
-            
+
             <!-- Page Header Row -->
             <div class="page-header-row">
                 <div>
@@ -640,30 +680,41 @@
                         </thead>
                         <tbody>
                             @forelse($produks ?? [] as $prod)
-                            <tr>
-                                <td class="product-name">{{ $prod->nama_produk }}</td>
-                                <td><span class="category-badge">{{ $prod->kategori }}</span></td>
-                                <td class="price-text">Rp {{ number_format($prod->harga, 0, ',', '.') }}</td>
-                                <td style="font-weight: 600; color: #475569;">{{ number_format($prod->stok ?? 0, 0, ',', '.') }}</td>
-                                <td><span class="status-badge {{ strtolower($prod->status ?? 'tersedia') }}">{{ $prod->status ?? 'Tersedia' }}</span></td>
-                                <td style="text-align: right;">
-                                    <div class="action-dropdown">
-                                        <button class="action-icon-btn action-toggle" title="Aksi"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                                        <div class="dropdown-menu">
-                                            <button type="button" class="dropdown-item edit-prod-btn" onclick="editProduk({{ json_encode($prod) }})"><i class="fa-regular fa-pen-to-square"></i> Edit</button>
-                                            <form action="{{ route('produk.destroy', $prod->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="dropdown-item danger"><i class="fa-regular fa-trash-can"></i> Hapus</button>
-                                            </form>
+                                <tr>
+                                    <td class="product-name">{{ $prod->nama_produk }}</td>
+                                    <td><span class="category-badge">{{ $prod->kategori }}</span></td>
+                                    <td class="price-text">Rp {{ number_format($prod->harga, 0, ',', '.') }}</td>
+                                    <td style="font-weight: 600; color: #475569;">
+                                        {{ number_format($prod->stok ?? 0, 0, ',', '.') }}
+                                    </td>
+                                    <td><span
+                                            class="status-badge {{ strtolower($prod->status ?? 'tersedia') }}">{{ $prod->status ?? 'Tersedia' }}</span>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <div class="action-dropdown">
+                                            <button class="action-icon-btn action-toggle" title="Aksi"><i
+                                                    class="fa-solid fa-ellipsis-vertical"></i></button>
+                                            <div class="dropdown-menu">
+                                                <button type="button" class="dropdown-item edit-prod-btn"
+                                                    onclick="editProduk({{ json_encode($prod) }})"><i
+                                                        class="fa-regular fa-pen-to-square"></i> Edit</button>
+                                                <form action="{{ route('produk.destroy', $prod->id) }}" method="POST"
+                                                    style="display:inline;"
+                                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="dropdown-item danger"><i
+                                                            class="fa-regular fa-trash-can"></i> Hapus</button>
+                                                </form>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                            </tr>
+                                    </td>
+                                </tr>
                             @empty
-                            <tr>
-                                <td colspan="6" style="text-align:center; padding: 20px; color: #64748B;">Belum ada produk di database.</td>
-                            </tr>
+                                <tr>
+                                    <td colspan="6" style="text-align:center; padding: 20px; color: #64748B;">Belum ada
+                                        produk di database.</td>
+                                </tr>
                             @endforelse
                         </tbody>
                     </table>
@@ -689,7 +740,8 @@
 
                         <div class="form-group">
                             <label for="prodName">Nama Produk</label>
-                            <input type="text" name="nama_produk" id="prodName" class="form-control" placeholder="mis. Spanduk Flexy 280gr" required>
+                            <input type="text" name="nama_produk" id="prodName" class="form-control"
+                                placeholder="mis. Spanduk Flexy 280gr" required>
                         </div>
 
                         <div class="form-group">
@@ -706,12 +758,14 @@
 
                         <div class="form-group">
                             <label for="prodBasePrice">Harga Dasar (Rp)</label>
-                            <input type="number" name="harga" id="prodBasePrice" class="form-control" min="0" step="1000" placeholder="25000" required>
+                            <input type="number" name="harga" id="prodBasePrice" class="form-control" min="0"
+                                step="1000" placeholder="25000" required>
                         </div>
 
                         <div class="form-group">
                             <label for="prodStok">Stok (Maks 1.000.000 Pesanan/Unit)</label>
-                            <input type="number" name="stok" id="prodStok" class="form-control" value="100" min="0" max="1000000" placeholder="Contoh: 500" required>
+                            <input type="number" name="stok" id="prodStok" class="form-control" value="1" min="0"
+                                max="1000000" placeholder="Contoh: 500" required>
                         </div>
 
                         <div class="form-group">
@@ -725,7 +779,8 @@
 
                         <div class="form-group">
                             <label for="prodDesc">Deskripsi (Opsional)</label>
-                            <textarea name="deskripsi" id="prodDesc" rows="3" class="form-control" placeholder="Detail teknis singkat..."></textarea>
+                            <textarea name="deskripsi" id="prodDesc" rows="3" class="form-control"
+                                placeholder="Detail teknis singkat..."></textarea>
                         </div>
 
                         <div class="form-actions">
@@ -740,7 +795,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const productForm = document.getElementById('productForm');
             const formTitle = document.getElementById('formCardTitle');
             const submitBtn = document.getElementById('btnSubmitForm');
@@ -814,7 +869,7 @@
                 }
             }
 
-            window.editProduk = function(prod) {
+            window.editProduk = function (prod) {
                 if (formTitle) formTitle.textContent = 'Edit Produk: ' + prod.nama_produk;
                 const form = document.getElementById('productForm');
                 form.action = '/produk/' + prod.id;
@@ -822,7 +877,7 @@
                 document.getElementById('prodName').value = prod.nama_produk;
                 document.getElementById('prodCategory').value = prod.kategori;
                 document.getElementById('prodBasePrice').value = prod.harga;
-                document.getElementById('prodStok').value = prod.stok !== undefined ? prod.stok : 100;
+                document.getElementById('prodStok').value = prod.stok !== undefined ? prod.stok : 1;
                 document.getElementById('prodStatus').value = prod.status || 'Tersedia';
                 document.getElementById('prodDesc').value = prod.deskripsi || '';
                 if (submitBtn) submitBtn.textContent = 'Update Produk';
@@ -835,14 +890,14 @@
                 form.reset();
                 form.action = "{{ route('produk.store') }}";
                 document.getElementById('prodFormMethod').value = 'POST';
-                document.getElementById('prodStok').value = 100;
+                document.getElementById('prodStok').value = 1;
                 document.getElementById('prodStatus').value = 'Tersedia';
                 if (formTitle) formTitle.textContent = 'Tambah Produk Baru';
                 if (submitBtn) submitBtn.textContent = 'Simpan Produk';
             }
 
             if (btnAdd) {
-                btnAdd.addEventListener('click', function() {
+                btnAdd.addEventListener('click', function () {
                     resetForm();
                     openModal();
                     setTimeout(() => document.getElementById('prodName').focus(), 100);
@@ -850,19 +905,19 @@
             }
 
             if (cancelBtn) {
-                cancelBtn.addEventListener('click', function() {
+                cancelBtn.addEventListener('click', function () {
                     closeModal();
                 });
             }
 
             if (closeModalBtn) {
-                closeModalBtn.addEventListener('click', function() {
+                closeModalBtn.addEventListener('click', function () {
                     closeModal();
                 });
             }
 
             if (modalEl) {
-                modalEl.addEventListener('click', function(e) {
+                modalEl.addEventListener('click', function (e) {
                     if (e.target === modalEl) {
                         closeModal();
                     }
@@ -874,7 +929,7 @@
                 const menu = row.querySelector('.dropdown-menu');
 
                 if (toggleBtn && menu) {
-                    toggleBtn.addEventListener('click', function(e) {
+                    toggleBtn.addEventListener('click', function (e) {
                         e.stopPropagation();
                         document.querySelectorAll('.dropdown-menu').forEach(m => {
                             if (m !== menu) m.classList.remove('show');
@@ -890,7 +945,7 @@
             }
 
             if (searchInput && tbody) {
-                searchInput.addEventListener('keyup', function() {
+                searchInput.addEventListener('keyup', function () {
                     const q = this.value.toLowerCase();
                     const rows = tbody.querySelectorAll('tr');
                     rows.forEach(r => {
@@ -905,7 +960,7 @@
                 });
             }
 
-            document.addEventListener('click', function() {
+            document.addEventListener('click', function () {
                 document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
             });
         });
@@ -913,4 +968,5 @@
 
     @include('layouts.navbar_assets')
 </body>
+
 </html>

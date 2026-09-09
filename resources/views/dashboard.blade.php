@@ -408,7 +408,7 @@
 
         .custom-table th {
             background-color: #F8FAFC;
-            padding: 12px 24px;
+            padding: 11px 14px;
             font-size: 11px;
             font-weight: 700;
             color: #64748B;
@@ -419,13 +419,12 @@
         }
 
         .custom-table td {
-            padding: 16px 24px;
-            font-size: 13.5px;
+            padding: 12px 14px;
+            font-size: 13px;
             color: #334155;
             border-bottom: 1px solid #F1F5F9;
             font-weight: 500;
             vertical-align: middle;
-            white-space: nowrap;
         }
 
         .custom-table tr:last-child td {
@@ -598,7 +597,7 @@
                 <div class="chart-card">
                     <div class="chart-header">
                         <div>
-                            <h2 class="chart-title">Penjualan per Kategori</h2>
+                            <h2 class="chart-title">Penjualan Per Kategori</h2>
                             <p class="chart-subtitle">Total transaksi berdasarkan jenis produk</p>
                         </div>
                     </div>
@@ -677,20 +676,20 @@
                     labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'],
                     datasets: [
                         {
-                            label: 'Pendapatan',
-                            data: [32000000, 45000000, 38000000, 52000000, 48000000, 65000000, 74000000, 68000000, 82000000, 88000000, 95000000, 112000000],
+                            label: 'Pendapatan Real',
+                            data: {!! json_encode($monthlyRevenue ?? []) !!},
                             borderColor: '#1E3A8A',
                             backgroundColor: gradientBlue,
                             fill: true,
                             tension: 0.35,
                             borderWidth: 3,
                             pointBackgroundColor: '#1E3A8A',
-                            pointRadius: 3,
+                            pointRadius: 4,
                             pointHoverRadius: 6
                         },
                         {
                             label: 'Target Pendapatan',
-                            data: [30000000, 40000000, 40000000, 50000000, 50000000, 60000000, 70000000, 70000000, 80000000, 85000000, 90000000, 100000000],
+                            data: {!! json_encode($monthlyTarget ?? []) !!},
                             borderColor: '#94A3B8',
                             borderDash: [5, 5],
                             fill: false,
@@ -740,7 +739,7 @@
                             ticks: {
                                 callback: function(val) {
                                     if (val >= 1000000000) return 'Rp ' + (val / 1000000000) + ' M';
-                                    if (val >= 1000000) return 'Rp ' + (val / 1000000) + ' Juta';
+                                    if (val >= 1000000) return 'Rp ' + (val / 1000000) + ' Jt';
                                     return 'Rp ' + val.toLocaleString('id-ID');
                                 }
                             }
@@ -750,17 +749,17 @@
             });
             }
 
-            // 2. Category Sales Bar Chart
+            // 2. Category Sales Horizontal Bar Chart
             const canvasCategory = document.getElementById('categoryBarChart');
             if (canvasCategory && typeof Chart !== 'undefined') {
                 const ctxCategory = canvasCategory.getContext('2d');
                 new Chart(ctxCategory, {
                     type: 'bar',
                     data: {
-                        labels: ['Banner/Spanduk', 'Brosur', 'Kartu Nama', 'Stiker', 'Buku/Kalender'],
+                        labels: {!! json_encode($categoryLabels ?? ['Banner/Spanduk', 'Brosur', 'Kartu Nama', 'Stiker', 'Buku/Kalender']) !!},
                         datasets: [{
                             label: 'Total Pesanan',
-                            data: [340, 260, 210, 185, 120],
+                            data: {!! json_encode($categoryCounts ?? [0, 0, 0, 0, 0]) !!},
                             backgroundColor: [
                                 '#1E3A8A',
                                 '#2563EB',
@@ -768,24 +767,44 @@
                                 '#60A5FA',
                                 '#93C5FD'
                             ],
-                            borderRadius: 8,
+                            borderRadius: 6,
                             borderSkipped: false,
-                            barThickness: 28
+                            barThickness: 18
                         }]
                     },
                     options: {
+                        animation: false,
+                        indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
                         plugins: {
                             legend: { display: false },
                             tooltip: {
                                 backgroundColor: '#0F172A',
-                                padding: 12
+                                padding: 12,
+                                callbacks: {
+                                    label: function(context) {
+                                        return ' Total Pesanan: ' + context.raw + ' pesanan';
+                                    }
+                                }
                             }
                         },
                         scales: {
-                            x: { grid: { display: false } },
-                            y: { grid: { color: '#F1F5F9' } }
+                            x: {
+                                grid: { color: '#F1F5F9' },
+                                ticks: {
+                                    precision: 0,
+                                    stepSize: 1
+                                },
+                                beginAtZero: true
+                            },
+                            y: {
+                                grid: { display: false },
+                                ticks: {
+                                    font: { size: 12, weight: '600' },
+                                    color: '#334155'
+                                }
+                            }
                         }
                     }
                 });

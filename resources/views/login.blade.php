@@ -1,15 +1,17 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - SIPEKAN</title>
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
@@ -55,17 +57,6 @@
             justify-content: center;
         }
 
-        .brand-logo-wrapper {
-            margin-bottom: 20px;
-            margin-left: -20px;
-        }
-
-        .brand-logo {
-            height: 65px;
-            width: auto;
-            object-fit: contain;
-            display: block;
-        }
 
         .brand-title {
             font-size: 24px;
@@ -418,17 +409,21 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="login-card">
         <!-- Left Side: Login Form -->
         <div class="login-form-container">
-            <div class="brand-logo-wrapper">
-                <img src="{{ asset('assets/images/pg-logo.png') }}" alt="PG Logo" class="brand-logo">
-            </div>
 
-            <h1 class="brand-title">SIPEKAN</h1>
-            <p class="brand-subtitle">Sistem Informasi Manajemen Pesanan Percetakan</p>
+            <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 24px;">
+                <img src="{{ asset('assets/images/sipekan-logo.png') }}" alt="SIPEKAN Logo"
+                    style="height: 50px; width: auto; object-fit: contain; flex-shrink: 0; display: block;">
+                <div style="display: flex; flex-direction: column; justify-content: space-between; height: 50px;">
+                    <h1 class="brand-title" style="margin: 0; font-size: 24px; font-weight: 800; line-height: 1.1; letter-spacing: -0.5px;">SIPEKAN</h1>
+                    <p class="brand-subtitle" style="margin: 0; font-size: 13px; font-weight: 500; line-height: 1.25; color: #4B5563;">Sistem Informasi Manajemen Percetakan</p>
+                </div>
+            </div>
 
             @if(session('error'))
                 <div class="alert alert-danger">
@@ -446,20 +441,14 @@
 
             <form action="{{ route('login.post') }}" method="POST" autocomplete="off">
                 @csrf
-                
+
                 <!-- Username Input -->
                 <div class="form-group">
                     <label for="username" class="form-label">Nama Pengguna</label>
                     <div class="input-wrapper">
                         <i class="fa-regular fa-user input-icon"></i>
-                        <input type="text" 
-                               id="username" 
-                               name="username" 
-                               class="form-input" 
-                               placeholder="Masukkan nama pengguna Anda"
-                               value="{{ old('username') }}" 
-                               required 
-                               autofocus>
+                        <input type="text" id="username" name="username" class="form-input"
+                            placeholder="Masukkan nama pengguna Anda" value="{{ old('username') }}" required autofocus>
                     </div>
                 </div>
 
@@ -468,13 +457,10 @@
                     <label for="password" class="form-label">Kata Sandi</label>
                     <div class="input-wrapper">
                         <i class="fa-solid fa-lock input-icon" style="font-size: 14px;"></i>
-                        <input type="password" 
-                               id="password" 
-                               name="password" 
-                               class="form-input" 
-                               placeholder="********" 
-                               required>
-                        <button type="button" class="password-toggle" id="togglePasswordBtn" title="Tampilkan/Sembunyikan kata sandi">
+                        <input type="password" id="password" name="password" class="form-input" placeholder="********"
+                            required>
+                        <button type="button" class="password-toggle" id="togglePasswordBtn"
+                            title="Tampilkan/Sembunyikan kata sandi">
                             <i class="fa-regular fa-eye" id="passwordEyeIcon"></i>
                         </button>
                     </div>
@@ -490,22 +476,22 @@
                 <!-- Cloudflare Turnstile CAPTCHA ("Verifikasi Anda Bukan Robot") -->
                 <div class="form-group" style="margin-bottom: 20px;">
                     <label class="form-label">Verifikasi Keamanan</label>
-                    <div class="cf-turnstile" data-sitekey="{{ config('services.turnstile.site_key', env('TURNSTILE_SITE_KEY', '0x4AAAAAAElX-y-BGcmshHBP')) }}" data-theme="light"></div>
+                    <div class="cf-turnstile"
+                        data-sitekey="{{ config('services.turnstile.site_key', env('TURNSTILE_SITE_KEY', '0x4AAAAAAElX-y-BGcmshHBP')) }}"
+                        data-theme="light"></div>
                 </div>
 
                 <!-- Submit Button -->
                 <button type="submit" class="btn-submit">
-                    <span>Lanjutkan ke Verifikasi 2FA</span>
-                    <i class="fa-solid fa-arrow-right"></i>
+                    <span>Login</span>
                 </button>
             </form>
         </div>
 
         <!-- Right Side: Side Illustration -->
         <div class="login-illustration-container">
-            <img src="{{ asset('assets/images/printing-illustration.png') }}" 
-                 alt="Percetakan SIPEKAN" 
-                 class="illustration-image">
+            <img src="{{ asset('assets/images/printing-illustration.png') }}" alt="Percetakan SIPEKAN"
+                class="illustration-image">
         </div>
     </div>
 
@@ -514,7 +500,8 @@
         $currentStep = session('forgot_step', 1);
     @endphp
 
-    <div class="forgot-modal-overlay {{ (isset($openForgotPassword) || session('open_forgot_modal')) ? 'active' : '' }}" id="forgotModal">
+    <div class="forgot-modal-overlay {{ (isset($openForgotPassword) || session('open_forgot_modal')) ? 'active' : '' }}"
+        id="forgotModal">
         <div class="forgot-modal-box">
             <div class="forgot-modal-header">
                 <div class="forgot-modal-title">
@@ -525,33 +512,53 @@
             </div>
 
             <!-- Step Progress Indicator -->
-            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; position: relative;">
+            <div
+                style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; position: relative;">
                 <div style="flex: 1; text-align: center; z-index: 2;">
-                    <div style="width: 30px; height: 30px; border-radius: 50%; background: {{ $currentStep >= 1 ? '#1B3B6F' : '#E2E8F0' }}; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin: 0 auto 4px auto; box-shadow: {{ $currentStep == 1 ? '0 0 0 4px rgba(27,59,111,0.2)' : 'none' }};">1</div>
-                    <span style="font-size: 11.5px; font-weight: 700; color: {{ $currentStep >= 1 ? '#1B3B6F' : '#94A3B8' }};">Cari Akun</span>
+                    <div
+                        style="width: 30px; height: 30px; border-radius: 50%; background: {{ $currentStep >= 1 ? '#1B3B6F' : '#E2E8F0' }}; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin: 0 auto 4px auto; box-shadow: {{ $currentStep == 1 ? '0 0 0 4px rgba(27,59,111,0.2)' : 'none' }};">
+                        1</div>
+                    <span
+                        style="font-size: 11.5px; font-weight: 700; color: {{ $currentStep >= 1 ? '#1B3B6F' : '#94A3B8' }};">Cari
+                        Akun</span>
                 </div>
-                <div style="height: 3px; flex: 1; background: {{ $currentStep >= 2 ? '#1B3B6F' : '#E2E8F0' }}; margin: -16px -10px 0 -10px; z-index: 1;"></div>
-                <div style="flex: 1; text-align: center; z-index: 2;">
-                    <div style="width: 30px; height: 30px; border-radius: 50%; background: {{ $currentStep >= 2 ? '#1B3B6F' : '#E2E8F0' }}; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin: 0 auto 4px auto; box-shadow: {{ $currentStep == 2 ? '0 0 0 4px rgba(27,59,111,0.2)' : 'none' }};">2</div>
-                    <span style="font-size: 11.5px; font-weight: 700; color: {{ $currentStep >= 2 ? '#1B3B6F' : '#94A3B8' }};">Verifikasi OTP</span>
+                <div
+                    style="height: 3px; flex: 1; background: {{ $currentStep >= 2 ? '#1B3B6F' : '#E2E8F0' }}; margin: -16px -10px 0 -10px; z-index: 1;">
                 </div>
-                <div style="height: 3px; flex: 1; background: {{ $currentStep >= 3 ? '#1B3B6F' : '#E2E8F0' }}; margin: -16px -10px 0 -10px; z-index: 1;"></div>
                 <div style="flex: 1; text-align: center; z-index: 2;">
-                    <div style="width: 30px; height: 30px; border-radius: 50%; background: {{ $currentStep >= 3 ? '#1B3B6F' : '#E2E8F0' }}; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin: 0 auto 4px auto; box-shadow: {{ $currentStep == 3 ? '0 0 0 4px rgba(27,59,111,0.2)' : 'none' }};">3</div>
-                    <span style="font-size: 11.5px; font-weight: 700; color: {{ $currentStep >= 3 ? '#1B3B6F' : '#94A3B8' }};">Sandi Baru</span>
+                    <div
+                        style="width: 30px; height: 30px; border-radius: 50%; background: {{ $currentStep >= 2 ? '#1B3B6F' : '#E2E8F0' }}; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin: 0 auto 4px auto; box-shadow: {{ $currentStep == 2 ? '0 0 0 4px rgba(27,59,111,0.2)' : 'none' }};">
+                        2</div>
+                    <span
+                        style="font-size: 11.5px; font-weight: 700; color: {{ $currentStep >= 2 ? '#1B3B6F' : '#94A3B8' }};">Verifikasi
+                        OTP</span>
+                </div>
+                <div
+                    style="height: 3px; flex: 1; background: {{ $currentStep >= 3 ? '#1B3B6F' : '#E2E8F0' }}; margin: -16px -10px 0 -10px; z-index: 1;">
+                </div>
+                <div style="flex: 1; text-align: center; z-index: 2;">
+                    <div
+                        style="width: 30px; height: 30px; border-radius: 50%; background: {{ $currentStep >= 3 ? '#1B3B6F' : '#E2E8F0' }}; color: white; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; margin: 0 auto 4px auto; box-shadow: {{ $currentStep == 3 ? '0 0 0 4px rgba(27,59,111,0.2)' : 'none' }};">
+                        3</div>
+                    <span
+                        style="font-size: 11.5px; font-weight: 700; color: {{ $currentStep >= 3 ? '#1B3B6F' : '#94A3B8' }};">Sandi
+                        Baru</span>
                 </div>
             </div>
 
             @if(session('open_forgot_modal') && session('error'))
-                <div class="alert alert-danger" style="margin-bottom: 16px; padding: 10px 14px; font-size: 13px; background: #FEF2F2; color: #DC2626; border: 1px solid #FCA5A5; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
+                <div class="alert alert-danger"
+                    style="margin-bottom: 16px; padding: 10px 14px; font-size: 13px; background: #FEF2F2; color: #DC2626; border: 1px solid #FCA5A5; border-radius: 8px; display: flex; align-items: center; gap: 8px;">
                     <i class="fa-solid fa-circle-exclamation"></i>
                     <span>{{ session('error') }}</span>
                 </div>
             @endif
 
             @if(session('success_code'))
-                <div class="alert alert-success" style="margin-bottom: 18px; padding: 14px 16px; font-size: 13px; background: #F0F9FF; color: #0369A1; border: 1px solid #BAE6FD; border-radius: 10px; line-height: 1.5; box-shadow: 0 2px 6px rgba(3, 105, 161, 0.08);">
-                    <div style="font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; color: #0284C7; font-size: 13.5px;">
+                <div class="alert alert-success"
+                    style="margin-bottom: 18px; padding: 14px 16px; font-size: 13px; background: #F0F9FF; color: #0369A1; border: 1px solid #BAE6FD; border-radius: 10px; line-height: 1.5; box-shadow: 0 2px 6px rgba(3, 105, 161, 0.08);">
+                    <div
+                        style="font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; color: #0284C7; font-size: 13.5px;">
                         <i class="fa-solid fa-paper-plane"></i>
                         <span>Kode Verifikasi OTP Dikirim</span>
                     </div>
@@ -562,52 +569,66 @@
             <!-- STEP 1: Cari Akun User -->
             @if($currentStep == 1)
                 <p style="font-size: 13px; color: #64748B; margin-bottom: 16px; line-height: 1.5;">
-                    Tahap 1 dari 3: Masukkan nama pengguna atau alamat email akun SIPEKAN Anda untuk menerima <strong>Kode OTP Verifikasi</strong>.
+                    Tahap 1 dari 3: Masukkan nama pengguna atau alamat email akun SIPEKAN Anda untuk menerima <strong>Kode
+                        OTP Verifikasi</strong>.
                 </p>
                 <form action="{{ route('password.send_code') }}" method="POST">
                     @csrf
                     <div class="form-group" style="margin-bottom: 18px;">
-                        <label class="form-label" style="font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; display: block;">Nama Pengguna atau Email</label>
+                        <label class="form-label"
+                            style="font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; display: block;">Nama
+                            Pengguna atau Email</label>
                         <div class="input-wrapper">
                             <i class="fa-regular fa-user input-icon"></i>
-                            <input type="text" name="username_email" required class="form-input" placeholder="wusakun@gmail.com atau admin" value="{{ old('username_email', 'wusakun@gmail.com') }}">
+                            <input type="text" name="username_email" required class="form-input"
+                                placeholder="wusakun@gmail.com atau admin"
+                                value="{{ old('username_email', 'wusakun@gmail.com') }}">
                         </div>
                     </div>
 
                     <div style="display: flex; gap: 10px; margin-top: 16px;">
-                        <button type="button" id="cancelForgotModalBtn" style="flex: 1; background: #F1F5F9; color: #475569; border: none; padding: 11px 16px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer;">Batal</button>
-                        <button type="submit" style="flex: 2; background-color: #1B3B6F; color: #FFFFFF; border: none; border-radius: 8px; padding: 11px 16px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(27, 59, 111, 0.15);">
+                        <button type="button" id="cancelForgotModalBtn"
+                            style="flex: 1; background: #F1F5F9; color: #475569; border: none; padding: 11px 16px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer;">Batal</button>
+                        <button type="submit"
+                            style="flex: 2; background-color: #1B3B6F; color: #FFFFFF; border: none; border-radius: 8px; padding: 11px 16px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(27, 59, 111, 0.15);">
                             <span>Kirim Kode OTP</span>
                             <i class="fa-solid fa-paper-plane"></i>
                         </button>
                     </div>
                 </form>
 
-            <!-- STEP 2: Input Kode OTP Verifikasi 6-Digit -->
+                <!-- STEP 2: Input Kode OTP Verifikasi 6-Digit -->
             @elseif($currentStep == 2)
                 <p style="font-size: 13px; color: #64748B; margin-bottom: 16px; line-height: 1.5;">
-                    Tahap 2 dari 3: Masukkan <strong>Kode Verifikasi 6-Digit</strong> yang telah dikirimkan ke email akun Anda.
+                    Tahap 2 dari 3: Masukkan <strong>Kode Verifikasi 6-Digit</strong> yang telah dikirimkan ke email akun
+                    Anda.
                 </p>
                 <form action="{{ route('password.verify_code') }}" method="POST">
                     @csrf
                     <div class="form-group" style="margin-bottom: 18px;">
-                        <label class="form-label" style="font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; display: block;">Kode Verifikasi OTP (6 Digit)</label>
+                        <label class="form-label"
+                            style="font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; display: block;">Kode
+                            Verifikasi OTP (6 Digit)</label>
                         <div class="input-wrapper">
                             <i class="fa-solid fa-key input-icon"></i>
-                            <input type="text" name="otp_code" required class="form-input" placeholder="Masukkan 6 digit kode OTP (Contoh: 123456)" maxlength="6" autofocus style="letter-spacing: 2px; font-weight: 800; font-size: 16px;">
+                            <input type="text" name="otp_code" required class="form-input"
+                                placeholder="Masukkan 6 digit kode OTP (Contoh: 123456)" maxlength="6" autofocus
+                                style="letter-spacing: 2px; font-weight: 800; font-size: 16px;">
                         </div>
                     </div>
 
                     <div style="display: flex; gap: 10px; margin-top: 16px;">
-                        <a href="{{ route('password.request') }}" style="flex: 1; background: #F1F5F9; color: #475569; border: none; padding: 11px 16px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none;">Ulangi</a>
-                        <button type="submit" style="flex: 2; background-color: #1B3B6F; color: #FFFFFF; border: none; border-radius: 8px; padding: 11px 16px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(27, 59, 111, 0.15);">
+                        <a href="{{ route('password.request') }}"
+                            style="flex: 1; background: #F1F5F9; color: #475569; border: none; padding: 11px 16px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer; text-align: center; text-decoration: none;">Ulangi</a>
+                        <button type="submit"
+                            style="flex: 2; background-color: #1B3B6F; color: #FFFFFF; border: none; border-radius: 8px; padding: 11px 16px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(27, 59, 111, 0.15);">
                             <i class="fa-solid fa-circle-check"></i>
                             <span>Verifikasi Kode OTP</span>
                         </button>
                     </div>
                 </form>
 
-            <!-- STEP 3: Buat & Konfirmasi Kata Sandi Baru -->
+                <!-- STEP 3: Buat & Konfirmasi Kata Sandi Baru -->
             @elseif($currentStep == 3)
                 <p style="font-size: 13px; color: #64748B; margin-bottom: 16px; line-height: 1.5;">
                     Tahap 3 dari 3: Verifikasi berhasil! Silakan buat <strong>Kata Sandi Baru</strong> untuk akun Anda.
@@ -615,27 +636,36 @@
                 <form action="{{ route('password.reset.post') }}" method="POST">
                     @csrf
                     <div class="form-group" style="margin-bottom: 14px;">
-                        <label class="form-label" style="font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; display: block;">Kata Sandi Baru</label>
+                        <label class="form-label"
+                            style="font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; display: block;">Kata
+                            Sandi Baru</label>
                         <div class="input-wrapper">
                             <i class="fa-solid fa-lock input-icon" style="font-size: 14px;"></i>
-                            <input type="password" name="new_password" id="newPasswordInput" required class="form-input" placeholder="Minimal 6 karakter" autofocus>
-                            <button type="button" class="password-toggle" id="toggleNewPasswordBtn" title="Tampilkan/Sembunyikan kata sandi">
+                            <input type="password" name="new_password" id="newPasswordInput" required class="form-input"
+                                placeholder="Minimal 6 karakter" autofocus>
+                            <button type="button" class="password-toggle" id="toggleNewPasswordBtn"
+                                title="Tampilkan/Sembunyikan kata sandi">
                                 <i class="fa-regular fa-eye" id="newPasswordEyeIcon"></i>
                             </button>
                         </div>
                     </div>
 
                     <div class="form-group" style="margin-bottom: 20px;">
-                        <label class="form-label" style="font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; display: block;">Konfirmasi Kata Sandi Baru</label>
+                        <label class="form-label"
+                            style="font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 6px; display: block;">Konfirmasi
+                            Kata Sandi Baru</label>
                         <div class="input-wrapper">
                             <i class="fa-solid fa-lock input-icon" style="font-size: 14px;"></i>
-                            <input type="password" name="new_password_confirmation" id="confirmPasswordInput" required class="form-input" placeholder="Ulangi kata sandi baru">
+                            <input type="password" name="new_password_confirmation" id="confirmPasswordInput" required
+                                class="form-input" placeholder="Ulangi kata sandi baru">
                         </div>
                     </div>
 
                     <div style="display: flex; gap: 10px; margin-top: 16px;">
-                        <button type="button" id="cancelForgotModalBtn" style="flex: 1; background: #F1F5F9; color: #475569; border: none; padding: 11px 16px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer;">Batal</button>
-                        <button type="submit" style="flex: 2; background-color: #1B3B6F; color: #FFFFFF; border: none; border-radius: 8px; padding: 11px 16px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(27, 59, 111, 0.15);">
+                        <button type="button" id="cancelForgotModalBtn"
+                            style="flex: 1; background: #F1F5F9; color: #475569; border: none; padding: 11px 16px; border-radius: 8px; font-size: 14px; font-weight: 700; cursor: pointer;">Batal</button>
+                        <button type="submit"
+                            style="flex: 2; background-color: #1B3B6F; color: #FFFFFF; border: none; border-radius: 8px; padding: 11px 16px; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 12px rgba(27, 59, 111, 0.15);">
                             <i class="fa-solid fa-rotate"></i>
                             <span>Simpan Kata Sandi Baru</span>
                         </button>
@@ -655,7 +685,7 @@
                 togglePasswordBtn.addEventListener('click', function () {
                     const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                     passwordInput.setAttribute('type', type);
-                    
+
                     if (type === 'text') {
                         passwordEyeIcon.classList.remove('fa-eye');
                         passwordEyeIcon.classList.add('fa-eye-slash');
@@ -698,7 +728,7 @@
                 toggleNewPasswordBtn.addEventListener('click', function () {
                     const type = newPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
                     newPasswordInput.setAttribute('type', type);
-                    
+
                     if (type === 'text') {
                         newPasswordEyeIcon.classList.remove('fa-eye');
                         newPasswordEyeIcon.classList.add('fa-eye-slash');
@@ -711,4 +741,5 @@
         });
     </script>
 </body>
+
 </html>

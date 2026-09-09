@@ -20,6 +20,14 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
+        \App\Models\User::updateOrCreate(
+            ['email' => 'kasir@gmail.com'],
+            [
+                'name' => 'Kasir',
+                'password' => bcrypt('123456'),
+            ]
+        );
+
         $this->call([
             PelangganSeeder::class,
             ProdukSeeder::class,
