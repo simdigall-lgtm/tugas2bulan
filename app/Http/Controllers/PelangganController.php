@@ -20,7 +20,25 @@ class PelangganController extends Controller
             }
         }
 
-        return view('pelanggan', compact('pelanggans'));
+        $defaultCities = [
+            'Bandung', 'Batam', 'Bekasi', 'Bogor', 'Denpasar', 
+            'Depok', 'Jakarta Pusat', 'Jakarta Selatan', 'Jakarta Barat', 'Jakarta Timur', 'Jakarta Utara',
+            'Makassar', 'Malang', 'Medan', 'Palembang', 'Semarang', 
+            'Solo', 'Surabaya', 'Tangerang', 'Yogyakarta'
+        ];
+
+        $dbCities = $pelanggans->pluck('alamat')
+            ->filter()
+            ->map(function($address) {
+                return trim(explode(',', $address)[0]);
+            })
+            ->filter()
+            ->toArray();
+
+        $allAvailableCities = array_values(array_unique(array_merge($defaultCities, $dbCities)));
+        sort($allAvailableCities);
+
+        return view('pelanggan', compact('pelanggans', 'allAvailableCities'));
     }
 
     public function store(Request $request)

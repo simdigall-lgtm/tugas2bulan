@@ -162,6 +162,99 @@
                             </select>
                         </div>
 
+                        <!-- Dynamic Payment Details Box -->
+                        <div id="paymentDetailsContainer" style="display: none; margin-top: 6px; margin-bottom: 16px;">
+                            <!-- QRIS Compact Card -->
+                            <div id="qrisBox" style="display: none; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px 14px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                                <div style="display: flex; align-items: center; gap: 14px;">
+                                    <div style="flex-shrink: 0; background: #FFFFFF; padding: 6px; border: 1.5px solid #0F172A; border-radius: 8px; line-height: 0;">
+                                        <svg width="75" height="75" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect width="200" height="200" fill="white"/>
+                                            <rect x="10" y="10" width="55" height="55" rx="6" fill="#0F172A"/>
+                                            <rect x="20" y="20" width="35" height="35" rx="3" fill="white"/>
+                                            <rect x="27" y="27" width="21" height="21" rx="2" fill="#0F172A"/>
+                                            <rect x="135" y="10" width="55" height="55" rx="6" fill="#0F172A"/>
+                                            <rect x="145" y="20" width="35" height="35" rx="3" fill="white"/>
+                                            <rect x="152" y="27" width="21" height="21" rx="2" fill="#0F172A"/>
+                                            <rect x="10" y="135" width="55" height="55" rx="6" fill="#0F172A"/>
+                                            <rect x="20" y="145" width="35" height="35" rx="3" fill="white"/>
+                                            <rect x="27" y="152" width="21" height="21" rx="2" fill="#0F172A"/>
+                                            <rect x="75" y="15" width="12" height="12" rx="2" fill="#0F172A"/>
+                                            <rect x="95" y="15" width="12" height="12" rx="2" fill="#0F172A"/>
+                                            <rect x="115" y="15" width="12" height="12" rx="2" fill="#0F172A"/>
+                                            <rect x="75" y="35" width="12" height="12" rx="2" fill="#0F172A"/>
+                                            <rect x="105" y="35" width="18" height="18" rx="2" fill="#0F172A"/>
+                                            <rect x="15" y="75" width="12" height="12" rx="2" fill="#0F172A"/>
+                                            <rect x="35" y="75" width="12" height="12" rx="2" fill="#0F172A"/>
+                                            <rect x="55" y="75" width="12" height="12" rx="2" fill="#0F172A"/>
+                                            <rect x="75" y="75" width="50" height="50" rx="6" fill="#1E3A8A"/>
+                                            <text x="100" y="105" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" font-weight="900" fill="white" text-anchor="middle">QRIS</text>
+                                            <rect x="135" y="75" width="15" height="15" rx="2" fill="#0F172A"/>
+                                            <rect x="160" y="75" width="25" height="12" rx="2" fill="#0F172A"/>
+                                            <rect x="15" y="95" width="15" height="15" rx="2" fill="#0F172A"/>
+                                            <rect x="40" y="95" width="15" height="15" rx="2" fill="#0F172A"/>
+                                            <rect x="135" y="100" width="20" height="20" rx="2" fill="#0F172A"/>
+                                            <rect x="165" y="95" width="20" height="20" rx="2" fill="#0F172A"/>
+                                            <rect x="75" y="135" width="15" height="15" rx="2" fill="#0F172A"/>
+                                            <rect x="100" y="135" width="25" height="15" rx="2" fill="#0F172A"/>
+                                            <rect x="135" y="135" width="50" height="50" rx="4" fill="#0F172A"/>
+                                            <rect x="145" y="145" width="30" height="30" rx="2" fill="white"/>
+                                            <rect x="155" y="155" width="10" height="10" rx="1" fill="#0F172A"/>
+                                            <rect x="75" y="160" width="20" height="25" rx="2" fill="#0F172A"/>
+                                            <rect x="105" y="165" width="20" height="20" rx="2" fill="#0F172A"/>
+                                        </svg>
+                                    </div>
+                                    <div style="flex: 1; min-width: 0;">
+                                        <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 3px;">
+                                            <span style="background: #EF4444; color: #fff; font-weight: 800; font-size: 10px; padding: 2px 6px; border-radius: 4px; letter-spacing: 0.5px;">QRIS</span>
+                                            <span style="font-size: 12px; font-weight: 800; color: #0F172A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">SIPEKAN PRINTING</span>
+                                        </div>
+                                        <div style="font-size: 11px; color: #64748B; margin-bottom: 6px; line-height: 1.2;">Scan via M-Banking / GoPay / OVO / Dana</div>
+                                        <button type="button" id="openQrisModalBtn" style="background: #FEF2F2; color: #EF4444; border: 1px solid #FCA5A5; padding: 3px 8px; border-radius: 5px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;">
+                                            <i class="fa-solid fa-expand"></i>
+                                            <span>Perbesar QR</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Bank Transfer Card -->
+                            <div id="bankBox" style="display: none; background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 10px 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.03);">
+                                <div style="display: flex; flex-direction: column; gap: 8px;">
+                                    <!-- BCA Row -->
+                                    <div style="display: flex; align-items: center; justify-content: space-between; background: #F8FAFC; padding: 8px 10px; border-radius: 8px; border: 1px solid #F1F5F9;">
+                                        <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                            <span style="background: #005E9E; color: #fff; font-weight: 900; font-size: 10px; padding: 2px 5px; border-radius: 4px; flex-shrink: 0;">BCA</span>
+                                            <span style="font-size: 12.5px; font-weight: 800; color: #0F172A; letter-spacing: 0.3px;">8830-9921-77</span>
+                                        </div>
+                                        <button type="button" onclick="copyAccNo('8830992177', this)" style="background: #EEF2FF; color: #1E3A8A; border: 1px solid #C7D2FE; padding: 4px 8px; border-radius: 5px; font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; flex-shrink: 0;">
+                                            <i class="fa-regular fa-copy"></i>
+                                            <span>Salin</span>
+                                        </button>
+                                    </div>
+                                    <!-- Mandiri Row -->
+                                    <div style="display: flex; align-items: center; justify-content: space-between; background: #F8FAFC; padding: 8px 10px; border-radius: 8px; border: 1px solid #F1F5F9;">
+                                        <div style="display: flex; align-items: center; gap: 8px; min-width: 0;">
+                                            <span style="background: #F59E0B; color: #000; font-weight: 900; font-size: 10px; padding: 2px 5px; border-radius: 4px; flex-shrink: 0;">MANDIRI</span>
+                                            <span style="font-size: 12.5px; font-weight: 800; color: #0F172A; letter-spacing: 0.3px;">1370-0098-1122</span>
+                                        </div>
+                                        <button type="button" onclick="copyAccNo('137000981122', this)" style="background: #EEF2FF; color: #1E3A8A; border: 1px solid #C7D2FE; padding: 4px 8px; border-radius: 5px; font-size: 11px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; flex-shrink: 0;">
+                                            <i class="fa-regular fa-copy"></i>
+                                            <span>Salin</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tunai Card -->
+                            <div id="cashBox" style="display: none; background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 10px; padding: 10px 12px;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <i class="fa-solid fa-money-bill-wave" style="color: #16A34A; font-size: 14px;"></i>
+                                    <span style="font-size: 12px; font-weight: 700; color: #166534;">Pembayaran Tunai di Kasir</span>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label for="payAmount">Jumlah (IDR)</label>
                             <input type="number" name="jumlah" id="payAmount" class="form-control" min="0" step="1000" placeholder="900000" required>
@@ -194,7 +287,6 @@
                                     <th>METODE</th>
                                     <th>JUMLAH</th>
                                     <th>STATUS</th>
-                                    <th style="text-align:right;">AKSI</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -206,32 +298,10 @@
                                     <td>{{ $pem->metode_pembayaran ?? $pem->metode }}</td>
                                     <td>Rp {{ number_format($pem->jumlah, 0, ',', '.') }}</td>
                                     <td><span class="status-badge {{ strtolower($pem->status) == 'lunas' ? 'status-lunas' : 'status-menunggu' }}">{{ $pem->status }}</span></td>
-                                    <td style="text-align:right;">
-                                        @if(strtolower($pem->status) == 'lunas')
-                                            <span style="color: #94A3B8; font-weight: 500;">-</span>
-                                        @else
-                                            <div class="action-dropdown" style="position:relative; display:inline-block;">
-                                                <button type="button" class="action-icon-btn action-toggle" title="Aksi" style="background:none; border:none; color:#94A3B8; font-size:16px; cursor:pointer; width:32px; height:32px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center;"><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                                                <div class="dropdown-menu">
-                                                    <form action="{{ route('pembayaran.update', $pem->id) }}" method="POST" style="display:block;">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <input type="hidden" name="status" value="Lunas">
-                                                        <button type="submit" class="dropdown-item" style="color:#16A34A; font-weight:600;"><i class="fa-solid fa-circle-check" style="color:#16A34A;"></i> Tandai Lunas</button>
-                                                    </form>
-                                                    <form action="{{ route('pembayaran.destroy', $pem->id) }}" method="POST" style="display:block;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus data pembayaran ini?');">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="dropdown-item danger"><i class="fa-regular fa-trash-can"></i> Hapus</button>
-                                                    </form>
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </td>
                                 </tr>
                                 @empty
                                 <tr>
-                                    <td colspan="7" style="text-align:center; padding:20px; color:#64748B;">Belum ada data pembayaran di database.</td>
+                                    <td colspan="6" style="text-align:center; padding:20px; color:#64748B;">Belum ada data pembayaran di database.</td>
                                 </tr>
                                 @endforelse
                             </tbody>
@@ -348,6 +418,43 @@
                     currentPage = 1;
                     updatePagination();
                 });
+            }
+
+            const payMethodSelect = document.getElementById('payMethod');
+            const paymentDetailsContainer = document.getElementById('paymentDetailsContainer');
+            const qrisBox = document.getElementById('qrisBox');
+            const bankBox = document.getElementById('bankBox');
+            const cashBox = document.getElementById('cashBox');
+
+            function updatePaymentMethodView() {
+                if (!payMethodSelect || !paymentDetailsContainer) return;
+                const val = payMethodSelect.value;
+                if (val === 'QRIS') {
+                    paymentDetailsContainer.style.display = 'block';
+                    if (qrisBox) qrisBox.style.display = 'block';
+                    if (bankBox) bankBox.style.display = 'none';
+                    if (cashBox) cashBox.style.display = 'none';
+                } else if (val === 'Transfer Bank') {
+                    paymentDetailsContainer.style.display = 'block';
+                    if (qrisBox) qrisBox.style.display = 'none';
+                    if (bankBox) bankBox.style.display = 'block';
+                    if (cashBox) cashBox.style.display = 'none';
+                } else if (val === 'Tunai') {
+                    paymentDetailsContainer.style.display = 'block';
+                    if (qrisBox) qrisBox.style.display = 'none';
+                    if (bankBox) bankBox.style.display = 'none';
+                    if (cashBox) cashBox.style.display = 'block';
+                } else {
+                    paymentDetailsContainer.style.display = 'none';
+                    if (qrisBox) qrisBox.style.display = 'none';
+                    if (bankBox) bankBox.style.display = 'none';
+                    if (cashBox) cashBox.style.display = 'none';
+                }
+            }
+
+            if (payMethodSelect) {
+                payMethodSelect.addEventListener('change', updatePaymentMethodView);
+                updatePaymentMethodView();
             }
 
             // Dropdown toggle handler

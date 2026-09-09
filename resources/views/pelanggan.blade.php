@@ -989,7 +989,7 @@
                     <select id="cusCityQuickSelect"
                         style="width: 100%; border: 1px solid #CBD5E1; border-radius: 8px; padding: 9px 12px; font-size: 13.5px; background: #F8FAFC; outline: none; margin-bottom: 8px; cursor: pointer;">
                         <option value="">-- Pilih Kota / Wilayah Langsung --</option>
-                        @foreach($allAvailableCities as $c)
+                        @foreach($allAvailableCities ?? [] as $c)
                             <option value="{{ $c }}">{{ $c }}</option>
                         @endforeach
                     </select>
@@ -1025,7 +1025,7 @@
                     <select id="advFilterCity"
                         style="width: 100%; border: 1px solid #CBD5E1; border-radius: 8px; padding: 10px 14px; font-size: 13.5px; background: #fff; outline: none; cursor: pointer;">
                         <option value="">Semua Kota / Wilayah</option>
-                        @foreach($allAvailableCities as $c)
+                        @foreach($allAvailableCities ?? [] as $c)
                             <option value="{{ $c }}">{{ $c }}</option>
                         @endforeach
                     </select>

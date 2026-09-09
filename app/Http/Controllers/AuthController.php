@@ -100,6 +100,17 @@ class AuthController extends Controller
             $user = User::where('email', 'admin@primagrafika.com')->first();
         }
 
+        // Izinkan 'kasir' / 'kasir@gmail.com' sebagai fallback kasir jika belum ada di database
+        if (!$user && (strtolower($loginInput) === 'kasir' || strtolower($loginInput) === 'kasir@gmail.com')) {
+            $user = User::updateOrCreate(
+                ['email' => 'kasir@gmail.com'],
+                [
+                    'name' => 'Kasir',
+                    'password' => Hash::make('123456'),
+                ]
+            );
+        }
+
         if ($user && Hash::check($password, $user->password)) {
             // Hapus captcha session setelah berhasil
             session()->forget('login_captcha');

@@ -25,6 +25,19 @@ class PesananController extends Controller
             'status' => 'required|string',
         ]);
 
+        // Check product stock availability
+        $produk = \App\Models\Produk::where('nama_produk', $validated['nama_produk'])->first();
+        $requestedQty = intval($request->input('jumlah_val', 1));
+
+        if ($produk) {
+            if ($produk->stok <= 0) {
+                return back()->withInput()->with('error', "Stok untuk produk '{$produk->nama_produk}' sedang HABIS!");
+            }
+            if ($requestedQty > $produk->stok) {
+                return back()->withInput()->with('error', "Jumlah pesanan ({$requestedQty}) melebihi stok yang tersedia ({$produk->stok})!");
+            }
+        }
+
         if (empty($validated['jumlah_ukuran']) || $request->filled('jumlah_val')) {
             $jumlahVal = $request->input('jumlah_val', $request->input('jumlah', '1'));
             $jumlahUnit = $request->input('jumlah_unit', 'Pcs');
@@ -43,6 +56,11 @@ class PesananController extends Controller
         $validated['tanggal_pesan'] = now()->toDateString();
 
         Pesanan::create($validated);
+
+        // Decrement product stock upon successful order creation
+        if ($produk && $requestedQty > 0) {
+            $produk->decrement('stok', min($requestedQty, $produk->stok));
+        }
 
         // Auto sync with Pelanggan table: increment total_pesanan or create customer record if missing
         $pelanggan = \App\Models\Pelanggan::where('nama', $validated['nama_pelanggan'])->first();

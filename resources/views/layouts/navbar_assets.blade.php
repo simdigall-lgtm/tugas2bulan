@@ -1113,11 +1113,42 @@
             }, 100);
         }
 
-        // Notifications Dropdown Logic
+        // Notifications Dropdown Logic with Persistent localStorage State
         const notifBtn = document.getElementById('notifBellBtn');
         const notifDropdown = document.getElementById('notifDropdown');
         const markReadBtn = document.getElementById('markAllReadBtn');
         const notifBadge = document.querySelector('.notif-badge');
+
+        function applyNotifReadState() {
+            const isAllRead = localStorage.getItem('sipekan_notif_read_all') === 'true';
+            const readItems = JSON.parse(localStorage.getItem('sipekan_read_notif_ids') || '[]');
+
+            if (isAllRead) {
+                document.querySelectorAll('.notif-item').forEach(el => el.classList.remove('unread'));
+                if (notifBadge) notifBadge.style.display = 'none';
+            } else {
+                let unreadCount = 0;
+                document.querySelectorAll('.notif-item').forEach((el, index) => {
+                    const id = el.getAttribute('data-notif-id') || String(index + 1);
+                    if (readItems.includes(id)) {
+                        el.classList.remove('unread');
+                    } else if (el.classList.contains('unread')) {
+                        unreadCount++;
+                    }
+                });
+
+                if (notifBadge) {
+                    if (unreadCount > 0) {
+                        notifBadge.textContent = unreadCount;
+                        notifBadge.style.display = 'inline-block';
+                    } else {
+                        notifBadge.style.display = 'none';
+                    }
+                }
+            }
+        }
+
+        applyNotifReadState();
 
         if (notifBtn && notifDropdown) {
             notifBtn.addEventListener('click', function (e) {
@@ -1127,14 +1158,26 @@
             });
         }
 
-        if (markReadBtn && notifBadge) {
+        if (markReadBtn) {
             markReadBtn.addEventListener('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                document.querySelectorAll('.notif-item.unread').forEach(el => el.classList.remove('unread'));
-                notifBadge.style.display = 'none';
+                localStorage.setItem('sipekan_notif_read_all', 'true');
+                applyNotifReadState();
             });
         }
+
+        document.querySelectorAll('.notif-item').forEach((item, index) => {
+            item.addEventListener('click', function() {
+                const id = this.getAttribute('data-notif-id') || String(index + 1);
+                let readItems = JSON.parse(localStorage.getItem('sipekan_read_notif_ids') || '[]');
+                if (!readItems.includes(id)) {
+                    readItems.push(id);
+                    localStorage.setItem('sipekan_read_notif_ids', JSON.stringify(readItems));
+                }
+                applyNotifReadState();
+            });
+        });
 
         // User Profile Dropdown Logic
         const userProfileBtn = document.getElementById('userProfileBtn') || document.querySelector('.user-profile');

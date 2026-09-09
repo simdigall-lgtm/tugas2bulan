@@ -86,12 +86,6 @@
                     <i class="fa-regular fa-user"></i>
                     <span>Profil Saya</span>
                 </a>
-                @if(!($isKasir ?? false))
-                <a href="{{ route('pengaturan') }}" class="profile-menu-item">
-                    <i class="fa-solid fa-gear"></i>
-                    <span>Pengaturan Sistem</span>
-                </a>
-                @endif
                 <a href="#" class="profile-menu-item" id="helpModalProfileLink">
                     <i class="fa-regular fa-circle-question"></i>
                     <span>Pusat Bantuan</span>

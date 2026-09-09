@@ -753,15 +753,17 @@
                 </div>
                 <div class="form-group">
                     <label for="ordProduct">Nama Produk</label>
-                    <input type="text" name="nama_produk" id="ordProduct" list="productList" required
-                        placeholder="Pilih dari daftar produk atau ketik sendiri..." autocomplete="off">
-                    <datalist id="productList">
+                    <select name="nama_produk" id="ordProduct" required
+                        style="width: 100%; border: 1px solid #CBD5E1; border-radius: 8px; padding: 10px 14px; font-size: 13.5px; color: #0F172A; outline: none; background: #fff; cursor: pointer;">
+                        <option value="" disabled selected>-- Pilih Produk --</option>
                         @foreach($produks ?? [] as $prod)
-                            <option value="{{ $prod->nama_produk }}">{{ $prod->kode_produk }} - {{ $prod->nama_produk }} (Rp
-                                {{ number_format($prod->harga, 0, ',', '.') }})
+                            @php $isOut = ($prod->stok ?? 0) <= 0; @endphp
+                            <option value="{{ $prod->nama_produk }}" {{ $isOut ? 'disabled style=color:#94A3B8;background:#F1F5F9;' : '' }}>
+                                {{ $prod->kode_produk }} - {{ $prod->nama_produk }} (Rp {{ number_format($prod->harga, 0, ',', '.') }}) {{ $isOut ? '• HABIS' : '• Stok: ' . $prod->stok }}
                             </option>
                         @endforeach
-                    </datalist>
+                    </select>
+                    <div id="stockHint" style="font-size: 12px; color: #64748B; font-weight: 600; margin-top: 5px; display: none;"></div>
                 </div>
                 <!-- Split Jumlah & Ukuran Fields -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
@@ -808,7 +810,6 @@
                     <select name="status" id="ordStatus" required>
                         <option value="Menunggu">Menunggu</option>
                         <option value="Diproses" selected>Diproses</option>
-                        <option value="Selesai">Selesai</option>
                     </select>
                 </div>
                 <div class="modal-actions">
@@ -881,6 +882,9 @@
 
                 document.getElementById('ordCustomer').value = p.nama_pelanggan || '';
                 document.getElementById('ordProduct').value = p.nama_produk || '';
+                if (typeof validateStockAndCalculatePrice === 'function') {
+                    validateStockAndCalculatePrice();
+                }
 
                 const parsed = parseJumlahUkuran(p.jumlah_ukuran);
                 if (document.getElementById('ordJumlah')) document.getElementById('ordJumlah').value = parsed.qty;
@@ -964,12 +968,15 @@
             if (openBtn) {
                 openBtn.addEventListener('click', () => {
                     form.reset();
-                    if (document.getElementById('ordJumlah')) document.getElementById('ordJumlah').value = '100';
+                    if (document.getElementById('ordProduct')) document.getElementById('ordProduct').value = '';
+                    if (document.getElementById('ordJumlah')) document.getElementById('ordJumlah').value = '1';
                     if (document.getElementById('ordJumlahUnit')) document.getElementById('ordJumlahUnit').value = 'Pcs';
                     if (document.getElementById('ordUkuran')) document.getElementById('ordUkuran').value = '';
+                    const sHint = document.getElementById('stockHint');
+                    if (sHint) sHint.style.display = 'none';
                     form.action = "{{ route('pesanan.store') }}";
                     if (methodInput) methodInput.value = 'POST';
-                    if (modalTitle) modalTitle.textContent = '';
+                    if (modalTitle) modalTitle.textContent = 'Buat Pesanan Baru';
                     if (saveBtn) saveBtn.textContent = 'Simpan Pesanan';
                     modalOverlay.classList.add('active');
                 });
@@ -986,50 +993,102 @@
                 if (ordCustomer) ordCustomer.value = prefillCustomer;
             }
 
-            // Auto-calculate total harga based on selected product and quantity
+            // Auto-calculate total harga and validate stock based on selected product and quantity
             const productPrices = {
                 @foreach($produks ?? [] as $prod)
                     "{!! addslashes($prod->nama_produk) !!}": {{ $prod->harga ?? 0 }},
                 @endforeach
             };
 
+            const productStocks = {
+                @foreach($produks ?? [] as $prod)
+                    "{!! addslashes($prod->nama_produk) !!}": {{ $prod->stok ?? 0 }},
+                @endforeach
+            };
+
+            const productUnits = {
+                @foreach($produks ?? [] as $prod)
+                    @php
+                        $pName = strtolower($prod->nama_produk ?? '');
+                        $unit = 'Pcs';
+                        if (str_contains($pName, 'kartu nama')) $unit = 'Box';
+                        elseif (str_contains($pName, 'brosur')) $unit = 'Rim';
+                        elseif (str_contains($pName, 'spanduk') || str_contains($pName, 'banner')) $unit = 'Meter';
+                        elseif (str_contains($pName, 'stiker')) $unit = 'Lembar';
+                        elseif (str_contains($pName, 'kalender')) $unit = 'Set';
+                    @endphp
+                    "{!! addslashes($prod->nama_produk) !!}": "{{ $unit }}",
+                @endforeach
+            };
+
             const ordProductInput = document.getElementById('ordProduct');
             const ordJumlahInput = document.getElementById('ordJumlah');
+            const ordJumlahUnitSelect = document.getElementById('ordJumlahUnit');
             const ordPriceInput = document.getElementById('ordPrice');
-            const priceHint = document.getElementById('priceCalculationHint');
+            const stockHint = document.getElementById('stockHint');
 
-            function calculateTotalPrice() {
-                if (!ordProductInput || !ordPriceInput) return;
+            function validateStockAndCalculatePrice(isProductChange = false) {
+                if (!ordProductInput) return;
                 const prodName = ordProductInput.value.trim();
                 let basePrice = null;
+                let availStock = null;
+                let unitName = 'Pcs';
 
                 for (const [name, price] of Object.entries(productPrices)) {
                     if (name.toLowerCase() === prodName.toLowerCase()) {
                         basePrice = price;
+                        availStock = productStocks[name] ?? 0;
+                        unitName = productUnits[name] ?? 'Pcs';
                         break;
                     }
                 }
 
-                if (basePrice !== null && basePrice > 0) {
+                if (isProductChange && ordJumlahUnitSelect && unitName) {
+                    ordJumlahUnitSelect.value = unitName;
+                } else if (ordJumlahUnitSelect && ordJumlahUnitSelect.value) {
+                    unitName = ordJumlahUnitSelect.value;
+                }
+
+                if (availStock !== null) {
+                    if (stockHint) {
+                        stockHint.style.display = 'block';
+                        if (availStock <= 0) {
+                            stockHint.innerHTML = `<span style="color: #EF4444;"><i class="fa-solid fa-circle-xmark"></i> Stok Habis (0 ${unitName})</span>`;
+                        } else {
+                            stockHint.innerHTML = `<i class="fa-solid fa-boxes-stacked" style="color: #64748B;"></i> <span style="color: #64748B;">Stok Tersedia:</span> <strong style="color: #334155;">${availStock} ${unitName}</strong>`;
+                        }
+                    }
+
+                    if (ordJumlahInput) {
+                        ordJumlahInput.max = availStock;
+                        let qty = parseInt(ordJumlahInput.value) || 1;
+                        if (availStock > 0 && qty > availStock) {
+                            ordJumlahInput.value = availStock;
+                            qty = availStock;
+                        }
+                    }
+                } else if (stockHint) {
+                    stockHint.style.display = 'none';
+                    if (ordJumlahInput) ordJumlahInput.removeAttribute('max');
+                }
+
+                if (basePrice !== null && basePrice > 0 && ordPriceInput) {
                     const qty = parseInt(ordJumlahInput ? ordJumlahInput.value : 1) || 1;
                     const total = basePrice * Math.max(1, qty);
                     ordPriceInput.value = total;
-                    if (priceHint) {
-                        priceHint.style.display = 'block';
-                        priceHint.textContent = ` Rp ${Number(basePrice).toLocaleString('id-ID')} × ${qty} = Rp ${Number(total).toLocaleString('id-ID')}`;
-                    }
-                } else if (priceHint) {
-                    priceHint.style.display = 'none';
                 }
             }
 
             if (ordProductInput) {
-                ordProductInput.addEventListener('input', calculateTotalPrice);
-                ordProductInput.addEventListener('change', calculateTotalPrice);
+                ordProductInput.addEventListener('input', () => validateStockAndCalculatePrice(true));
+                ordProductInput.addEventListener('change', () => validateStockAndCalculatePrice(true));
             }
             if (ordJumlahInput) {
-                ordJumlahInput.addEventListener('input', calculateTotalPrice);
-                ordJumlahInput.addEventListener('change', calculateTotalPrice);
+                ordJumlahInput.addEventListener('input', () => validateStockAndCalculatePrice(false));
+                ordJumlahInput.addEventListener('change', () => validateStockAndCalculatePrice(false));
+            }
+            if (ordJumlahUnitSelect) {
+                ordJumlahUnitSelect.addEventListener('change', () => validateStockAndCalculatePrice(false));
             }
 
         if (tbody) {
