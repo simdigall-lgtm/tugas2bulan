@@ -804,66 +804,11 @@
                 </button>
             </div>
 
-            @php
-                $extractedCities = [];
-                foreach ($pelanggans ?? [] as $pel) {
-                    if (!empty($pel->alamat)) {
-                        $parts = array_map('trim', explode(',', $pel->alamat));
-                        foreach ($parts as $part) {
-                            if (!empty($part) && strlen($part) >= 3 && !is_numeric($part)) {
-                                $extractedCities[] = ucwords(strtolower($part));
-                            }
-                        }
-                    }
-                }
-                $defaultCities = [
-                    'Buniseuri',
-                    'Ciamis',
-                    'Cijeungjing',
-                    'Margaluyu',
-                    'Gunung Asih',
-                    'Nasol',
-                    'Jati',
-                    'Kawali',
-                    'Kujang',
-                    'Sindangkasih',
-                    'Bandung',
-                    'Jakarta Pusat',
-                    'Jakarta Selatan',
-                    'Semarang',
-                    'Surabaya',
-                    'Tasikmalaya',
-                    'Yogyakarta'
-                ];
-                $allAvailableCities = array_unique(array_merge($extractedCities, $defaultCities));
-                sort($allAvailableCities);
-            @endphp
-
-            <!-- Filter & Search Toolbar -->
+            <!-- Search Toolbar -->
             <div class="filter-toolbar">
-                <div class="customer-search-box">
+                <div class="customer-search-box" style="max-width: 360px;">
                     <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                    <input type="text" id="customerSearchInput" placeholder="Cari pelanggan...">
-                </div>
-
-                <div class="filter-actions">
-                    <select class="filter-select" id="filterCityQuickSelect" title="Filter Cepat Kota / Wilayah">
-                        <option value="">Semua Wilayah</option>
-                        @foreach($allAvailableCities as $c)
-                            <option value="{{ $c }}">{{ $c }}</option>
-                        @endforeach
-                    </select>
-
-                    <select class="filter-select" id="filterStatusSelect" title="Filter Status Keanggotaan">
-                        <option value="">Semua Status</option>
-                        <option value="aktif">Aktif</option>
-                        <option value="nonaktif">Nonaktif</option>
-                    </select>
-
-                    <button class="btn-filter-more" id="openFilterMoreBtn">
-                        <i class="fa-solid fa-sliders"></i>
-                        <span>Lebih Banyak Filter</span>
-                    </button>
+                    <input type="text" id="customerSearchInput" placeholder="Cari pelanggan berdasarkan nama, HP, atau email...">
                 </div>
             </div>
 
@@ -873,22 +818,18 @@
                     <table class="custom-table" id="customerTable">
                         <thead>
                             <tr>
-                                <th style="width: 36px; text-align: center;"><input type="checkbox"
-                                        style="cursor:pointer;" id="selectAll"></th>
-                                <th style="width: 105px;">ID PELANGGAN</th>
+                                <th style="width: 115px;">ID PELANGGAN</th>
                                 <th>NAMA PELANGGAN</th>
-                                <th style="width: 195px;">KONTAK</th>
-                                <th style="width: 95px; text-align: center;">TOTAL PESANAN</th>
-                                <th style="width: 110px;">TANGGAL DAFTAR</th>
-                                <th style="width: 85px; text-align: center;">STATUS</th>
+                                <th style="width: 200px;">KONTAK</th>
+                                <th style="width: 100px; text-align: center;">TOTAL PESANAN</th>
+                                <th style="width: 120px;">TANGGAL DAFTAR</th>
+                                <th style="width: 90px; text-align: center;">STATUS</th>
                                 <th style="width: 50px; text-align: center;">AKSI</th>
                             </tr>
                         </thead>
                         <tbody>
                             @forelse($pelanggans ?? [] as $p)
                                 <tr class="customer-row" data-customer='@json($p)' style="cursor: pointer;">
-                                    <td class="prevent-row-click" style="text-align: center;"><input type="checkbox"
-                                            style="cursor:pointer;"></td>
                                     <td class="cus-id">{{ $p->kode_pelanggan }}</td>
                                     <td>
                                         <div class="customer-cell">
@@ -945,7 +886,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" style="text-align:center; padding: 20px; color:#64748B;">Belum ada data
+                                    <td colspan="7" style="text-align:center; padding: 20px; color:#64748B;">Belum ada data
                                         pelanggan di database.</td>
                                 </tr>
                             @endforelse
