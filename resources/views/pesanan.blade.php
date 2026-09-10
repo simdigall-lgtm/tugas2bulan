@@ -181,7 +181,7 @@
         }
 
         .content-body {
-            padding: 32px;
+            padding: 24px 28px;
             flex: 1;
         }
 
@@ -189,20 +189,20 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .page-title {
-            font-size: 26px;
+            font-size: 24px;
             font-weight: 800;
             color: #0F172A;
             letter-spacing: -.5px;
         }
 
         .page-subtitle {
-            font-size: 14px;
+            font-size: 13.5px;
             color: #64748B;
-            margin-top: 4px;
+            margin-top: 3px;
         }
 
         .header-right {
@@ -213,12 +213,12 @@
 
         .search-filter {
             position: relative;
-            width: 260px;
+            width: 240px;
         }
 
         .search-filter i {
             position: absolute;
-            left: 13px;
+            left: 12px;
             top: 50%;
             transform: translateY(-50%);
             color: #94A3B8;
@@ -230,7 +230,7 @@
             background: #fff;
             border: 1px solid #E2E8F0;
             border-radius: 8px;
-            padding: 9px 14px 9px 36px;
+            padding: 8px 12px 8px 34px;
             font-size: 13px;
             outline: none;
         }
@@ -239,9 +239,9 @@
             background: #1B3B6F;
             color: #fff;
             border: none;
-            padding: 10px 18px;
+            padding: 9px 16px;
             border-radius: 8px;
-            font-size: 13.5px;
+            font-size: 13px;
             font-weight: 700;
             cursor: pointer;
             display: flex;
@@ -263,24 +263,25 @@
         }
 
         thead th {
-            padding: 12px 14px;
+            padding: 10px 12px;
             font-size: 11px;
             font-weight: 700;
             color: #64748B;
             text-transform: uppercase;
-            letter-spacing: .5px;
+            letter-spacing: .4px;
             border-bottom: 1px solid #E2E8F0;
             background: #fff;
             white-space: nowrap;
         }
 
         tbody td {
-            padding: 12px 14px;
-            font-size: 13px;
+            padding: 10px 12px;
+            font-size: 12.5px;
             color: #334155;
             font-weight: 500;
             border-bottom: 1px solid #F1F5F9;
             vertical-align: middle;
+            white-space: nowrap;
         }
 
         tbody tr:last-child td {
@@ -333,8 +334,8 @@
         }
 
         .badge-menunggu {
-            background: #FEF3C7;
-            color: #D97706;
+            background: #DBEAFE;
+            color: #1E3A8A;
         }
 
         .badge-diproses {
@@ -681,7 +682,7 @@
                                                 style="font-size:10px; color:#64748B;"></i> {{ $uVal ?: 'Standard' }}
                                         </span>
                                     </td>
-                                    <td>Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}</td>
+                                    <td style="white-space: nowrap; font-weight: 600; color: #0F172A;">Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}</td>
                                     <td>
                                         <span
                                             class="badge {{ strtolower($pesanan->status) == 'selesai' ? 'badge-selesai' : (strtolower($pesanan->status) == 'diproses' ? 'badge-diproses' : 'badge-menunggu') }}">
@@ -693,9 +694,11 @@
                                             <button type="button" class="action-icon-btn action-toggle" title="Aksi"><i
                                                     class="fa-solid fa-ellipsis-vertical"></i></button>
                                             <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item"
-                                                    onclick="editPesanan({{ json_encode($pesanan) }})"><i
-                                                        class="fa-regular fa-pen-to-square"></i> Edit</button>
+                                                @if(strtolower($pesanan->status ?? '') !== 'selesai')
+                                                    <button type="button" class="dropdown-item"
+                                                        onclick="editPesanan({{ json_encode($pesanan) }})"><i
+                                                            class="fa-regular fa-pen-to-square"></i> Edit</button>
+                                                @endif
                                                 <form action="{{ route('pesanan.destroy', $pesanan->id) }}" method="POST"
                                                     style="display:inline;"
                                                     onsubmit="return confirm('Apakah Anda yakin ingin menghapus pesanan {{ $pesanan->kode_pesanan }}?');">
@@ -759,11 +762,10 @@
                         @foreach($produks ?? [] as $prod)
                             @php $isOut = ($prod->stok ?? 0) <= 0; @endphp
                             <option value="{{ $prod->nama_produk }}" {{ $isOut ? 'disabled style=color:#94A3B8;background:#F1F5F9;' : '' }}>
-                                {{ $prod->kode_produk }} - {{ $prod->nama_produk }} (Rp {{ number_format($prod->harga, 0, ',', '.') }}) {{ $isOut ? '• HABIS' : '• Stok: ' . $prod->stok }}
+                                {{ $prod->nama_produk }} — Rp {{ number_format($prod->harga, 0, ',', '.') }} (Stok: {{ $isOut ? 'Habis' : $prod->stok }})
                             </option>
                         @endforeach
                     </select>
-                    <div id="stockHint" style="font-size: 12px; color: #64748B; font-weight: 600; margin-top: 5px; display: none;"></div>
                 </div>
                 <!-- Split Jumlah & Ukuran Fields -->
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
@@ -801,7 +803,7 @@
                 <input type="hidden" name="jumlah_ukuran" id="ordJumlahUkuran">
                 <div class="form-group">
                     <label for="ordPrice">Total Harga (IDR)</label>
-                    <input type="number" name="total_harga" id="ordPrice" min="0" step="1000" required
+                    <input type="number" name="total_harga" id="ordPrice" min="0" step="any" required
                         placeholder="Contoh: 500000">
                     <div id="priceCalculationHint" style="font-size: 12px; color: #2563EB; font-weight: 600; margin-top: 5px; display: none;"></div>
                 </div>
@@ -836,7 +838,7 @@
             const searchInput = document.querySelector('.search-filter input');
 
             let currentPage = 1;
-            const itemsPerPage = 5;
+            const itemsPerPage = 10;
 
             function parseJumlahUkuran(str) {
                 if (!str || str === '-') return { qty: '1', unit: 'Pcs', size: '' };
@@ -1050,15 +1052,6 @@
                 }
 
                 if (availStock !== null) {
-                    if (stockHint) {
-                        stockHint.style.display = 'block';
-                        if (availStock <= 0) {
-                            stockHint.innerHTML = `<span style="color: #EF4444;"><i class="fa-solid fa-circle-xmark"></i> Stok Habis (0 ${unitName})</span>`;
-                        } else {
-                            stockHint.innerHTML = `<i class="fa-solid fa-boxes-stacked" style="color: #64748B;"></i> <span style="color: #64748B;">Stok Tersedia:</span> <strong style="color: #334155;">${availStock} ${unitName}</strong>`;
-                        }
-                    }
-
                     if (ordJumlahInput) {
                         ordJumlahInput.max = availStock;
                         let qty = parseInt(ordJumlahInput.value) || 1;
@@ -1067,8 +1060,7 @@
                             qty = availStock;
                         }
                     }
-                } else if (stockHint) {
-                    stockHint.style.display = 'none';
+                } else {
                     if (ordJumlahInput) ordJumlahInput.removeAttribute('max');
                 }
 

@@ -211,6 +211,8 @@
             text-decoration: underline;
         }
 
+
+
         /* Forgot Password Modal Overlay */
         .forgot-modal-overlay {
             position: fixed;
@@ -420,8 +422,12 @@
                 <img src="{{ asset('assets/images/sipekan-logo.png') }}" alt="SIPEKAN Logo"
                     style="height: 50px; width: auto; object-fit: contain; flex-shrink: 0; display: block;">
                 <div style="display: flex; flex-direction: column; justify-content: space-between; height: 50px;">
-                    <h1 class="brand-title" style="margin: 0; font-size: 24px; font-weight: 800; line-height: 1.1; letter-spacing: -0.5px;">SIPEKAN</h1>
-                    <p class="brand-subtitle" style="margin: 0; font-size: 13px; font-weight: 500; line-height: 1.25; color: #4B5563;">Sistem Informasi Manajemen Percetakan</p>
+                    <h1 class="brand-title"
+                        style="margin: 0; font-size: 24px; font-weight: 800; line-height: 1.1; letter-spacing: -0.5px;">
+                        SIPEKAN</h1>
+                    <p class="brand-subtitle"
+                        style="margin: 0; font-size: 13px; font-weight: 500; line-height: 1.25; color: #4B5563;">Sistem
+                        Informasi Manajemen Percetakan</p>
                 </div>
             </div>
 
@@ -477,7 +483,7 @@
                 <div class="form-group" style="margin-bottom: 20px;">
                     <label class="form-label">Verifikasi Keamanan</label>
                     <div class="cf-turnstile"
-                        data-sitekey="{{ config('services.turnstile.site_key', env('TURNSTILE_SITE_KEY', '0x4AAAAAAElX-y-BGcmshHBP')) }}"
+                        data-sitekey="{{ config('services.turnstile.site_key', env('TURNSTILE_SITE_KEY', '1x00000000000000000000AA')) }}"
                         data-theme="light"></div>
                 </div>
 
@@ -599,10 +605,14 @@
 
                 <!-- STEP 2: Input Kode OTP Verifikasi 6-Digit -->
             @elseif($currentStep == 2)
-                <p style="font-size: 13px; color: #64748B; margin-bottom: 16px; line-height: 1.5;">
-                    Tahap 2 dari 3: Masukkan <strong>Kode Verifikasi 6-Digit</strong> yang telah dikirimkan ke email akun
-                    Anda.
+                @php
+                    $targetEmail = session('target_email') ?? session('reset_user_email') ?? 'wusakun@gmail.com';
+                @endphp
+                <p style="font-size: 13px; color: #64748B; margin-bottom: 14px; line-height: 1.5;">
+                    Tahap 2 dari 3: Masukkan <strong>Kode Verifikasi 6-Digit</strong> yang telah dikirimkan ke email
+                    <strong>{{ $targetEmail }}</strong>.
                 </p>
+
                 <form action="{{ route('password.verify_code') }}" method="POST">
                     @csrf
                     <div class="form-group" style="margin-bottom: 18px;">
@@ -612,8 +622,8 @@
                         <div class="input-wrapper">
                             <i class="fa-solid fa-key input-icon"></i>
                             <input type="text" name="otp_code" required class="form-input"
-                                placeholder="Masukkan 6 digit kode OTP (Contoh: 123456)" maxlength="6" autofocus
-                                style="letter-spacing: 2px; font-weight: 800; font-size: 16px;">
+                                placeholder="Masukkan 6 digit kode OTP" maxlength="6" autofocus
+                                style="letter-spacing: 4px; font-weight: 800; font-size: 17px; text-align: center;">
                         </div>
                     </div>
 

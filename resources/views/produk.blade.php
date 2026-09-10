@@ -312,6 +312,7 @@
             border-bottom: 1px solid #F1F5F9;
             font-weight: 500;
             vertical-align: middle;
+            white-space: nowrap;
         }
 
         .custom-table tr:last-child td {
@@ -325,6 +326,7 @@
         .product-name {
             font-weight: 700;
             color: #0F172A;
+            white-space: nowrap;
         }
 
         .category-badge {
@@ -365,6 +367,7 @@
         .price-text {
             font-weight: 600;
             color: #1E293B;
+            white-space: nowrap;
         }
 
         .action-dropdown {
@@ -759,7 +762,7 @@
                         <div class="form-group">
                             <label for="prodBasePrice">Harga Dasar (Rp)</label>
                             <input type="number" name="harga" id="prodBasePrice" class="form-control" min="0"
-                                step="1000" placeholder="25000" required>
+                                step="any" placeholder="25000" required>
                         </div>
 
                         <div class="form-group">
@@ -809,7 +812,7 @@
             const closeModalBtn = document.getElementById('closeModalBtn');
 
             let currentPage = 1;
-            const itemsPerPage = 5;
+            const itemsPerPage = 10;
 
             function openModal() {
                 if (modalEl) modalEl.classList.add('active');

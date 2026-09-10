@@ -718,8 +718,16 @@
     .order-code,
     .pay-id,
     .inv-code,
-    .cus-id {
-        white-space: nowrap;
+    .cus-id,
+    .price-text,
+    .status-badge,
+    .badge,
+    .size-badge,
+    table th,
+    table td,
+    .custom-table th,
+    .custom-table td {
+        white-space: nowrap !important;
     }
 
     /* Table Dropdown Menu & Dropup Positioning */
@@ -759,67 +767,706 @@
             display: none;
         }
     }
+    /* ===================================================
+       Enhanced Help Center Modal Styles
+    =================================================== */
+    #helpModal .app-modal-box {
+        max-width: 820px;
+        width: 95%;
+        max-height: 88vh;
+        height: 640px;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        border-radius: 18px;
+        box-shadow: 0 25px 60px -15px rgba(15, 23, 42, 0.35);
+        border: 1px solid #E2E8F0;
+    }
+
+    .help-header-wrapper {
+        padding: 22px 26px 16px 26px;
+        background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 100%);
+        color: #FFFFFF;
+        position: relative;
+    }
+
+    .help-header-top {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+    }
+
+    .help-header-title {
+        font-size: 18px;
+        font-weight: 800;
+        color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .help-header-subtitle {
+        font-size: 12px;
+        color: #93C5FD;
+        margin-top: 2px;
+        font-weight: 400;
+    }
+
+    .help-close-btn {
+        background: rgba(255, 255, 255, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: #FFFFFF;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.2s ease;
+    }
+
+    .help-close-btn:hover {
+        background: rgba(255, 255, 255, 0.25);
+        transform: scale(1.05);
+    }
+
+    .help-search-input-box {
+        position: relative;
+        width: 100%;
+    }
+
+    .help-search-input-box i {
+        position: absolute;
+        left: 14px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #94A3B8;
+        font-size: 13.5px;
+    }
+
+    .help-search-input-box input {
+        width: 100%;
+        padding: 10px 14px 10px 38px;
+        background: #FFFFFF;
+        border: 1px solid #CBD5E1;
+        border-radius: 10px;
+        font-size: 13px;
+        color: #0F172A;
+        outline: none;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: all 0.2s ease;
+    }
+
+    .help-search-input-box input:focus {
+        border-color: #3B82F6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+    }
+
+    /* Tab navigation bar */
+    .help-nav-tabs {
+        display: flex;
+        background: #F8FAFC;
+        border-bottom: 1px solid #E2E8F0;
+        padding: 0 20px;
+        gap: 6px;
+        overflow-x: auto;
+    }
+
+    .help-tab-link {
+        padding: 12px 14px;
+        background: none;
+        border: none;
+        border-bottom: 2px solid transparent;
+        font-size: 13px;
+        font-weight: 600;
+        color: #64748B;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+    }
+
+    .help-tab-link:hover {
+        color: #1E3A8A;
+    }
+
+    .help-tab-link.active {
+        color: #2563EB;
+        border-bottom-color: #2563EB;
+        font-weight: 700;
+    }
+
+    /* Tab Content Area */
+    .help-body-content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 20px 24px;
+        background-color: #FFFFFF;
+    }
+
+    .help-tab-pane {
+        display: none;
+        animation: fadeInDown 0.2s ease-out;
+    }
+
+    .help-tab-pane.active {
+        display: block;
+    }
+
+    /* Workflow Cards */
+    .workflow-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .workflow-step-card {
+        display: flex;
+        gap: 14px;
+        padding: 14px 16px;
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+    }
+
+    .workflow-step-card:hover {
+        border-color: #CBD5E1;
+        background: #F1F5F9;
+        transform: translateY(-2px);
+    }
+
+    .workflow-step-num {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #1E3A8A, #2563EB);
+        color: #FFFFFF;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 14px;
+        flex-shrink: 0;
+        box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25);
+    }
+
+    .workflow-step-content {
+        flex: 1;
+    }
+
+    .workflow-step-title {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: #0F172A;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 4px;
+    }
+
+    .workflow-step-desc {
+        font-size: 12px;
+        color: #64748B;
+        line-height: 1.5;
+        margin-bottom: 8px;
+    }
+
+    .workflow-quick-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 11.5px;
+        font-weight: 700;
+        color: #2563EB;
+        text-decoration: none;
+        padding: 4px 10px;
+        background: #EFF6FF;
+        border-radius: 6px;
+        transition: all 0.15s ease;
+    }
+
+    .workflow-quick-link:hover {
+        background: #DBEAFE;
+        color: #1D4ED8;
+    }
+
+    /* FAQ Accordion */
+    .faq-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .faq-item {
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #FFFFFF;
+        transition: all 0.2s ease;
+    }
+
+    .faq-item.active {
+        border-color: #93C5FD;
+        box-shadow: 0 4px 14px rgba(37, 99, 235, 0.08);
+    }
+
+    .faq-question-btn {
+        width: 100%;
+        padding: 13px 16px;
+        background: #F8FAFC;
+        border: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        text-align: left;
+        font-size: 13px;
+        font-weight: 700;
+        color: #1E293B;
+        cursor: pointer;
+        transition: background 0.15s ease;
+    }
+
+    .faq-item.active .faq-question-btn {
+        background: #EFF6FF;
+        color: #1E3A8A;
+    }
+
+    .faq-chevron {
+        font-size: 12px;
+        color: #64748B;
+        transition: transform 0.25s ease;
+    }
+
+    .faq-item.active .faq-chevron {
+        transform: rotate(180deg);
+        color: #2563EB;
+    }
+
+    .faq-answer-body {
+        display: none;
+        padding: 13px 16px;
+        font-size: 12.5px;
+        color: #475569;
+        line-height: 1.6;
+        border-top: 1px solid #E2E8F0;
+        background: #FFFFFF;
+    }
+
+    .faq-item.active .faq-answer-body {
+        display: block;
+    }
+
+    /* Shortcuts Grid */
+    .shortcut-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 12px;
+    }
+
+    .shortcut-item-card {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 14px;
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 10px;
+        transition: all 0.15s ease;
+    }
+
+    .shortcut-item-card:hover {
+        background: #EFF6FF;
+        border-color: #BFDBFE;
+    }
+
+    .kbd-badge {
+        background: #FFFFFF;
+        border: 1px solid #CBD5E1;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+        border-radius: 6px;
+        padding: 3px 8px;
+        font-family: monospace;
+        font-size: 12px;
+        font-weight: 700;
+        color: #1E3A8A;
+    }
+
+    /* Contact & Support Tab */
+    .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 14px;
+        margin-bottom: 16px;
+    }
+
+    .contact-card {
+        padding: 18px 14px;
+        background: #F8FAFC;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.2s ease;
+    }
+
+    .contact-card:hover {
+        border-color: #CBD5E1;
+        transform: translateY(-2px);
+    }
+
+    .contact-card-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+    }
+
+    /* Footer */
+    .help-modal-footer {
+        padding: 12px 24px;
+        background: #F8FAFC;
+        border-top: 1px solid #E2E8F0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
 </style>
 
 <!-- Sidebar Overlay Backdrop for Mobile -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-<!-- Help Modal -->
+<!-- Professional Help Center Modal -->
 <div class="app-modal-overlay" id="helpModal">
     <div class="app-modal-box">
-        <div class="app-modal-header">
-            <div class="app-modal-title">
-                <i class="fa-regular fa-circle-question" style="color: #1E3A8A;"></i>
-                <span>Pusat Bantuan & Panduan</span>
+        <!-- Header -->
+        <div class="help-header-wrapper">
+            <div class="help-header-top">
+                <div>
+                    <div class="help-header-title">
+                        <i class="fa-solid fa-headset" style="color: #60A5FA;"></i>
+                        <span>Pusat Bantuan & Panduan Sistem</span>
+                    </div>
+                    <div class="help-header-subtitle">SIPEKAN — Sistem Informasi Manajemen Percetakan Modern</div>
+                </div>
+                <button type="button" class="help-close-btn closeHelpModal" title="Tutup Panduan (Esc)">&times;</button>
             </div>
-            <button class="app-modal-close closeHelpModal">&times;</button>
-        </div>
-        <div style="font-size: 13.5px; color: #475569; line-height: 1.6;">
-            <p style="margin-bottom: 12px;">Selamat datang di Konsol Manajemen <strong>SIPEKAN</strong>. Berikut adalah
-                panduan ringkas navigasi sistem:</p>
-
-            <div
-                style="background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 14px; margin-bottom: 16px;">
-                <div style="font-weight: 700; color: #0F172A; margin-bottom: 8px;">Pintasan Papan Ketik (Shortcuts):
-                </div>
-                <ul
-                    style="padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; margin: 0;">
-                    <li>
-                        <button type="button" id="triggerSearchShortcutBtn"
-                            style="background: none; border: none; padding: 0; font-size: 13.5px; color: #475569; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-                            <code
-                                style="background:#EEF2FF; padding: 3px 8px; border-radius: 6px; color: #1E3A8A; font-weight: 700; border: 1px solid #C7D2FE;">/</code>
-                            <span>Fokus langsung ke Pencarian Utama (Global Search)</span>
-                        </button>
-                    </li>
-                    <li>
-                        <button type="button" id="triggerEscShortcutBtn"
-                            style="background: none; border: none; padding: 0; font-size: 13.5px; color: #475569; text-align: left; cursor: pointer; display: flex; align-items: center; gap: 8px;">
-                            <code
-                                style="background:#EEF2FF; padding: 3px 8px; border-radius: 6px; color: #1E3A8A; font-weight: 700; border: 1px solid #C7D2FE;">Esc</code>
-                            <span>Menutup semua menu popup & modal</span>
-                        </button>
-                    </li>
-                </ul>
-            </div>
-
-            <div style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
-                <div style="font-weight: 700; color: #0F172A;">Dukungan Teknis & Layanan:</div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <i class="fa-solid fa-phone" style="color: #2563EB;"></i>
-                    <a href="tel:+62215550192" style="color: #1E3A8A; font-weight: 600; text-decoration: none;">+62 21
-                        555 0192 (Jam Kerja: 08.00 - 17.00 WIB)</a>
-                </div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <i class="fa-regular fa-envelope" style="color: #2563EB;"></i>
-                    <a href="mailto:support@sipekan.co.id"
-                        style="color: #1E3A8A; font-weight: 600; text-decoration: none;">support@sipekan.co.id</a>
-                </div>
+            <!-- Search Bar inside Help Center -->
+            <div class="help-search-input-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="helpFilterInput" placeholder="Cari topik panduan, alur fitur, atau tanya jawab..." autocomplete="off">
             </div>
         </div>
-        <div style="display: flex; justify-content: flex-end; margin-top: 20px;">
-            <button class="btn-primary closeHelpModal"
-                style="background-color: #1B3B6F; color: white; border: none; padding: 9px 20px; border-radius: 8px; font-weight: 700; cursor: pointer;">Mengerti</button>
+
+        <!-- Tab Navigation Bar -->
+        <div class="help-nav-tabs">
+            <button type="button" class="help-tab-link active" data-tab="helpTabWorkflow">
+                <i class="fa-solid fa-diagram-project"></i>
+                <span>Alur Kerja Sistem</span>
+            </button>
+            <button type="button" class="help-tab-link" data-tab="helpTabFaq">
+                <i class="fa-regular fa-circle-question"></i>
+                <span>Tanya Jawab (FAQ)</span>
+            </button>
+            <button type="button" class="help-tab-link" data-tab="helpTabShortcuts">
+                <i class="fa-solid fa-keyboard"></i>
+                <span>Pintasan Keyboard</span>
+            </button>
+            <button type="button" class="help-tab-link" data-tab="helpTabContact">
+                <i class="fa-solid fa-comments"></i>
+                <span>Dukungan & Kontak</span>
+            </button>
+        </div>
+
+        <!-- Body Content -->
+        <div class="help-body-content">
+            <!-- TAB 1: ALUR KERJA SISTEM -->
+            <div class="help-tab-pane active" id="helpTabWorkflow">
+                <div style="font-size: 12.5px; color: #64748B; margin-bottom: 14px;">
+                    Ikuti 5 tahapan alur operasional standar percetakan dari awal order hingga pencatatan keuangan:
+                </div>
+
+                <div class="workflow-grid">
+                    <!-- Step 1 -->
+                    <div class="workflow-step-card searchable-item">
+                        <div class="workflow-step-num">1</div>
+                        <div class="workflow-step-content">
+                            <div class="workflow-step-title">
+                                <span>1. Registrasi & Manajemen Pelanggan</span>
+                                <span class="badge" style="background:#E0E7FF; color:#3730A3; font-size:10.5px; padding:2px 8px; border-radius:4px;">Master Data</span>
+                            </div>
+                            <div class="workflow-step-desc">
+                                Catat data pelanggan baru (Nama, Nomor WhatsApp, Email, & Alamat). Riwayat pemesanan pelanggan akan otomatis tersimpan untuk kemudahan re-order.
+                            </div>
+                            <a href="{{ route('pelanggan') }}" class="workflow-quick-link">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Menu Pelanggan
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="workflow-step-card searchable-item">
+                        <div class="workflow-step-num">2</div>
+                        <div class="workflow-step-content">
+                            <div class="workflow-step-title">
+                                <span>2. Kelola Katalog Produk & Tarif Cetak</span>
+                                <span class="badge" style="background:#FEF3C7; color:#92400E; font-size:10.5px; padding:2px 8px; border-radius:4px;">Katalog</span>
+                            </div>
+                            <div class="workflow-step-desc">
+                                Atur varian produk cetak (Banner/Spanduk, Brosur, Stiker Vinyl, Kartu Nama), satuan ukuran (m² / lembar / rim), serta tarif harga dasar per item.
+                            </div>
+                            <a href="{{ route('produk') }}" class="workflow-quick-link">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Menu Produk
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="workflow-step-card searchable-item">
+                        <div class="workflow-step-num">3</div>
+                        <div class="workflow-step-content">
+                            <div class="workflow-step-title">
+                                <span>3. Buat & Pantau Pesanan (Order Cetak)</span>
+                                <span class="badge" style="background:#DBEAFE; color:#1E40AF; font-size:10.5px; padding:2px 8px; border-radius:4px;">Transaksi</span>
+                            </div>
+                            <div class="workflow-step-desc">
+                                Input pesanan pelanggan dengan memilih produk dan jumlah. Sistem menghitung total biaya otomatis. Pantau progres pengerjaan: <em>Menunggu &rarr; Diproses &rarr; Selesai</em>.
+                            </div>
+                            <a href="{{ route('pesanan') }}" class="workflow-quick-link">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Menu Pesanan
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="workflow-step-card searchable-item">
+                        <div class="workflow-step-num">4</div>
+                        <div class="workflow-step-content">
+                            <div class="workflow-step-title">
+                                <span>4. Pembayaran Kasir & Cetak Invoice</span>
+                                <span class="badge" style="background:#DCFCE7; color:#166534; font-size:10.5px; padding:2px 8px; border-radius:4px;">Kasir</span>
+                            </div>
+                            <div class="workflow-step-desc">
+                                Catat transaksi pembayaran melalui Tunai, Transfer Bank, atau QRIS. Status pembayaran mendukung Uang Muka (DP / Belum Lunas) hingga Pelunasan (Lunas) & cetak struk kwitansi.
+                            </div>
+                            <a href="{{ route('pembayaran') }}" class="workflow-quick-link">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Menu Pembayaran
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Step 5 -->
+                    <div class="workflow-step-card searchable-item">
+                        <div class="workflow-step-num">5</div>
+                        <div class="workflow-step-content">
+                            <div class="workflow-step-title">
+                                <span>5. Rekapitulasi Laporan & Export Data</span>
+                                <span class="badge" style="background:#F3E8FF; color:#6B21A8; font-size:10.5px; padding:2px 8px; border-radius:4px;">Analitik</span>
+                            </div>
+                            <div class="workflow-step-desc">
+                                Analisis performa omset cetak harian, mingguan, dan bulanan. Filter data berdasarkan tanggal dan unduh laporan resmi dalam format <strong>PDF</strong> atau <strong>Excel</strong>.
+                            </div>
+                            <a href="{{ route('laporan') }}" class="workflow-quick-link">
+                                <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Menu Laporan
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: FAQ ACCORDION -->
+            <div class="help-tab-pane" id="helpTabFaq">
+                <div style="font-size: 12.5px; color: #64748B; margin-bottom: 14px;">
+                    Pertanyaan yang sering diajukan mengenai pengoperasian aplikasi SIPEKAN:
+                </div>
+
+                <div class="faq-list">
+                    <!-- FAQ 1 -->
+                    <div class="faq-item searchable-item active">
+                        <button type="button" class="faq-question-btn">
+                            <span><i class="fa-regular fa-file-lines" style="color:#2563EB; margin-right:8px;"></i> Bagaimana cara mencetak struk atau invoice pesanan?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer-body">
+                            Buka menu <strong>Pembayaran</strong> atau <strong>Pesanan</strong>, klik tombol opsi aksi (titik tiga `⋮`) pada baris transaksi yang diinginkan, kemudian pilih <strong>Cetak Kwitansi / Struk</strong>. Anda juga bisa menekan tombol cetak langsung dari modal detail invoice.
+                        </div>
+                    </div>
+
+                    <!-- FAQ 2 -->
+                    <div class="faq-item searchable-item">
+                        <button type="button" class="faq-question-btn">
+                            <span><i class="fa-solid fa-circle-check" style="color:#10B981; margin-right:8px;"></i> Bagaimana mengubah status pesanan yang sudah selesai dicetak?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer-body">
+                            Buka menu <strong>Pesanan</strong>, cari kode pesanan pelanggan, klik tombol <strong>Edit</strong>, ubah kolom status dari <em>Diproses</em> menjadi <strong>Selesai</strong>, lalu klik <strong>Simpan Perubahan</strong>. Sistem akan otomatis memperbarui data dan mengirimkan status ke dasbor.
+                        </div>
+                    </div>
+
+                    <!-- FAQ 3 -->
+                    <div class="faq-item searchable-item">
+                        <button type="button" class="faq-question-btn">
+                            <span><i class="fa-solid fa-money-bill-wave" style="color:#F59E0B; margin-right:8px;"></i> Bagaimana jika pelanggan hanya membayar uang muka (DP) terlebih dahulu?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer-body">
+                            Pada formulir <strong>Tambah Pembayaran</strong>, masukkan jumlah uang muka yang dibayarkan. Pilih status <strong>Belum Lunas</strong>. Sisa tagihan akan tercatat otomatis dan dapat dilunasi kapan saja saat pesanan selesai diambil.
+                        </div>
+                    </div>
+
+                    <!-- FAQ 4 -->
+                    <div class="faq-item searchable-item">
+                        <button type="button" class="faq-question-btn">
+                            <span><i class="fa-solid fa-file-excel" style="color:#059669; margin-right:8px;"></i> Bagaimana cara mengekspor laporan keuangan ke format Excel atau PDF?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer-body">
+                            Masuk ke menu <strong>Laporan</strong>, atur filter rentang tanggal dan jenis laporan yang ingin ditampilkan, kemudian klik tombol <strong>Export PDF</strong> atau <strong>Export Excel</strong> di pojok kanan atas tabel laporan.
+                        </div>
+                    </div>
+
+                    <!-- FAQ 5 -->
+                    <div class="faq-item searchable-item">
+                        <button type="button" class="faq-question-btn">
+                            <span><i class="fa-solid fa-shield-halved" style="color:#6366F1; margin-right:8px;"></i> Bagaimana cara mengaktifkan keamanan Two-Factor Authentication (2FA)?</span>
+                            <i class="fa-solid fa-chevron-down faq-chevron"></i>
+                        </button>
+                        <div class="faq-answer-body">
+                            Buka menu <strong>Pengaturan</strong>, cari bagian <em>Keamanan Autentikasi 2FA</em>, aktifkan tombol switch, lalu scan QR Code menggunakan aplikasi Google Authenticator di smartphone Anda dan masukkan 6 digit token untuk verifikasi.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: PINTASAN KEYBOARD -->
+            <div class="help-tab-pane" id="helpTabShortcuts">
+                <div style="font-size: 12.5px; color: #64748B; margin-bottom: 14px;">
+                    Gunakan pintasan keyboard berikut untuk mempercepat pekerjaan Anda:
+                </div>
+
+                <div class="shortcut-grid">
+                    <div class="shortcut-item-card searchable-item">
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Fokus Pencarian Global</div>
+                            <div style="font-size: 11.5px; color: #64748B;">Cari menu & data cepat</div>
+                        </div>
+                        <button type="button" id="triggerSearchShortcutBtn" class="kbd-badge" style="cursor:pointer; background:#EEF2FF; border-color:#C7D2FE;" title="Klik untuk mencoba">
+                            / (Garis Miring)
+                        </button>
+                    </div>
+
+                    <div class="shortcut-item-card searchable-item">
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Tutup Modal & Popup</div>
+                            <div style="font-size: 11.5px; color: #64748B;">Kembali ke halaman utama</div>
+                        </div>
+                        <button type="button" id="triggerEscShortcutBtn" class="kbd-badge" style="cursor:pointer;" title="Klik untuk mencoba">
+                            Esc
+                        </button>
+                    </div>
+
+                    <div class="shortcut-item-card searchable-item">
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Cetak Halaman / Invoice</div>
+                            <div style="font-size: 11.5px; color: #64748B;">Buka dialog cetak printer</div>
+                        </div>
+                        <span class="kbd-badge">Ctrl + P</span>
+                    </div>
+
+                    <div class="shortcut-item-card searchable-item">
+                        <div>
+                            <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Buka Pusat Bantuan</div>
+                            <div style="font-size: 11.5px; color: #64748B;">Akses panduan sistem</div>
+                        </div>
+                        <span class="kbd-badge">Icon Bantuan (?)</span>
+                    </div>
+                </div>
+
+                <div style="margin-top: 18px; padding: 12px 16px; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 10px; font-size: 12px; color: #475569; display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-lightbulb" style="color: #F59E0B; font-size: 16px;"></i>
+                    <span><strong>Tips Produktivitas:</strong> Tekan tombol <kbd style="background:#FFF; padding:2px 6px; border:1px solid #CBD5E1; border-radius:4px;">/</kbd> di mana saja pada aplikasi untuk langsung mencari nama pelanggan atau nomor pesanan.</span>
+                </div>
+            </div>
+
+            <!-- TAB 4: KONTAK & DUKUNGAN -->
+            <div class="help-tab-pane" id="helpTabContact">
+                <div style="font-size: 12.5px; color: #64748B; margin-bottom: 14px;">
+                    Hubungi tim bantuan teknis SIPEKAN jika mengalami kendala sistem atau membutuhkan integrasi khusus:
+                </div>
+
+                <div class="contact-grid">
+                    <!-- Contact 1: WhatsApp CS -->
+                    <div class="contact-card searchable-item">
+                        <div class="contact-card-icon" style="background: #DCFCE7; color: #16A34A;">
+                            <i class="fa-brands fa-whatsapp"></i>
+                        </div>
+                        <div style="font-size: 13px; font-weight: 700; color: #0F172A;">WhatsApp CS Helpdesk</div>
+                        <div style="font-size: 11.5px; color: #64748B;">Respon cepat untuk kasir & admin</div>
+                        <a href="https://wa.me/6281234567890?text=Halo%20Tim%20Support%20SIPEKAN,%20saya%20membutuhkan%20bantuan" target="_blank" class="btn-primary" style="background:#16A34A; color:white; padding:6px 14px; border-radius:6px; font-size:11.5px; font-weight:700; text-decoration:none; margin-top:4px;">
+                            Chat WhatsApp
+                        </a>
+                    </div>
+
+                    <!-- Contact 2: Call Support -->
+                    <div class="contact-card searchable-item">
+                        <div class="contact-card-icon" style="background: #EFF6FF; color: #2563EB;">
+                            <i class="fa-solid fa-phone"></i>
+                        </div>
+                        <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Layanan Telepon Kantor</div>
+                        <div style="font-size: 11.5px; color: #64748B;">Senin – Sabtu (08:00 – 17:00 WIB)</div>
+                        <a href="tel:+62215550192" class="btn-primary" style="background:#2563EB; color:white; padding:6px 14px; border-radius:6px; font-size:11.5px; font-weight:700; text-decoration:none; margin-top:4px;">
+                            +62 21 555 0192
+                        </a>
+                    </div>
+
+                    <!-- Contact 3: Email Support -->
+                    <div class="contact-card searchable-item">
+                        <div class="contact-card-icon" style="background: #EEF2FF; color: #4F46E5;">
+                            <i class="fa-regular fa-envelope"></i>
+                        </div>
+                        <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Email Dukungan Teknis</div>
+                        <div style="font-size: 11.5px; color: #64748B;">Kirim tiket & laporan bug</div>
+                        <a href="mailto:support@sipekan.co.id?subject=Bantuan%20Sistem%20SIPEKAN" class="btn-primary" style="background:#4F46E5; color:white; padding:6px 14px; border-radius:6px; font-size:11.5px; font-weight:700; text-decoration:none; margin-top:4px;">
+                            support@sipekan.co.id
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Server & System Status Info -->
+                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;">
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #10B981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);"></span>
+                        <div>
+                            <div style="font-size: 12.5px; font-weight: 700; color: #0F172A;">Status Sistem SIPEKAN: Beroperasi Normal</div>
+                            <div style="font-size: 11.5px; color: #64748B;">Database, Layanan Cloudflare, & Kasir Terhubung</div>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; font-weight: 700; color: #64748B; background: #E2E8F0; padding: 3px 8px; border-radius: 6px;">v2.4 Pro</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="help-modal-footer">
+            <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748B;">
+                <i class="fa-solid fa-circle-info" style="color: #2563EB;"></i>
+                <span>Tekan <kbd style="background:#FFF; padding:1px 5px; border:1px solid #CBD5E1; border-radius:4px; font-size:11px;">Esc</kbd> untuk menutup panduan</span>
+            </div>
+            <button type="button" class="closeHelpModal" style="background: #1E3A8A; color: #FFFFFF; border: none; padding: 8px 18px; border-radius: 8px; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all 0.15s ease;">
+                Tutup Panduan
+            </button>
         </div>
     </div>
 </div>
@@ -1194,7 +1841,7 @@
             });
         }
 
-        // Help Modal Logic
+        // Help Modal Logic & Interactions
         const helpBtns = [document.getElementById('helpModalBtn'), document.getElementById('helpModalProfileLink')].filter(Boolean);
         const helpModal = document.getElementById('helpModal');
         const closeHelpBtns = document.querySelectorAll('.closeHelpModal');
@@ -1219,6 +1866,64 @@
                 if (e.target === helpModal) {
                     helpModal.classList.remove('active');
                 }
+            });
+        }
+
+        // Help Modal Tabs Switcher
+        const helpTabBtns = document.querySelectorAll('.help-tab-link');
+        const helpTabPanes = document.querySelectorAll('.help-tab-pane');
+
+        helpTabBtns.forEach(tabBtn => {
+            tabBtn.addEventListener('click', function () {
+                const targetTabId = this.getAttribute('data-tab');
+                helpTabBtns.forEach(b => b.classList.remove('active'));
+                helpTabPanes.forEach(p => p.classList.remove('active'));
+
+                this.classList.add('active');
+                const targetPane = document.getElementById(targetTabId);
+                if (targetPane) targetPane.classList.add('active');
+            });
+        });
+
+        // FAQ Accordion Toggle
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const btn = item.querySelector('.faq-question-btn');
+            if (btn) {
+                btn.addEventListener('click', function () {
+                    const isActive = item.classList.contains('active');
+                    faqItems.forEach(fi => fi.classList.remove('active'));
+                    if (!isActive) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+        });
+
+        // Live Real-Time Search Filter inside Help Center
+        const helpFilterInput = document.getElementById('helpFilterInput');
+        if (helpFilterInput) {
+            helpFilterInput.addEventListener('input', function () {
+                const q = this.value.toLowerCase().trim();
+                const searchableItems = document.querySelectorAll('.searchable-item');
+
+                if (!q) {
+                    searchableItems.forEach(el => el.style.display = '');
+                    return;
+                }
+
+                // If user starts searching, automatically open matching items and activate relevant tab if needed
+                searchableItems.forEach(el => {
+                    const text = el.textContent.toLowerCase();
+                    if (text.includes(q)) {
+                        el.style.display = '';
+                        if (el.classList.contains('faq-item')) {
+                            el.classList.add('active'); // Expand matching FAQ
+                        }
+                    } else {
+                        el.style.display = 'none';
+                    }
+                });
             });
         }
 

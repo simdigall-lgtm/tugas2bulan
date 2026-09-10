@@ -20,7 +20,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (request()->server('HTTP_X_FORWARDED_PROTO') === 'https' || request()->isSecure() || str_contains(request()->url(), 'devtunnels.ms') || str_contains(request()->url(), 'ngrok')) {
+        if (request()->server('HTTP_X_FORWARDED_PROTO') === 'https' || request()->isSecure() || str_contains(request()->url(), 'devtunnels.ms') || str_contains(request()->url(), 'ngrok') || str_contains(request()->url(), 'pinggy') || str_contains(request()->url(), 'localhost.run') || str_contains(request()->url(), 'lhr.life') || str_contains(request()->url(), 'serveo.net')) {
             URL::forceScheme('https');
         }
 

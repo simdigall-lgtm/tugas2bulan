@@ -362,6 +362,7 @@
             border-bottom: 1px solid #F1F5F9;
             font-weight: 500;
             vertical-align: middle;
+            white-space: nowrap;
         }
 
         .custom-table tr:last-child td {
@@ -376,6 +377,24 @@
             color: #64748B;
             font-weight: 600;
             white-space: nowrap;
+        }
+
+        .customer-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .avatar-init {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            flex-shrink: 0;
         }
 
         .cus-name {
@@ -1204,7 +1223,7 @@
         }
 
         let currentPage = 1;
-        const itemsPerPage = 5;
+        const itemsPerPage = 10;
 
         function updatePagination() {
             if (!tbody) return;

@@ -241,7 +241,7 @@
         .metric-card {
             background-color: #FFFFFF;
             border-radius: 12px;
-            padding: 22px;
+            padding: 18px 20px;
             border: 1px solid #E2E8F0;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
             transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
@@ -249,6 +249,7 @@
             display: block;
             color: inherit;
             cursor: pointer;
+            min-width: 0;
         }
 
         .metric-card:hover {
@@ -290,11 +291,17 @@
         }
 
         .metric-value {
-            font-size: 28px;
+            font-size: 21px;
             font-weight: 800;
             color: #0F172A;
             margin: 10px 0 6px 0;
             letter-spacing: -0.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
         }
 
         .metric-footer {
@@ -425,6 +432,7 @@
             border-bottom: 1px solid #F1F5F9;
             font-weight: 500;
             vertical-align: middle;
+            white-space: nowrap;
         }
 
         .custom-table tr:last-child td {
@@ -458,14 +466,10 @@
             color: #15803D;
         }
 
-        .status-diproses {
-            background-color: #FEF3C7;
-            color: #B45309;
-        }
-
+        .status-diproses,
         .status-menunggu {
-            background-color: #FFEDD5;
-            color: #C2410C;
+            background-color: #DBEAFE;
+            color: #1E3A8A;
         }
 
         /* Responsive */
@@ -570,7 +574,10 @@
                             <i class="fa-solid fa-money-bill-trend-up"></i>
                         </div>
                     </div>
-                    <div class="metric-value">Rp {{ number_format($totalPendapatan ?? 0, 0, ',', '.') }}</div>
+                    <div class="metric-value">
+                        <span style="font-size: 14px; font-weight: 700; color: #64748B;">Rp</span>
+                        <span>{{ number_format($totalPendapatan ?? 0, 0, ',', '.') }}</span>
+                    </div>
                     <div class="metric-footer">
                         <span class="trend-up"><i class="fa-solid fa-arrow-up" style="font-size: 11px;"></i> +15.3%</span>
                         <span class="trend-period">vs bulan lalu</span>
@@ -684,6 +691,7 @@
                             tension: 0.35,
                             borderWidth: 3,
                             pointBackgroundColor: '#1E3A8A',
+                            pointStyle: 'circle',
                             pointRadius: 4,
                             pointHoverRadius: 6
                         },
@@ -695,6 +703,7 @@
                             fill: false,
                             tension: 0.35,
                             borderWidth: 2,
+                            pointStyle: 'circle',
                             pointRadius: 0
                         }
                     ]
@@ -709,7 +718,7 @@
                             align: 'end',
                             labels: {
                                 usePointStyle: true,
-                                pointStyleWidth: 8,
+                                pointStyle: 'circle',
                                 boxWidth: 8,
                                 boxHeight: 8,
                                 padding: 16,

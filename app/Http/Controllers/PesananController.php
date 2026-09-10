@@ -86,6 +86,11 @@ class PesananController extends Controller
     public function update(Request $request, $id)
     {
         $pesanan = Pesanan::findOrFail($id);
+
+        if (strtolower($pesanan->status ?? '') === 'selesai') {
+            return redirect()->route('pesanan')->with('error', 'Pesanan yang sudah berstatus Selesai tidak dapat diedit lagi!');
+        }
+
         $validated = $request->validate([
             'nama_pelanggan' => 'required|string|max:255',
             'nama_produk' => 'required|string|max:255',

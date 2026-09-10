@@ -63,7 +63,7 @@
         .stat-icon.green { background:#DCFCE7; color:#15803D; }
         .stat-icon.purple { background:#EDE9FE; color:#7C3AED; }
         .stat-label { font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.5px; }
-        .stat-value { font-size:24px; font-weight:800; color:#0F172A; margin-top:4px; letter-spacing:-0.5px; }
+        .stat-value { font-size:22px; font-weight:800; color:#0F172A; margin-top:4px; letter-spacing:-0.5px; white-space:nowrap; }
 
         /* Laporan Charts Layout */
         .card { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.02); }
@@ -76,13 +76,13 @@
         .card-link { font-size:13px; font-weight:700; color:#1E3A8A; text-decoration:none; }
         .custom-table { width:100%; border-collapse:collapse; text-align:left; }
         .custom-table th { background:#FFFFFF; padding:11px 14px; font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #E2E8F0; white-space:nowrap; }
-        .custom-table td { padding:11px 14px; font-size:13px; color:#334155; border-bottom:1px solid #F1F5F9; font-weight:500; vertical-align:middle; }
+        .custom-table td { padding:11px 14px; font-size:13px; color:#334155; border-bottom:1px solid #F1F5F9; font-weight:500; vertical-align:middle; white-space:nowrap; }
         .custom-table tr:last-child td { border-bottom:none; }
         .inv-code { color:#1E3A8A; font-weight:700; white-space:nowrap; }
 
         .status-badge { display:inline-flex; align-items:center; justify-content:center; padding:4px 10px; border-radius:12px; font-size:11px; font-weight:700; white-space:nowrap; }
         .status-selesai { background:#DCFCE7; color:#16A34A; }
-        .status-proses { background:#FEF3C7; color:#D97706; }
+        .status-proses, .status-menunggu, .status-diproses { background:#DBEAFE; color:#1E3A8A; }
         .status-desain { background:#DBEAFE; color:#1D4ED8; }
 
         /* Pagination Controls Styling */
@@ -307,8 +307,8 @@
                                 <td>{{ $pes->nama_pelanggan }}</td>
                                 <td>{{ $pes->tanggal_pesan ? \Carbon\Carbon::parse($pes->tanggal_pesan)->format('d M Y') : '-' }}</td>
                                 <td>{{ $pes->nama_produk }}</td>
-                                <td>Rp {{ number_format($pes->total_harga, 0, ',', '.') }}</td>
-                                <td><span class="status-badge {{ strtolower($pes->status) == 'selesai' ? 'status-selesai' : 'status-proses' }}">{{ $pes->status }}</span></td>
+                                <td style="white-space: nowrap; font-weight: 600; color: #0F172A;">Rp {{ number_format($pes->total_harga, 0, ',', '.') }}</td>
+                                <td><span class="status-badge {{ strtolower($pes->status) == 'selesai' ? 'status-selesai' : (strtolower($pes->status) == 'menunggu' ? 'status-menunggu' : 'status-proses') }}">{{ $pes->status }}</span></td>
                             </tr>
                             @empty
                             <tr>
@@ -363,6 +363,7 @@
                         tension: 0.35,
                         borderWidth: 3,
                         pointBackgroundColor: '#1E3A8A',
+                        pointStyle: 'circle',
                         pointRadius: 4,
                         pointHoverRadius: 6
                     }]
@@ -371,7 +372,7 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
-                        legend: { position: 'top', align: 'end', labels: { usePointStyle: true, font: { weight: '600' } } },
+                        legend: { position: 'top', align: 'end', labels: { usePointStyle: true, pointStyle: 'circle', boxWidth: 8, boxHeight: 8, font: { weight: '600' } } },
                         tooltip: {
                             backgroundColor: '#0F172A',
                             padding: 12,
@@ -454,20 +455,29 @@
             const btnExportExcel = document.querySelector('.btn-export.primary');
             if (btnExportExcel) {
                 btnExportExcel.addEventListener('click', function() {
-                    let csvContent = "data:text/csv;charset=utf-8,";
-                    csvContent += "KODE PESANAN,PELANGGAN,TANGGAL SELESAI,PRODUK,NILAI TRANSAKSI,STATUS\n";
+                    let csvContent = "KODE PESANAN,PELANGGAN,TANGGAL SELESAI,PRODUK,NILAI TRANSAKSI,STATUS\r\n";
                     const rows = document.querySelectorAll('.custom-table tbody tr');
                     rows.forEach(r => {
-                        const cols = Array.from(r.querySelectorAll('td')).map(td => `"${td.textContent.trim().replace(/"/g, '""')}"`);
-                        csvContent += cols.join(",") + "\n";
+                        const cols = Array.from(r.querySelectorAll('td')).map(td => {
+                            const cleanText = td.textContent.replace(/[\u00A0\u1680\u180e\u2000-\u200b\u202f\u205f\u3000\ufeff]/g, ' ').replace(/\s+/g, ' ').trim();
+                            return `"${cleanText.replace(/"/g, '""')}"`;
+                        });
+                        if (cols.length > 1) {
+                            csvContent += cols.join(",") + "\r\n";
+                        }
                     });
-                    const encodedUri = encodeURI(csvContent);
+
+                    const bom = '\uFEFF';
+                    const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
                     const link = document.createElement("a");
-                    link.setAttribute("href", encodedUri);
+                    link.setAttribute("href", url);
                     link.setAttribute("download", "Laporan_Transaksi_SIPEKAN_2026.csv");
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+
                     if (window.showAppToast) {
                         window.showAppToast('File Excel laporan (.csv) berhasil di-download!', 'success');
                     }
@@ -512,7 +522,7 @@
             const totalRowsEl = document.getElementById('totalRowsCount');
 
             let currentPage = 1;
-            let rowsPerPage = parseInt(limitSelect ? limitSelect.value : 5);
+            let rowsPerPage = parseInt(limitSelect ? limitSelect.value : 10);
 
             function renderTablePagination() {
                 const totalRows = tableRows.length;
