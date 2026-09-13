@@ -170,7 +170,7 @@
                     <span>Pusat Bantuan</span>
                 </a>
                 <div class="profile-menu-divider"></div>
-                <a href="{{ route('logout') }}" class="profile-menu-item danger" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                <a href="{{ route('logout') }}" class="profile-menu-item danger" onclick="event.preventDefault(); const f = document.getElementById('logout-form'); f ? f.submit() : (window.location.href='{{ route('logout') }}');">
                     <i class="fa-solid fa-arrow-right-from-bracket"></i>
                     <span>Keluar (Logout)</span>
                 </a>

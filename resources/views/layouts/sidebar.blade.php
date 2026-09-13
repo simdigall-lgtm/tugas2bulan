@@ -46,7 +46,7 @@
             <span>Pengaturan</span>
         </a>
         @endif
-        <a href="{{ route('logout') }}" class="menu-item" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+        <a href="{{ route('logout') }}" class="menu-item" onclick="event.preventDefault(); const f = document.getElementById('logout-form'); f ? f.submit() : (window.location.href='{{ route('logout') }}');">
             <i class="fa-solid fa-arrow-right-from-bracket"></i>
             <span>Keluar</span>
         </a>
