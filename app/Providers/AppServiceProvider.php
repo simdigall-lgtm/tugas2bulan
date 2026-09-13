@@ -24,6 +24,32 @@ class AppServiceProvider extends ServiceProvider
             URL::forceScheme('https');
         }
 
+        // Auto-provision printing columns if not yet present in database
+        try {
+            if (\Illuminate\Support\Facades\Schema::hasTable('pesanans')) {
+                if (!\Illuminate\Support\Facades\Schema::hasColumn('pesanans', 'detail_items')) {
+                    \Illuminate\Support\Facades\Schema::table('pesanans', function (\Illuminate\Database\Schema\Blueprint $table) {
+                        $table->longText('detail_items')->nullable();
+                        $table->text('catatan_finishing')->nullable();
+                        $table->string('file_desain')->nullable();
+                        $table->string('status_pembayaran')->default('Belum Lunas');
+                        $table->bigInteger('sisa_bayar')->default(0);
+                    });
+                }
+            }
+
+            if (\Illuminate\Support\Facades\Schema::hasTable('pembayarans')) {
+                if (!\Illuminate\Support\Facades\Schema::hasColumn('pembayarans', 'uang_diterima')) {
+                    \Illuminate\Support\Facades\Schema::table('pembayarans', function (\Illuminate\Database\Schema\Blueprint $table) {
+                        $table->bigInteger('uang_diterima')->nullable();
+                        $table->bigInteger('kembalian')->nullable();
+                    });
+                }
+            }
+        } catch (\Throwable $e) {
+            // Ignore schema check errors gracefully
+        }
+
         \Illuminate\Support\Facades\View::composer('*', function ($view) {
             $sessionUser = session('user');
             $currentLoggedUser = null;

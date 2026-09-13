@@ -35,6 +35,11 @@
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
+        html, body {
+            max-width: 100vw;
+            overflow-x: clip;
+        }
+
         body {
             background-color: #F8FAFC;
             color: #1E293B;
@@ -44,7 +49,7 @@
 
         /* Sidebar Styles */
         .sidebar {
-            width: 250px;
+            width: 210px;
             background-color: #FFFFFF;
             border-right: 1px solid #E2E8F0;
             display: flex;
@@ -58,40 +63,40 @@
         }
 
         .sidebar-brand {
-            padding: 24px 20px 20px 24px;
+            padding: 18px 16px 14px;
         }
 
         .brand-name {
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 800;
             color: #1E3A8A;
             letter-spacing: -0.3px;
         }
 
         .brand-tag {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             color: #64748B;
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
         .sidebar-menu {
-            padding: 12px 14px;
+            padding: 10px 10px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
             flex: 1;
         }
 
         .menu-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 11px 16px;
+            gap: 10px;
+            padding: 9px 12px;
             border-radius: 8px;
             color: #475569;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 600;
             transition: all 0.2s ease;
         }
@@ -108,22 +113,24 @@
         }
 
         .menu-item i {
-            font-size: 16px;
-            width: 20px;
+            font-size: 15px;
+            width: 18px;
             text-align: center;
         }
 
         .sidebar-bottom {
-            padding: 16px 14px 20px 14px;
+            padding: 12px 10px 16px;
             border-top: 1px dashed #E2E8F0;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
 
         /* Main Wrapper */
         .main-wrapper {
-            margin-left: 250px;
+            margin-left: 210px;
+            width: calc(100% - 210px);
+            max-width: calc(100vw - 210px);
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -132,16 +139,18 @@
 
         /* Topbar Header */
         .topbar {
-            height: 68px;
+            height: 64px;
             background-color: #FFFFFF;
             border-bottom: 1px solid #E2E8F0;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 32px;
+            padding: 0 24px;
             position: sticky;
             top: 0;
-            z-index: 90;
+            z-index: 100;
+            max-width: 100%;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
         }
 
         .search-container {
@@ -495,6 +504,55 @@
             font-weight: 700;
         }
 
+        .page-ellipsis {
+            min-width: 26px;
+            height: 32px;
+            color: #94A3B8;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .page-select-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #64748B;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .page-select-dropdown {
+            appearance: none;
+            -webkit-appearance: none;
+            background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 8px center;
+            background-size: 12px;
+            border: 1px solid #CBD5E1;
+            border-radius: 6px;
+            padding: 5px 26px 5px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1B3B6F;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.15s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+
+        .page-select-dropdown:hover {
+            border-color: #94A3B8;
+            background-color: #F8FAFC;
+        }
+
+        .page-select-dropdown:focus {
+            border-color: #1B3B6F;
+            box-shadow: 0 0 0 2px rgba(27, 59, 111, 0.15);
+        }
+
         /* Modal Popup Styling */
         .modal-overlay {
             position: fixed;
@@ -651,13 +709,28 @@
             <div class="page-header-row">
                 <div>
                     <h1 class="page-title">Kelola Produk</h1>
-                    <p class="page-subtitle">Kelola katalog produk cetak, kategori, dan harga Anda.</p>
+                    <p class="page-subtitle">{{ ($isKasir ?? false) ? 'Lihat katalog produk cetak, ketersediaan stok, dan harga dasar.' : 'Kelola katalog produk cetak, kategori, dan harga Anda.' }}</p>
                 </div>
+                @if(!($isKasir ?? false))
                 <button class="btn-add" id="openAddModalBtn">
                     <i class="fa-solid fa-plus"></i>
                     <span>Produk Baru</span>
                 </button>
+                @endif
             </div>
+
+            @if(session('success'))
+                <div class="alert alert-success" style="padding: 12px 16px; background: #F0FDF4; color: #166534; border: 1px solid #86EFAC; border-radius: 8px; margin-bottom: 20px; font-weight: 600; font-size: 13.5px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-circle-check"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+            @endif
+            @if(session('error'))
+                <div class="alert alert-danger" style="padding: 12px 16px; background: #FEF2F2; color: #991B1B; border: 1px solid #FCA5A5; border-radius: 8px; margin-bottom: 20px; font-weight: 600; font-size: 13.5px; display: flex; align-items: center; gap: 10px;">
+                    <i class="fa-solid fa-circle-exclamation"></i>
+                    <span>{{ session('error') }}</span>
+                </div>
+            @endif
 
             <!-- Full Width Katalog Produk Table Card -->
             <div class="card">
@@ -678,7 +751,9 @@
                                 <th>HARGA DASAR</th>
                                 <th>STOK</th>
                                 <th>STATUS</th>
+                                @if(!($isKasir ?? false))
                                 <th style="text-align: right;">AKSI</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
@@ -693,6 +768,7 @@
                                     <td><span
                                             class="status-badge {{ strtolower($prod->status ?? 'tersedia') }}">{{ $prod->status ?? 'Tersedia' }}</span>
                                     </td>
+                                    @if(!($isKasir ?? false))
                                     <td style="text-align: right;">
                                         <div class="action-dropdown">
                                             <button class="action-icon-btn action-toggle" title="Aksi"><i
@@ -707,15 +783,16 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="dropdown-item danger"><i
-                                                            class="fa-regular fa-trash-can"></i> Hapus</button>
+                                                             class="fa-regular fa-trash-can"></i> Hapus</button>
                                                 </form>
                                             </div>
                                         </div>
                                     </td>
+                                    @endif
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" style="text-align:center; padding: 20px; color: #64748B;">Belum ada
+                                    <td colspan="{{ ($isKasir ?? false) ? '5' : '6' }}" style="text-align:center; padding: 20px; color: #64748B;">Belum ada
                                         produk di database.</td>
                                 </tr>
                             @endforelse
@@ -729,6 +806,7 @@
                 </div>
             </div>
 
+            @if(!($isKasir ?? false))
             <!-- Modal Popup Form for Product -->
             <div class="modal-overlay" id="productModal">
                 <div class="modal-box">
@@ -793,6 +871,7 @@
                     </form>
                 </div>
             </div>
+            @endif
 
         </main>
     </div>
@@ -848,26 +927,57 @@
 
                     const prevBtn = document.createElement('button');
                     prevBtn.className = 'page-btn';
+                    prevBtn.title = 'Halaman Sebelumnya';
                     prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left" style="font-size: 11px;"></i>';
                     prevBtn.disabled = currentPage === 1;
-                    prevBtn.style.opacity = currentPage === 1 ? '0.5' : '1';
-                    prevBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; updatePagination(); } });
+                    prevBtn.addEventListener('click', () => { 
+                        if (currentPage > 1) { 
+                            currentPage--; 
+                            updatePagination(); 
+                        } 
+                    });
                     paginationEl.appendChild(prevBtn);
 
-                    for (let i = 1; i <= totalPages; i++) {
-                        const pBtn = document.createElement('button');
-                        pBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-                        pBtn.textContent = i;
-                        pBtn.addEventListener('click', () => { currentPage = i; updatePagination(); });
-                        paginationEl.appendChild(pBtn);
+                    const selectWrap = document.createElement('div');
+                    selectWrap.className = 'page-select-container';
+
+                    const labelPre = document.createElement('span');
+                    labelPre.textContent = 'Halaman';
+                    selectWrap.appendChild(labelPre);
+
+                    const select = document.createElement('select');
+                    select.className = 'page-select-dropdown';
+                    select.title = 'Pilih Halaman';
+                    for (let p = 1; p <= totalPages; p++) {
+                        const opt = document.createElement('option');
+                        opt.value = p;
+                        opt.textContent = p;
+                        if (p === currentPage) opt.selected = true;
+                        select.appendChild(opt);
                     }
+                    select.addEventListener('change', function() {
+                        currentPage = parseInt(this.value);
+                        updatePagination();
+                    });
+                    selectWrap.appendChild(select);
+
+                    const labelPost = document.createElement('span');
+                    labelPost.innerHTML = `dari <strong style="color:#1E293B;">${totalPages}</strong>`;
+                    selectWrap.appendChild(labelPost);
+
+                    paginationEl.appendChild(selectWrap);
 
                     const nextBtn = document.createElement('button');
                     nextBtn.className = 'page-btn';
+                    nextBtn.title = 'Halaman Selanjutnya';
                     nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i>';
-                    nextBtn.disabled = currentPage === totalPages;
-                    nextBtn.style.opacity = currentPage === totalPages ? '0.5' : '1';
-                    nextBtn.addEventListener('click', () => { if (currentPage < totalPages) { currentPage++; updatePagination(); } });
+                    nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+                    nextBtn.addEventListener('click', () => { 
+                        if (currentPage < totalPages) { 
+                            currentPage++; 
+                            updatePagination(); 
+                        } 
+                    });
                     paginationEl.appendChild(nextBtn);
                 }
             }

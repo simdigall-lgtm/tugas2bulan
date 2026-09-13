@@ -8,6 +8,21 @@ use App\Models\Pesanan;
 
 class PembayaranController extends Controller
 {
+    private function isKasir()
+    {
+        $sessionUser = session('user');
+        $currentLoggedUser = null;
+        if (session()->has('user_id')) {
+            $currentLoggedUser = \App\Models\User::find(session('user_id'));
+        }
+        if (!$currentLoggedUser && $sessionUser) {
+            $currentLoggedUser = \App\Models\User::where('name', $sessionUser)->orWhere('email', $sessionUser)->first();
+        }
+        $name = $currentLoggedUser ? $currentLoggedUser->name : $sessionUser;
+        $email = $currentLoggedUser ? $currentLoggedUser->email : '';
+        return (strtolower($name ?? '') === 'kasir' || str_contains(strtolower($email ?? ''), 'kasir'));
+    }
+
     public function index()
     {
         $pembayarans = Pembayaran::orderBy('id', 'desc')->get();
@@ -19,8 +34,9 @@ class PembayaranController extends Controller
             ->pluck('total_dibayar', 'kode_pesanan')
             ->toArray();
 
-        // Ambil daftar kode_pesanan yang sudah memiliki status LUNAS
-        $lunasOrderCodes = Pembayaran::whereRaw('LOWER(status) = ?', ['lunas'])
+        // Ambil daftar kode_pesanan yang benar-benar sudah LUNAS (sisa <= 0 atau status Lunas)
+        $lunasOrderCodes = Pesanan::whereRaw('LOWER(status_pembayaran) = ?', ['lunas'])
+            ->orWhere('sisa_bayar', '<=', 0)
             ->pluck('kode_pesanan')
             ->toArray();
 
@@ -43,19 +59,33 @@ class PembayaranController extends Controller
             return back()->withInput()->with('error', 'Data pesanan tidak ditemukan di database!');
         }
 
-        // Cek apakah pesanan ini sudah berstatus Selesai / LUNAS
-        $isPesananSelesai = strtolower($pesanan->status ?? '') === 'selesai' || strtolower($pesanan->status ?? '') === 'lunas';
-        $alreadyLunas = Pembayaran::where('kode_pesanan', $validated['kode_pesanan'])
-            ->whereRaw('LOWER(status) = ?', ['lunas'])
-            ->exists();
+        // Hitung total yang sudah dibayar sebelumnya untuk pesanan ini
+        $previousPaid = Pembayaran::where('kode_pesanan', $validated['kode_pesanan'])->sum('jumlah');
+        $targetHarga = floatval($pesanan->total_harga);
+        $remainingBeforeThis = max(0, $targetHarga - $previousPaid);
 
-        if ($alreadyLunas || $isPesananSelesai) {
-            return back()->withInput()->with('error', 'Pesanan ' . $validated['kode_pesanan'] . ' sudah LUNAS / Selesai! Tidak dapat menambah pembayaran baru.');
+        // Cek apakah pesanan ini memang sudah LUNAS
+        if ($remainingBeforeThis <= 0 || strtolower($pesanan->status_pembayaran ?? '') === 'lunas') {
+            return back()->withInput()->with('error', "Pesanan {$validated['kode_pesanan']} sudah LUNAS! Tidak ada sisa tagihan yang perlu dibayar.");
         }
 
-        $metode = $request->input('metode_pembayaran') ?? $request->input('metode', 'Transfer Bank');
+        $metode = $request->input('metode_pembayaran') ?? $request->input('metode', 'Tunai');
         $tanggal = $request->input('tanggal_bayar') ?? $request->input('tanggal', now()->toDateString());
         $inputJumlah = floatval($validated['jumlah']);
+
+        // Cegah pembayaran melebihi sisa tagihan
+        if ($inputJumlah > $remainingBeforeThis) {
+            return back()->withInput()->with('error', "Gagal: Jumlah bayar (Rp " . number_format($inputJumlah, 0, ',', '.') . ") melebihi sisa tagihan pesanan (Rp " . number_format($remainingBeforeThis, 0, ',', '.') . ")!");
+        }
+
+        $uangDiterima = $request->filled('uang_diterima') ? floatval($request->input('uang_diterima')) : $inputJumlah;
+
+        // Validasi Tunai: Uang kasir yang diterima tidak boleh kurang dari jumlah yang disetorkan
+        if ($metode === 'Tunai' && $uangDiterima < $inputJumlah) {
+            return back()->withInput()->with('error', "Gagal: Uang fisik yang diterima (Rp " . number_format($uangDiterima, 0, ',', '.') . ") kurang dari jumlah pembayaran yang dicatat (Rp " . number_format($inputJumlah, 0, ',', '.') . ")! Jika pelanggan membayar DP sebesar Rp " . number_format($uangDiterima, 0, ',', '.') . ", ubah nilai pada kolom 'Jumlah Bayar Masuk'.");
+        }
+
+        $kembalian = max(0, $uangDiterima - $inputJumlah);
 
         // LOGIKA BISNIS 1: Tanggal pembayaran tidak boleh mendahului tanggal pemesanan
         if (!empty($pesanan->tanggal_pesan) && $tanggal < $pesanan->tanggal_pesan) {
@@ -63,43 +93,16 @@ class PembayaranController extends Controller
             return back()->withInput()->with('error', 'Gagal menyimpan: Tanggal pembayaran (' . date('d M Y', strtotime($tanggal)) . ') tidak boleh sebelum tanggal pemesanan (' . $tglPesanFmt . ')!');
         }
 
-        // LOGIKA BISNIS 2: Tanggal pembayaran tidak boleh melebihi hari ini (masa depan)
-        if ($tanggal > date('Y-m-d')) {
-            return back()->withInput()->with('error', 'Gagal menyimpan: Tanggal pembayaran tidak boleh di masa depan (maksimal hari ini, ' . date('d M Y') . ')!');
-        }
-
-        // LOGIKA BISNIS 3: Hitung akumulasi pembayaran dan sisa tagihan
-        $previousPaid = Pembayaran::where('kode_pesanan', $validated['kode_pesanan'])->sum('jumlah');
-        $targetHarga = floatval($pesanan->total_harga);
+        // LOGIKA BISNIS 2: Hitung akumulasi pembayaran dan sisa tagihan
         $totalBayarAkumulasi = $previousPaid + $inputJumlah;
+        $sisaBayar = max(0, $targetHarga - $totalBayarAkumulasi);
 
-        // Logika Otomatis: Jika akumulasi terbayar >= total harga pesanan -> Lunas, jika kurang -> Belum Lunas
-        if ($targetHarga > 0 && $totalBayarAkumulasi < $targetHarga) {
-            $statusOtomatis = 'Belum Lunas';
+        if ($sisaBayar > 0) {
+            $statusOtomatis = 'DP (Uang Muka)';
+            $pesananStatusBayar = 'DP';
         } else {
             $statusOtomatis = 'Lunas';
-        }
-
-        // Cek apakah pesanan ini sudah memiliki catatan pembayaran sebelumnya (update jika belum lunas)
-        $existingPayment = Pembayaran::where('kode_pesanan', $validated['kode_pesanan'])->first();
-
-        if ($existingPayment) {
-            if (strtolower($existingPayment->status) === 'lunas') {
-                return back()->withInput()->with('error', 'Pesanan ' . $validated['kode_pesanan'] . ' sudah LUNAS! Tidak dapat menambah pembayaran baru.');
-            }
-
-            $existingPayment->update([
-                'metode' => $metode,
-                'jumlah' => $inputJumlah,
-                'status' => $statusOtomatis,
-                'tanggal' => $tanggal,
-            ]);
-
-            if ($statusOtomatis === 'Lunas') {
-                $pesanan->update(['status' => 'Selesai']);
-            }
-
-            return redirect()->route('pembayaran')->with('success', 'Data pembayaran untuk ' . $validated['kode_pesanan'] . ' berhasil diperbarui (Status: ' . $statusOtomatis . ')!');
+            $pesananStatusBayar = 'Lunas';
         }
 
         $lastId = Pembayaran::max('id') + 1;
@@ -112,23 +115,29 @@ class PembayaranController extends Controller
             'jumlah' => $inputJumlah,
             'status' => $statusOtomatis,
             'tanggal' => $tanggal,
+            'uang_diterima' => $uangDiterima,
+            'kembalian' => $kembalian,
         ];
 
         Pembayaran::create($pembayaranData);
 
-        // Jika status Lunas, otomatis perbarui status pesanan terkait menjadi Selesai
-        if ($statusOtomatis === 'Lunas') {
-            $pesanan->update(['status' => 'Selesai']);
-        }
+        // Update status pembayaran & sisa bayar di pesanan terkait
+        $pesanan->update([
+            'status_pembayaran' => $pesananStatusBayar,
+            'sisa_bayar' => $sisaBayar,
+        ]);
 
-        return redirect()->route('pembayaran')->with('success', 'Pembayaran berhasil dicatat dengan status: ' . $statusOtomatis . '!');
+        $statusMsg = $sisaBayar > 0 
+            ? "Status: DP (Sisa Tagihan: Rp " . number_format($sisaBayar, 0, ',', '.') . ")" 
+            : "Status: LUNAS (Tagihan Selesai)";
+
+        return redirect()->route('pembayaran')->with('success', "Pembayaran untuk {$validated['kode_pesanan']} berhasil dicatat! {$statusMsg}" . ($kembalian > 0 ? " (Kembalian: Rp " . number_format($kembalian, 0, ',', '.') . ")" : ''));
     }
 
     public function update(Request $request, $id)
     {
         $pembayaran = Pembayaran::findOrFail($id);
 
-        // Pembayaran yang sudah Lunas tidak dapat diubah
         if (strtolower($pembayaran->status) === 'lunas') {
             return back()->with('error', 'Pembayaran berstatus LUNAS telah terkunci dan tidak dapat diubah lagi!');
         }
@@ -136,7 +145,6 @@ class PembayaranController extends Controller
         $metode = $request->input('metode_pembayaran') ?? $request->input('metode', $pembayaran->metode);
         $jumlah = floatval($request->input('jumlah', $pembayaran->jumlah));
 
-        // Ambil data pesanan untuk mengecek total harga
         $pesanan = Pesanan::where('kode_pesanan', $pembayaran->kode_pesanan)->first();
         $targetHarga = $pesanan ? floatval($pesanan->total_harga) : 0;
 
@@ -152,8 +160,11 @@ class PembayaranController extends Controller
             'status' => $status,
         ]);
 
-        if ($status === 'Lunas') {
-            Pesanan::where('kode_pesanan', $pembayaran->kode_pesanan)->update(['status' => 'Selesai']);
+        if ($pesanan) {
+            $pesanan->update([
+                'status_pembayaran' => $status,
+                'sisa_bayar' => max(0, $targetHarga - $jumlah),
+            ]);
         }
 
         return redirect()->route('pembayaran')->with('success', 'Status pembayaran berhasil diperbarui menjadi ' . $status . '!');
@@ -161,9 +172,12 @@ class PembayaranController extends Controller
 
     public function destroy($id)
     {
+        if ($this->isKasir()) {
+            return back()->with('error', 'Akses ditolak! Akun Kasir tidak memiliki wewenang untuk menghapus catatan transaksi pembayaran. Silakan hubungi Administrator.');
+        }
+
         $pembayaran = Pembayaran::findOrFail($id);
 
-        // Pembayaran yang sudah Lunas tidak dapat dihapus
         if (strtolower($pembayaran->status) === 'lunas') {
             return back()->with('error', 'Pembayaran berstatus LUNAS telah terkunci dan tidak dapat dihapus!');
         }

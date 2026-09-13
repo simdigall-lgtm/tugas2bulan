@@ -24,9 +24,14 @@
             min-height: 100vh;
         }
 
+        html, body {
+            max-width: 100vw;
+            overflow-x: clip;
+        }
+
         /* Sidebar */
         .sidebar {
-            width: 250px;
+            width: 210px;
             background: #FFFFFF;
             border-right: 1px solid #E2E8F0;
             display: flex;
@@ -40,40 +45,40 @@
         }
 
         .sidebar-brand {
-            padding: 24px 20px 20px 24px;
+            padding: 18px 16px 14px;
         }
 
         .brand-name {
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 800;
             color: #1E3A8A;
             letter-spacing: -0.3px;
         }
 
         .brand-tag {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             color: #64748B;
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
         .sidebar-menu {
-            padding: 12px 14px;
+            padding: 10px 10px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
             flex: 1;
         }
 
         .menu-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 11px 16px;
+            gap: 10px;
+            padding: 9px 12px;
             border-radius: 8px;
             color: #475569;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 600;
             transition: all .2s ease;
         }
@@ -90,22 +95,25 @@
         }
 
         .menu-item i {
-            font-size: 16px;
-            width: 20px;
+            font-size: 15px;
+            width: 18px;
             text-align: center;
         }
 
         .sidebar-bottom {
-            padding: 16px 14px 20px;
+            padding: 12px 10px 16px;
             border-top: 1px dashed #E2E8F0;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
 
         /* Main Wrapper */
         .main-wrapper {
-            margin-left: 250px;
+            margin-left: 210px;
+            width: calc(100% - 210px);
+            max-width: calc(100vw - 210px);
+            min-width: 0;
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -113,16 +121,18 @@
 
         /* Topbar */
         .topbar {
-            height: 68px;
+            height: 64px;
             background: #FFFFFF;
             border-bottom: 1px solid #E2E8F0;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 28px;
+            padding: 0 24px;
             position: sticky;
             top: 0;
-            z-index: 90;
+            z-index: 100;
+            max-width: 100%;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
         }
 
         .topbar-left {
@@ -452,7 +462,7 @@
 
                     <!-- Logo & Profile Upload -->
                     <div class="profile-upload">
-                        <img src="{{ asset('assets/images/sipekan-logo.png') }}" alt="Logo Perusahaan"
+                        <img src="{{ asset('assets/images/sipekan-logo.png') }}?v={{ file_exists(public_path('assets/images/sipekan-logo.png')) ? filemtime(public_path('assets/images/sipekan-logo.png')) : time() }}" alt="Logo Perusahaan"
                             class="profile-avatar" id="profileAvatar"
                             style="object-fit: contain; background: #fff; padding: 4px;">
                         <div class="upload-info">

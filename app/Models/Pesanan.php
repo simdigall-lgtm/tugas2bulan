@@ -17,5 +17,16 @@ class Pesanan extends Model
         'total_harga',
         'status',
         'tanggal_pesan',
+        'detail_items',
+        'catatan_finishing',
+        'file_desain',
+        'status_pembayaran',
+        'sisa_bayar',
+    ];
+
+    protected $casts = [
+        'detail_items' => 'array',
+        'total_harga' => 'integer',
+        'sisa_bayar' => 'integer',
     ];
 }

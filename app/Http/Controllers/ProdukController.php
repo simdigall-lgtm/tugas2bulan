@@ -7,6 +7,21 @@ use App\Models\Produk;
 
 class ProdukController extends Controller
 {
+    private function isKasir()
+    {
+        $sessionUser = session('user');
+        $currentLoggedUser = null;
+        if (session()->has('user_id')) {
+            $currentLoggedUser = \App\Models\User::find(session('user_id'));
+        }
+        if (!$currentLoggedUser && $sessionUser) {
+            $currentLoggedUser = \App\Models\User::where('name', $sessionUser)->orWhere('email', $sessionUser)->first();
+        }
+        $name = $currentLoggedUser ? $currentLoggedUser->name : $sessionUser;
+        $email = $currentLoggedUser ? $currentLoggedUser->email : '';
+        return (strtolower($name ?? '') === 'kasir' || str_contains(strtolower($email ?? ''), 'kasir'));
+    }
+
     public function index()
     {
         $produks = Produk::orderBy('id', 'desc')->get();
@@ -15,6 +30,13 @@ class ProdukController extends Controller
 
     public function store(Request $request)
     {
+        if ($this->isKasir()) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Akses ditolak! Hanya Administrator yang dapat menambah produk.'], 403);
+            }
+            return redirect()->route('produk')->with('error', 'Akses ditolak! Hanya Administrator yang dapat menambah produk.');
+        }
+
         $validated = $request->validate([
             'nama_produk' => 'required|string|max:255',
             'kategori' => 'required|string|max:100',
@@ -40,6 +62,13 @@ class ProdukController extends Controller
 
     public function update(Request $request, $id)
     {
+        if ($this->isKasir()) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Akses ditolak! Hanya Administrator yang dapat mengubah data produk.'], 403);
+            }
+            return redirect()->route('produk')->with('error', 'Akses ditolak! Hanya Administrator yang dapat mengubah data produk.');
+        }
+
         $produk = Produk::findOrFail($id);
         $validated = $request->validate([
             'nama_produk' => 'required|string|max:255',
@@ -63,6 +92,13 @@ class ProdukController extends Controller
 
     public function destroy(Request $request, $id)
     {
+        if ($this->isKasir()) {
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json(['success' => false, 'message' => 'Akses ditolak! Hanya Administrator yang dapat menghapus produk.'], 403);
+            }
+            return redirect()->route('produk')->with('error', 'Akses ditolak! Hanya Administrator yang dapat menghapus produk.');
+        }
+
         $produk = Produk::findOrFail($id);
         $produk->delete();
 

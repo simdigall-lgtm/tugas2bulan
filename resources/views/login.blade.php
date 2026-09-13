@@ -38,7 +38,7 @@
 
         .login-card {
             width: 100%;
-            max-width: 940px;
+            max-width: 980px;
             background: #FFFFFF;
             border-radius: 16px;
             box-shadow: 0 12px 36px rgba(0, 0, 0, 0.05), 0 2px 8px rgba(0, 0, 0, 0.02);
@@ -369,29 +369,80 @@
 
         /* Right Column - Illustration */
         .login-illustration-container {
-            flex: 1;
-            background: linear-gradient(135deg, #F0F4FC 0%, #E5EDF9 100%);
+            flex: 1.2;
+            background: linear-gradient(145deg, #F0F4FC 0%, #E2ECFA 100%);
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 30px;
+            padding: 30px 24px;
             position: relative;
             overflow: hidden;
+            text-align: center;
+        }
+
+        /* Subtle decorative radial glows */
+        .login-illustration-container::before {
+            content: '';
+            position: absolute;
+            top: -60px;
+            right: -60px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(37, 99, 235, 0.09) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .login-illustration-container::after {
+            content: '';
+            position: absolute;
+            bottom: -60px;
+            left: -60px;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(30, 58, 138, 0.08) 0%, transparent 70%);
+            pointer-events: none;
         }
 
         .illustration-image {
-            max-width: 90%;
-            max-height: 440px;
-            width: auto;
+            max-width: 96%;
+            max-height: 380px;
+            width: 100%;
             height: auto;
             object-fit: contain;
             mix-blend-mode: multiply;
             filter: contrast(1.02);
             transition: transform 0.3s ease;
+            margin-bottom: 14px;
+            z-index: 1;
         }
 
         .illustration-image:hover {
-            transform: scale(1.03);
+            transform: scale(1.02);
+        }
+
+        .illustration-content {
+            z-index: 1;
+            max-width: 360px;
+        }
+
+        .illustration-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #0F172A;
+            line-height: 1.35;
+            letter-spacing: -0.3px;
+            margin-bottom: 6px;
+        }
+
+        .illustration-desc {
+            font-size: 13.5px;
+            font-weight: 500;
+            color: #64748B;
+            line-height: 1.5;
+            margin: 0;
         }
 
         /* Responsive Breakpoints */
@@ -419,7 +470,7 @@
         <div class="login-form-container">
 
             <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 24px;">
-                <img src="{{ asset('assets/images/sipekan-logo.png') }}" alt="SIPEKAN Logo"
+                <img src="{{ asset('assets/images/sipekan-logo.png') }}?v={{ file_exists(public_path('assets/images/sipekan-logo.png')) ? filemtime(public_path('assets/images/sipekan-logo.png')) : time() }}" alt="SIPEKAN Logo"
                     style="height: 50px; width: auto; object-fit: contain; flex-shrink: 0; display: block;">
                 <div style="display: flex; flex-direction: column; justify-content: space-between; height: 50px;">
                     <h1 class="brand-title"
@@ -498,6 +549,13 @@
         <div class="login-illustration-container">
             <img src="{{ asset('assets/images/printing-illustration.png') }}" alt="Percetakan SIPEKAN"
                 class="illustration-image">
+
+            <div class="illustration-content">
+                <h3 class="illustration-title">Sistem Manajemen Percetakan</h3>
+                <p class="illustration-desc">
+                    Kelola operasional, produksi, dan pesanan percetakan dalam satu platform terpadu.
+                </p>
+            </div>
         </div>
     </div>
 

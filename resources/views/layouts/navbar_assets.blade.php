@@ -727,7 +727,40 @@
     table td,
     .custom-table th,
     .custom-table td {
-        white-space: nowrap !important;
+        white-space: nowrap;
+    }
+
+    .product-cell,
+    .product-cell *,
+    .product-sub,
+    .product-sub *,
+    .wrap-text,
+    td.wrap-text,
+    th.wrap-text {
+        white-space: normal !important;
+    }
+
+    /* Global Compact Sidebar Standard */
+    .sidebar {
+        width: 210px !important;
+    }
+    .main-wrapper {
+        margin-left: 210px !important;
+        width: calc(100% - 210px) !important;
+        max-width: calc(100vw - 210px) !important;
+        min-width: 0 !important;
+    }
+
+    /* Sticky Topbar Standard Across All Pages */
+    html, body {
+        overflow-x: clip !important;
+    }
+    .topbar {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 100 !important;
+        background-color: #FFFFFF !important;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05) !important;
     }
 
     /* Table Dropdown Menu & Dropup Positioning */
@@ -746,6 +779,7 @@
         }
 
         .sidebar {
+            width: 240px !important;
             transform: translateX(-100%);
             transition: transform 0.3s ease;
         }
@@ -756,6 +790,8 @@
 
         .main-wrapper {
             margin-left: 0 !important;
+            width: 100% !important;
+            max-width: 100vw !important;
         }
 
         .search-container,

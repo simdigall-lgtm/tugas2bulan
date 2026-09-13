@@ -11,81 +11,534 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,sans-serif; }
+        html, body { max-width: 100vw; overflow-x: clip; }
         body { background-color:#F8FAFC; color:#1E293B; display:flex; min-height:100vh; }
 
-        .sidebar { width:250px; background:#FFFFFF; border-right:1px solid #E2E8F0; display:flex; flex-direction:column; justify-content:space-between; position:fixed; top:0; bottom:0; left:0; z-index:100; }
-        .sidebar-brand { padding:24px 20px 20px 24px; }
-        .brand-name { font-size:19px; font-weight:800; color:#1E3A8A; letter-spacing:-0.3px; }
-        .brand-tag { font-size:12px; font-weight:500; color:#64748B; margin-top:2px; }
-        .sidebar-menu { padding:12px 14px; display:flex; flex-direction:column; gap:4px; flex:1; }
-        .menu-item { display:flex; align-items:center; gap:12px; padding:11px 16px; border-radius:8px; color:#475569; text-decoration:none; font-size:14px; font-weight:600; transition:all 0.2s ease; }
+        .sidebar { width:210px; background:#FFFFFF; border-right:1px solid #E2E8F0; display:flex; flex-direction:column; justify-content:space-between; position:fixed; top:0; bottom:0; left:0; z-index:100; }
+        .sidebar-brand { padding:18px 16px 14px; }
+        .brand-name { font-size:18px; font-weight:800; color:#1E3A8A; letter-spacing:-0.3px; }
+        .brand-tag { font-size:11px; font-weight:500; color:#64748B; margin-top:1px; }
+        .sidebar-menu { padding:10px 10px; display:flex; flex-direction:column; gap:3px; flex:1; }
+        .menu-item { display:flex; align-items:center; gap:10px; padding:9px 12px; border-radius:8px; color:#475569; text-decoration:none; font-size:13.5px; font-weight:600; transition:all 0.2s ease; }
         .menu-item:hover { background-color:#F1F5F9; color:#1E3A8A; }
         .menu-item.active { background-color:#EEF2FF; color:#1E3A8A; font-weight:700; }
-        .menu-item i { font-size:16px; width:20px; text-align:center; }
-        .sidebar-bottom { padding:16px 14px 20px; border-top:1px dashed #E2E8F0; display:flex; flex-direction:column; gap:4px; }
+        .menu-item i { font-size:15px; width:18px; text-align:center; }
+        .sidebar-bottom { padding:12px 10px 16px; border-top:1px dashed #E2E8F0; display:flex; flex-direction:column; gap:3px; }
 
-        .main-wrapper { margin-left:250px; flex:1; display:flex; flex-direction:column; min-width:0; }
-        .topbar { height:68px; background:#FFFFFF; border-bottom:1px solid #E2E8F0; display:flex; align-items:center; justify-content:space-between; padding:0 32px; position:sticky; top:0; z-index:90; }
-        .search-container { position:relative; width:340px; }
+        .main-wrapper { margin-left:210px; width:calc(100% - 210px); max-width:calc(100vw - 210px); flex:1; display:flex; flex-direction:column; min-width:0; }
+        .topbar { height:64px; background:#FFFFFF; border-bottom:1px solid #E2E8F0; display:flex; align-items:center; justify-content:space-between; padding:0 24px; position:sticky; top:0; z-index:100; max-width:100%; box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05); }
+        .search-container { position:relative; width:300px; }
         .search-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#94A3B8; font-size:14px; }
         .search-input { width:100%; background:#F1F5F9; border:1px solid transparent; border-radius:8px; padding:9px 14px 9px 38px; font-size:13.5px; color:#1E293B; outline:none; }
         .topbar-right { display:flex; align-items:center; gap:20px; }
         .icon-btn { background:none; border:none; color:#64748B; font-size:17px; cursor:pointer; padding:6px; border-radius:50%; }
         .avatar-img { width:36px; height:36px; border-radius:50%; object-fit:cover; border:1.5px solid #E2E8F0; }
 
-        .content-body { padding:32px; flex:1; }
+        .content-body { padding:20px 24px; flex:1; min-width:0; max-width:100%; }
 
         .page-title { font-size:26px; font-weight:800; color:#0F172A; letter-spacing:-0.5px; }
         .page-subtitle { font-size:14px; color:#64748B; margin-top:4px; }
 
-        /* Filter Card with Left Date Inputs & Right Export Buttons */
-        .filter-card { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:18px 24px; margin-bottom:24px; display:flex; align-items:flex-end; justify-content:space-between; gap:16px; box-shadow:0 1px 3px rgba(0,0,0,0.02); flex-wrap:wrap; }
-        .filter-form-left { display:flex; align-items:flex-end; gap:14px; flex-wrap:wrap; }
-        .date-input-group { display:flex; flex-direction:column; gap:6px; }
-        .date-input-group label { font-size:12.5px; font-weight:700; color:#334155; }
-        .date-input-group input[type="date"] { border:1px solid #CBD5E1; border-radius:8px; padding:9px 14px; font-size:13.5px; color:#0F172A; background:#FFFFFF; outline:none; transition:border-color 0.2s ease; }
-        .date-input-group input[type="date"]:focus { border-color:#1E3A8A; }
-        .btn-filter { background:#1B3B6F; color:#FFFFFF; border:none; padding:10px 22px; border-radius:8px; font-weight:700; font-size:13.5px; cursor:pointer; white-space:nowrap; display:flex; align-items:center; gap:6px; transition:background 0.2s ease; }
-        .btn-filter:hover { background:#142F5B; }
-        .export-actions-right { display:flex; align-items:center; gap:10px; }
+        /* Filter Card - Refined Modern Toolbar Layout */
+        .filter-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
 
-        .btn-export { display:flex; align-items:center; gap:8px; padding:10px 18px; border-radius:8px; font-size:13.5px; font-weight:700; cursor:pointer; border:1.5px solid #CBD5E1; background:#FFFFFF; color:#334155; transition:all 0.2s ease; white-space:nowrap; }
-        .btn-export:hover { background:#F1F5F9; }
-        .btn-export.primary { background:#1B3B6F; border-color:#1B3B6F; color:#FFFFFF; }
-        .btn-export.primary:hover { background:#142F5B; }
+        /* Top Row: Presets on Left, Exports on Right */
+        .filter-row-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .filter-preset-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .filter-section-title {
+            font-size: 11.5px;
+            font-weight: 800;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .segmented-filter-container {
+            display: inline-flex;
+            align-items: center;
+            background: #F1F5F9;
+            padding: 3.5px;
+            border-radius: 10px;
+            gap: 3px;
+            border: 1px solid #E2E8F0;
+        }
+        .btn-segmented {
+            padding: 6px 13px;
+            border-radius: 7px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #475569;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+        }
+        .btn-segmented:hover {
+            color: #1E3A8A;
+            background: rgba(255, 255, 255, 0.7);
+        }
+        .btn-segmented.active {
+            background: #1B3B6F !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 2px 5px rgba(27, 59, 111, 0.22);
+        }
 
-        /* Stat Cards */
-        .stats-row { display:grid; grid-template-columns:repeat(3, 1fr); gap:20px; margin-bottom:24px; }
-        .stat-card { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:20px 24px; display:flex; align-items:center; gap:16px; text-decoration:none; color:inherit; cursor:pointer; transition:transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
-        .stat-card:hover { transform:translateY(-4px); box-shadow:0 10px 24px rgba(30, 58, 138, 0.1); border-color:#1E3A8A; }
-        .stat-icon { width:48px; height:48px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
-        .stat-icon.blue { background:#DBEAFE; color:#1D4ED8; }
-        .stat-icon.green { background:#DCFCE7; color:#15803D; }
-        .stat-icon.purple { background:#EDE9FE; color:#7C3AED; }
-        .stat-label { font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.5px; }
-        .stat-value { font-size:22px; font-weight:800; color:#0F172A; margin-top:4px; letter-spacing:-0.5px; white-space:nowrap; }
+        /* Export Actions on Top Right */
+        .export-actions-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn-export {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 7px 14px;
+            border-radius: 8px;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            border: 1px solid #CBD5E1;
+            background: #FFFFFF;
+            color: #334155;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+            height: 36px;
+        }
+        .btn-export:hover {
+            background: #F8FAFC;
+            border-color: #94A3B8;
+            color: #0F172A;
+        }
+        .btn-export.primary {
+            background: #1B3B6F;
+            border-color: #1B3B6F;
+            color: #FFFFFF;
+        }
+        .btn-export.primary:hover {
+            background: #142F5B;
+        }
 
-        /* Laporan Charts Layout */
-        .card { background:#FFFFFF; border:1px solid #E2E8F0; border-radius:12px; padding:24px; box-shadow:0 1px 3px rgba(0,0,0,0.02); }
-        .card-title { font-size:16px; font-weight:800; color:#0F172A; margin-bottom:16px; }
-        .charts-row-laporan { display:grid; grid-template-columns:1.6fr 1fr; gap:24px; margin-bottom:24px; }
-        .chart-container-laporan { position:relative; height:260px; width:100%; }
+        /* Divider between Rows */
+        .filter-divider {
+            height: 1px;
+            background: #F1F5F9;
+            width: 100%;
+        }
 
-        /* Table */
-        .card-header-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; }
-        .card-link { font-size:13px; font-weight:700; color:#1E3A8A; text-decoration:none; }
-        .custom-table { width:100%; border-collapse:collapse; text-align:left; }
-        .custom-table th { background:#FFFFFF; padding:11px 14px; font-size:11px; font-weight:700; color:#64748B; text-transform:uppercase; letter-spacing:0.5px; border-bottom:1px solid #E2E8F0; white-space:nowrap; }
-        .custom-table td { padding:11px 14px; font-size:13px; color:#334155; border-bottom:1px solid #F1F5F9; font-weight:500; vertical-align:middle; white-space:nowrap; }
-        .custom-table tr:last-child td { border-bottom:none; }
-        .inv-code { color:#1E3A8A; font-weight:700; white-space:nowrap; }
+        /* Bottom Row: Custom Date Form across the toolbar */
+        .filter-row-bottom {
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        .filter-date-form {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            flex-wrap: wrap;
+        }
+        .date-range-box {
+            display: inline-flex;
+            align-items: center;
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 0 12px;
+            height: 38px;
+            gap: 8px;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+        .date-range-box:focus-within {
+            border-color: #1E3A8A;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.09);
+        }
+        .date-sub-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .date-input-field {
+            border: none;
+            outline: none;
+            font-size: 12.5px;
+            font-weight: 600;
+            color: #0F172A;
+            background: transparent;
+            font-family: inherit;
+        }
+        .date-range-separator {
+            color: #94A3B8;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .btn-filter-apply {
+            height: 38px;
+            padding: 0 16px;
+            border-radius: 8px;
+            background: #1B3B6F;
+            color: #FFFFFF;
+            border: none;
+            font-size: 12.5px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.15s ease;
+            white-space: nowrap;
+        }
+        .btn-filter-apply:hover {
+            background: #142F5B;
+        }
+        .btn-filter-reset {
+            height: 38px;
+            padding: 0 12px;
+            border-radius: 8px;
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            color: #64748B;
+            font-size: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+            white-space: nowrap;
+        }
+        .btn-filter-reset:hover {
+            background: #F1F5F9;
+            color: #0F172A;
+            border-color: #94A3B8;
+        }
 
-        .status-badge { display:inline-flex; align-items:center; justify-content:center; padding:4px 10px; border-radius:12px; font-size:11px; font-weight:700; white-space:nowrap; }
-        .status-selesai { background:#DCFCE7; color:#16A34A; }
-        .status-proses, .status-menunggu, .status-diproses { background:#DBEAFE; color:#1E3A8A; }
-        .status-desain { background:#DBEAFE; color:#1D4ED8; }
+        /* Active Period Summary Badge */
+        .active-period-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            padding: 0 14px;
+            height: 38px;
+            border-radius: 8px;
+            font-size: 12px;
+            color: #475569;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+        @media (max-width: 1100px) {
+            .active-period-badge {
+                margin-left: 0;
+            }
+        }
+        .active-period-badge strong {
+            color: #0F172A;
+        }
+        .active-count-pill {
+            background: #EEF2FF;
+            color: #1E3A8A;
+            font-weight: 800;
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 12px;
+            margin-left: 2px;
+        }
 
-        /* Pagination Controls Styling */
+        /* Stat Cards: 5 Columns Balanced Grid */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+            width: 100%;
+        }
+        .stat-card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+            min-width: 0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .stat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(30, 58, 138, 0.09);
+            border-color: #1E3A8A;
+        }
+        .card-highlight-glow {
+            transition: all 0.3s ease;
+            border-color: #2563EB !important;
+            box-shadow: 0 0 0 3.5px rgba(37, 99, 235, 0.25), 0 12px 28px rgba(37, 99, 235, 0.12) !important;
+        }
+        .cell-highlight-glow {
+            background-color: #EFF6FF !important;
+            color: #1E40AF !important;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+        .stat-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-size: 11px;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 9px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+        .stat-icon.blue { background: #DBEAFE; color: #1D4ED8; }
+        .stat-icon.green { background: #DCFCE7; color: #15803D; }
+        .stat-icon.purple { background: #EDE9FE; color: #7C3AED; }
+        .stat-icon.teal { background: #CCFBF1; color: #0F766E; }
+        .stat-icon.amber { background: #FEF3C7; color: #B45309; }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0F172A;
+            letter-spacing: -0.4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin: 4px 0 2px;
+        }
+        .stat-footer {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11.5px;
+            font-weight: 600;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #F1F5F9;
+            flex-wrap: nowrap;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .trend-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .trend-badge.up { background: #DCFCE7; color: #15803D; }
+        .trend-badge.down { background: #FEE2E2; color: #DC2626; }
+        .trend-badge.neutral { background: #F1F5F9; color: #64748B; }
+        .trend-text {
+            color: #94A3B8;
+            font-weight: 500;
+            font-size: 11px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Laporan Charts Layout: Minmax + responsive stack to prevent cutoff */
+        .card {
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+            min-width: 0;
+            overflow: hidden;
+        }
+        .card-title { font-size: 16px; font-weight: 800; color: #0F172A; margin-bottom: 4px; }
+        .card-desc { font-size: 12.5px; color: #64748B; margin-bottom: 16px; }
+
+        .charts-row-laporan {
+            display: grid;
+            grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+            gap: 20px;
+            margin-bottom: 24px;
+            width: 100%;
+            min-width: 0;
+        }
+        .chart-container-laporan {
+            position: relative;
+            height: 270px;
+            width: 100%;
+            min-width: 0;
+        }
+
+        /* Table Toolbar & Search */
+        .card-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .table-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .table-search-box {
+            position: relative;
+            min-width: 250px;
+            flex: 1;
+            max-width: 360px;
+        }
+        .table-search-box input {
+            width: 100%;
+            background: #F8FAFC;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 8px 12px 8px 34px;
+            font-size: 13px;
+            color: #1E293B;
+            outline: none;
+            transition: all 0.2s ease;
+        }
+        .table-search-box input:focus {
+            background: #FFFFFF;
+            border-color: #1E3A8A;
+            box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
+        }
+        .table-search-box i {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94A3B8;
+            font-size: 13px;
+        }
+        .table-filter-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .table-select {
+            padding: 7.5px 12px;
+            border: 1px solid #CBD5E1;
+            border-radius: 8px;
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #1E293B;
+            background: #FFFFFF;
+            outline: none;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .table-select:focus {
+            border-color: #1E3A8A;
+        }
+
+        /* Table Design */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+        .custom-table { width: 100%; border-collapse: collapse; text-align: left; }
+        .custom-table th { background: #F8FAFC; padding: 11px 14px; font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid #E2E8F0; white-space: nowrap; }
+        .custom-table td { padding: 12px 14px; font-size: 13px; color: #334155; border-bottom: 1px solid #F1F5F9; font-weight: 500; vertical-align: middle; white-space: nowrap; }
+        .custom-table tr:hover td { background-color: #F8FAFC; }
+        .custom-table tr:last-child td { border-bottom: none; }
+        .inv-code { color: #1E3A8A; font-weight: 700; white-space: nowrap; }
+
+        /* Production Status Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3.5px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+        .badge-antrean-cetak { background: #E0F2FE; color: #0369A1; border: 1px solid #BAE6FD; }
+        .badge-sedang-dicetak { background: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; }
+        .badge-finishing { background: #F3E8FF; color: #7E22CE; border: 1px solid #E9D5FF; }
+        .badge-siap-diambil { background: #CCFBF1; color: #0F766E; border: 1px solid #99F6E4; }
+        .badge-selesai { background: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; }
+
+        /* Payment Badges */
+        .badge-pay {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 2px 7px;
+            border-radius: 6px;
+            font-size: 10.5px;
+            font-weight: 700;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+        .badge-pay-lunas { background: #DCFCE7; color: #166534; border: 1px solid #86EFAC; }
+        .badge-pay-dp { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
+        .badge-pay-belum { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
+
+        /* Pagination Controls */
         .table-pagination-footer {
             display: flex;
             align-items: center;
@@ -96,18 +549,10 @@
             flex-wrap: wrap;
             gap: 12px;
         }
-        .pagination-info {
-            font-size: 13px;
-            font-weight: 600;
-            color: #64748B;
-        }
-        .pagination-controls {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
+        .pagination-info { font-size: 13px; font-weight: 600; color: #64748B; }
+        .pagination-controls { display: flex; align-items: center; gap: 6px; }
         .pag-btn {
-            padding: 7px 14px;
+            padding: 6.5px 14px;
             border: 1px solid #CBD5E1;
             background: #FFFFFF;
             border-radius: 8px;
@@ -120,15 +565,8 @@
             align-items: center;
             gap: 6px;
         }
-        .pag-btn:hover:not(:disabled) {
-            background-color: #F1F5F9;
-            color: #1E3A8A;
-            border-color: #94A3B8;
-        }
-        .pag-btn:disabled {
-            opacity: 0.45;
-            cursor: not-allowed;
-        }
+        .pag-btn:hover:not(:disabled) { background-color: #F1F5F9; color: #1E3A8A; border-color: #94A3B8; }
+        .pag-btn:disabled { opacity: 0.45; cursor: not-allowed; }
         .page-num-btn {
             width: 32px;
             height: 32px;
@@ -138,31 +576,106 @@
             border: 1px solid #CBD5E1;
             background: #FFFFFF;
             border-radius: 8px;
-            font-size: 13px;
+            font-size: 12.5px;
             font-weight: 700;
             color: #475569;
             cursor: pointer;
             transition: all 0.15s ease;
         }
-        .page-num-btn:hover {
-            background-color: #F1F5F9;
-            color: #1E3A8A;
-        }
+        .page-num-btn:hover { background-color: #F1F5F9; color: #1E3A8A; }
         .page-num-btn.active {
             background-color: #1B3B6F !important;
             color: #FFFFFF !important;
             border-color: #1B3B6F !important;
             box-shadow: 0 2px 4px rgba(27, 59, 111, 0.2);
         }
+        .page-ellipsis {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 32px;
+            color: #94A3B8;
+            font-size: 13px;
+            font-weight: 700;
+            user-select: none;
+        }
 
-        /* Responsive Adjustments */
-        @media (max-width: 768px) {
-            .page-header-row { flex-direction: column; align-items: flex-start; gap: 16px; }
-            .header-actions { width: 100%; flex-direction: column; }
-            .header-actions button { width: 100%; justify-content: center; }
-            .filter-card { flex-direction: column; align-items: stretch; gap: 12px; }
-            .stats-row { grid-template-columns: 1fr; }
+        .page-select-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #64748B;
+            font-weight: 600;
+            padding: 0 4px;
+            user-select: none;
+        }
+
+        .page-select-dropdown {
+            appearance: none;
+            -webkit-appearance: none;
+            background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 8px center;
+            background-size: 12px;
+            border: 1px solid #CBD5E1;
+            border-radius: 6px;
+            padding: 5px 26px 5px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1B3B6F;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.15s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+
+        .page-select-dropdown:hover {
+            border-color: #94A3B8;
+            background-color: #F8FAFC;
+        }
+
+        .page-select-dropdown:focus {
+            border-color: #1B3B6F;
+            box-shadow: 0 0 0 2px rgba(27, 59, 111, 0.15);
+        }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1280px) {
+            .stats-row { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 1024px) {
             .charts-row-laporan { grid-template-columns: 1fr; }
+            .stats-row { grid-template-columns: repeat(2, 1fr); }
+            .filter-row-top { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .export-actions-group { width: 100%; justify-content: flex-start; }
+            .filter-row-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .active-period-badge { width: 100%; justify-content: space-between; }
+        }
+        @media (max-width: 768px) {
+            .sidebar { display: none; }
+            .main-wrapper { margin-left: 0; width: 100%; max-width: 100%; }
+            .segmented-filter-container { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); }
+            .btn-segmented { justify-content: center; }
+            .export-actions-group { width: 100%; display: flex; }
+            .export-actions-group button { flex: 1; justify-content: center; }
+            .filter-date-form { width: 100%; flex-direction: column; align-items: stretch; }
+            .date-range-box { width: 100%; justify-content: space-between; }
+            .btn-filter-apply { width: 100%; justify-content: center; }
+            .btn-filter-reset { width: 100%; justify-content: center; }
+            .stats-row { grid-template-columns: 1fr; }
+            .table-toolbar { flex-direction: column; align-items: stretch; }
+            .table-search-box { max-width: 100%; }
+            .table-filter-controls { width: 100%; justify-content: space-between; }
+        }
+
+        /* Print Media Styling */
+        @media print {
+            .sidebar, .topbar, .filter-card, .table-toolbar, .table-pagination-footer, .btn-export, .brand-tag { display: none !important; }
+            .main-wrapper { margin-left: 0 !important; width: 100% !important; max-width: 100% !important; }
+            .content-body { padding: 0 !important; }
+            .card { box-shadow: none !important; border: 1px solid #CBD5E1 !important; break-inside: avoid; margin-bottom: 20px !important; }
+            .stats-row { grid-template-columns: repeat(5, 1fr) !important; gap: 8px !important; }
+            body { background: #FFFFFF !important; }
         }
     </style>
 </head>
@@ -179,79 +692,218 @@
             <!-- Page Header -->
             <div style="margin-bottom: 20px;">
                 <h1 class="page-title">Laporan & Statistik</h1>
-                <p class="page-subtitle">Ringkasan performa dan transaksi percetakan tahun 2026.</p>
+                <p class="page-subtitle">Ringkasan performa, tren pendapatan, dan riwayat transaksi percetakan.</p>
             </div>
 
-            <!-- Filter Card: Date Inputs on Left, Export Buttons on Right -->
+            <!-- Filter Card: Unified 2-Row Balanced Toolbar -->
             <div class="filter-card">
-                <!-- Left: Date Filter Form -->
-                <form action="{{ route('laporan') }}" method="GET" class="filter-form-left">
-                    <div class="date-input-group">
-                        <label for="startDateInput">Dari Tanggal</label>
-                        <input type="date" 
-                               id="startDateInput" 
-                               name="start_date" 
-                               value="{{ $startDate ?? '2026-01-01' }}" 
-                               min="2026-01-01" 
-                               max="2026-12-31">
+                <!-- Top Row: Quick Presets on Left, Complete Export Group on Right -->
+                <div class="filter-row-top">
+                    <div class="filter-preset-group">
+                        <span class="filter-section-title"><i class="fa-solid fa-clock-rotate-left"></i> Waktu:</span>
+                        <div class="segmented-filter-container">
+                            <a href="{{ route('laporan', ['range' => 'today']) }}" 
+                               class="btn-segmented {{ ($activeRange ?? '') === 'today' ? 'active' : '' }}" 
+                               data-range="today" title="Filter transaksi hari ini">
+                                <i class="fa-regular fa-calendar-check"></i> Hari Ini
+                            </a>
+                            <a href="{{ route('laporan', ['range' => 'month']) }}" 
+                               class="btn-segmented {{ ($activeRange ?? '') === 'month' ? 'active' : '' }}" 
+                               data-range="month" title="Filter transaksi bulan ini">
+                                <i class="fa-regular fa-calendar-days"></i> Bulan Ini
+                            </a>
+                            <a href="{{ route('laporan', ['range' => 'quarter']) }}" 
+                               class="btn-segmented {{ ($activeRange ?? '') === 'quarter' ? 'active' : '' }}" 
+                               data-range="quarter" title="Filter transaksi kuartal ini">
+                                <i class="fa-solid fa-chart-pie"></i> Kuartal Ini
+                            </a>
+                            <a href="{{ route('laporan', ['range' => 'year']) }}" 
+                               class="btn-segmented {{ ($activeRange ?? '') === 'year' ? 'active' : '' }}" 
+                               data-range="year" title="Filter transaksi tahun {{ $currentYear ?? date('Y') }}">
+                                <i class="fa-regular fa-calendar"></i> Tahun Ini
+                            </a>
+                        </div>
                     </div>
-                    <div class="date-input-group">
-                        <label for="endDateInput">Sampai Tanggal</label>
-                        <input type="date" 
-                               id="endDateInput" 
-                               name="end_date" 
-                               value="{{ $endDate ?? '2026-12-31' }}" 
-                               min="2026-01-01" 
-                               max="2026-12-31">
-                    </div>
-                    <button type="submit" class="btn-filter">
-                        <i class="fa-solid fa-filter"></i>
-                        <span>Tampilkan</span>
-                    </button>
-                    @if(request()->has('start_date') || request()->has('end_date'))
-                        <a href="{{ route('laporan') }}" class="btn-export" style="text-decoration:none; padding: 10px 14px;" title="Reset Filter">
-                            <i class="fa-solid fa-rotate-left"></i> Reset
-                        </a>
-                    @endif
-                </form>
 
-                <!-- Right: Export Action Buttons -->
-                <div class="export-actions-right">
-                    <button class="btn-export" title="Cetak Ringkasan PDF"><i class="fa-regular fa-file-pdf"></i> Cetak PDF</button>
-                    <button class="btn-export primary" title="Download Format Excel / CSV"><i class="fa-regular fa-file-excel"></i> Export Excel</button>
+                    <!-- Export Actions on Right -->
+                    <div class="export-actions-group">
+                        <button class="btn-export" id="btnCetakPdf" title="Cetak Ringkasan Laporan ke PDF">
+                            <i class="fa-solid fa-print"></i> Cetak PDF
+                        </button>
+                        <button class="btn-export" id="btnExportCsv" title="Download Data Transaksi Format CSV (RFC 4180)">
+                            <i class="fa-solid fa-file-csv" style="color: #0284C7;"></i> Export CSV
+                        </button>
+                        <button class="btn-export primary" id="btnExportExcel" title="Download Format Excel Spreadsheet">
+                            <i class="fa-regular fa-file-excel"></i> Export Excel
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Subtle Card Divider -->
+                <div class="filter-divider"></div>
+
+                <!-- Bottom Row: Inline Custom Date Picker on Left, Active Period Summary on Right -->
+                <div class="filter-row-bottom">
+                    <form action="{{ route('laporan') }}" method="GET" class="filter-date-form" id="dateFilterForm">
+                        <span class="filter-section-title"><i class="fa-regular fa-calendar"></i> Tanggal:</span>
+
+                        <div class="date-range-box">
+                            <span class="date-sub-label">Dari</span>
+                            <input type="date" 
+                                   class="date-input-field" 
+                                   id="startDateInput" 
+                                   name="start_date" 
+                                   value="{{ $startDate }}" 
+                                   min="{{ $earliestDate }}" 
+                                   max="{{ $latestAllowedDate }}"
+                                   title="Pilih tanggal mulai">
+                            <span class="date-range-separator">—</span>
+                            <span class="date-sub-label">Sampai</span>
+                            <input type="date" 
+                                   class="date-input-field" 
+                                   id="endDateInput" 
+                                   name="end_date" 
+                                   value="{{ $endDate }}" 
+                                   min="{{ $earliestDate }}" 
+                                   max="{{ $latestAllowedDate }}"
+                                   title="Pilih tanggal akhir (maksimal hari ini)">
+                        </div>
+
+                        <button type="submit" class="btn-filter-apply" id="btnApplyFilter" title="Terapkan filter rentang tanggal">
+                            <i class="fa-solid fa-filter"></i>
+                            <span>Tampilkan</span>
+                        </button>
+
+                        @if(request()->has('start_date') || request()->has('end_date') || request()->has('range'))
+                            <a href="{{ route('laporan') }}" class="btn-filter-reset" title="Kembalikan ke rentang default">
+                                <i class="fa-solid fa-rotate-left"></i> Reset
+                            </a>
+                        @endif
+
+                        <!-- Periode status langsung di sebelah kanan reset dalam baris yang sama -->
+                        <div class="active-period-badge">
+                            <i class="fa-solid fa-circle-info" style="color: #1E3A8A;"></i>
+                            <span>Periode: <strong>{{ \Carbon\Carbon::parse($startDate)->format('d M Y') }}</strong> s/d <strong>{{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}</strong></span>
+                            <span class="active-count-pill">{{ number_format($totalTransaksi ?? 0, 0, ',', '.') }} Transaksi</span>
+                        </div>
+                    </form>
                 </div>
             </div>
 
-            <!-- Stat Cards -->
+            <!-- Balanced 5 Stat Cards with Growth Rates & Rich Business Metrics -->
             <div class="stats-row">
-                <a href="{{ route('pesanan') }}" class="stat-card" title="Klik untuk membuka Kelola Pesanan">
-                    <div class="stat-icon blue"><i class="fa-solid fa-file-invoice"></i></div>
+                <!-- 1. Total Pendapatan -->
+                <a href="#trenPendapatanCard" class="stat-card" id="cardTotalPendapatan" onclick="scrollToTransactions(event, 'omzet')" title="Klik untuk melompat ke grafik tren pendapatan & rincian omzet">
                     <div>
-                        <div class="stat-label">TOTAL PESANAN</div>
-                        <div class="stat-value">{{ \App\Models\Pesanan::count() }}</div>
-                    </div>
-                </a>
-                <a href="{{ route('pembayaran') }}" class="stat-card" title="Klik untuk membuka Kelola Pembayaran">
-                    <div class="stat-icon green"><i class="fa-solid fa-money-bill-trend-up"></i></div>
-                    <div>
-                        <div class="stat-label">TOTAL PENDAPATAN</div>
+                        <div class="stat-header">
+                            <span class="stat-label">TOTAL PENDAPATAN</span>
+                            <div class="stat-icon green"><i class="fa-solid fa-money-bill-trend-up"></i></div>
+                        </div>
                         <div class="stat-value">Rp {{ number_format($totalPendapatan ?? 0, 0, ',', '.') }}</div>
                     </div>
+                    <div class="stat-footer">
+                        @if(($growthPendapatan ?? 0) > 0)
+                            <span class="trend-badge up"><i class="fa-solid fa-arrow-trend-up"></i> +{{ $growthPendapatan }}%</span>
+                        @elseif(($growthPendapatan ?? 0) < 0)
+                            <span class="trend-badge down"><i class="fa-solid fa-arrow-trend-down"></i> {{ $growthPendapatan }}%</span>
+                        @else
+                            <span class="trend-badge neutral"><i class="fa-solid fa-minus"></i> 0%</span>
+                        @endif
+                        <span class="trend-text">{{ $growthLabel ?? 'vs periode lalu' }}</span>
+                    </div>
                 </a>
-                <a href="{{ route('pelanggan') }}" class="stat-card" title="Klik untuk membuka Kelola Pelanggan">
-                    <div class="stat-icon purple"><i class="fa-solid fa-users"></i></div>
+
+                <!-- 2. Total Pesanan -->
+                <a href="{{ route('pesanan') }}" class="stat-card" title="Klik untuk membuka daftar kelola pesanan">
                     <div>
-                        <div class="stat-label">TOTAL PELANGGAN</div>
-                        <div class="stat-value">{{ \App\Models\Pelanggan::count() }}</div>
+                        <div class="stat-header">
+                            <span class="stat-label">TOTAL PESANAN</span>
+                            <div class="stat-icon blue"><i class="fa-solid fa-file-invoice"></i></div>
+                        </div>
+                        <div class="stat-value">{{ number_format($totalTransaksi ?? 0, 0, ',', '.') }} <span style="font-size: 14px; font-weight: 600; color: #64748B;">Pesanan</span></div>
+                    </div>
+                    <div class="stat-footer">
+                        @if(($growthPesanan ?? 0) > 0)
+                            <span class="trend-badge up"><i class="fa-solid fa-arrow-trend-up"></i> +{{ $growthPesanan }}%</span>
+                        @elseif(($growthPesanan ?? 0) < 0)
+                            <span class="trend-badge down"><i class="fa-solid fa-arrow-trend-down"></i> {{ $growthPesanan }}%</span>
+                        @else
+                            <span class="trend-badge neutral"><i class="fa-solid fa-minus"></i> 0%</span>
+                        @endif
+                        <span class="trend-text">{{ $growthLabel ?? 'vs periode lalu' }}</span>
+                    </div>
+                </a>
+
+                <!-- 3. Rata-rata Transaksi (AOV) -->
+                <a href="#detailTransaksiCard" class="stat-card" id="cardAov" onclick="scrollToTransactions(event, 'nilai')" title="Klik untuk melompat & menyorot rincian nilai transaksi pada tabel di bawah">
+                    <div>
+                        <div class="stat-header">
+                            <span class="stat-label">RATA-RATA NILAI</span>
+                            <div class="stat-icon purple"><i class="fa-solid fa-chart-line"></i></div>
+                        </div>
+                        <div class="stat-value">Rp {{ number_format($rataRataTransaksi ?? 0, 0, ',', '.') }}</div>
+                    </div>
+                    <div class="stat-footer">
+                        @if(($growthAov ?? 0) > 0)
+                            <span class="trend-badge up"><i class="fa-solid fa-arrow-trend-up"></i> +{{ $growthAov }}%</span>
+                        @elseif(($growthAov ?? 0) < 0)
+                            <span class="trend-badge down"><i class="fa-solid fa-arrow-trend-down"></i> {{ $growthAov }}%</span>
+                        @else
+                            <span class="trend-badge neutral"><i class="fa-solid fa-minus"></i> Stabil</span>
+                        @endif
+                        <span class="trend-text">per transaksi</span>
+                    </div>
+                </a>
+
+                <!-- 4. Total Produk / Kuantitas Terjual -->
+                <a href="{{ route('produk') }}" class="stat-card" title="Klik untuk membuka katalog produk">
+                    <div>
+                        <div class="stat-header">
+                            <span class="stat-label">PRODUK TERJUAL</span>
+                            <div class="stat-icon teal"><i class="fa-solid fa-boxes-stacked"></i></div>
+                        </div>
+                        <div class="stat-value">{{ number_format($totalProdukTerjual ?? 0, 0, ',', '.') }} <span style="font-size: 14px; font-weight: 600; color: #64748B;">Item</span></div>
+                    </div>
+                    <div class="stat-footer">
+                        <span class="trend-badge up" style="background:#CCFBF1; color:#0F766E;"><i class="fa-solid fa-check"></i> Volume</span>
+                        <span class="trend-text">cetak diproduksi</span>
+                    </div>
+                </a>
+
+                <!-- 5. Sisa Piutang / Belum Lunas -->
+                <a href="{{ route('pembayaran') }}" class="stat-card" title="Klik untuk melihat transaksi pembayaran & sisa piutang">
+                    <div>
+                        <div class="stat-header">
+                            <span class="stat-label">BELUM LUNAS</span>
+                            <div class="stat-icon amber"><i class="fa-solid fa-hand-holding-dollar"></i></div>
+                        </div>
+                        <div class="stat-value">Rp {{ number_format($totalPiutang ?? 0, 0, ',', '.') }}</div>
+                    </div>
+                    <div class="stat-footer">
+                        @if(($totalBelumLunasCount ?? 0) > 0)
+                            <span class="trend-badge down" style="background:#FEF3C7; color:#92400E;"><i class="fa-solid fa-clock"></i> {{ $totalBelumLunasCount }} Tagihan</span>
+                            <span class="trend-text">perlu pelunasan</span>
+                        @else
+                            <span class="trend-badge up"><i class="fa-solid fa-circle-check"></i> Lunas Semua</span>
+                            <span class="trend-text">tidak ada piutang</span>
+                        @endif
                     </div>
                 </a>
             </div>
 
-            <!-- Charts Row: Monthly Performance + Category Revenue -->
+            <!-- Charts Row: Tren Pendapatan + Kontribusi Omzet Produk -->
             <div class="charts-row-laporan">
                 <!-- Pendapatan Line Chart -->
-                <div class="card">
-                    <h2 class="card-title">Tren Pendapatan</h2>
+                <div class="card" id="trenPendapatanCard">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+                        <div>
+                            <h2 class="card-title">Tren Pendapatan</h2>
+                            <p class="card-desc">Grafik pergerakan omzet berkala dalam rentang filter yang dipilih.</p>
+                        </div>
+                        <span style="font-size:12px; font-weight:700; color:#1E3A8A; background:#EEF2FF; padding:4px 10px; border-radius:6px;">
+                            <i class="fa-solid fa-chart-area"></i> Fluktuasi Omzet
+                        </span>
+                    </div>
                     <div class="chart-container-laporan">
                         <canvas id="laporanTrendChart"></canvas>
                     </div>
@@ -259,27 +911,57 @@
 
                 <!-- Product Revenue Bar Chart -->
                 <div class="card">
-                    <h2 class="card-title">Kontribusi Omzet Produk</h2>
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+                        <div>
+                            <h2 class="card-title">Kontribusi Omzet Produk</h2>
+                            <p class="card-desc">Persentase kontribusi per kategori produk cetak.</p>
+                        </div>
+                        <span style="font-size:12px; font-weight:700; color:#15803D; background:#DCFCE7; padding:4px 10px; border-radius:6px;">
+                            <i class="fa-solid fa-pie-chart"></i> Top 6 Produk
+                        </span>
+                    </div>
                     <div class="chart-container-laporan">
                         <canvas id="laporanShareChart"></canvas>
                     </div>
                 </div>
             </div>
 
-            <!-- Detail Transaksi Table -->
-            <div class="card">
-                <div class="card-header-row" style="flex-wrap: wrap; gap: 12px;">
+            <!-- Detail Transaksi Table with Search, Status Filter & Pagination -->
+            <div class="card" id="detailTransaksiCard">
+                <div class="card-header-row">
                     <div>
-                        <h2 class="card-title" style="margin-bottom:2px;">Detail Transaksi Terbaru</h2>
-                        <p style="font-size:12.5px; color:#64748B;">Daftar rincian riwayat transaksi yang tercatat di sistem.</p>
+                        <h2 class="card-title">Detail Transaksi Terbaru</h2>
+                        <p class="card-desc" style="margin-bottom:0;">Rincian transaksi aktual yang terekam pada periode ini.</p>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
-                        <!-- Limit Rows Selector -->
-                        <div style="display: flex; align-items: center; gap: 6px; font-size: 13px; color: #475569; font-weight: 600;">
-                            <span>Tampilkan:</span>
-                            <select id="tableLimitSelect" style="padding: 6px 12px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 13px; font-weight: 700; color: #1E293B; background: #F8FAFC; outline: none; cursor: pointer; transition: all 0.15s ease;">
-                                <option value="5" selected>5 data</option>
-                                <option value="10">10 data</option>
+                </div>
+
+                <!-- Table Filter & Search Toolbar -->
+                <div class="table-toolbar">
+                    <!-- Live Quick Search -->
+                    <div class="table-search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" id="tableSearchInput" placeholder="Cari kode pesanan, pelanggan, atau produk...">
+                    </div>
+
+                    <!-- Right Controls: Status Filter & Rows per Page -->
+                    <div class="table-filter-controls">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span style="font-size:12.5px; font-weight:700; color:#475569;">Status:</span>
+                            <select id="tableStatusFilter" class="table-select" title="Saring berdasarkan alur status pesanan">
+                                <option value="all">Semua Status</option>
+                                <option value="Antrean Cetak">Antrean Cetak</option>
+                                <option value="Sedang Dicetak">Sedang Dicetak</option>
+                                <option value="Finishing">Finishing</option>
+                                <option value="Siap Diambil">Siap Diambil</option>
+                                <option value="Selesai">Selesai</option>
+                            </select>
+                        </div>
+
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <span style="font-size:12.5px; font-weight:700; color:#475569;">Tampilkan:</span>
+                            <select id="tableLimitSelect" class="table-select" title="Jumlah baris per halaman">
+                                <option value="5">5 data</option>
+                                <option value="10" selected>10 data</option>
                                 <option value="25">25 data</option>
                                 <option value="50">50 data</option>
                                 <option value="all">Semua</option>
@@ -288,38 +970,75 @@
                     </div>
                 </div>
 
+                <!-- Table Content -->
                 <div class="table-responsive">
-                    <table class="custom-table">
+                    <table class="custom-table" id="transactionTable">
                         <thead>
                             <tr>
                                 <th>KODE PESANAN</th>
                                 <th>PELANGGAN</th>
-                                <th>TANGGAL</th>
-                                <th>PRODUK</th>
-                                <th>NILAI TRANSAKSI</th>
-                                <th>STATUS</th>
+                                <th>TANGGAL PESAN</th>
+                                <th>PRODUK & SPESIFIKASI</th>
+                                <th class="col-nilai-transaksi">NILAI TRANSAKSI</th>
+                                <th>STATUS PRODUKSI</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @forelse($pesananSelesai ?? [] as $pes)
-                            <tr>
-                                <td class="inv-code">{{ $pes->kode_pesanan }}</td>
-                                <td>{{ $pes->nama_pelanggan }}</td>
-                                <td>{{ $pes->tanggal_pesan ? \Carbon\Carbon::parse($pes->tanggal_pesan)->format('d M Y') : '-' }}</td>
-                                <td>{{ $pes->nama_produk }}</td>
-                                <td style="white-space: nowrap; font-weight: 600; color: #0F172A;">Rp {{ number_format($pes->total_harga, 0, ',', '.') }}</td>
-                                <td><span class="status-badge {{ strtolower($pes->status) == 'selesai' ? 'status-selesai' : (strtolower($pes->status) == 'menunggu' ? 'status-menunggu' : 'status-proses') }}">{{ $pes->status }}</span></td>
-                            </tr>
+                            @forelse($pesanans ?? [] as $pes)
+                                @php
+                                    $stProd = $pes->status ?? 'Antrean Cetak';
+                                    $stProdClass = 'badge-antrean-cetak';
+                                    if ($stProd === 'Sedang Dicetak') $stProdClass = 'badge-sedang-dicetak';
+                                    elseif ($stProd === 'Finishing') $stProdClass = 'badge-finishing';
+                                    elseif ($stProd === 'Siap Diambil') $stProdClass = 'badge-siap-diambil';
+                                    elseif ($stProd === 'Selesai') $stProdClass = 'badge-selesai';
+
+                                    $stBayar = $pes->status_pembayaran ?? (strtolower($stProd) === 'selesai' ? 'Lunas' : 'Belum Lunas');
+                                    $stBayarLower = strtolower($stBayar);
+                                    $payBadgeClass = 'badge-pay-belum';
+                                    if ($stBayarLower === 'lunas') $payBadgeClass = 'badge-pay-lunas';
+                                    elseif ($stBayarLower === 'dp') $payBadgeClass = 'badge-pay-dp';
+                                @endphp
+                                <tr data-status="{{ $stProd }}" data-order-code="{{ $pes->kode_pesanan }}" data-customer="{{ $pes->nama_pelanggan }}" data-product="{{ $pes->nama_produk }}">
+                                    <td class="inv-code">{{ $pes->kode_pesanan }}</td>
+                                    <td>
+                                        <div style="font-weight:700; color:#0F172A;">{{ $pes->nama_pelanggan }}</div>
+                                    </td>
+                                    <td>{{ $pes->tanggal_pesan ? \Carbon\Carbon::parse($pes->tanggal_pesan)->format('d M Y') : '-' }}</td>
+                                    <td>
+                                        <div style="font-weight:600; color:#1E293B;">{{ $pes->nama_produk }}</div>
+                                        @if($pes->jumlah_ukuran)
+                                            <div style="font-size:11.5px; color:#64748B; margin-top:2px;">{{ $pes->jumlah_ukuran }}</div>
+                                        @endif
+                                    </td>
+                                    <td class="col-nilai-transaksi">
+                                        <div style="display:flex; align-items:center;">
+                                            <span style="font-weight:700; color:#0F172A;">Rp {{ number_format($pes->total_harga, 0, ',', '.') }}</span>
+                                            <span class="badge-pay {{ $payBadgeClass }}" title="Status Pembayaran: {{ $stBayar }}">
+                                                {{ $stBayar }}
+                                            </span>
+                                        </div>
+                                        @if($stBayarLower === 'dp' && $pes->sisa_bayar > 0)
+                                            <div style="font-size:11px; color:#DC2626; margin-top:2px; font-weight:600;">Sisa: Rp {{ number_format($pes->sisa_bayar, 0, ',', '.') }}</div>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        <span class="status-badge {{ $stProdClass }}">{{ $stProd }}</span>
+                                    </td>
+                                </tr>
                             @empty
-                            <tr>
-                                <td colspan="6" style="text-align:center; padding:20px; color:#64748B;">Belum ada data transaksi di database.</td>
-                            </tr>
+                                <tr id="emptyRowInitial">
+                                    <td colspan="6" style="text-align:center; padding:28px; color:#64748B;">
+                                        <i class="fa-solid fa-inbox" style="font-size:24px; margin-bottom:6px; display:block; color:#94A3B8;"></i>
+                                        Tidak ada data transaksi yang sesuai dengan kriteria filter saat ini.
+                                    </td>
+                                </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
 
-                <!-- Pagination Footer -->
+                <!-- Dynamic Pagination Footer -->
                 <div class="table-pagination-footer">
                     <div class="pagination-info" id="tablePaginationInfo">
                         Menampilkan <strong id="pageStartIdx" style="color: #0F172A;">0</strong> - <strong id="pageEndIdx" style="color: #0F172A;">0</strong> dari <strong id="totalRowsCount" style="color: #0F172A;">0</strong> total transaksi
@@ -338,182 +1057,180 @@
         </main>
     </div>
 
-    <!-- Chart.js Scripts Initialization -->
+    <!-- Chart.js & Interactive Scripts -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             Chart.defaults.font.family = "'Plus Jakarta Sans', sans-serif";
             Chart.defaults.color = '#64748B';
 
-            // 1. Laporan Trend Line Chart
-            const ctxTrend = document.getElementById('laporanTrendChart').getContext('2d');
-            const gradientBlue = ctxTrend.createLinearGradient(0, 0, 0, 250);
-            gradientBlue.addColorStop(0, 'rgba(30, 58, 138, 0.18)');
-            gradientBlue.addColorStop(1, 'rgba(30, 58, 138, 0.0)');
+            // 1. Tren Pendapatan Chart (Responsive & Smooth Line)
+            const canvasTrend = document.getElementById('laporanTrendChart');
+            if (canvasTrend) {
+                const ctxTrend = canvasTrend.getContext('2d');
+                const gradientBlue = ctxTrend.createLinearGradient(0, 0, 0, 250);
+                gradientBlue.addColorStop(0, 'rgba(30, 58, 138, 0.24)');
+                gradientBlue.addColorStop(1, 'rgba(30, 58, 138, 0.01)');
+                const trendFullLabels = {!! json_encode($trendFullLabels ?? []) !!};
 
-            new Chart(ctxTrend, {
-                type: 'line',
-                data: {
-                    labels: {!! json_encode($trendLabels ?? ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des']) !!},
-                    datasets: [{
-                        label: 'Pendapatan',
-                        data: {!! json_encode($trendValues ?? array_fill(0, 12, 0)) !!},
-                        borderColor: '#1E3A8A',
-                        backgroundColor: gradientBlue,
-                        fill: true,
-                        tension: 0.35,
-                        borderWidth: 3,
-                        pointBackgroundColor: '#1E3A8A',
-                        pointStyle: 'circle',
-                        pointRadius: 4,
-                        pointHoverRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top', align: 'end', labels: { usePointStyle: true, pointStyle: 'circle', boxWidth: 8, boxHeight: 8, font: { weight: '600' } } },
-                        tooltip: {
-                            backgroundColor: '#0F172A',
-                            padding: 12,
-                            callbacks: {
-                                label: function(context) {
-                                    let label = context.dataset.label || 'Pendapatan';
-                                    let val = context.raw || 0;
-                                    return ' ' + label + ': Rp ' + val.toLocaleString('id-ID');
-                                }
-                            }
-                        }
+                const trendChart = new Chart(ctxTrend, {
+                    type: 'line',
+                    data: {
+                        labels: {!! json_encode($trendLabels ?? []) !!},
+                        datasets: [{
+                            label: 'Pendapatan',
+                            data: {!! json_encode($trendValues ?? []) !!},
+                            borderColor: '#1E3A8A',
+                            backgroundColor: gradientBlue,
+                            fill: true,
+                            tension: 0.36,
+                            borderWidth: 3,
+                            pointBackgroundColor: '#FFFFFF',
+                            pointBorderColor: '#1E3A8A',
+                            pointBorderWidth: 2.5,
+                            pointRadius: 4.5,
+                            pointHoverRadius: 7,
+                            pointHoverBackgroundColor: '#1E3A8A',
+                            pointHoverBorderColor: '#FFFFFF',
+                            pointHoverBorderWidth: 2
+                        }]
                     },
-                    scales: {
-                        x: { grid: { display: false } },
-                        y: {
-                            grid: { color: '#F1F5F9' },
-                            ticks: {
-                                callback: function(val) {
-                                    if (val >= 1000000000) return 'Rp ' + (val / 1000000000) + ' M';
-                                    if (val >= 1000000) return 'Rp ' + (val / 1000000) + ' Jt';
-                                    return 'Rp ' + val.toLocaleString('id-ID');
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-
-            // 2. Laporan Share Horizontal Bar Chart
-            const ctxShare = document.getElementById('laporanShareChart').getContext('2d');
-            new Chart(ctxShare, {
-                type: 'bar',
-                data: {
-                    labels: {!! json_encode($shareLabels ?? ['Banner/Spanduk', 'Brosur', 'Kartu Nama', 'Stiker', 'Dokumen']) !!},
-                    datasets: [{
-                        label: 'Persentase Omzet (%)',
-                        data: {!! json_encode($sharePercentages ?? [0, 0, 0, 0, 0]) !!},
-                        backgroundColor: ['#1E3A8A', '#2563EB', '#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE'],
-                        borderRadius: 6,
-                        barThickness: 18
-                    }]
-                },
-                options: {
-                    animation: false,
-                    indexAxis: 'y',
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: '#0F172A',
-                            padding: 12,
-                            callbacks: {
-                                label: function(context) {
-                                    return ' Kontribusi: ' + context.raw + '%';
-                                }
-                            }
-                        }
-                    },
-                    scales: {
-                        x: {
-                            grid: { color: '#F1F5F9' },
-                            ticks: {
-                                callback: function(val) { return val + '%'; }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        interaction: { mode: 'index', intersect: false },
+                        plugins: {
+                            legend: {
+                                position: 'top',
+                                align: 'end',
+                                labels: { usePointStyle: true, pointStyle: 'circle', boxWidth: 8, boxHeight: 8, font: { weight: '600' } }
                             },
-                            beginAtZero: true
+                            tooltip: {
+                                backgroundColor: '#0F172A',
+                                padding: 12,
+                                titleFont: { size: 13, weight: '700' },
+                                bodyFont: { size: 12 },
+                                callbacks: {
+                                    title: function(context) {
+                                        if (context && context.length > 0) {
+                                            const idx = context[0].dataIndex;
+                                            if (trendFullLabels && trendFullLabels[idx]) {
+                                                return trendFullLabels[idx];
+                                            }
+                                            return context[0].label;
+                                        }
+                                        return '';
+                                    },
+                                    label: function(context) {
+                                        let label = context.dataset.label || 'Pendapatan';
+                                        let val = context.raw || 0;
+                                        return ' ' + label + ': Rp ' + val.toLocaleString('id-ID');
+                                    }
+                                }
+                            }
                         },
-                        y: {
-                            grid: { display: false },
-                            ticks: {
-                                font: { size: 12, weight: '600' },
-                                color: '#334155'
+                        scales: {
+                            x: {
+                                grid: { display: false },
+                                ticks: {
+                                    maxRotation: 0,
+                                    minRotation: 0,
+                                    autoSkip: false,
+                                    font: { size: 11, weight: '600' },
+                                    color: '#64748B'
+                                }
+                            },
+                            y: {
+                                suggestedMin: 0,
+                                grid: { color: '#F1F5F9' },
+                                ticks: {
+                                    callback: function(val) {
+                                        if (val === 0) return 'Rp 0';
+                                        if (val >= 1000000000) {
+                                            let m = val / 1000000000;
+                                            return 'Rp ' + (m % 1 === 0 ? m : m.toFixed(1).replace('.', ',')) + ' M';
+                                        }
+                                        if (val >= 1000000) {
+                                            let jt = val / 1000000;
+                                            return 'Rp ' + (jt % 1 === 0 ? jt : jt.toFixed(1).replace('.', ',')) + ' Jt';
+                                        }
+                                        if (val >= 1000) {
+                                            let rb = val / 1000;
+                                            return 'Rp ' + (rb % 1 === 0 ? rb : rb.toFixed(1).replace('.', ',')) + ' Rb';
+                                        }
+                                        return 'Rp ' + val.toLocaleString('id-ID');
+                                    }
+                                }
                             }
                         }
                     }
-                }
-            });
+                });
 
-            // 3. Export Excel Download Event
-            const btnExportExcel = document.querySelector('.btn-export.primary');
-            if (btnExportExcel) {
-                btnExportExcel.addEventListener('click', function() {
-                    let csvContent = "KODE PESANAN,PELANGGAN,TANGGAL SELESAI,PRODUK,NILAI TRANSAKSI,STATUS\r\n";
-                    const rows = document.querySelectorAll('.custom-table tbody tr');
-                    rows.forEach(r => {
-                        const cols = Array.from(r.querySelectorAll('td')).map(td => {
-                            const cleanText = td.textContent.replace(/[\u00A0\u1680\u180e\u2000-\u200b\u202f\u205f\u3000\ufeff]/g, ' ').replace(/\s+/g, ' ').trim();
-                            return `"${cleanText.replace(/"/g, '""')}"`;
-                        });
-                        if (cols.length > 1) {
-                            csvContent += cols.join(",") + "\r\n";
+                // Window resize trigger to guarantee no layout overflow
+                window.addEventListener('resize', () => { trendChart.resize(); });
+            }
+
+            // 2. Kontribusi Omzet Produk Chart
+            const canvasShare = document.getElementById('laporanShareChart');
+            if (canvasShare) {
+                const ctxShare = canvasShare.getContext('2d');
+                const shareChart = new Chart(ctxShare, {
+                    type: 'bar',
+                    data: {
+                        labels: {!! json_encode($shareLabels ?? ['Banner/Spanduk', 'Brosur', 'Kartu Nama', 'Stiker', 'Dokumen']) !!},
+                        datasets: [{
+                            label: 'Persentase Omzet (%)',
+                            data: {!! json_encode($sharePercentages ?? [0, 0, 0, 0, 0]) !!},
+                            backgroundColor: ['#1E3A8A', '#2563EB', '#3B82F6', '#60A5FA', '#93C5FD', '#BFDBFE'],
+                            borderRadius: 6,
+                            barThickness: 18
+                        }]
+                    },
+                    options: {
+                        animation: false,
+                        indexAxis: 'y',
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: '#0F172A',
+                                padding: 12,
+                                callbacks: {
+                                    label: function(context) {
+                                        return ' Kontribusi: ' + context.raw + '%';
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            x: {
+                                grid: { color: '#F1F5F9' },
+                                ticks: {
+                                    callback: function(val) { return val + '%'; }
+                                },
+                                beginAtZero: true
+                            },
+                            y: {
+                                grid: { display: false },
+                                ticks: {
+                                    font: { size: 12, weight: '600' },
+                                    color: '#334155'
+                                }
+                            }
                         }
-                    });
-
-                    const bom = '\uFEFF';
-                    const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
-                    const url = URL.createObjectURL(blob);
-                    const link = document.createElement("a");
-                    link.setAttribute("href", url);
-                    link.setAttribute("download", "Laporan_Transaksi_SIPEKAN_2026.csv");
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                    URL.revokeObjectURL(url);
-
-                    if (window.showAppToast) {
-                        window.showAppToast('File Excel laporan (.csv) berhasil di-download!', 'success');
                     }
                 });
+
+                window.addEventListener('resize', () => { shareChart.resize(); });
             }
 
-            // 4. Cetak PDF Event
-            const btnCetakPdf = document.querySelector('.btn-export:not(.primary)');
-            if (btnCetakPdf) {
-                btnCetakPdf.addEventListener('click', function() {
-                    if (window.showAppToast) {
-                        window.showAppToast('Membuka tampilan cetak PDF...', 'info');
-                    }
-                    setTimeout(() => { window.print(); }, 500);
-                });
-            }
-
-            // 5. Date Filter Event
-            const btnFilter = document.querySelector('.btn-filter');
-            if (btnFilter) {
-                btnFilter.addEventListener('click', function() {
-                    const inputs = document.querySelectorAll('.filter-card input');
-                    const startDate = inputs[0] ? inputs[0].value : '2026-01-01';
-                    const endDate = inputs[1] ? inputs[1].value : '2026-12-31';
-                    if (window.showAppToast) {
-                        window.showAppToast(`Data laporan berhasil diperbarui untuk periode ${startDate} s/d ${endDate}`, 'success');
-                    }
-                    if (typeof renderTablePagination === 'function') {
-                        renderTablePagination();
-                    }
-                });
-            }
-
-            // 6. Transaction Table Pagination & Limit Rows Control Engine
+            // 3. Table Search, Status Filter & Pagination Control Engine
+            const searchInput = document.getElementById('tableSearchInput');
+            const statusFilter = document.getElementById('tableStatusFilter');
             const limitSelect = document.getElementById('tableLimitSelect');
-            const tableRows = Array.from(document.querySelectorAll('.custom-table tbody tr')).filter(r => !r.querySelector('td[colspan]'));
+            const tableBody = document.querySelector('#transactionTable tbody');
+            const rawTableRows = Array.from(tableBody.querySelectorAll('tr')).filter(r => !r.querySelector('td[colspan]'));
+            
             const prevBtn = document.getElementById('prevPageBtn');
             const nextBtn = document.getElementById('nextPageBtn');
             const pageNumbersList = document.getElementById('pageNumbersList');
@@ -521,14 +1238,44 @@
             const endIdxEl = document.getElementById('pageEndIdx');
             const totalRowsEl = document.getElementById('totalRowsCount');
 
+            let filteredRows = [...rawTableRows];
             let currentPage = 1;
             let rowsPerPage = parseInt(limitSelect ? limitSelect.value : 10);
 
-            function renderTablePagination() {
-                const totalRows = tableRows.length;
-                if (totalRowsEl) totalRowsEl.textContent = totalRows;
+            // Empty state row element for when filter produces 0 rows
+            let noDataRow = document.createElement('tr');
+            noDataRow.id = 'noFilterMatchRow';
+            noDataRow.innerHTML = '<td colspan="6" style="text-align:center; padding:28px; color:#64748B;"><i class="fa-solid fa-filter-circle-xmark" style="font-size:22px; margin-bottom:6px; display:block; color:#94A3B8;"></i>Tidak ada transaksi yang cocok dengan pencarian / filter ini.</td>';
+            noDataRow.style.display = 'none';
+            tableBody.appendChild(noDataRow);
 
-                if (totalRows === 0) {
+            function applyFilters() {
+                const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+                const selectedStatus = (statusFilter ? statusFilter.value : 'all').toLowerCase();
+
+                filteredRows = rawTableRows.filter(row => {
+                    const rowStatus = (row.getAttribute('data-status') || '').toLowerCase();
+                    const matchesStatus = (selectedStatus === 'all' || rowStatus === selectedStatus);
+
+                    const textContent = (row.textContent || '').toLowerCase();
+                    const matchesQuery = (!query || textContent.includes(query));
+
+                    return matchesStatus && matchesQuery;
+                });
+
+                currentPage = 1;
+                renderTablePagination();
+            }
+
+            function renderTablePagination() {
+                const totalFiltered = filteredRows.length;
+                if (totalRowsEl) totalRowsEl.textContent = totalFiltered;
+
+                // Hide all raw rows first
+                rawTableRows.forEach(r => { r.style.display = 'none'; });
+
+                if (totalFiltered === 0) {
+                    noDataRow.style.display = '';
                     if (startIdxEl) startIdxEl.textContent = 0;
                     if (endIdxEl) endIdxEl.textContent = 0;
                     if (prevBtn) prevBtn.disabled = true;
@@ -537,43 +1284,71 @@
                     return;
                 }
 
-                const effectiveRowsPerPage = (rowsPerPage === -1 || isNaN(rowsPerPage)) ? totalRows : rowsPerPage;
-                const totalPages = Math.ceil(totalRows / effectiveRowsPerPage);
+                noDataRow.style.display = 'none';
+
+                const effectiveRowsPerPage = (rowsPerPage === -1 || isNaN(rowsPerPage)) ? totalFiltered : rowsPerPage;
+                const totalPages = Math.ceil(totalFiltered / effectiveRowsPerPage);
 
                 if (currentPage > totalPages) currentPage = totalPages;
                 if (currentPage < 1) currentPage = 1;
 
                 const start = (currentPage - 1) * effectiveRowsPerPage;
-                const end = Math.min(start + effectiveRowsPerPage, totalRows);
+                const end = Math.min(start + effectiveRowsPerPage, totalFiltered);
 
                 if (startIdxEl) startIdxEl.textContent = start + 1;
                 if (endIdxEl) endIdxEl.textContent = end;
 
-                tableRows.forEach((row, idx) => {
-                    if (idx >= start && idx < end) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
+                // Display active rows in slice
+                for (let i = start; i < end; i++) {
+                    if (filteredRows[i]) {
+                        filteredRows[i].style.display = '';
                     }
-                });
+                }
 
                 if (prevBtn) prevBtn.disabled = (currentPage === 1);
                 if (nextBtn) nextBtn.disabled = (currentPage === totalPages || totalPages === 0);
 
-                // Render Numbered Page Buttons
+                // Build compact dropdown page selector
                 if (pageNumbersList) {
                     pageNumbersList.innerHTML = '';
-                    for (let i = 1; i <= totalPages; i++) {
-                        const btn = document.createElement('button');
-                        btn.className = `page-num-btn ${i === currentPage ? 'active' : ''}`;
-                        btn.textContent = i;
-                        btn.addEventListener('click', function() {
-                            currentPage = i;
-                            renderTablePagination();
-                        });
-                        pageNumbersList.appendChild(btn);
+                    
+                    const selectWrap = document.createElement('div');
+                    selectWrap.className = 'page-select-container';
+
+                    const labelPre = document.createElement('span');
+                    labelPre.textContent = 'Halaman';
+                    selectWrap.appendChild(labelPre);
+
+                    const select = document.createElement('select');
+                    select.className = 'page-select-dropdown';
+                    select.title = 'Lompat ke Halaman';
+                    for (let p = 1; p <= totalPages; p++) {
+                        const opt = document.createElement('option');
+                        opt.value = p;
+                        opt.textContent = p;
+                        if (p === currentPage) opt.selected = true;
+                        select.appendChild(opt);
                     }
+                    select.addEventListener('change', function() {
+                        currentPage = parseInt(this.value);
+                        renderTablePagination();
+                    });
+                    selectWrap.appendChild(select);
+
+                    const labelPost = document.createElement('span');
+                    labelPost.innerHTML = `dari <strong style="color:#0F172A;">${totalPages}</strong>`;
+                    selectWrap.appendChild(labelPost);
+
+                    pageNumbersList.appendChild(selectWrap);
                 }
+            }
+
+            if (searchInput) {
+                searchInput.addEventListener('input', applyFilters);
+            }
+
+            if (statusFilter) {
+                statusFilter.addEventListener('change', applyFilters);
             }
 
             if (limitSelect) {
@@ -596,8 +1371,8 @@
 
             if (nextBtn) {
                 nextBtn.addEventListener('click', function() {
-                    const effectiveRowsPerPage = rowsPerPage === -1 ? tableRows.length : rowsPerPage;
-                    const totalPages = Math.ceil(tableRows.length / effectiveRowsPerPage);
+                    const effectiveRowsPerPage = rowsPerPage === -1 ? filteredRows.length : rowsPerPage;
+                    const totalPages = Math.ceil(filteredRows.length / effectiveRowsPerPage);
                     if (currentPage < totalPages) {
                         currentPage++;
                         renderTablePagination();
@@ -605,8 +1380,153 @@
                 });
             }
 
-            // Initial render call
+            // Initial pagination render
             renderTablePagination();
+
+            // 4. Export CSV Handler (RFC 4180 Compliant with UTF-8 BOM)
+            const btnExportCsv = document.getElementById('btnExportCsv');
+            if (btnExportCsv) {
+                btnExportCsv.addEventListener('click', function() {
+                    let csvContent = "KODE PESANAN,PELANGGAN,TANGGAL PESAN,PRODUK & SPESIFIKASI,NILAI TRANSAKSI (RP),STATUS PRODUKSI\r\n";
+                    
+                    // Export all rows currently matching search/filter or all filtered rows
+                    const rowsToExport = filteredRows.length > 0 ? filteredRows : rawTableRows;
+                    rowsToExport.forEach(r => {
+                        const tds = Array.from(r.querySelectorAll('td'));
+                        if (tds.length >= 6) {
+                            const code = tds[0].innerText.trim();
+                            const customer = tds[1].innerText.trim().replace(/\n/g, ' ');
+                            const date = tds[2].innerText.trim();
+                            const product = tds[3].innerText.trim().replace(/\n/g, ' - ');
+                            const rawPrice = tds[4].innerText.trim().replace(/\n/g, ' ');
+                            const status = tds[5].innerText.trim();
+
+                            const rowData = [code, customer, date, product, rawPrice, status].map(field => {
+                                const clean = field.replace(/"/g, '""');
+                                return `"${clean}"`;
+                            });
+                            csvContent += rowData.join(",") + "\r\n";
+                        }
+                    });
+
+                    const bom = '\uFEFF';
+                    const blob = new Blob([bom + csvContent], { type: 'text/csv;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", `Laporan_Transaksi_SIPEKAN_{{ $startDate }}_{{ $endDate }}.csv`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+
+                    if (window.showAppToast) {
+                        window.showAppToast('Laporan format CSV (.csv) berhasil di-unduh!', 'success');
+                    }
+                });
+            }
+
+            // 5. Export Excel Handler (.xls Spreadsheet)
+            const btnExportExcel = document.getElementById('btnExportExcel');
+            if (btnExportExcel) {
+                btnExportExcel.addEventListener('click', function() {
+                    const rowsToExport = filteredRows.length > 0 ? filteredRows : rawTableRows;
+                    
+                    let tableHtml = `
+                    <html>
+                    <head>
+                        <meta charset="utf-8">
+                        <style>
+                            th { background-color: #1B3B6F; color: #FFFFFF; font-weight: bold; border: 1px solid #CBD5E1; padding: 10px; font-family: sans-serif; text-align: left; }
+                            td { border: 1px solid #E2E8F0; padding: 8px; font-family: sans-serif; }
+                            .title { font-size: 16pt; font-weight: bold; color: #1B3B6F; }
+                            .meta { font-size: 10pt; color: #64748B; }
+                        </style>
+                    </head>
+                    <body>
+                        <table>
+                            <tr><td colspan="6" class="title">LAPORAN & STATISTIK SIPEKAN</td></tr>
+                            <tr><td colspan="6" class="meta">Periode: {{ $startDate }} s/d {{ $endDate }} | Total Transaksi: ${rowsToExport.length}</td></tr>
+                            <tr><td colspan="6"></td></tr>
+                            <tr>
+                                <th>KODE PESANAN</th>
+                                <th>PELANGGAN</th>
+                                <th>TANGGAL PESAN</th>
+                                <th>PRODUK & SPESIFIKASI</th>
+                                <th>NILAI TRANSAKSI</th>
+                                <th>STATUS PRODUKSI</th>
+                            </tr>
+                    `;
+
+                    rowsToExport.forEach(r => {
+                        const tds = Array.from(r.querySelectorAll('td'));
+                        if (tds.length >= 6) {
+                            tableHtml += `<tr>
+                                <td><b>${tds[0].innerText.trim()}</b></td>
+                                <td>${tds[1].innerText.trim().replace(/\n/g, ' ')}</td>
+                                <td>${tds[2].innerText.trim()}</td>
+                                <td>${tds[3].innerText.trim().replace(/\n/g, ' - ')}</td>
+                                <td>${tds[4].innerText.trim().replace(/\n/g, ' ')}</td>
+                                <td>${tds[5].innerText.trim()}</td>
+                            </tr>`;
+                        }
+                    });
+
+                    tableHtml += `</table></body></html>`;
+
+                    const blob = new Blob([tableHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+                    const url = URL.createObjectURL(blob);
+                    const link = document.createElement("a");
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", `Laporan_Transaksi_SIPEKAN_{{ $startDate }}_{{ $endDate }}.xls`);
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
+
+                    if (window.showAppToast) {
+                        window.showAppToast('Laporan format Excel (.xls) berhasil di-unduh!', 'success');
+                    }
+                });
+            }
+
+            // 6. Cetak PDF Handler (Standard Print Layout)
+            const btnCetakPdf = document.getElementById('btnCetakPdf');
+            if (btnCetakPdf) {
+                btnCetakPdf.addEventListener('click', function() {
+                    if (window.showAppToast) {
+                        window.showAppToast('Menyiapkan tampilan cetak PDF...', 'info');
+                    }
+                    setTimeout(() => { window.print(); }, 400);
+                });
+            }
+
+            // 7. Interactive Stat Card Scroll & Highlight Handler
+            window.scrollToTransactions = function(e, type) {
+                if (e) e.preventDefault();
+                if (type === 'omzet') {
+                    const chartCard = document.getElementById('trenPendapatanCard');
+                    if (chartCard) {
+                        chartCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        chartCard.classList.add('card-highlight-glow');
+                        setTimeout(() => chartCard.classList.remove('card-highlight-glow'), 2200);
+                    }
+                } else {
+                    const tableCard = document.getElementById('detailTransaksiCard');
+                    if (tableCard) {
+                        tableCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        tableCard.classList.add('card-highlight-glow');
+
+                        const nilaiCells = document.querySelectorAll('.col-nilai-transaksi');
+                        nilaiCells.forEach(cell => cell.classList.add('cell-highlight-glow'));
+
+                        setTimeout(() => {
+                            tableCard.classList.remove('card-highlight-glow');
+                            nilaiCells.forEach(cell => cell.classList.remove('cell-highlight-glow'));
+                        }, 2400);
+                    }
+                }
+            };
         });
     </script>
     @include('layouts.navbar_assets')

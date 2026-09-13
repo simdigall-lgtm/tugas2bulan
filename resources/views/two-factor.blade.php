@@ -316,7 +316,7 @@
     <div class="twofa-card">
 
         <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 22px;">
-            <img src="{{ asset('assets/images/sipekan-logo.png') }}" alt="SIPEKAN Logo"
+            <img src="{{ asset('assets/images/sipekan-logo.png') }}?v={{ file_exists(public_path('assets/images/sipekan-logo.png')) ? filemtime(public_path('assets/images/sipekan-logo.png')) : time() }}" alt="SIPEKAN Logo"
                 style="height: 46px; width: auto; object-fit: contain; flex-shrink: 0; display: block;">
             <div style="display: flex; flex-direction: column; justify-content: space-between; height: 46px;">
                 <h1 class="brand-title" style="margin: 0; font-size: 22px; font-weight: 800; line-height: 1.1; letter-spacing: -0.4px;">SIPEKAN</h1>

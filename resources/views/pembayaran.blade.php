@@ -27,6 +27,11 @@
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
+        html, body {
+            max-width: 100vw;
+            overflow-x: clip;
+        }
+
         body {
             background-color: #F8FAFC;
             color: #1E293B;
@@ -35,7 +40,7 @@
         }
 
         .sidebar {
-            width: 250px;
+            width: 210px;
             background: #FFFFFF;
             border-right: 1px solid #E2E8F0;
             display: flex;
@@ -49,40 +54,40 @@
         }
 
         .sidebar-brand {
-            padding: 24px 20px 20px 24px;
+            padding: 18px 16px 14px;
         }
 
         .brand-name {
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 800;
             color: #1E3A8A;
             letter-spacing: -0.3px;
         }
 
         .brand-tag {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             color: #64748B;
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
         .sidebar-menu {
-            padding: 12px 14px;
+            padding: 10px 10px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
             flex: 1;
         }
 
         .menu-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 11px 16px;
+            gap: 10px;
+            padding: 9px 12px;
             border-radius: 8px;
             color: #475569;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 600;
             transition: all 0.2s ease;
         }
@@ -99,21 +104,23 @@
         }
 
         .menu-item i {
-            font-size: 16px;
-            width: 20px;
+            font-size: 15px;
+            width: 18px;
             text-align: center;
         }
 
         .sidebar-bottom {
-            padding: 16px 14px 20px;
+            padding: 12px 10px 16px;
             border-top: 1px dashed #E2E8F0;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
 
         .main-wrapper {
-            margin-left: 250px;
+            margin-left: 210px;
+            width: calc(100% - 210px);
+            max-width: calc(100vw - 210px);
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -122,16 +129,18 @@
 
         /* Topbar Header */
         .topbar {
-            height: 68px;
+            height: 64px;
             background-color: #FFFFFF;
             border-bottom: 1px solid #E2E8F0;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 28px;
+            padding: 0 24px;
             position: sticky;
             top: 0;
-            z-index: 90;
+            z-index: 100;
+            max-width: 100%;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
         }
 
         .topbar > div:first-child {
@@ -268,8 +277,8 @@
         /* 2 Column Grid Layout */
         .grid-2col {
             display: grid;
-            grid-template-columns: 275px minmax(0, 1fr);
-            gap: 16px;
+            grid-template-columns: 380px minmax(0, 1fr);
+            gap: 20px;
             align-items: start;
         }
 
@@ -356,6 +365,23 @@
 
         .btn-submit:hover {
             background: #1E3A8A;
+        }
+
+        .chip-btn {
+            background: #F1F5F9;
+            border: 1px solid #CBD5E1;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #334155;
+            cursor: pointer;
+            transition: all .15s;
+        }
+
+        .chip-btn:hover {
+            background: #E2E8F0;
+            color: #1E3A8A;
         }
 
         .filter-search {
@@ -512,7 +538,80 @@
             font-weight: 700;
         }
 
-        @media (max-width: 900px) {
+        .page-ellipsis {
+            min-width: 26px;
+            height: 30px;
+            color: #94A3B8;
+            font-size: 13px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .page-select-container {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: #64748B;
+            font-weight: 600;
+            user-select: none;
+        }
+
+        .page-select-dropdown {
+            appearance: none;
+            -webkit-appearance: none;
+            background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23475569'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E") no-repeat right 8px center;
+            background-size: 12px;
+            border: 1px solid #CBD5E1;
+            border-radius: 6px;
+            padding: 5px 26px 5px 10px;
+            font-size: 13px;
+            font-weight: 700;
+            color: #1B3B6F;
+            cursor: pointer;
+            outline: none;
+            transition: all 0.15s ease;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+        }
+
+        .page-select-dropdown:hover {
+            border-color: #94A3B8;
+            background-color: #F8FAFC;
+        }
+
+        .page-select-dropdown:focus {
+            border-color: #1B3B6F;
+            box-shadow: 0 0 0 2px rgba(27, 59, 111, 0.15);
+        }
+
+        .pay-type-card {
+            border: 1.5px solid #CBD5E1;
+            border-radius: 8px;
+            padding: 9px 12px;
+            background: #FFFFFF;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-align: left;
+            width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            box-sizing: border-box;
+        }
+
+        .pay-type-card:hover {
+            border-color: #93C5FD;
+        }
+
+        .pay-type-card.active {
+            border-color: #2563EB;
+            background: #EFF6FF;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
+        }
+
+        @media (max-width: 1080px) {
             .grid-2col {
                 grid-template-columns: 1fr;
             }
@@ -567,48 +666,57 @@
                                 <option value="">Pilih pesanan...</option>
                                 @foreach($pesanans ?? [] as $p)
                                     @php
-                                        $isAlreadyLunas = in_array($p->kode_pesanan, $lunasOrderCodes ?? []) || strtolower($p->status ?? '') === 'lunas' || strtolower($p->status ?? '') === 'selesai';
                                         $alreadyPaid = $paidByOrder[$p->kode_pesanan] ?? 0;
                                         $remaining = max(0, $p->total_harga - $alreadyPaid);
+                                        $isAlreadyLunas = in_array($p->kode_pesanan, $lunasOrderCodes ?? []) || $remaining <= 0 || strtolower($p->status_pembayaran ?? '') === 'lunas';
                                         $orderDateVal = $p->tanggal_pesan ? \Carbon\Carbon::parse($p->tanggal_pesan)->format('Y-m-d') : ($p->created_at ? $p->created_at->format('Y-m-d') : date('Y-m-d'));
                                         $orderDateFormatted = $p->tanggal_pesan ? \Carbon\Carbon::parse($p->tanggal_pesan)->format('d M Y') : ($p->created_at ? $p->created_at->format('d M Y') : date('d M Y'));
+                                        
+                                        $statusBadgeText = '';
+                                        if ($isAlreadyLunas) {
+                                            $statusBadgeText = ' [LUNAS]';
+                                        } elseif ($alreadyPaid > 0) {
+                                            $statusBadgeText = ' [DP - Sisa Rp ' . number_format($remaining, 0, ',', '.') . ']';
+                                        } else {
+                                            $statusBadgeText = ' [Belum Bayar - Rp ' . number_format($remaining, 0, ',', '.') . ']';
+                                        }
                                     @endphp
                                     <option value="{{ $p->kode_pesanan }}" 
                                         data-nama="{{ $p->nama_pelanggan }}"
                                         data-produk="{{ $p->nama_produk }}"
                                         data-harga="{{ $p->total_harga }}" 
                                         data-paid="{{ $alreadyPaid }}"
-                                        data-remaining="{{ $isAlreadyLunas ? 0 : ($remaining > 0 ? $remaining : $p->total_harga) }}"
+                                        data-remaining="{{ $isAlreadyLunas ? 0 : $remaining }}"
                                         data-tanggal="{{ $orderDateVal }}"
                                         data-tanggal-fmt="{{ $orderDateFormatted }}"
                                         {{ $isAlreadyLunas ? 'disabled style=color:#94A3B8;background:#F1F5F9;' : '' }}>
-                                        {{ $p->kode_pesanan }} – {{ $p->nama_pelanggan }} (Rp {{ number_format($p->total_harga, 0, ',', '.') }}) {{ $isAlreadyLunas ? ' [LUNAS]' : '' }}
+                                        {{ $p->kode_pesanan }} – {{ $p->nama_pelanggan }}{{ $statusBadgeText }}
                                     </option>
                                 @endforeach
                             </select>
 
                             <!-- Dynamic Order Summary Card (Clean & Elegant) -->
-                            <div id="orderSummaryBox" style="display: none; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px 12px; margin-top: 8px;">
+                            <div id="orderSummaryBox" style="display: none; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px 14px; margin-top: 8px;">
                                 <div style="display: flex; align-items: center; justify-content: space-between; padding-bottom: 6px; margin-bottom: 6px; border-bottom: 1px solid #E2E8F0;">
-                                    <span style="font-size: 11px; font-weight: 700; color: #1E3A8A; text-transform: uppercase; letter-spacing: 0.5px;">Rincian Pesanan</span>
-                                    <span id="sumOrderDate" style="font-size: 11px; font-weight: 600; color: #64748B;">-</span>
+                                    <span style="font-size: 11px; font-weight: 700; color: #1E3A8A; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;">Rincian Pesanan</span>
+                                    <span id="sumOrderDate" style="font-size: 11px; font-weight: 600; color: #64748B; white-space: nowrap;">-</span>
                                 </div>
-                                <div style="display: flex; flex-direction: column; gap: 4px; font-size: 12px;">
-                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <span style="color: #64748B;">Pelanggan</span>
-                                        <span id="sumCustomer" style="font-weight: 600; color: #0F172A; text-align: right;">-</span>
+                                <div style="display: flex; flex-direction: column; gap: 5px; font-size: 12px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                                        <span style="color: #64748B; white-space: nowrap;">Pelanggan</span>
+                                        <span id="sumCustomer" style="font-weight: 600; color: #0F172A; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">-</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                                        <span style="color: #64748B; white-space: nowrap;">Produk</span>
+                                        <span id="sumProduct" style="font-weight: 600; color: #0F172A; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">-</span>
+                                    </div>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 5px; border-top: 1px solid #E2E8F0; margin-top: 2px;">
+                                        <span style="color: #64748B; white-space: nowrap;">Total Tagihan</span>
+                                        <span id="sumTotal" style="font-weight: 700; color: #0F172A; white-space: nowrap;">Rp 0</span>
                                     </div>
                                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <span style="color: #64748B;">Produk</span>
-                                        <span id="sumProduct" style="font-weight: 600; color: #0F172A; text-align: right;">-</span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 4px; border-top: 1px solid #E2E8F0; margin-top: 2px;">
-                                        <span style="color: #64748B;">Total Tagihan</span>
-                                        <span id="sumTotal" style="font-weight: 700; color: #0F172A;">Rp 0</span>
-                                    </div>
-                                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                                        <span style="color: #1E3A8A; font-weight: 700;">Sisa Tagihan</span>
-                                        <span id="sumRemaining" style="font-weight: 800; color: #1E3A8A;">Rp 0</span>
+                                        <span style="color: #1E3A8A; font-weight: 700; white-space: nowrap;">Sisa Tagihan</span>
+                                        <span id="sumRemaining" style="font-weight: 800; color: #1E3A8A; white-space: nowrap;">Rp 0</span>
                                     </div>
                                 </div>
                             </div>
@@ -616,12 +724,12 @@
 
                         <!-- Date Input with Silent Background Validation -->
                         <div class="form-group">
-                            <label for="payDate">Tanggal Pembayaran</label>
+                            <label for="payDate" style="white-space: nowrap;">Tanggal Pembayaran</label>
                             <input type="date" name="tanggal_bayar" id="payDate" class="form-control" value="{{ date('Y-m-d') }}" max="{{ date('Y-m-d') }}" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="payMethod">Metode Pembayaran</label>
+                            <label for="payMethod" style="white-space: nowrap;">Metode Pembayaran</label>
                             <select name="metode_pembayaran" id="payMethod" class="form-control" required>
                                 <option value="">Pilih metode...</option>
                                 <option value="Transfer Bank">Transfer Bank</option>
@@ -674,11 +782,11 @@
                                     </div>
                                     <div style="flex: 1; min-width: 0;">
                                         <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 2px;">
-                                            <span style="background: #1E3A8A; color: #FFFFFF; font-weight: 800; font-size: 9.5px; padding: 1px 5px; border-radius: 4px;">QRIS</span>
-                                            <span style="font-size: 11px; font-weight: 800; color: #0F172A;">SIPEKAN PRINT</span>
+                                            <span style="background: #1E3A8A; color: #FFFFFF; font-weight: 800; font-size: 9.5px; padding: 1px 5px; border-radius: 4px; white-space: nowrap;">QRIS</span>
+                                            <span style="font-size: 11px; font-weight: 800; color: #0F172A; white-space: nowrap;">SIPEKAN PRINT</span>
                                         </div>
-                                        <div style="font-size: 9.5px; color: #64748B; margin-bottom: 5px;">M-Banking / E-Wallet</div>
-                                        <button type="button" id="openQrisModalBtn" style="background: #EEF2FF; color: #1E3A8A; border: 1px solid #C7D2FE; padding: 2px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; cursor: pointer;">
+                                        <div style="font-size: 9.5px; color: #64748B; margin-bottom: 5px; white-space: nowrap;">M-Banking / E-Wallet</div>
+                                        <button type="button" id="openQrisModalBtn" style="background: #EEF2FF; color: #1E3A8A; border: 1px solid #C7D2FE; padding: 2px 8px; border-radius: 4px; font-size: 10.5px; font-weight: 700; cursor: pointer; white-space: nowrap;">
                                             <i class="fa-solid fa-expand"></i> Perbesar QR
                                         </button>
                                     </div>
@@ -690,28 +798,96 @@
                                 <div style="display: flex; flex-direction: column; gap: 6px;">
                                     <div style="display: flex; align-items: center; justify-content: space-between; background: #F8FAFC; padding: 6px 8px; border-radius: 6px; border: 1px solid #E2E8F0;">
                                         <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
-                                            <span style="background: #005E9E; color: #FFFFFF; font-weight: 900; font-size: 9.5px; padding: 1px 5px; border-radius: 3px;">BCA</span>
-                                            <span style="font-size: 11.5px; font-weight: 800; color: #0F172A;">8830-9921-77</span>
+                                            <span style="background: #005E9E; color: #FFFFFF; font-weight: 900; font-size: 9.5px; padding: 1px 5px; border-radius: 3px; white-space: nowrap;">BCA</span>
+                                            <span style="font-size: 11.5px; font-weight: 800; color: #0F172A; white-space: nowrap;">8830-9921-77</span>
                                         </div>
-                                        <button type="button" onclick="copyAccNo('8830992177', this)" style="background: #FFFFFF; color: #1E3A8A; border: 1px solid #CBD5E1; padding: 2px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 700; cursor: pointer;">Salin</button>
+                                        <button type="button" onclick="copyAccNo('8830992177', this)" style="background: #FFFFFF; color: #1E3A8A; border: 1px solid #CBD5E1; padding: 2px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 700; cursor: pointer; white-space: nowrap;">Salin</button>
                                     </div>
                                     <div style="display: flex; align-items: center; justify-content: space-between; background: #F8FAFC; padding: 6px 8px; border-radius: 6px; border: 1px solid #E2E8F0;">
                                         <div style="display: flex; align-items: center; gap: 6px; min-width: 0;">
-                                            <span style="background: #F59E0B; color: #000000; font-weight: 900; font-size: 9.5px; padding: 1px 5px; border-radius: 3px;">MANDIRI</span>
-                                            <span style="font-size: 11.5px; font-weight: 800; color: #0F172A;">1370-0098-1122</span>
+                                            <span style="background: #F59E0B; color: #000000; font-weight: 900; font-size: 9.5px; padding: 1px 5px; border-radius: 3px; white-space: nowrap;">MANDIRI</span>
+                                            <span style="font-size: 11.5px; font-weight: 800; color: #0F172A; white-space: nowrap;">1370-0098-1122</span>
                                         </div>
-                                        <button type="button" onclick="copyAccNo('137000981122', this)" style="background: #FFFFFF; color: #1E3A8A; border: 1px solid #CBD5E1; padding: 2px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 700; cursor: pointer;">Salin</button>
+                                        <button type="button" onclick="copyAccNo('137000981122', this)" style="background: #FFFFFF; color: #1E3A8A; border: 1px solid #CBD5E1; padding: 2px 7px; border-radius: 4px; font-size: 10.5px; font-weight: 700; cursor: pointer; white-space: nowrap;">Salin</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="form-group">
-                            <label for="payAmount">Jumlah Bayar Masuk (IDR)</label>
-                            <input type="number" name="jumlah" id="payAmount" class="form-control" min="1" step="any" placeholder="Contoh: 50000" required>
+                        <!-- Opsi Tipe Pembayaran: Pelunasan Penuh vs Bayar DP -->
+                        <div id="paymentTypeSelectionBox" style="display: none; margin-bottom: 14px;">
+                            <label style="font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 6px; display: block; white-space: nowrap;">Pilihan Pembayaran:</label>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                <button type="button" id="btnPayTypeFull" class="pay-type-card active" onclick="selectPaymentType('full')">
+                                    <div style="display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 800; color: #1E3A8A; white-space: nowrap;">
+                                        <i class="fa-solid fa-circle-check" style="color: #16A34A; flex-shrink: 0;"></i>
+                                        <span style="white-space: nowrap;">Pelunasan Penuh</span>
+                                    </div>
+                                    <div id="fullPayDisplay" style="font-size: 11px; color: #64748B; margin-top: 3px; text-align: left; white-space: nowrap;">Sisa: Rp 0</div>
+                                </button>
+                                <button type="button" id="btnPayTypeDp" class="pay-type-card" onclick="selectPaymentType('dp')">
+                                    <div style="display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 800; color: #B45309; white-space: nowrap;">
+                                        <i class="fa-solid fa-clock" style="color: #D97706; flex-shrink: 0;"></i>
+                                        <span style="white-space: nowrap;">Bayar DP / Sebagian</span>
+                                    </div>
+                                    <div style="font-size: 11px; color: #64748B; margin-top: 3px; text-align: left; white-space: nowrap;">Input nominal DP</div>
+                                </button>
+                            </div>
                         </div>
 
-                        <button type="submit" class="btn-submit">
+                        <!-- Ringkasan Bersih Saat Pelunasan Penuh (Tanpa Input Ganda & Rata 1 Baris) -->
+                        <div id="fullPaySummaryCard" style="display: none; background: #F0FDF4; border: 1.5px solid #BBF7D0; border-radius: 8px; padding: 11px 14px; margin-bottom: 14px;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: nowrap;">
+                                <div style="min-width: 0; white-space: nowrap;">
+                                    <span style="font-size: 10.5px; font-weight: 700; color: #166534; text-transform: uppercase; letter-spacing: 0.5px; display: block; white-space: nowrap;">Tagihan Dilunasi</span>
+                                    <span id="fullPaySummaryAmount" style="font-size: 16.5px; font-weight: 800; color: #15803D; white-space: nowrap;">Rp 0</span>
+                                </div>
+                                <span style="background: #DCFCE7; color: #166534; font-size: 11px; font-weight: 800; padding: 5px 12px; border-radius: 20px; border: 1px solid #86EFAC; display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; flex-shrink: 0;">
+                                    <i class="fa-solid fa-circle-check"></i> Pelunasan Penuh
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Input Nominal Hanya Ditampilkan Saat Bayar DP / Sebagian -->
+                        <div id="dpInputBox" style="display: none; margin-bottom: 14px;">
+                            <label for="payAmount" style="font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px; display: block; white-space: nowrap;">
+                                Nominal DP / Bayar Sebagian (IDR) <span style="color:#DC2626;">*</span>
+                            </label>
+                            <input type="number" name="jumlah" id="payAmount" class="form-control" min="1" step="any" placeholder="Masukkan nominal DP..." style="font-size: 13.5px; font-weight: 700; color: #0F172A;">
+                            
+                            <!-- Chip Cepat Persentase DP -->
+                            <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
+                                <span style="font-size: 11px; font-weight: 600; color: #64748B; white-space: nowrap;">Pilihan Cepat:</span>
+                                <button type="button" class="chip-btn" onclick="setDpPercent(25)" style="white-space: nowrap;">DP 25%</button>
+                                <button type="button" class="chip-btn" onclick="setDpPercent(50)" style="white-space: nowrap;">DP 50%</button>
+                                <button type="button" class="chip-btn" onclick="setDpPercent(75)" style="white-space: nowrap;">DP 75%</button>
+                            </div>
+
+                            <!-- Live Status Info Sisa Tagihan -->
+                            <div id="livePayStatusPreview" style="display: none; margin-top: 8px; font-size: 11.5px; padding: 7px 10px; border-radius: 6px; font-weight: 700; white-space: nowrap;"></div>
+                        </div>
+
+                        <!-- Cashier Change Box (Hanya Tampil Jika Tunai) -->
+                        <div id="cashierChangeCalcBox" style="margin-top: 6px; margin-bottom: 14px; background: #F8FAFC; border: 1px solid #CBD5E1; border-radius: 8px; padding: 12px; display: none;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; gap: 8px;">
+                                <label for="uangDiterimaInput" style="font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 0; white-space: nowrap;">Uang Tunai Diterima (Rp)</label>
+                                <button type="button" class="chip-btn" onclick="setCashierChip('pas')" style="background: #E0E7FF; color: #1E3A8A; border-color: #C7D2FE; font-size: 11px; padding: 3px 8px; white-space: nowrap; flex-shrink: 0;">
+                                    <i class="fa-solid fa-money-bill-wave"></i> Uang Pas
+                                </button>
+                            </div>
+                            <input type="number" name="uang_diterima" id="uangDiterimaInput" class="form-control" placeholder="Contoh: 100000" min="0" step="any" style="font-size: 13.5px; font-weight: 700; color: #0F172A;">
+                            
+                            <div style="margin-top: 10px;">
+                                <div id="liveKembalianDisplay" style="font-size: 12px; font-weight: 800; color: #16A34A; background: #DCFCE7; border: 1px solid #BBF7D0; padding: 6px 12px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;">
+                                    <i class="fa-solid fa-check-double"></i> <span>Kembalian: Rp 0 (Uang Pas)</span>
+                                </div>
+                            </div>
+                            <div id="cashierWarningUnderpaid" style="display: none; margin-top: 8px; font-size: 11.5px; color: #DC2626; font-weight: 700; background: #FEE2E2; border: 1px solid #FECACA; padding: 6px 10px; border-radius: 6px; white-space: nowrap;">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Uang tunai fisik kurang dari tagihan! Silakan sesuaikan nominal.
+                            </div>
+                        </div>
+
+                        <button type="submit" id="btnSubmitPayment" class="btn-submit" style="margin-top: 14px;">
                             <i class="fa-regular fa-floppy-disk"></i>
                             <span>Simpan Pembayaran</span>
                         </button>
@@ -738,7 +914,7 @@
                                     <th>METODE</th>
                                     <th>JUMLAH</th>
                                     <th>STATUS</th>
-                                    <th style="text-align: right;">BUKTI</th>
+                                    <th style="text-align: right;">AKSI</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -748,15 +924,17 @@
                                     $custName = $relPesanan ? $relPesanan->nama_pelanggan : 'Pelanggan Umum';
                                     $prodName = $relPesanan ? $relPesanan->nama_produk : 'Produk Cetak';
                                     $totalTagihan = $relPesanan ? $relPesanan->total_harga : $pem->jumlah;
+                                    $kembalianVal = floatval($pem->kembalian ?? 0);
+                                    $uangDiterimaVal = floatval($pem->uang_diterima ?? $pem->jumlah);
                                 @endphp
                                 <tr>
                                     <td class="pay-id">{{ $pem->kode_pembayaran }}</td>
                                     <td><a href="{{ route('pesanan') }}" class="order-link">{{ $pem->kode_pesanan }}</a></td>
                                     <td>{{ $pem->tanggal_bayar ? \Carbon\Carbon::parse($pem->tanggal_bayar)->format('d M Y') : ($pem->tanggal ? \Carbon\Carbon::parse($pem->tanggal)->format('d M Y') : '-') }}</td>
                                     <td>{{ $pem->metode_pembayaran ?? $pem->metode }}</td>
-                                    <td style="white-space: nowrap; font-weight: 600; color: #0F172A;">Rp {{ number_format($pem->jumlah, 0, ',', '.') }}</td>
+                                    <td style="white-space: nowrap; font-weight: 700; color: #0F172A;">Rp {{ number_format($pem->jumlah, 0, ',', '.') }}</td>
                                     <td><span class="status-badge {{ (strtolower($pem->status) == 'lunas' || strtolower($pem->status) == 'sudah lunas') ? 'status-lunas' : 'status-menunggu' }}">{{ (strtolower($pem->status) == 'lunas' || strtolower($pem->status) == 'sudah lunas') ? 'Sudah Lunas' : $pem->status }}</span></td>
-                                    <td style="text-align: right;">
+                                    <td style="text-align: right; white-space: nowrap;">
                                         <button type="button" onclick="openReceiptModal({{ json_encode([
                                             'kode_pembayaran' => $pem->kode_pembayaran,
                                             'kode_pesanan' => $pem->kode_pesanan,
@@ -767,9 +945,20 @@
                                             'metode' => $pem->metode_pembayaran ?? $pem->metode ?? 'Tunai',
                                             'tanggal' => $pem->tanggal_bayar ? \Carbon\Carbon::parse($pem->tanggal_bayar)->format('d M Y') : ($pem->tanggal ? \Carbon\Carbon::parse($pem->tanggal)->format('d M Y') : date('d M Y')),
                                             'status' => $pem->status,
+                                            'uang_diterima' => $uangDiterimaVal,
+                                            'kembalian' => $kembalianVal,
                                         ]) }})" style="background: #EEF2FF; color: #1E3A8A; border: 1px solid #C7D2FE; padding: 4px 9px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Cetak Nota Pembayaran">
                                             <i class="fa-solid fa-receipt"></i>
                                         </button>
+                                        @if(!($isKasir ?? false))
+                                            <form action="{{ route('pembayaran.destroy', $pem->id) }}" method="POST" style="display:inline; margin-left: 4px;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus catatan pembayaran {{ $pem->kode_pembayaran }}?');">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" style="background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;" title="Hapus Pembayaran">
+                                                    <i class="fa-regular fa-trash-can"></i>
+                                                </button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                                 @empty
@@ -783,12 +972,7 @@
 
                     <div class="table-footer">
                         <div class="entry-info">Menampilkan {{ count($pembayarans ?? []) }} data pembayaran</div>
-                        <div class="pagination">
-                            <button class="page-btn"><i class="fa-solid fa-chevron-left" style="font-size: 11px;"></i></button>
-                            <button class="page-btn active">1</button>
-                            <button class="page-btn">2</button>
-                            <button class="page-btn"><i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i></button>
-                        </div>
+                        <div class="pagination"></div>
                     </div>
                 </div>
 
@@ -815,45 +999,55 @@
                     <div style="font-size: 10.5px; color: #94A3B8; margin-top: 2px;">Jl. Percetakan No. 45, Jakarta • Telp: (021) 555-0192</div>
                 </div>
 
-                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                    <span style="color: #64748B;">No. Transaksi:</span>
-                    <strong id="recNoBayar" style="color: #0F172A;">-</strong>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px; gap: 10px;">
+                    <span style="color: #64748B; white-space: nowrap;">No. Transaksi:</span>
+                    <strong id="recNoBayar" style="color: #0F172A; white-space: nowrap;">-</strong>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                    <span style="color: #64748B;">Kode Pesanan:</span>
-                    <strong id="recKodePesanan" style="color: #1E3A8A;">-</strong>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px; gap: 10px;">
+                    <span style="color: #64748B; white-space: nowrap;">Kode Pesanan:</span>
+                    <strong id="recKodePesanan" style="color: #1E3A8A; white-space: nowrap;">-</strong>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                    <span style="color: #64748B;">Tanggal Bayar:</span>
-                    <span id="recTanggal" style="font-weight: 600; color: #0F172A;">-</span>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px; gap: 10px;">
+                    <span style="color: #64748B; white-space: nowrap;">Tanggal Bayar:</span>
+                    <span id="recTanggal" style="font-weight: 600; color: #0F172A; white-space: nowrap;">-</span>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                    <span style="color: #64748B;">Pelanggan:</span>
-                    <strong id="recPelanggan" style="color: #0F172A;">-</strong>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 4px; gap: 10px;">
+                    <span style="color: #64748B; white-space: nowrap;">Pelanggan:</span>
+                    <strong id="recPelanggan" style="color: #0F172A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">-</strong>
                 </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                    <span style="color: #64748B;">Produk:</span>
-                    <span id="recProduk" style="font-weight: 600; color: #0F172A;">-</span>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px; gap: 10px;">
+                    <span style="color: #64748B; white-space: nowrap;">Produk:</span>
+                    <span id="recProduk" style="font-weight: 600; color: #0F172A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">-</span>
                 </div>
 
                 <div style="border-top: 1px dashed #CBD5E1; padding-top: 8px; margin-top: 8px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                        <span style="color: #64748B;">Total Tagihan:</span>
-                        <strong id="recTotalTagihan" style="color: #0F172A;">Rp 0</strong>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; gap: 10px;">
+                        <span style="color: #64748B; white-space: nowrap;">Total Tagihan:</span>
+                        <strong id="recTotalTagihan" style="color: #0F172A; white-space: nowrap;">Rp 0</strong>
                     </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                        <span style="color: #64748B;">Metode Bayar:</span>
-                        <span id="recMetode" style="font-weight: 700; color: #1E3A8A;">-</span>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; gap: 10px;">
+                        <span style="color: #64748B; white-space: nowrap;">Metode Bayar:</span>
+                        <span id="recMetode" style="font-weight: 700; color: #1E3A8A; white-space: nowrap;">-</span>
                     </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
-                        <span style="color: #64748B;">Jumlah Dibayar:</span>
-                        <strong id="recJumlahBayar" style="color: #16A34A; font-size: 14px; font-weight: 900;">Rp 0</strong>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px; gap: 10px;">
+                        <span style="color: #64748B; white-space: nowrap;">Jumlah Dibayar:</span>
+                        <strong id="recJumlahBayar" style="color: #16A34A; font-size: 14px; font-weight: 900; white-space: nowrap;">Rp 0</strong>
+                    </div>
+                    <div id="recCashDetails" style="display: none; border-top: 1px dotted #CBD5E1; padding-top: 4px; margin-top: 4px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px; gap: 10px;">
+                            <span style="color: #64748B; white-space: nowrap;">Uang Diterima:</span>
+                            <span id="recUangDiterima" style="font-weight: 700; color: #0F172A; white-space: nowrap;">Rp 0</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px; gap: 10px;">
+                            <span style="color: #64748B; white-space: nowrap;">Kembalian:</span>
+                            <strong id="recKembalian" style="font-weight: 800; color: #16A34A; white-space: nowrap;">Rp 0</strong>
+                        </div>
                     </div>
                 </div>
 
-                <div style="border-top: 1.5px solid #1E3A8A; padding-top: 10px; margin-top: 12px; display: flex; align-items: center; justify-content: space-between;">
-                    <span style="font-weight: 800; color: #0F172A; font-size: 12px;">STATUS PEMBAYARAN:</span>
-                    <span id="recStatusBadge" style="background: #DCFCE7; color: #16A34A; padding: 3px 12px; border-radius: 12px; font-weight: 800; font-size: 11.5px;">LUNAS</span>
+                <div style="border-top: 1.5px solid #1E3A8A; padding-top: 10px; margin-top: 12px; display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+                    <span style="font-weight: 800; color: #0F172A; font-size: 12px; white-space: nowrap;">STATUS PEMBAYARAN:</span>
+                    <span id="recStatusBadge" style="background: #DCFCE7; color: #166534; padding: 3px 12px; border-radius: 12px; font-weight: 800; font-size: 11.5px; white-space: nowrap; flex-shrink: 0;">LUNAS</span>
                 </div>
 
                 <div style="text-align: center; margin-top: 14px; font-size: 11px; color: #94A3B8;">
@@ -971,9 +1165,17 @@
             if (payOrderSelect) {
                 payOrderSelect.addEventListener('change', function() {
                     const opt = this.options[this.selectedIndex];
+                    const payTypeBox = document.getElementById('paymentTypeSelectionBox');
+                    const fullSummary = document.getElementById('fullPaySummaryCard');
+                    const dpBox = document.getElementById('dpInputBox');
+
                     if (!opt || !this.value) {
                         if (summaryBox) summaryBox.style.display = 'none';
                         if (payAmountInput) payAmountInput.value = '';
+                        if (payTypeBox) payTypeBox.style.display = 'none';
+                        if (fullSummary) fullSummary.style.display = 'none';
+                        if (dpBox) dpBox.style.display = 'none';
+                        if (cashierBox) cashierBox.style.display = 'none';
                         currentOrderRemaining = 0;
                         currentOrderTotal = 0;
                         currentOrderDate = '';
@@ -1013,9 +1215,13 @@
                         if (sumRemaining) sumRemaining.textContent = 'Rp ' + remaining.toLocaleString('id-ID');
                     }
 
-                    if (payAmountInput) {
-                        payAmountInput.value = remaining;
-                    }
+                    // Tampilkan kotak pemilih tipe pembayaran (Pelunasan vs DP)
+                    if (payTypeBox) payTypeBox.style.display = 'block';
+                    const fullDisp = document.getElementById('fullPayDisplay');
+                    if (fullDisp) fullDisp.textContent = 'Sisa: Rp ' + remaining.toLocaleString('id-ID');
+
+                    window.selectPaymentType('full');
+                    updatePaymentMethodView();
                 });
             }
 
@@ -1070,26 +1276,57 @@
 
                     const prevBtn = document.createElement('button');
                     prevBtn.className = 'page-btn';
+                    prevBtn.title = 'Halaman Sebelumnya';
                     prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left" style="font-size: 11px;"></i>';
                     prevBtn.disabled = currentPage === 1;
-                    prevBtn.style.opacity = currentPage === 1 ? '0.5' : '1';
-                    prevBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; updatePagination(); } });
+                    prevBtn.addEventListener('click', () => { 
+                        if (currentPage > 1) { 
+                            currentPage--; 
+                            updatePagination(); 
+                        } 
+                    });
                     paginationEl.appendChild(prevBtn);
 
-                    for (let i = 1; i <= totalPages; i++) {
-                        const pBtn = document.createElement('button');
-                        pBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
-                        pBtn.textContent = i;
-                        pBtn.addEventListener('click', () => { currentPage = i; updatePagination(); });
-                        paginationEl.appendChild(pBtn);
+                    const selectWrap = document.createElement('div');
+                    selectWrap.className = 'page-select-container';
+
+                    const labelPre = document.createElement('span');
+                    labelPre.textContent = 'Halaman';
+                    selectWrap.appendChild(labelPre);
+
+                    const select = document.createElement('select');
+                    select.className = 'page-select-dropdown';
+                    select.title = 'Pilih Halaman';
+                    for (let p = 1; p <= totalPages; p++) {
+                        const opt = document.createElement('option');
+                        opt.value = p;
+                        opt.textContent = p;
+                        if (p === currentPage) opt.selected = true;
+                        select.appendChild(opt);
                     }
+                    select.addEventListener('change', function() {
+                        currentPage = parseInt(this.value);
+                        updatePagination();
+                    });
+                    selectWrap.appendChild(select);
+
+                    const labelPost = document.createElement('span');
+                    labelPost.innerHTML = `dari <strong style="color:#1E293B;">${totalPages}</strong>`;
+                    selectWrap.appendChild(labelPost);
+
+                    paginationEl.appendChild(selectWrap);
 
                     const nextBtn = document.createElement('button');
                     nextBtn.className = 'page-btn';
+                    nextBtn.title = 'Halaman Selanjutnya';
                     nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i>';
-                    nextBtn.disabled = currentPage === totalPages;
-                    nextBtn.style.opacity = currentPage === totalPages ? '0.5' : '1';
-                    nextBtn.addEventListener('click', () => { if (currentPage < totalPages) { currentPage++; updatePagination(); } });
+                    nextBtn.disabled = currentPage === totalPages || totalPages === 0;
+                    nextBtn.addEventListener('click', () => { 
+                        if (currentPage < totalPages) { 
+                            currentPage++; 
+                            updatePagination(); 
+                        } 
+                    });
                     paginationEl.appendChild(nextBtn);
                 }
             }
@@ -1119,21 +1356,182 @@
             const qrisBox = document.getElementById('qrisBox');
             const bankBox = document.getElementById('bankBox');
 
+            const cashierBox = document.getElementById('cashierChangeCalcBox');
+            const uangDiterimaInput = document.getElementById('uangDiterimaInput');
+            const liveKembalianDisplay = document.getElementById('liveKembalianDisplay');
+
+            window.selectPaymentType = function(type) {
+                const btnFull = document.getElementById('btnPayTypeFull');
+                const btnDp = document.getElementById('btnPayTypeDp');
+                const fullSummary = document.getElementById('fullPaySummaryCard');
+                const fullAmountText = document.getElementById('fullPaySummaryAmount');
+                const dpBox = document.getElementById('dpInputBox');
+
+                if (type === 'full') {
+                    if (btnFull) btnFull.classList.add('active');
+                    if (btnDp) btnDp.classList.remove('active');
+                    if (fullSummary) fullSummary.style.display = 'block';
+                    if (fullAmountText) fullAmountText.textContent = 'Rp ' + currentOrderRemaining.toLocaleString('id-ID');
+                    if (dpBox) dpBox.style.display = 'none';
+                    if (payAmountInput) {
+                        payAmountInput.value = currentOrderRemaining;
+                        payAmountInput.removeAttribute('required');
+                    }
+                } else {
+                    if (btnDp) btnDp.classList.add('active');
+                    if (btnFull) btnFull.classList.remove('active');
+                    if (fullSummary) fullSummary.style.display = 'none';
+                    if (dpBox) dpBox.style.display = 'block';
+                    if (payAmountInput) {
+                        payAmountInput.setAttribute('required', 'true');
+                        if (parseFloat(payAmountInput.value) >= currentOrderRemaining && currentOrderRemaining > 0) {
+                            payAmountInput.value = Math.round(currentOrderRemaining * 0.5);
+                        }
+                    }
+                }
+
+                if (uangDiterimaInput && payAmountInput) {
+                    uangDiterimaInput.value = payAmountInput.value;
+                }
+                updateLivePayStatus();
+                calcKembalian();
+            };
+
+            window.setDpPercent = function(pct) {
+                if (!payAmountInput || currentOrderRemaining <= 0) return;
+                const val = Math.round((currentOrderRemaining * pct) / 100);
+                payAmountInput.value = val;
+                if (uangDiterimaInput) {
+                    uangDiterimaInput.value = val;
+                }
+                updateLivePayStatus();
+                calcKembalian();
+            };
+
+            window.setDpAmount = function(val) {
+                if (!payAmountInput || currentOrderRemaining <= 0) return;
+                if (val === '50percent') {
+                    window.setDpPercent(50);
+                } else {
+                    payAmountInput.value = Math.min(currentOrderRemaining, val);
+                    if (uangDiterimaInput) {
+                        uangDiterimaInput.value = payAmountInput.value;
+                    }
+                    updateLivePayStatus();
+                    calcKembalian();
+                }
+            };
+
+            function updateLivePayStatus() {
+                const previewEl = document.getElementById('livePayStatusPreview');
+                if (!previewEl || !payAmountInput) return;
+
+                const dpBox = document.getElementById('dpInputBox');
+                if (!dpBox || dpBox.style.display === 'none') {
+                    previewEl.style.display = 'none';
+                    return;
+                }
+
+                const val = parseFloat(payAmountInput.value) || 0;
+                if (val <= 0 || currentOrderRemaining <= 0) {
+                    previewEl.style.display = 'none';
+                    return;
+                }
+
+                previewEl.style.display = 'block';
+                const sisaNanti = Math.max(0, currentOrderRemaining - val);
+
+                if (val >= currentOrderRemaining) {
+                    previewEl.style.background = '#DCFCE7';
+                    previewEl.style.color = '#166534';
+                    previewEl.style.border = '1px solid #BBF7D0';
+                    previewEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Nominal mencakup <strong>Seluruh Sisa Tagihan (Lunas)</strong>`;
+                } else {
+                    previewEl.style.background = '#FEF3C7';
+                    previewEl.style.color = '#92400E';
+                    previewEl.style.border = '1px solid #FDE68A';
+                    previewEl.innerHTML = `<i class="fa-solid fa-clock"></i> DP: <strong>Rp ${val.toLocaleString('id-ID')}</strong> • Sisa Nanti: <strong>Rp ${sisaNanti.toLocaleString('id-ID')}</strong>`;
+                }
+            }
+
+            function calcKembalian() {
+                if (!payAmountInput || !uangDiterimaInput || !liveKembalianDisplay) return;
+                const tagihan = parseFloat(payAmountInput.value) || 0;
+                const bayar = parseFloat(uangDiterimaInput.value) || 0;
+                const diff = bayar - tagihan;
+                const warnUnderpaid = document.getElementById('cashierWarningUnderpaid');
+                const btnSubmit = document.getElementById('btnSubmitPayment');
+
+                if (diff === 0) {
+                    liveKembalianDisplay.style.color = '#166534';
+                    liveKembalianDisplay.style.background = '#DCFCE7';
+                    liveKembalianDisplay.style.border = '1px solid #BBF7D0';
+                    liveKembalianDisplay.innerHTML = '<i class="fa-solid fa-check-double"></i> <span>Kembalian: Rp 0 (Uang Pas)</span>';
+                    if (warnUnderpaid) warnUnderpaid.style.display = 'none';
+                    if (btnSubmit) btnSubmit.disabled = false;
+                } else if (diff > 0) {
+                    liveKembalianDisplay.style.color = '#065F46';
+                    liveKembalianDisplay.style.background = '#D1FAE5';
+                    liveKembalianDisplay.style.border = '1px solid #A7F3D0';
+                    liveKembalianDisplay.innerHTML = '<i class="fa-solid fa-hand-holding-dollar"></i> <span>Kembalian: Rp ' + diff.toLocaleString('id-ID') + '</span>';
+                    if (warnUnderpaid) warnUnderpaid.style.display = 'none';
+                    if (btnSubmit) btnSubmit.disabled = false;
+                } else {
+                    liveKembalianDisplay.style.color = '#991B1B';
+                    liveKembalianDisplay.style.background = '#FEE2E2';
+                    liveKembalianDisplay.style.border = '1px solid #FECACA';
+                    liveKembalianDisplay.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> <span>Kurang: Rp ' + Math.abs(diff).toLocaleString('id-ID') + '</span>';
+                    if (warnUnderpaid) warnUnderpaid.style.display = 'block';
+                }
+            }
+
+            window.setCashierChip = function(nominal) {
+                if (!payAmountInput || !uangDiterimaInput) return;
+                const tagihan = parseFloat(payAmountInput.value) || 0;
+                if (nominal === 'pas') {
+                    uangDiterimaInput.value = tagihan;
+                } else {
+                    uangDiterimaInput.value = nominal;
+                }
+                calcKembalian();
+            };
+
+            if (uangDiterimaInput) uangDiterimaInput.addEventListener('input', calcKembalian);
+            if (payAmountInput) {
+                payAmountInput.addEventListener('input', () => {
+                    updateLivePayStatus();
+                    calcKembalian();
+                });
+            }
+
             function updatePaymentMethodView() {
-                if (!payMethodSelect || !paymentDetailsContainer) return;
+                if (!payMethodSelect) return;
                 const val = payMethodSelect.value;
                 if (val === 'QRIS') {
-                    paymentDetailsContainer.style.display = 'block';
+                    if (paymentDetailsContainer) paymentDetailsContainer.style.display = 'block';
                     if (qrisBox) qrisBox.style.display = 'block';
                     if (bankBox) bankBox.style.display = 'none';
+                    if (cashierBox) cashierBox.style.display = 'none';
                 } else if (val === 'Transfer Bank') {
-                    paymentDetailsContainer.style.display = 'block';
+                    if (paymentDetailsContainer) paymentDetailsContainer.style.display = 'block';
                     if (qrisBox) qrisBox.style.display = 'none';
                     if (bankBox) bankBox.style.display = 'block';
+                    if (cashierBox) cashierBox.style.display = 'none';
+                } else if (val === 'Tunai') {
+                    if (paymentDetailsContainer) paymentDetailsContainer.style.display = 'none';
+                    if (cashierBox) {
+                        if (currentOrderRemaining > 0) {
+                            cashierBox.style.display = 'block';
+                            calcKembalian();
+                        } else {
+                            cashierBox.style.display = 'none';
+                        }
+                    }
                 } else {
-                    paymentDetailsContainer.style.display = 'none';
+                    if (paymentDetailsContainer) paymentDetailsContainer.style.display = 'none';
                     if (qrisBox) qrisBox.style.display = 'none';
                     if (bankBox) bankBox.style.display = 'none';
+                    if (cashierBox) cashierBox.style.display = 'none';
                 }
             }
 
@@ -1186,6 +1584,17 @@
                 document.getElementById('recTotalTagihan').textContent = 'Rp ' + (parseFloat(data.total_tagihan) || 0).toLocaleString('id-ID');
                 document.getElementById('recMetode').textContent = data.metode || 'Tunai';
                 document.getElementById('recJumlahBayar').textContent = 'Rp ' + (parseFloat(data.jumlah_bayar) || 0).toLocaleString('id-ID');
+
+                const recCashDetails = document.getElementById('recCashDetails');
+                const recUangDiterima = document.getElementById('recUangDiterima');
+                const recKembalian = document.getElementById('recKembalian');
+                if (data.metode === 'Tunai' || parseFloat(data.kembalian) > 0 || parseFloat(data.uang_diterima) > parseFloat(data.jumlah_bayar)) {
+                    if (recCashDetails) recCashDetails.style.display = 'block';
+                    if (recUangDiterima) recUangDiterima.textContent = 'Rp ' + (parseFloat(data.uang_diterima) || parseFloat(data.jumlah_bayar) || 0).toLocaleString('id-ID');
+                    if (recKembalian) recKembalian.textContent = 'Rp ' + (parseFloat(data.kembalian) || 0).toLocaleString('id-ID');
+                } else {
+                    if (recCashDetails) recCashDetails.style.display = 'none';
+                }
 
                 const badge = document.getElementById('recStatusBadge');
                 const isLunas = String(data.status).toLowerCase() === 'lunas' || String(data.status).toLowerCase() === 'sudah lunas';

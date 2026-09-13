@@ -24,23 +24,39 @@ class DashboardController extends Controller
         $pesananTerbaru = Pesanan::orderBy('id', 'desc')->take(5)->get();
         $pembayaranTerbaru = Pembayaran::orderBy('id', 'desc')->take(5)->get();
 
-        // Real Sales Data for 2026 monthly
+        // Dynamic month-over-month context
+        $now = now();
+        $thisMonth = (int) $now->month;
+        $thisYear = (int) $now->year;
+
+        $monthNamesIndo = [
+            1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr',
+            5 => 'Mei', 6 => 'Jun', 7 => 'Jul', 8 => 'Agt',
+            9 => 'Sep', 10 => 'Okt', 11 => 'Nov', 12 => 'Des'
+        ];
+
+        // Real Sales Data for current year, only up to the current month ($thisMonth)
+        // Automatically adds new months as time progresses
+        $monthlyLabels = [];
         $monthlyRevenue = [];
         $monthlyTarget = [];
-        for ($m = 1; $m <= 12; $m++) {
-            $rev = (float) Pesanan::whereYear('tanggal_pesan', 2026)
+        for ($m = 1; $m <= $thisMonth; $m++) {
+            $monthlyLabels[] = $monthNamesIndo[$m] ?? date('M', mktime(0, 0, 0, $m, 1));
+            $rev = (float) Pesanan::whereYear('tanggal_pesan', $thisYear)
                 ->whereMonth('tanggal_pesan', $m)
                 ->sum('total_harga');
             $monthlyRevenue[] = $rev;
             $monthlyTarget[] = $rev > 0 ? (float) ($rev * 1.15) : 0;
         }
 
-        // If 2026 total is zero, calculate across all data
+        // If current year total is zero, calculate across all data but still cap at $thisMonth
         if (array_sum($monthlyRevenue) == 0) {
-            for ($m = 1; $m <= 12; $m++) {
+            $monthlyRevenue = [];
+            $monthlyTarget = [];
+            for ($m = 1; $m <= $thisMonth; $m++) {
                 $rev = (float) Pesanan::whereMonth('tanggal_pesan', $m)->sum('total_harga');
-                $monthlyRevenue[$m - 1] = $rev;
-                $monthlyTarget[$m - 1] = $rev > 0 ? (float) ($rev * 1.15) : 0;
+                $monthlyRevenue[] = $rev;
+                $monthlyTarget[] = $rev > 0 ? (float) ($rev * 1.15) : 0;
             }
         }
 
@@ -59,6 +75,44 @@ class DashboardController extends Controller
             $categoryCounts = [0, 0, 0, 0, 0];
         }
 
+        // Dynamic month-over-month comparison metrics
+        $prevDate = $now->copy()->subMonth();
+        $prevMonth = $prevDate->month;
+        $prevYear = $prevDate->year;
+
+        // 1. Pesanan Growth
+        $pesananThisMonth = Pesanan::whereYear('tanggal_pesan', $thisYear)->whereMonth('tanggal_pesan', $thisMonth)->count();
+        $pesananPrevMonth = Pesanan::whereYear('tanggal_pesan', $prevYear)->whereMonth('tanggal_pesan', $prevMonth)->count();
+        if ($pesananPrevMonth > 0) {
+            $growthPesanan = round((($pesananThisMonth - $pesananPrevMonth) / $pesananPrevMonth) * 100, 1);
+        } else {
+            $growthPesanan = $pesananThisMonth > 0 ? 100.0 : 0.0;
+        }
+
+        // 2. Pendapatan Growth
+        $revThisMonth = (float) Pembayaran::where('status', 'Lunas')->whereYear('tanggal', $thisYear)->whereMonth('tanggal', $thisMonth)->sum('jumlah');
+        if ($revThisMonth == 0) {
+            $revThisMonth = (float) Pesanan::whereYear('tanggal_pesan', $thisYear)->whereMonth('tanggal_pesan', $thisMonth)->sum('total_harga');
+        }
+        $revPrevMonth = (float) Pembayaran::where('status', 'Lunas')->whereYear('tanggal', $prevYear)->whereMonth('tanggal', $prevMonth)->sum('jumlah');
+        if ($revPrevMonth == 0) {
+            $revPrevMonth = (float) Pesanan::whereYear('tanggal_pesan', $prevYear)->whereMonth('tanggal_pesan', $prevMonth)->sum('total_harga');
+        }
+        if ($revPrevMonth > 0) {
+            $growthPendapatan = round((($revThisMonth - $revPrevMonth) / $revPrevMonth) * 100, 1);
+        } else {
+            $growthPendapatan = $revThisMonth > 0 ? 100.0 : 0.0;
+        }
+
+        // 3. Pelanggan Growth
+        $pelangganThisMonth = Pelanggan::whereMonth('tanggal_daftar', $thisMonth)->count();
+        $pelangganPrevMonth = Pelanggan::whereMonth('tanggal_daftar', $prevMonth)->count();
+        if ($pelangganPrevMonth > 0) {
+            $growthPelanggan = round((($pelangganThisMonth - $pelangganPrevMonth) / $pelangganPrevMonth) * 100, 1);
+        } else {
+            $growthPelanggan = $pelangganThisMonth > 0 ? 100.0 : 0.0;
+        }
+
         return view('dashboard', compact(
             'totalPesanan',
             'totalPendapatan',
@@ -68,8 +122,15 @@ class DashboardController extends Controller
             'pembayaranTerbaru',
             'monthlyRevenue',
             'monthlyTarget',
+            'monthlyLabels',
+            'thisMonth',
+            'thisYear',
+            'monthNamesIndo',
             'categoryLabels',
-            'categoryCounts'
+            'categoryCounts',
+            'growthPesanan',
+            'growthPendapatan',
+            'growthPelanggan'
         ));
     }
 }

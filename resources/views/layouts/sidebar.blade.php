@@ -2,11 +2,11 @@
 <aside class="sidebar">
     <div>
         <div class="sidebar-brand">
-            <a href="{{ route('dashboard') }}" title="Ke Dasbor Utama" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 12px;">
-                <img src="{{ asset('assets/images/sipekan-logo.png') }}" alt="SIPEKAN Logo" style="height: 38px; width: auto; object-fit: contain; flex-shrink: 0; display: block;">
-                <div style="display: flex; flex-direction: column; justify-content: space-between; height: 38px;">
-                    <div class="brand-name" style="line-height: 1.1; font-size: 19px; font-weight: 800; margin: 0;">SIPEKAN</div>
-                    <div class="brand-tag" style="line-height: 1.2; font-size: 12px; margin: 0;">{{ ($isKasir ?? false) ? 'Konsol Kasir' : 'Konsol Admin' }}</div>
+            <a href="{{ route('dashboard') }}" title="Ke Dasbor Utama" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 10px;">
+                <img src="{{ asset('assets/images/sipekan-logo.png') }}?v={{ file_exists(public_path('assets/images/sipekan-logo.png')) ? filemtime(public_path('assets/images/sipekan-logo.png')) : time() }}" alt="SIPEKAN Logo" style="height: 36px; width: auto; object-fit: contain; flex-shrink: 0; display: block;">
+                <div style="display: flex; flex-direction: column; justify-content: center;">
+                    <div class="brand-name" style="line-height: 1.1; font-size: 18px; font-weight: 800; margin: 0; letter-spacing: -0.3px;">SIPEKAN</div>
+                    <div class="brand-tag" style="line-height: 1.2; font-size: 11px; margin: 0; color: #64748B;">{{ ($isKasir ?? false) ? 'Konsol Kasir' : 'Konsol Admin' }}</div>
                 </div>
             </a>
         </div>

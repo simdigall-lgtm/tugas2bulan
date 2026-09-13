@@ -16,5 +16,7 @@ class Pembayaran extends Model
         'metode',
         'jumlah',
         'status',
+        'uang_diterima',
+        'kembalian',
     ];
 }

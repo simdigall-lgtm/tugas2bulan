@@ -24,6 +24,11 @@
             font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
+        html, body {
+            max-width: 100vw;
+            overflow-x: clip;
+        }
+
         body {
             background-color: #F8FAFC;
             color: #1E293B;
@@ -33,7 +38,7 @@
 
         /* Sidebar Styles */
         .sidebar {
-            width: 250px;
+            width: 210px;
             background-color: #FFFFFF;
             border-right: 1px solid #E2E8F0;
             display: flex;
@@ -47,40 +52,40 @@
         }
 
         .sidebar-brand {
-            padding: 24px 20px 20px 24px;
+            padding: 18px 16px 14px;
         }
 
         .brand-name {
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 800;
             color: #1E3A8A;
             letter-spacing: -0.3px;
         }
 
         .brand-tag {
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 500;
             color: #64748B;
-            margin-top: 2px;
+            margin-top: 1px;
         }
 
         .sidebar-menu {
-            padding: 12px 14px;
+            padding: 10px 10px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
             flex: 1;
         }
 
         .menu-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 11px 16px;
+            gap: 10px;
+            padding: 9px 12px;
             border-radius: 8px;
             color: #475569;
             text-decoration: none;
-            font-size: 14px;
+            font-size: 13.5px;
             font-weight: 600;
             transition: all 0.2s ease;
         }
@@ -97,22 +102,24 @@
         }
 
         .menu-item i {
-            font-size: 16px;
-            width: 20px;
+            font-size: 15px;
+            width: 18px;
             text-align: center;
         }
 
         .sidebar-bottom {
-            padding: 16px 14px 20px 14px;
+            padding: 12px 10px 16px;
             border-top: 1px dashed #E2E8F0;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
         }
 
         /* Main Content Wrapper */
         .main-wrapper {
-            margin-left: 250px;
+            margin-left: 210px;
+            width: calc(100% - 210px);
+            max-width: calc(100vw - 210px);
             flex: 1;
             display: flex;
             flex-direction: column;
@@ -121,16 +128,18 @@
 
         /* Top Header Navigation */
         .topbar {
-            height: 68px;
+            height: 64px;
             background-color: #FFFFFF;
             border-bottom: 1px solid #E2E8F0;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 32px;
+            padding: 0 24px;
             position: sticky;
             top: 0;
-            z-index: 90;
+            z-index: 100;
+            max-width: 100%;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
         }
 
         .search-container {
@@ -310,6 +319,9 @@
             display: flex;
             align-items: center;
             gap: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .trend-up {
@@ -531,7 +543,11 @@
                     </div>
                     <div class="metric-value">{{ $totalPelanggan ?? 0 }}</div>
                     <div class="metric-footer">
-                        <span class="trend-up"><i class="fa-solid fa-arrow-up" style="font-size: 11px;"></i> +12%</span>
+                        @if(($growthPelanggan ?? 0) >= 0)
+                            <span class="trend-up"><i class="fa-solid fa-arrow-up" style="font-size: 11px;"></i> +{{ $growthPelanggan ?? 0 }}%</span>
+                        @else
+                            <span class="trend-down" style="color: #DC2626; font-weight: 700; font-size: 12px; display: flex; align-items: center; gap: 4px;"><i class="fa-solid fa-arrow-down" style="font-size: 11px;"></i> {{ $growthPelanggan ?? 0 }}%</span>
+                        @endif
                         <span class="trend-period">vs bulan lalu</span>
                     </div>
                 </a>
@@ -561,7 +577,11 @@
                     </div>
                     <div class="metric-value">{{ $totalPesanan ?? 0 }}</div>
                     <div class="metric-footer">
-                        <span class="trend-up"><i class="fa-solid fa-arrow-up" style="font-size: 11px;"></i> +8.5%</span>
+                        @if(($growthPesanan ?? 0) >= 0)
+                            <span class="trend-up"><i class="fa-solid fa-arrow-up" style="font-size: 11px;"></i> +{{ $growthPesanan ?? 0 }}%</span>
+                        @else
+                            <span class="trend-down" style="color: #DC2626; font-weight: 700; font-size: 12px; display: flex; align-items: center; gap: 4px;"><i class="fa-solid fa-arrow-down" style="font-size: 11px;"></i> {{ $growthPesanan ?? 0 }}%</span>
+                        @endif
                         <span class="trend-period">vs bulan lalu</span>
                     </div>
                 </a>
@@ -579,7 +599,11 @@
                         <span>{{ number_format($totalPendapatan ?? 0, 0, ',', '.') }}</span>
                     </div>
                     <div class="metric-footer">
-                        <span class="trend-up"><i class="fa-solid fa-arrow-up" style="font-size: 11px;"></i> +15.3%</span>
+                        @if(($growthPendapatan ?? 0) >= 0)
+                            <span class="trend-up"><i class="fa-solid fa-arrow-up" style="font-size: 11px;"></i> +{{ $growthPendapatan ?? 0 }}%</span>
+                        @else
+                            <span class="trend-down" style="color: #DC2626; font-weight: 700; font-size: 12px; display: flex; align-items: center; gap: 4px;"><i class="fa-solid fa-arrow-down" style="font-size: 11px;"></i> {{ $growthPendapatan ?? 0 }}%</span>
+                        @endif
                         <span class="trend-period">vs bulan lalu</span>
                     </div>
                 </a>
@@ -592,7 +616,7 @@
                     <div class="chart-header">
                         <div>
                             <h3 class="chart-title">Tren Penjualan &amp; Pesanan</h3>
-                            <p class="chart-subtitle">Performa pendapatan tahun 2026</p>
+                            <p class="chart-subtitle">Performa pendapatan tahun {{ $thisYear ?? date('Y') }}</p>
                         </div>
                     </div>
                     <div class="chart-container">
@@ -680,7 +704,7 @@
             new Chart(ctxMain, {
                 type: 'line',
                 data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'],
+                    labels: {!! json_encode($monthlyLabels ?? ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep']) !!},
                     datasets: [
                         {
                             label: 'Pendapatan Real',
@@ -690,10 +714,14 @@
                             fill: true,
                             tension: 0.35,
                             borderWidth: 3,
-                            pointBackgroundColor: '#1E3A8A',
-                            pointStyle: 'circle',
-                            pointRadius: 4,
-                            pointHoverRadius: 6
+                            pointBackgroundColor: '#FFFFFF',
+                            pointBorderColor: '#1E3A8A',
+                            pointBorderWidth: 2.5,
+                            pointRadius: 4.5,
+                            pointHoverRadius: 7,
+                            pointHoverBackgroundColor: '#1E3A8A',
+                            pointHoverBorderColor: '#FFFFFF',
+                            pointHoverBorderWidth: 2
                         },
                         {
                             label: 'Target Pendapatan',
@@ -741,14 +769,32 @@
                     },
                     scales: {
                         x: {
-                            grid: { display: false }
+                            grid: { display: false },
+                            ticks: {
+                                maxRotation: 0,
+                                minRotation: 0,
+                                autoSkip: false,
+                                font: { size: 11, weight: '600' },
+                                color: '#64748B'
+                            }
                         },
                         y: {
                             grid: { color: '#F1F5F9' },
                             ticks: {
                                 callback: function(val) {
-                                    if (val >= 1000000000) return 'Rp ' + (val / 1000000000) + ' M';
-                                    if (val >= 1000000) return 'Rp ' + (val / 1000000) + ' Jt';
+                                    if (val === 0) return 'Rp 0';
+                                    if (val >= 1000000000) {
+                                        let m = val / 1000000000;
+                                        return 'Rp ' + (m % 1 === 0 ? m : m.toFixed(1).replace('.', ',')) + ' M';
+                                    }
+                                    if (val >= 1000000) {
+                                        let jt = val / 1000000;
+                                        return 'Rp ' + (jt % 1 === 0 ? jt : jt.toFixed(1).replace('.', ',')) + ' Jt';
+                                    }
+                                    if (val >= 1000) {
+                                        let rb = val / 1000;
+                                        return 'Rp ' + (rb % 1 === 0 ? rb : rb.toFixed(1).replace('.', ',')) + ' Rb';
+                                    }
                                     return 'Rp ' + val.toLocaleString('id-ID');
                                 }
                             }
