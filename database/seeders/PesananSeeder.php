@@ -528,8 +528,8 @@ class PesananSeeder extends Seeder
                 'status' => 'Sedang Dicetak',
                 'tanggal_pesan' => '2026-09-02',
                 'catatan_finishing' => 'Bahan Korea 440gr, Mata Ayam 12 Titik',
-                'status_pembayaran' => 'Lunas',
-                'sisa_bayar' => 0,
+                'status_pembayaran' => 'DP',
+                'sisa_bayar' => 5000000,
             ],
             [
                 'kode_pesanan' => 'ORD-2026-043',
@@ -564,8 +564,8 @@ class PesananSeeder extends Seeder
                 'status' => 'Sedang Dicetak',
                 'tanggal_pesan' => '2026-09-10',
                 'catatan_finishing' => 'Mata Ayam 4 Sudut',
-                'status_pembayaran' => 'Lunas',
-                'sisa_bayar' => 0,
+                'status_pembayaran' => 'DP',
+                'sisa_bayar' => 1750000,
             ],
             [
                 'kode_pesanan' => 'ORD-2026-046',
@@ -576,8 +576,8 @@ class PesananSeeder extends Seeder
                 'status' => 'Antrean Cetak',
                 'tanggal_pesan' => '2026-09-11',
                 'catatan_finishing' => 'Laminasi Doff 2 Sisi + Box Akrilik',
-                'status_pembayaran' => 'Lunas',
-                'sisa_bayar' => 0,
+                'status_pembayaran' => 'Belum Lunas',
+                'sisa_bayar' => 1350000,
             ],
             [
                 'kode_pesanan' => 'ORD-2026-047',
@@ -588,8 +588,8 @@ class PesananSeeder extends Seeder
                 'status' => 'Antrean Cetak',
                 'tanggal_pesan' => '2026-09-12',
                 'catatan_finishing' => 'Selongsong Atas-Bawah',
-                'status_pembayaran' => 'Lunas',
-                'sisa_bayar' => 0,
+                'status_pembayaran' => 'Belum Lunas',
+                'sisa_bayar' => 1200000,
             ],
         ];
 

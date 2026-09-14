@@ -896,11 +896,23 @@
 
                 <!-- Right Card - Pembayaran Terbaru Table -->
                 <div class="card">
-                    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
-                        <h2 class="card-title" style="margin-bottom:0;">Pembayaran Terbaru</h2>
-                        <div class="filter-search">
-                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
-                            <input type="text" id="paySearchInput" placeholder="Cari pembayaran...">
+                    <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:16px;">
+                        <div>
+                            <h2 class="card-title" style="margin-bottom:2px;">Riwayat Pembayaran</h2>
+                            <div style="font-size: 12px; color: #64748B;">Kelola bukti transaksi, tagihan DP, dan status pelunasan.</div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                            <!-- Status Tabs Filter -->
+                            <div class="pay-filter-tabs" style="display: inline-flex; background: #F1F5F9; padding: 3px; border-radius: 8px; border: 1px solid #E2E8F0;">
+                                <button type="button" class="pay-tab-btn active" data-filter="all" style="padding: 5px 12px; border-radius: 6px; border: none; background: #FFFFFF; color: #1E3A8A; font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s ease;">Semua</button>
+                                <button type="button" class="pay-tab-btn" data-filter="belum_lunas" style="padding: 5px 12px; border-radius: 6px; border: none; background: transparent; color: #64748B; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s ease;">Belum Lunas</button>
+                                <button type="button" class="pay-tab-btn" data-filter="lunas" style="padding: 5px 12px; border-radius: 6px; border: none; background: transparent; color: #64748B; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.2s ease;">Lunas</button>
+                            </div>
+
+                            <div class="filter-search">
+                                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                                <input type="text" id="paySearchInput" placeholder="Cari pembayaran...">
+                            </div>
                         </div>
                     </div>
 
@@ -926,14 +938,25 @@
                                     $totalTagihan = $relPesanan ? $relPesanan->total_harga : $pem->jumlah;
                                     $kembalianVal = floatval($pem->kembalian ?? 0);
                                     $uangDiterimaVal = floatval($pem->uang_diterima ?? $pem->jumlah);
+                                    $stRaw = strtolower($pem->status ?? 'lunas');
+                                    $isStLunas = ($stRaw === 'lunas' || $stRaw === 'sudah lunas');
                                 @endphp
-                                <tr>
+                                <tr data-status="{{ $stRaw }}" data-pesanan="{{ strtolower($pem->kode_pesanan ?? '') }}" data-id="{{ strtolower($pem->kode_pembayaran ?? '') }}" data-pelanggan="{{ strtolower($custName) }}">
                                     <td class="pay-id">{{ $pem->kode_pembayaran }}</td>
-                                    <td><a href="{{ route('pesanan') }}" class="order-link">{{ $pem->kode_pesanan }}</a></td>
+                                    <td>
+                                        <a href="{{ route('pesanan') }}?search={{ urlencode($pem->kode_pesanan) }}" class="order-link" title="Buka Detail Pesanan {{ $pem->kode_pesanan }}">
+                                            {{ $pem->kode_pesanan }}
+                                        </a>
+                                    </td>
                                     <td>{{ $pem->tanggal_bayar ? \Carbon\Carbon::parse($pem->tanggal_bayar)->format('d M Y') : ($pem->tanggal ? \Carbon\Carbon::parse($pem->tanggal)->format('d M Y') : '-') }}</td>
                                     <td>{{ $pem->metode_pembayaran ?? $pem->metode }}</td>
                                     <td style="white-space: nowrap; font-weight: 700; color: #0F172A;">Rp {{ number_format($pem->jumlah, 0, ',', '.') }}</td>
-                                    <td><span class="status-badge {{ (strtolower($pem->status) == 'lunas' || strtolower($pem->status) == 'sudah lunas') ? 'status-lunas' : 'status-menunggu' }}">{{ (strtolower($pem->status) == 'lunas' || strtolower($pem->status) == 'sudah lunas') ? 'Sudah Lunas' : $pem->status }}</span></td>
+                                    <td>
+                                        <span class="status-badge {{ $isStLunas ? 'status-lunas' : 'status-menunggu' }}" style="{{ !$isStLunas ? 'background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A;' : '' }}">
+                                            <i class="fa-solid {{ $isStLunas ? 'fa-circle-check' : 'fa-clock' }}" style="font-size: 10.5px; margin-right: 4px;"></i>
+                                            {{ $isStLunas ? 'Sudah Lunas' : ($pem->status ?? 'Belum Lunas') }}
+                                        </span>
+                                    </td>
                                     <td style="text-align: right; white-space: nowrap;">
                                         <button type="button" onclick="openReceiptModal({{ json_encode([
                                             'kode_pembayaran' => $pem->kode_pembayaran,
@@ -1116,15 +1139,18 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
             const payForm = document.getElementById('mainPaymentForm');
             const payTable = document.getElementById('payTable');
             const tbody = payTable ? payTable.querySelector('tbody') : null;
-            const entryInfo = document.querySelector('.entry-info');
-            const paginationEl = document.querySelector('.pagination');
+            const entryInfo = document.querySelector('.card .table-footer .entry-info');
+            const paginationEl = document.querySelector('.card .table-footer .pagination');
             const paySearchInput = document.getElementById('paySearchInput');
             const payOrderSelect = document.getElementById('payOrder');
             const payDateInput = document.getElementById('payDate');
             const payAmountInput = document.getElementById('payAmount');
+            const payMethodSelect = document.getElementById('payMethod');
+            const payTabBtns = document.querySelectorAll('.pay-tab-btn');
 
             // Order Summary Elements
             const summaryBox = document.getElementById('orderSummaryBox');
@@ -1134,11 +1160,25 @@
             const sumTotal = document.getElementById('sumTotal');
             const sumRemaining = document.getElementById('sumRemaining');
 
+            // Dynamic Payment & Cashier Elements
+            const payTypeBox = document.getElementById('paymentTypeSelectionBox');
+            const fullSummary = document.getElementById('fullPaySummaryCard');
+            const fullAmountText = document.getElementById('fullPaySummaryAmount');
+            const dpBox = document.getElementById('dpInputBox');
+            const fullDisp = document.getElementById('fullPayDisplay');
+            const paymentDetailsContainer = document.getElementById('paymentDetailsContainer');
+            const qrisBox = document.getElementById('qrisBox');
+            const bankBox = document.getElementById('bankBox');
+            const cashierBox = document.getElementById('cashierChangeCalcBox');
+            const uangDiterimaInput = document.getElementById('uangDiterimaInput');
+            const liveKembalianDisplay = document.getElementById('liveKembalianDisplay');
+
             const todayStr = new Date().toISOString().split('T')[0];
             let currentOrderDate = '';
             let currentOrderRemaining = 0;
             let currentOrderTotal = 0;
 
+            // Date validation
             function validatePayDate() {
                 if (!payDateInput) return true;
                 const chosenDate = payDateInput.value;
@@ -1158,73 +1198,7 @@
                 return true;
             }
 
-            if (payDateInput) {
-                payDateInput.addEventListener('change', validatePayDate);
-            }
-
-            if (payOrderSelect) {
-                payOrderSelect.addEventListener('change', function() {
-                    const opt = this.options[this.selectedIndex];
-                    const payTypeBox = document.getElementById('paymentTypeSelectionBox');
-                    const fullSummary = document.getElementById('fullPaySummaryCard');
-                    const dpBox = document.getElementById('dpInputBox');
-
-                    if (!opt || !this.value) {
-                        if (summaryBox) summaryBox.style.display = 'none';
-                        if (payAmountInput) payAmountInput.value = '';
-                        if (payTypeBox) payTypeBox.style.display = 'none';
-                        if (fullSummary) fullSummary.style.display = 'none';
-                        if (dpBox) dpBox.style.display = 'none';
-                        if (cashierBox) cashierBox.style.display = 'none';
-                        currentOrderRemaining = 0;
-                        currentOrderTotal = 0;
-                        currentOrderDate = '';
-                        if (payDateInput) {
-                            payDateInput.removeAttribute('min');
-                            payDateInput.value = todayStr;
-                        }
-                        return;
-                    }
-
-                    const nama = opt.getAttribute('data-nama') || '-';
-                    const produk = opt.getAttribute('data-produk') || '-';
-                    const total = parseFloat(opt.getAttribute('data-harga')) || 0;
-                    const remaining = parseFloat(opt.getAttribute('data-remaining')) || total;
-                    const orderDate = opt.getAttribute('data-tanggal') || todayStr;
-                    const orderDateFmt = opt.getAttribute('data-tanggal-fmt') || orderDate;
-
-                    currentOrderRemaining = remaining;
-                    currentOrderTotal = total;
-                    currentOrderDate = orderDate;
-
-                    // Update dynamic date limits (silent in background)
-                    if (payDateInput) {
-                        payDateInput.min = orderDate;
-                        payDateInput.max = todayStr;
-                        if (payDateInput.value < orderDate) {
-                            payDateInput.value = orderDate;
-                        }
-                    }
-
-                    if (summaryBox) {
-                        summaryBox.style.display = 'block';
-                        if (sumCustomer) sumCustomer.textContent = nama;
-                        if (sumProduct) sumProduct.textContent = produk;
-                        if (sumOrderDate) sumOrderDate.textContent = orderDateFmt;
-                        if (sumTotal) sumTotal.textContent = 'Rp ' + total.toLocaleString('id-ID');
-                        if (sumRemaining) sumRemaining.textContent = 'Rp ' + remaining.toLocaleString('id-ID');
-                    }
-
-                    // Tampilkan kotak pemilih tipe pembayaran (Pelunasan vs DP)
-                    if (payTypeBox) payTypeBox.style.display = 'block';
-                    const fullDisp = document.getElementById('fullPayDisplay');
-                    if (fullDisp) fullDisp.textContent = 'Sisa: Rp ' + remaining.toLocaleString('id-ID');
-
-                    window.selectPaymentType('full');
-                    updatePaymentMethodView();
-                });
-            }
-
+            // Copy Bank Account Number
             window.copyAccNo = function(text, btn) {
                 navigator.clipboard.writeText(text).then(() => {
                     const originalText = btn.textContent;
@@ -1233,139 +1207,10 @@
                 });
             };
 
-            // Form Submit Interceptor
-            if (payForm) {
-                payForm.addEventListener('submit', function(e) {
-                    if (!validatePayDate()) {
-                        e.preventDefault();
-                        return false;
-                    }
-                });
-            }
-
-            // Client Pagination & Search
-            let currentPage = 1;
-            const itemsPerPage = 10;
-
-            function updatePagination() {
-                if (!tbody) return;
-                const rows = Array.from(tbody.querySelectorAll('tr'));
-                const visibleRows = rows.filter(r => r.getAttribute('data-search-hidden') !== 'true');
-                const totalItems = visibleRows.length;
-                const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
-
-                if (currentPage > totalPages) currentPage = totalPages;
-
-                const startIdx = (currentPage - 1) * itemsPerPage;
-                const endIdx = startIdx + itemsPerPage;
-
-                rows.forEach(r => r.style.display = 'none');
-                visibleRows.slice(startIdx, endIdx).forEach(r => r.style.display = '');
-
-                const tableResponsive = document.querySelector('.table-responsive');
-                if (tableResponsive) tableResponsive.scrollLeft = 0;
-
-                if (entryInfo) {
-                    const startShow = totalItems === 0 ? 0 : startIdx + 1;
-                    const endShow = Math.min(endIdx, totalItems);
-                    entryInfo.textContent = `Menampilkan ${startShow} hingga ${endShow} dari ${totalItems} data`;
-                }
-
-                if (paginationEl) {
-                    paginationEl.innerHTML = '';
-
-                    const prevBtn = document.createElement('button');
-                    prevBtn.className = 'page-btn';
-                    prevBtn.title = 'Halaman Sebelumnya';
-                    prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left" style="font-size: 11px;"></i>';
-                    prevBtn.disabled = currentPage === 1;
-                    prevBtn.addEventListener('click', () => { 
-                        if (currentPage > 1) { 
-                            currentPage--; 
-                            updatePagination(); 
-                        } 
-                    });
-                    paginationEl.appendChild(prevBtn);
-
-                    const selectWrap = document.createElement('div');
-                    selectWrap.className = 'page-select-container';
-
-                    const labelPre = document.createElement('span');
-                    labelPre.textContent = 'Halaman';
-                    selectWrap.appendChild(labelPre);
-
-                    const select = document.createElement('select');
-                    select.className = 'page-select-dropdown';
-                    select.title = 'Pilih Halaman';
-                    for (let p = 1; p <= totalPages; p++) {
-                        const opt = document.createElement('option');
-                        opt.value = p;
-                        opt.textContent = p;
-                        if (p === currentPage) opt.selected = true;
-                        select.appendChild(opt);
-                    }
-                    select.addEventListener('change', function() {
-                        currentPage = parseInt(this.value);
-                        updatePagination();
-                    });
-                    selectWrap.appendChild(select);
-
-                    const labelPost = document.createElement('span');
-                    labelPost.innerHTML = `dari <strong style="color:#1E293B;">${totalPages}</strong>`;
-                    selectWrap.appendChild(labelPost);
-
-                    paginationEl.appendChild(selectWrap);
-
-                    const nextBtn = document.createElement('button');
-                    nextBtn.className = 'page-btn';
-                    nextBtn.title = 'Halaman Selanjutnya';
-                    nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i>';
-                    nextBtn.disabled = currentPage === totalPages || totalPages === 0;
-                    nextBtn.addEventListener('click', () => { 
-                        if (currentPage < totalPages) { 
-                            currentPage++; 
-                            updatePagination(); 
-                        } 
-                    });
-                    paginationEl.appendChild(nextBtn);
-                }
-            }
-
-            if (tbody) {
-                updatePagination();
-            }
-
-            if (paySearchInput && payTable) {
-                paySearchInput.addEventListener('keyup', function() {
-                    const q = this.value.toLowerCase();
-                    const rows = payTable.querySelectorAll('tbody tr');
-                    rows.forEach(r => {
-                        if (r.textContent.toLowerCase().includes(q)) {
-                            r.removeAttribute('data-search-hidden');
-                        } else {
-                            r.setAttribute('data-search-hidden', 'true');
-                        }
-                    });
-                    currentPage = 1;
-                    updatePagination();
-                });
-            }
-
-            const payMethodSelect = document.getElementById('payMethod');
-            const paymentDetailsContainer = document.getElementById('paymentDetailsContainer');
-            const qrisBox = document.getElementById('qrisBox');
-            const bankBox = document.getElementById('bankBox');
-
-            const cashierBox = document.getElementById('cashierChangeCalcBox');
-            const uangDiterimaInput = document.getElementById('uangDiterimaInput');
-            const liveKembalianDisplay = document.getElementById('liveKembalianDisplay');
-
+            // Payment Type Selector (Full vs DP)
             window.selectPaymentType = function(type) {
                 const btnFull = document.getElementById('btnPayTypeFull');
                 const btnDp = document.getElementById('btnPayTypeDp');
-                const fullSummary = document.getElementById('fullPaySummaryCard');
-                const fullAmountText = document.getElementById('fullPaySummaryAmount');
-                const dpBox = document.getElementById('dpInputBox');
 
                 if (type === 'full') {
                     if (btnFull) btnFull.classList.add('active');
@@ -1426,7 +1271,6 @@
                 const previewEl = document.getElementById('livePayStatusPreview');
                 if (!previewEl || !payAmountInput) return;
 
-                const dpBox = document.getElementById('dpInputBox');
                 if (!dpBox || dpBox.style.display === 'none') {
                     previewEl.style.display = 'none';
                     return;
@@ -1450,7 +1294,7 @@
                     previewEl.style.background = '#FEF3C7';
                     previewEl.style.color = '#92400E';
                     previewEl.style.border = '1px solid #FDE68A';
-                    previewEl.innerHTML = `<i class="fa-solid fa-clock"></i> DP: <strong>Rp ${val.toLocaleString('id-ID')}</strong> • Sisa Nanti: <strong>Rp ${sisaNanti.toLocaleString('id-ID')}</strong>`;
+                    previewEl.innerHTML = `<i class="fa-solid fa-clock"></i> DP: <strong>Rp ${val.toLocaleString('id-ID')}</strong> • Sisa: <strong>Rp ${sisaNanti.toLocaleString('id-ID')}</strong>`;
                 }
             }
 
@@ -1496,14 +1340,6 @@
                 calcKembalian();
             };
 
-            if (uangDiterimaInput) uangDiterimaInput.addEventListener('input', calcKembalian);
-            if (payAmountInput) {
-                payAmountInput.addEventListener('input', () => {
-                    updateLivePayStatus();
-                    calcKembalian();
-                });
-            }
-
             function updatePaymentMethodView() {
                 if (!payMethodSelect) return;
                 const val = payMethodSelect.value;
@@ -1535,9 +1371,88 @@
                 }
             }
 
+            // Order Selection Handler
+            function handleOrderSelectChange() {
+                if (!payOrderSelect) return;
+                const opt = payOrderSelect.options[payOrderSelect.selectedIndex];
+
+                if (!opt || !payOrderSelect.value) {
+                    if (summaryBox) summaryBox.style.display = 'none';
+                    if (payAmountInput) payAmountInput.value = '';
+                    if (payTypeBox) payTypeBox.style.display = 'none';
+                    if (fullSummary) fullSummary.style.display = 'none';
+                    if (dpBox) dpBox.style.display = 'none';
+                    if (cashierBox) cashierBox.style.display = 'none';
+                    currentOrderRemaining = 0;
+                    currentOrderTotal = 0;
+                    currentOrderDate = '';
+                    if (payDateInput) {
+                        payDateInput.removeAttribute('min');
+                        payDateInput.value = todayStr;
+                    }
+                    return;
+                }
+
+                const nama = opt.getAttribute('data-nama') || '-';
+                const produk = opt.getAttribute('data-produk') || '-';
+                const total = parseFloat(opt.getAttribute('data-harga')) || 0;
+                const remaining = parseFloat(opt.getAttribute('data-remaining')) || total;
+                const orderDate = opt.getAttribute('data-tanggal') || todayStr;
+                const orderDateFmt = opt.getAttribute('data-tanggal-fmt') || orderDate;
+
+                currentOrderRemaining = remaining;
+                currentOrderTotal = total;
+                currentOrderDate = orderDate;
+
+                if (payDateInput) {
+                    payDateInput.min = orderDate;
+                    payDateInput.max = todayStr;
+                    if (payDateInput.value < orderDate) {
+                        payDateInput.value = orderDate;
+                    }
+                }
+
+                if (summaryBox) {
+                    summaryBox.style.display = 'block';
+                    if (sumCustomer) sumCustomer.textContent = nama;
+                    if (sumProduct) sumProduct.textContent = produk;
+                    if (sumOrderDate) sumOrderDate.textContent = orderDateFmt;
+                    if (sumTotal) sumTotal.textContent = 'Rp ' + total.toLocaleString('id-ID');
+                    if (sumRemaining) sumRemaining.textContent = 'Rp ' + remaining.toLocaleString('id-ID');
+                }
+
+                if (payTypeBox) payTypeBox.style.display = 'block';
+                if (fullDisp) fullDisp.textContent = 'Sisa: Rp ' + remaining.toLocaleString('id-ID');
+
+                window.selectPaymentType('full');
+                updatePaymentMethodView();
+            }
+
+            if (payOrderSelect) {
+                payOrderSelect.addEventListener('change', handleOrderSelectChange);
+            }
+            if (payDateInput) {
+                payDateInput.addEventListener('change', validatePayDate);
+            }
             if (payMethodSelect) {
                 payMethodSelect.addEventListener('change', updatePaymentMethodView);
-                updatePaymentMethodView();
+            }
+            if (uangDiterimaInput) {
+                uangDiterimaInput.addEventListener('input', calcKembalian);
+            }
+            if (payAmountInput) {
+                payAmountInput.addEventListener('input', () => {
+                    updateLivePayStatus();
+                    calcKembalian();
+                });
+            }
+            if (payForm) {
+                payForm.addEventListener('submit', function(e) {
+                    if (!validatePayDate()) {
+                        e.preventDefault();
+                        return false;
+                    }
+                });
             }
 
             // QRIS Modal Engine
@@ -1604,14 +1519,16 @@
 
                 receiptOverlay.style.opacity = '1';
                 receiptOverlay.style.visibility = 'visible';
-                receiptOverlay.querySelector('.modal-box').style.transform = 'translateY(0)';
+                const mBox = receiptOverlay.querySelector('.modal-box');
+                if (mBox) mBox.style.transform = 'translateY(0)';
             };
 
             function closeReceipt() {
                 if (!receiptOverlay) return;
                 receiptOverlay.style.opacity = '0';
                 receiptOverlay.style.visibility = 'hidden';
-                receiptOverlay.querySelector('.modal-box').style.transform = 'translateY(-10px)';
+                const mBox = receiptOverlay.querySelector('.modal-box');
+                if (mBox) mBox.style.transform = 'translateY(-10px)';
             }
 
             if (closeReceiptBtn) closeReceiptBtn.addEventListener('click', closeReceipt);
@@ -1620,6 +1537,160 @@
                 receiptOverlay.addEventListener('click', function(e) {
                     if (e.target === receiptOverlay) closeReceipt();
                 });
+            }
+
+            // Live Filter, Tabs & Pagination Engine for Pembayaran Table
+            let payCurrentPage = 1;
+            const payItemsPerPage = 10;
+            let payActiveFilter = 'all';
+
+            function filterAndPaginatePay() {
+                if (!tbody) return;
+                const q = (paySearchInput ? paySearchInput.value : '').toLowerCase().trim();
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                
+                const visibleRows = rows.filter(r => {
+                    if (r.children.length === 1 && r.children[0].hasAttribute('colspan')) return false;
+                    
+                    const rowText = r.textContent.toLowerCase();
+                    const textMatch = !q || rowText.includes(q);
+                    const statusAttr = (r.getAttribute('data-status') || '').toLowerCase();
+                    
+                    let statusMatch = true;
+                    if (payActiveFilter === 'belum_lunas') {
+                        statusMatch = statusAttr.includes('belum') || statusAttr.includes('dp') || (statusAttr !== 'lunas' && statusAttr !== 'sudah lunas');
+                    } else if (payActiveFilter === 'lunas') {
+                        statusMatch = statusAttr === 'lunas' || statusAttr === 'sudah lunas';
+                    }
+                    
+                    return textMatch && statusMatch;
+                });
+
+                const totalItems = visibleRows.length;
+                const totalPages = Math.max(1, Math.ceil(totalItems / payItemsPerPage));
+                if (payCurrentPage > totalPages) payCurrentPage = totalPages;
+                if (payCurrentPage < 1) payCurrentPage = 1;
+
+                const startIdx = (payCurrentPage - 1) * payItemsPerPage;
+                const endIdx = startIdx + payItemsPerPage;
+
+                rows.forEach(r => r.style.display = 'none');
+                visibleRows.slice(startIdx, endIdx).forEach(r => r.style.display = '');
+
+                if (entryInfo) {
+                    const startShow = totalItems === 0 ? 0 : startIdx + 1;
+                    const endShow = Math.min(endIdx, totalItems);
+                    entryInfo.textContent = `Menampilkan ${startShow} hingga ${endShow} dari ${totalItems} data pembayaran`;
+                }
+
+                if (paginationEl) {
+                    paginationEl.innerHTML = '';
+                    if (totalPages > 1) {
+                        const prevBtn = document.createElement('button');
+                        prevBtn.className = 'page-btn';
+                        prevBtn.title = 'Halaman Sebelumnya';
+                        prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left" style="font-size: 11px;"></i>';
+                        prevBtn.disabled = payCurrentPage === 1;
+                        prevBtn.onclick = () => { if (payCurrentPage > 1) { payCurrentPage--; filterAndPaginatePay(); } };
+                        paginationEl.appendChild(prevBtn);
+
+                        const selectWrap = document.createElement('div');
+                        selectWrap.className = 'page-select-container';
+
+                        const labelPre = document.createElement('span');
+                        labelPre.textContent = 'Halaman';
+                        selectWrap.appendChild(labelPre);
+
+                        const select = document.createElement('select');
+                        select.className = 'page-select-dropdown';
+                        select.title = 'Pilih Halaman';
+                        for (let p = 1; p <= totalPages; p++) {
+                            const opt = document.createElement('option');
+                            opt.value = p;
+                            opt.textContent = p;
+                            if (p === payCurrentPage) opt.selected = true;
+                            select.appendChild(opt);
+                        }
+                        select.onchange = function () {
+                            payCurrentPage = parseInt(this.value) || 1;
+                            filterAndPaginatePay();
+                        };
+                        selectWrap.appendChild(select);
+
+                        const labelPost = document.createElement('span');
+                        labelPost.innerHTML = `dari <strong style="color:#1E293B;">${totalPages}</strong>`;
+                        selectWrap.appendChild(labelPost);
+
+                        paginationEl.appendChild(selectWrap);
+
+                        const nextBtn = document.createElement('button');
+                        nextBtn.className = 'page-btn';
+                        nextBtn.title = 'Halaman Selanjutnya';
+                        nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i>';
+                        nextBtn.disabled = payCurrentPage === totalPages;
+                        nextBtn.onclick = () => { if (payCurrentPage < totalPages) { payCurrentPage++; filterAndPaginatePay(); } };
+                        paginationEl.appendChild(nextBtn);
+                    }
+                }
+            }
+
+            // Pay Tab switching
+            payTabBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    payTabBtns.forEach(b => {
+                        b.classList.remove('active');
+                        b.style.background = 'transparent';
+                        b.style.color = '#64748B';
+                        b.style.boxShadow = 'none';
+                    });
+                    this.classList.add('active');
+                    this.style.background = '#FFFFFF';
+                    this.style.color = '#1E3A8A';
+                    this.style.boxShadow = '0 1px 2px rgba(0,0,0,0.05)';
+                    payActiveFilter = this.getAttribute('data-filter') || 'all';
+                    payCurrentPage = 1;
+                    filterAndPaginatePay();
+                });
+            });
+
+            if (paySearchInput) {
+                paySearchInput.addEventListener('input', () => {
+                    payCurrentPage = 1;
+                    filterAndPaginatePay();
+                });
+            }
+
+            // Read URL Parameters
+            const payUrlParams = new URLSearchParams(window.location.search);
+            const payStatusParam = payUrlParams.get('status') || payUrlParams.get('status_pembayaran') || payUrlParams.get('status_bayar');
+            const paySearchParam = payUrlParams.get('search') || payUrlParams.get('q');
+            const payOrderParam = payUrlParams.get('pesanan') || payUrlParams.get('kode_pesanan');
+
+            if (paySearchParam && paySearchInput) {
+                paySearchInput.value = paySearchParam;
+            }
+
+            if (payStatusParam) {
+                const sLower = payStatusParam.toLowerCase().replace(/\s+/g, '_');
+                const targetTab = Array.from(payTabBtns).find(b => {
+                    const df = b.getAttribute('data-filter');
+                    return df === sLower || (sLower.includes('belum') && df === 'belum_lunas') || (sLower.includes('lunas') && !sLower.includes('belum') && df === 'lunas');
+                });
+                if (targetTab) {
+                    targetTab.click();
+                } else {
+                    filterAndPaginatePay();
+                }
+            } else {
+                filterAndPaginatePay();
+            }
+
+            // Auto-trigger Order Select if prefilled or URL param
+            if (payOrderParam && payOrderSelect) {
+                payOrderSelect.value = payOrderParam;
+                handleOrderSelectChange();
+            } else if (payOrderSelect && payOrderSelect.value) {
+                handleOrderSelectChange();
             }
         });
     </script>

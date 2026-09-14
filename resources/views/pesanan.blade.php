@@ -29,7 +29,8 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
         }
 
-        html, body {
+        html,
+        body {
             max-width: 100vw;
             overflow-x: clip;
         }
@@ -362,93 +363,136 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 4px 12px;
-            border-radius: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
             font-size: 11.5px;
-            font-weight: 700;
+            font-weight: 600;
             white-space: nowrap;
         }
 
-        .badge-menunggu {
-            background: #F1F5F9;
-            color: #475569;
-            border: 1px solid #CBD5E1;
+        /* Production Status Badges (Minimal, Enterprise, Cohesive) */
+        .badge-prod {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            font-weight: 600;
+            white-space: nowrap;
+            line-height: 1.3;
         }
 
-        .badge-diproses {
-            background: #DBEAFE;
-            color: #1E40AF;
-            border: 1px solid #BFDBFE;
-        }
-
-        .badge-selesai {
-            background: #DCFCE7;
-            color: #15803D;
-            border: 1px solid #BBF7D0;
+        .badge-prod::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
         }
 
         .badge-antrean-cetak {
-            background: #E0F2FE;
-            color: #0369A1;
-            border: 1px solid #BAE6FD;
+            background: #F1F5F9;
+            color: #334155;
+            border: 1px solid #E2E8F0;
+        }
+        .badge-antrean-cetak::before {
+            background: #64748B;
         }
 
         .badge-sedang-dicetak {
-            background: #FEF3C7;
-            color: #B45309;
+            background: #FFFBEB;
+            color: #92400E;
             border: 1px solid #FDE68A;
+        }
+        .badge-sedang-dicetak::before {
+            background: #F59E0B;
         }
 
         .badge-finishing {
-            background: #F3E8FF;
-            color: #7E22CE;
+            background: #FAF5FF;
+            color: #6B21A8;
             border: 1px solid #E9D5FF;
+        }
+        .badge-finishing::before {
+            background: #A855F7;
         }
 
         .badge-siap-diambil {
-            background: #CCFBF1;
+            background: #F0FDFA;
             color: #0F766E;
             border: 1px solid #99F6E4;
         }
+        .badge-siap-diambil::before {
+            background: #14B8A6;
+        }
 
-        /* Payment Status Badges */
-        .badge-pay-lunas {
-            background: #DCFCE7;
+        .badge-selesai {
+            background: #F0FDF4;
             color: #166534;
-            border: 1px solid #86EFAC;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
+            border: 1px solid #BBF7D0;
+        }
+        .badge-selesai::before {
+            background: #22C55E;
         }
 
-        .badge-pay-dp {
-            background: #FEF3C7;
-            color: #92400E;
-            border: 1px solid #FCD34D;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
+        .badge-diproses {
+            background: #EFF6FF;
+            color: #1D4ED8;
+            border: 1px solid #BFDBFE;
+        }
+        .badge-diproses::before {
+            background: #3B82F6;
         }
 
-        .badge-pay-unpaid {
-            background: #FEE2E2;
-            color: #991B1B;
-            border: 1px solid #FCA5A5;
-            padding: 3px 8px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
+        .badge-menunggu {
+            background: #F8FAFC;
+            color: #64748B;
+            border: 1px solid #E2E8F0;
+        }
+        .badge-menunggu::before {
+            background: #94A3B8;
+        }
+
+        /* Subtle Payment Status Sub-Tags (Clean & Non-distracting) */
+        .pay-sub-tag {
             display: inline-flex;
             align-items: center;
             gap: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 2px 7px;
+            border-radius: 4px;
+            line-height: 1.25;
+        }
+
+        .pay-sub-tag i {
+            font-size: 10px;
+        }
+
+        .pay-sub-tag.pay-sub-lunas {
+            background: #F0FDF4;
+            color: #166534;
+            border: 1px solid #DCFCE7;
+        }
+
+        .pay-sub-tag.pay-sub-dp {
+            background: #FFFBEB;
+            color: #B45309;
+            border: 1px solid #FEF3C7;
+        }
+
+        .pay-sub-tag.pay-sub-unpaid {
+            background: #FFF1F2;
+            color: #BE123C;
+            border: 1px solid #FFE4E6;
+        }
+
+        .pay-sub-tag .sisa-note {
+            font-size: 10px;
+            font-weight: 500;
+            opacity: 0.9;
         }
 
         .modal-box {
@@ -737,13 +781,7 @@
             border-color: #2563EB;
         }
 
-        /* Combined Dual Status Cell */
-        .status-dual-wrap {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            align-items: flex-start;
-        }
+
 
         /* Compact Design File Icon */
         .design-file-icon {
@@ -767,6 +805,150 @@
             background: #2563EB;
             color: #FFFFFF;
             border-color: #2563EB;
+        }
+
+        .design-file-icon.multi {
+            width: auto;
+            height: 22px;
+            padding: 0 7px;
+            gap: 4px;
+            font-weight: 700;
+            font-size: 10.5px;
+            cursor: pointer;
+            background: #EEF2FF;
+            color: #1E3A8A;
+            border: 1px solid #C7D2FE;
+        }
+
+        .design-file-icon.multi:hover {
+            background: #1E3A8A;
+            color: #FFFFFF;
+            border-color: #1E3A8A;
+        }
+
+        /* Design Gallery Grid & Cards */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+            gap: 14px;
+            margin-top: 14px;
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 4px;
+        }
+
+        .gallery-card {
+            background: #FFFFFF;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 10px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease;
+        }
+
+        .gallery-card:hover {
+            border-color: #3B82F6;
+            box-shadow: 0 6px 16px rgba(59, 130, 246, 0.15);
+        }
+
+        .gallery-thumb-wrap {
+            height: 140px;
+            background: #F8FAFC;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+            border-bottom: 1px solid #E2E8F0;
+        }
+
+        .gallery-thumb-img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            transition: transform 0.2s ease;
+        }
+
+        .gallery-card:hover .gallery-thumb-img {
+            transform: scale(1.05);
+        }
+
+        .gallery-card-body {
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1;
+        }
+
+        .gallery-card-title {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #0F172A;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .gallery-card-meta {
+            font-size: 11px;
+            color: #64748B;
+        }
+
+        .gallery-card-btn {
+            margin-top: 8px;
+            padding: 6px 10px;
+            background: #EFF6FF;
+            color: #1D4ED8;
+            border: 1px solid #BFDBFE;
+            border-radius: 6px;
+            font-size: 11.5px;
+            font-weight: 700;
+            text-align: center;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .gallery-card-btn:hover {
+            background: #1D4ED8;
+            color: #FFFFFF;
+            border-color: #1D4ED8;
+        }
+
+        /* Cart Item Design Badges */
+        .cart-item-design-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 4px;
+            font-weight: 600;
+            text-decoration: none;
+            max-width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .cart-item-design-badge.has-file {
+            background: #EFF6FF;
+            color: #1D4ED8;
+            border: 1px solid #BFDBFE;
+        }
+        .cart-item-design-badge.is-link {
+            background: #ECFEFF;
+            color: #0E7490;
+            border: 1px solid #CFFAFE;
+        }
+        .cart-item-design-badge.is-empty {
+            color: #94A3B8;
+            font-style: italic;
+            font-weight: 400;
         }
 
         /* Multi Item Badge Button & Floating Popover */
@@ -835,6 +1017,7 @@
                 opacity: 0;
                 transform: translateY(-6px) scale(0.98);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0) scale(1);
@@ -1319,6 +1502,7 @@
             border-radius: 6px;
             gap: 2px;
         }
+
         .file-tab-btn {
             border: none;
             background: none;
@@ -1333,11 +1517,13 @@
             gap: 5px;
             transition: all 0.15s ease;
         }
+
         .file-tab-btn.active {
             background: #FFFFFF;
             color: #1E3A8A;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
         }
+
         .file-upload-dropzone {
             border: 1.5px dashed #CBD5E1;
             border-radius: 8px;
@@ -1349,10 +1535,12 @@
             cursor: pointer;
             transition: all 0.15s ease;
         }
+
         .file-upload-dropzone:hover {
             background: #EFF6FF;
             border-color: #3B82F6;
         }
+
         .file-upload-icon {
             font-size: 20px;
             color: #3B82F6;
@@ -1365,6 +1553,7 @@
             justify-content: center;
             flex-shrink: 0;
         }
+
         .file-upload-browse-btn {
             background: #1E3A8A;
             color: #FFFFFF;
@@ -1375,6 +1564,7 @@
             flex-shrink: 0;
             transition: background 0.15s ease;
         }
+
         .file-upload-browse-btn:hover {
             background: #172554;
         }
@@ -1871,9 +2061,12 @@
             body * {
                 visibility: hidden !important;
             }
-            #spkPrintArea, #spkPrintArea * {
+
+            #spkPrintArea,
+            #spkPrintArea * {
                 visibility: visible !important;
             }
+
             #spkPrintArea {
                 position: absolute !important;
                 left: 0 !important;
@@ -1886,6 +2079,10 @@
                 border: none !important;
                 box-shadow: none !important;
             }
+        }
+
+        tr[data-filter-hidden="true"] {
+            display: none !important;
         }
     </style>
 </head>
@@ -1900,22 +2097,26 @@
             <div class="page-header">
                 <div>
                     <h1 class="page-title">Kelola Pesanan</h1>
-                    <p class="page-subtitle">Pantau alur kerja produksi cetak (SPK), pesanan multi-item, dan status pembayaran.</p>
+                    <p class="page-subtitle">Pantau alur kerja produksi cetak (SPK), pesanan multi-item, dan status
+                        pembayaran.</p>
                 </div>
                 <div class="header-right">
-                    <button class="btn-primary" id="openOrderModal"><i class="fa-solid fa-plus"></i> Buat Pesanan Baru</button>
+                    <button class="btn-primary" id="openOrderModal"><i class="fa-solid fa-plus"></i> Buat Pesanan
+                        Baru</button>
                 </div>
             </div>
 
             @if(session('error'))
-                <div style="padding: 12px 16px; background: #FEF2F2; color: #991B1B; border: 1px solid #FCA5A5; border-radius: 8px; margin-bottom: 20px; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 10px;">
+                <div
+                    style="padding: 12px 16px; background: #FEF2F2; color: #991B1B; border: 1px solid #FCA5A5; border-radius: 8px; margin-bottom: 20px; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 10px;">
                     <i class="fa-solid fa-circle-exclamation"></i>
                     <span>{{ session('error') }}</span>
                 </div>
             @endif
 
             @if(session('success'))
-                <div style="padding: 12px 16px; background: #F0FDF4; color: #166534; border: 1px solid #86EFAC; border-radius: 8px; margin-bottom: 20px; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 10px;">
+                <div
+                    style="padding: 12px 16px; background: #F0FDF4; color: #166534; border: 1px solid #86EFAC; border-radius: 8px; margin-bottom: 20px; font-weight: 600; font-size: 13px; display: flex; align-items: center; gap: 10px;">
                     <i class="fa-solid fa-circle-check"></i>
                     <span>{{ session('success') }}</span>
                 </div>
@@ -1926,10 +2127,12 @@
                 <div class="pesanan-table-toolbar">
                     <div class="toolbar-search-wrap">
                         <i class="fa-solid fa-magnifying-glass"></i>
-                        <input type="text" id="tableSearchInput" class="toolbar-search-input" placeholder="Cari kode pesanan, nama pelanggan, produk...">
+                        <input type="text" id="tableSearchInput" class="toolbar-search-input"
+                            placeholder="Cari kode pesanan, nama pelanggan, produk..." oninput="if(window.applyTableFilters) window.applyTableFilters()">
                     </div>
                     <div class="toolbar-filters-wrap">
-                        <select id="filterStatusProd" class="toolbar-select" title="Saring berdasarkan status alur produksi">
+                        <select id="filterStatusProd" class="toolbar-select"
+                            title="Saring berdasarkan status alur produksi" onchange="if(window.applyTableFilters) window.applyTableFilters()">
                             <option value="">Semua Status Produksi</option>
                             <option value="Antrean Cetak">Antrean Cetak</option>
                             <option value="Sedang Dicetak">Sedang Dicetak</option>
@@ -1937,7 +2140,8 @@
                             <option value="Siap Diambil">Siap Diambil</option>
                             <option value="Selesai">Selesai</option>
                         </select>
-                        <select id="filterStatusBayar" class="toolbar-select" title="Saring berdasarkan status pembayaran">
+                        <select id="filterStatusBayar" class="toolbar-select"
+                            title="Saring berdasarkan status pembayaran" onchange="if(window.applyTableFilters) window.applyTableFilters()">
                             <option value="">Semua Pembayaran</option>
                             <option value="lunas">Lunas</option>
                             <option value="dp">DP</option>
@@ -1947,34 +2151,39 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table>
+                    <table id="pesananMainTable">
                         <thead>
                             <tr>
                                 <th style="width: 140px;">KODE & TANGGAL</th>
                                 <th style="width: 175px;">PELANGGAN</th>
                                 <th style="min-width: 200px;">PRODUK</th>
-                                <th style="width: 130px;">TOTAL HARGA</th>
-                                <th style="width: 165px;">STATUS</th>
+                                <th style="width: 155px;">TOTAL & BAYAR</th>
+                                <th style="width: 150px;">STATUS PRODUKSI</th>
                                 <th style="text-align:right; width: 60px;">AKSI</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody id="pesananMainTableBody">
                             @forelse($pesanans ?? [] as $pesanan)
                                 @php
                                     $stProd = $pesanan->status ?? 'Antrean Cetak';
                                     $stProdClass = 'badge-diproses';
-                                    if ($stProd === 'Antrean Cetak') $stProdClass = 'badge-antrean-cetak';
-                                    elseif ($stProd === 'Sedang Dicetak') $stProdClass = 'badge-sedang-dicetak';
-                                    elseif ($stProd === 'Finishing') $stProdClass = 'badge-finishing';
-                                    elseif ($stProd === 'Siap Diambil') $stProdClass = 'badge-siap-diambil';
-                                    elseif ($stProd === 'Selesai') $stProdClass = 'badge-selesai';
+                                    if ($stProd === 'Antrean Cetak')
+                                        $stProdClass = 'badge-antrean-cetak';
+                                    elseif ($stProd === 'Sedang Dicetak')
+                                        $stProdClass = 'badge-sedang-dicetak';
+                                    elseif ($stProd === 'Finishing')
+                                        $stProdClass = 'badge-finishing';
+                                    elseif ($stProd === 'Siap Diambil')
+                                        $stProdClass = 'badge-siap-diambil';
+                                    elseif ($stProd === 'Selesai')
+                                        $stProdClass = 'badge-selesai';
 
                                     $stBayar = $pesanan->status_pembayaran ?? (strtolower($pesanan->status) === 'selesai' ? 'Lunas' : 'Belum Bayar');
                                     $stBayarLower = strtolower($stBayar);
                                     $sisaTagihan = floatval($pesanan->sisa_bayar ?? ($stBayarLower === 'lunas' ? 0 : $pesanan->total_harga));
 
-                                    $detailItems = is_array($pesanan->detail_items) 
-                                        ? $pesanan->detail_items 
+                                    $detailItems = is_array($pesanan->detail_items)
+                                        ? $pesanan->detail_items
                                         : (is_string($pesanan->detail_items) ? json_decode($pesanan->detail_items, true) : []);
                                     $itemsCount = is_array($detailItems) ? count($detailItems) : 1;
 
@@ -1991,13 +2200,21 @@
                                 @endphp
                                 <tr data-status-prod="{{ $stProd }}" data-status-bayar="{{ $stBayarLower }}">
                                     <td class="td-nowrap">
-                                        <div style="display: flex; align-items: center;">
+                                        <div style="display: flex; align-items: center; gap: 4px;">
                                             <span class="order-code">{{ $pesanan->kode_pesanan }}</span>
-                                            @if(!empty($pesanan->file_desain))
+                                            @if($itemsCount > 1)
+                                                <button type="button" class="design-file-icon multi"
+                                                    onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}")'
+                                                    title="Buka Galeri Desain ({{ $itemsCount }} File)">
+                                                    <i class="fa-solid fa-images"></i>
+                                                    <span>{{ $itemsCount }} Desain</span>
+                                                </button>
+                                            @elseif(!empty($pesanan->file_desain))
                                                 @php
                                                     $fUrl = \Illuminate\Support\Str::startsWith($pesanan->file_desain, ['http://', 'https://']) ? $pesanan->file_desain : asset(ltrim($pesanan->file_desain, '/'));
                                                 @endphp
-                                                <a href="{{ $fUrl }}" target="_blank" class="design-file-icon" title="Buka File Desain ({{ basename($pesanan->file_desain) }})">
+                                                <a href="{{ $fUrl }}" target="_blank" class="design-file-icon"
+                                                    title="Buka File Desain ({{ basename($pesanan->file_desain) }})">
                                                     <i class="fa-solid fa-file-image"></i>
                                                 </a>
                                             @endif
@@ -2012,7 +2229,8 @@
                                                 {{ strtoupper(substr($pesanan->nama_pelanggan, 0, 2)) }}
                                             </div>
                                             <div>
-                                                <div style="font-weight: 700; color: #0F172A;">{{ $pesanan->nama_pelanggan }}</div>
+                                                <div style="font-weight: 700; color: #0F172A;">
+                                                    {{ $pesanan->nama_pelanggan }}</div>
                                             </div>
                                         </div>
                                     </td>
@@ -2023,11 +2241,11 @@
 
                                         @if($itemsCount > 1)
                                             <div style="margin-top: 4px;">
-                                                <button type="button" 
-                                                        class="badge-multi-item-btn" 
-                                                        onclick='toggleItemsPopover(event, this, @json($detailItems), "{{ $pesanan->kode_pesanan }}", {{ $pesanan->total_harga }}, @json($pesanan))'
-                                                        title="{{ $otherTooltip }}">
-                                                    <i class="fa-solid fa-layer-group"></i> +{{ $itemsCount - 1 }} produk lainnya
+                                                <button type="button" class="badge-multi-item-btn"
+                                                    onclick='toggleItemsPopover(event, this, @json($detailItems), "{{ $pesanan->kode_pesanan }}", {{ $pesanan->total_harga }}, @json($pesanan))'
+                                                    title="{{ $otherTooltip }}">
+                                                    <i class="fa-solid fa-layer-group"></i> +{{ $itemsCount - 1 }} produk
+                                                    lainnya
                                                     <i class="fa-solid fa-chevron-down chevron-icon"></i>
                                                 </button>
                                             </div>
@@ -2044,47 +2262,61 @@
                                         @endif
                                     </td>
                                     <td class="td-nowrap">
-                                        <div style="font-weight: 700; color: #0F172A; font-size: 13px;">
+                                        <div style="font-weight: 700; color: #0F172A; font-size: 13.5px; letter-spacing: -0.01em;">
                                             Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}
                                         </div>
-                                    </td>
-                                    <td class="td-nowrap">
-                                        <div class="status-dual-wrap">
-                                            <span class="badge {{ $stProdClass }}" style="font-size: 10.5px; padding: 2.5px 8px;">
-                                                {{ $stProd }}
-                                            </span>
+                                        <div style="margin-top: 3px;">
                                             @if($stBayarLower === 'lunas')
-                                                <span class="badge-pay-lunas" style="font-size: 10.5px; padding: 2.5px 8px;" title="Pembayaran: Lunas"><i class="fa-solid fa-circle-check"></i> Lunas</span>
+                                                <span class="pay-sub-tag pay-sub-lunas" title="Pembayaran: Lunas">
+                                                    <i class="fa-solid fa-circle-check"></i> Lunas
+                                                </span>
                                             @elseif($stBayarLower === 'dp' || str_contains($stBayarLower, 'dp'))
-                                                <span class="badge-pay-dp" style="font-size: 10.5px; padding: 2.5px 8px; cursor: default;" title="{{ $sisaTagihan > 0 ? 'Sisa tagihan: Rp ' . number_format($sisaTagihan, 0, ',', '.') : 'Pembayaran: DP' }}">
-                                                    <i class="fa-solid fa-clock"></i> DP
+                                                <span class="pay-sub-tag pay-sub-dp"
+                                                    title="{{ $sisaTagihan > 0 ? 'Sisa tagihan: Rp ' . number_format($sisaTagihan, 0, ',', '.') : 'Pembayaran: DP' }}">
+                                                    <i class="fa-solid fa-clock"></i> DP @if($sisaTagihan > 0)<span class="sisa-note">(Sisa Rp {{ number_format($sisaTagihan, 0, ',', '.') }})</span>@endif
                                                 </span>
                                             @else
-                                                <span class="badge-pay-unpaid" style="font-size: 10.5px; padding: 2.5px 8px; cursor: default;" title="{{ $sisaTagihan > 0 ? 'Sisa tagihan: Rp ' . number_format($sisaTagihan, 0, ',', '.') : 'Belum Lunas' }}">
+                                                <span class="pay-sub-tag pay-sub-unpaid"
+                                                    title="{{ $sisaTagihan > 0 ? 'Sisa tagihan: Rp ' . number_format($sisaTagihan, 0, ',', '.') : 'Belum Lunas' }}">
                                                     <i class="fa-solid fa-circle-exclamation"></i> Belum Lunas
                                                 </span>
                                             @endif
                                         </div>
                                     </td>
+                                    <td class="td-nowrap">
+                                        <span class="badge-prod {{ $stProdClass }}">
+                                            {{ $stProd }}
+                                        </span>
+                                    </td>
                                     <td class="td-nowrap" style="text-align:right;">
                                         <div class="action-dropdown">
-                                            <button type="button" class="action-icon-btn action-toggle" title="Menu Aksi"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+                                            <button type="button" class="action-icon-btn action-toggle" title="Menu Aksi"><i
+                                                    class="fa-solid fa-ellipsis-vertical"></i></button>
                                             <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item" onclick='viewSpkDetail(@json($pesanan))'>
+                                                <button type="button" class="dropdown-item"
+                                                    onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}")'>
+                                                    <i class="fa-solid fa-images" style="color:#2563EB;"></i> Galeri File Desain ({{ $itemsCount }})
+                                                </button>
+                                                <button type="button" class="dropdown-item"
+                                                    onclick='viewSpkDetail(@json($pesanan))'>
                                                     <i class="fa-solid fa-print"></i> Cetak SPK / Nota
                                                 </button>
                                                 @if($sisaTagihan > 0)
-                                                    <button type="button" class="dropdown-item" style="color: #16A34A;" onclick='openPelunasanModal(@json($pesanan))'>
+                                                    <button type="button" class="dropdown-item" style="color: #16A34A;"
+                                                        onclick='openPelunasanModal(@json($pesanan))'>
                                                         <i class="fa-solid fa-hand-holding-dollar"></i> Pelunasan Cepat
                                                     </button>
                                                 @endif
                                                 @if(strtolower($pesanan->status ?? '') !== 'selesai')
-                                                    <button type="button" class="dropdown-item" onclick='openStatusModal(@json($pesanan))'>
+                                                    <button type="button" class="dropdown-item"
+                                                        onclick='openStatusModal(@json($pesanan))'>
                                                         <i class="fa-solid fa-arrows-rotate"></i> Update Produksi
                                                     </button>
                                                 @endif
                                                 @if(!($isKasir ?? false))
-                                                    <form action="{{ route('pesanan.destroy', $pesanan->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pesanan {{ $pesanan->kode_pesanan }}?');">
+                                                    <form action="{{ route('pesanan.destroy', $pesanan->id) }}" method="POST"
+                                                        style="display:inline;"
+                                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus pesanan {{ $pesanan->kode_pesanan }}?');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="dropdown-item danger">
@@ -2098,7 +2330,8 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" style="text-align:center; padding:30px; color:#64748B;">Belum ada data pesanan cetak di database.</td>
+                                    <td colspan="6" style="text-align:center; padding:30px; color:#64748B;">Belum ada data
+                                        pesanan cetak di database.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -2112,6 +2345,230 @@
         </main>
     </div>
 
+    <!-- DEDICATED TABLE FILTER & PAGINATION ENGINE (ISOLATED & BULLETPROOF) -->
+    <script>
+        (function () {
+            let currentPage = 1;
+            const itemsPerPage = 10;
+
+            function updatePagination() {
+                const tbody = document.getElementById('pesananMainTableBody') || document.querySelector('#pesananMainTable tbody') || document.querySelector('.table-responsive table tbody');
+                if (!tbody) return;
+
+                const rows = Array.from(tbody.querySelectorAll('tr')).filter(r => r.id !== 'noDataFilterRow');
+                const visibleRows = rows.filter(r => r.getAttribute('data-filter-hidden') !== 'true');
+                const totalItems = visibleRows.length;
+                const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
+
+                if (currentPage > totalPages) currentPage = totalPages;
+                if (currentPage < 1) currentPage = 1;
+
+                const startIdx = (currentPage - 1) * itemsPerPage;
+                const endIdx = startIdx + itemsPerPage;
+
+                rows.forEach(r => {
+                    r.style.display = 'none';
+                });
+
+                visibleRows.slice(startIdx, endIdx).forEach(r => {
+                    r.style.display = '';
+                });
+
+                // Empty state handler
+                let emptyFilterRow = document.getElementById('noDataFilterRow');
+                if (totalItems === 0) {
+                    if (!emptyFilterRow) {
+                        emptyFilterRow = document.createElement('tr');
+                        emptyFilterRow.id = 'noDataFilterRow';
+                        emptyFilterRow.innerHTML = '<td colspan="6" style="text-align:center; padding:32px; color:#64748B;"><i class="fa-solid fa-inbox" style="font-size:26px; margin-bottom:8px; display:block; color:#94A3B8;"></i> Tidak ada pesanan yang sesuai dengan filter yang dipilih.</td>';
+                        tbody.appendChild(emptyFilterRow);
+                    }
+                    emptyFilterRow.style.display = '';
+                } else if (emptyFilterRow) {
+                    emptyFilterRow.style.display = 'none';
+                }
+
+                // Update entry info
+                const entryInfo = document.querySelector('.entry-info');
+                if (entryInfo) {
+                    const startShow = totalItems === 0 ? 0 : startIdx + 1;
+                    const endShow = Math.min(endIdx, totalItems);
+                    entryInfo.textContent = `Menampilkan ${startShow} hingga ${endShow} dari ${totalItems} pesanan`;
+                }
+
+                // Update pagination controls
+                const paginationEl = document.querySelector('.pagination');
+                if (paginationEl) {
+                    paginationEl.innerHTML = '';
+                    if (totalPages > 1) {
+                        const prevBtn = document.createElement('button');
+                        prevBtn.className = 'page-btn';
+                        prevBtn.title = 'Halaman Sebelumnya';
+                        prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left" style="font-size: 11px;"></i>';
+                        prevBtn.disabled = currentPage === 1;
+                        prevBtn.onclick = function () {
+                            if (currentPage > 1) {
+                                currentPage--;
+                                updatePagination();
+                            }
+                        };
+                        paginationEl.appendChild(prevBtn);
+
+                        const selectWrap = document.createElement('div');
+                        selectWrap.className = 'page-select-container';
+
+                        const labelPre = document.createElement('span');
+                        labelPre.textContent = 'Halaman';
+                        selectWrap.appendChild(labelPre);
+
+                        const select = document.createElement('select');
+                        select.className = 'page-select-dropdown';
+                        select.title = 'Pilih Halaman';
+                        for (let p = 1; p <= totalPages; p++) {
+                            const opt = document.createElement('option');
+                            opt.value = p;
+                            opt.textContent = p;
+                            if (p === currentPage) opt.selected = true;
+                            select.appendChild(opt);
+                        }
+                        select.onchange = function () {
+                            currentPage = parseInt(this.value) || 1;
+                            updatePagination();
+                        };
+                        selectWrap.appendChild(select);
+
+                        const labelPost = document.createElement('span');
+                        labelPost.innerHTML = `dari <strong style="color:#1E293B;">${totalPages}</strong>`;
+                        selectWrap.appendChild(labelPost);
+
+                        paginationEl.appendChild(selectWrap);
+
+                        const nextBtn = document.createElement('button');
+                        nextBtn.className = 'page-btn';
+                        nextBtn.title = 'Halaman Selanjutnya';
+                        nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i>';
+                        nextBtn.disabled = currentPage === totalPages;
+                        nextBtn.onclick = function () {
+                            if (currentPage < totalPages) {
+                                currentPage++;
+                                updatePagination();
+                            }
+                        };
+                        paginationEl.appendChild(nextBtn);
+                    }
+                }
+            }
+
+            window.applyTableFilters = function () {
+                const tbody = document.getElementById('pesananMainTableBody') || document.querySelector('#pesananMainTable tbody') || document.querySelector('.table-responsive table tbody');
+                if (!tbody) return;
+
+                const searchInput = document.getElementById('tableSearchInput') || document.querySelector('.pesanan-table-toolbar input');
+                const statusProdSelect = document.getElementById('filterStatusProd');
+                const statusBayarSelect = document.getElementById('filterStatusBayar');
+
+                const q = (searchInput ? searchInput.value : '').toLowerCase().trim();
+                const prodFilter = (statusProdSelect ? statusProdSelect.value : '').toLowerCase().trim();
+                const bayarFilter = (statusBayarSelect ? statusBayarSelect.value : '').toLowerCase().trim();
+
+                const rows = Array.from(tbody.querySelectorAll('tr'));
+                rows.forEach(r => {
+                    if (r.id === 'noDataFilterRow') return;
+
+                    const rowText = r.textContent.toLowerCase();
+                    const textMatch = !q || rowText.includes(q);
+
+                    const rowProd = (r.getAttribute('data-status-prod') || '').toLowerCase().trim();
+                    const rowBayar = (r.getAttribute('data-status-bayar') || '').toLowerCase().trim();
+
+                    const prodMatch = !prodFilter || rowProd === prodFilter;
+
+                    let bayarMatch = true;
+                    if (bayarFilter === 'lunas') {
+                        bayarMatch = (rowBayar === 'lunas' || rowBayar === 'sudah lunas');
+                    } else if (bayarFilter === 'dp') {
+                        bayarMatch = rowBayar.includes('dp');
+                    } else if (bayarFilter === 'belum_lunas') {
+                        bayarMatch = (rowBayar !== 'lunas' && rowBayar !== 'sudah lunas');
+                    }
+
+                    if (textMatch && prodMatch && bayarMatch) {
+                        r.removeAttribute('data-filter-hidden');
+                    } else {
+                        r.setAttribute('data-filter-hidden', 'true');
+                    }
+                });
+
+                currentPage = 1;
+                updatePagination();
+            };
+
+            function initPesananTable() {
+                const searchInput = document.getElementById('tableSearchInput');
+                const statusProdSelect = document.getElementById('filterStatusProd');
+                const statusBayarSelect = document.getElementById('filterStatusBayar');
+
+                // Read URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const qParam = urlParams.get('search') || urlParams.get('q');
+                let prodParam = urlParams.get('status_prod') || urlParams.get('prod');
+                let bayarParam = urlParams.get('status_bayar') || urlParams.get('status_pembayaran') || urlParams.get('bayar');
+                const genericStatus = urlParams.get('status');
+
+                if (genericStatus) {
+                    const gLower = genericStatus.toLowerCase();
+                    if (gLower.includes('lunas') || gLower.includes('bayar') || gLower === 'dp') {
+                        if (!bayarParam) bayarParam = genericStatus;
+                    } else {
+                        if (!prodParam) prodParam = genericStatus;
+                    }
+                }
+
+                if (qParam && searchInput) {
+                    searchInput.value = qParam;
+                }
+                if (prodParam && statusProdSelect) {
+                    const pLower = prodParam.toLowerCase();
+                    for (let opt of statusProdSelect.options) {
+                        if (opt.value.toLowerCase() === pLower || opt.text.toLowerCase() === pLower) {
+                            statusProdSelect.value = opt.value;
+                            break;
+                        }
+                    }
+                }
+                if (bayarParam && statusBayarSelect) {
+                    const bLower = bayarParam.toLowerCase().replace(/\s+/g, '_');
+                    if (bLower.includes('belum') || bLower.includes('piutang') || bLower.includes('unpaid')) {
+                        statusBayarSelect.value = 'belum_lunas';
+                    } else if (bLower === 'dp') {
+                        statusBayarSelect.value = 'dp';
+                    } else if (bLower.includes('lunas') || bLower.includes('paid')) {
+                        statusBayarSelect.value = 'lunas';
+                    }
+                }
+
+                if (searchInput) {
+                    searchInput.addEventListener('input', window.applyTableFilters);
+                    searchInput.addEventListener('change', window.applyTableFilters);
+                }
+                if (statusProdSelect) {
+                    statusProdSelect.addEventListener('change', window.applyTableFilters);
+                }
+                if (statusBayarSelect) {
+                    statusBayarSelect.addEventListener('change', window.applyTableFilters);
+                }
+
+                window.applyTableFilters();
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initPesananTable);
+            } else {
+                initPesananTable();
+            }
+        })();
+    </script>
+
     <!-- FLOATING POPOVER: MULTI-ITEM ORDER DETAILS -->
     <div id="multiItemPopover" class="multi-item-popover">
         <div class="popover-header">
@@ -2120,7 +2577,8 @@
                 <span id="popoverOrderCode" style="letter-spacing: -0.2px; font-weight:800;">ORD-XXXX-XXX</span>
                 <span id="popoverItemCountBadge" class="popover-count-badge">0 Produk</span>
             </div>
-            <button type="button" class="popover-close-btn" onclick="closeMultiItemPopover()" title="Tutup">&times;</button>
+            <button type="button" class="popover-close-btn" onclick="closeMultiItemPopover()"
+                title="Tutup">&times;</button>
         </div>
         <div class="popover-body" id="popoverItemsList">
             <!-- Dynamic item cards will be injected here -->
@@ -2146,14 +2604,17 @@
                     </div>
                     <div>
                         <h3 class="modal-title">Buat Pesanan & SPK Percetakan</h3>
-                        <p class="modal-subtitle">Kalkulator dinamis ukuran cetak, spesifikasi finishing & penerbitan SPK</p>
+                        <p class="modal-subtitle">Kalkulator dinamis ukuran cetak, spesifikasi finishing & penerbitan
+                            SPK</p>
                     </div>
                 </div>
-                <button type="button" class="close-modal-btn" id="closeOrderModalBtn" title="Tutup Modal">&times;</button>
+                <button type="button" class="close-modal-btn" id="closeOrderModalBtn"
+                    title="Tutup Modal">&times;</button>
             </div>
 
             <!-- Form -->
-            <form id="addOrderForm" action="{{ route('pesanan.store') }}" method="POST" enctype="multipart/form-data" style="display: flex; flex-direction: column; flex: 1; min-height: 0; margin: 0;">
+            <form id="addOrderForm" action="{{ route('pesanan.store') }}" method="POST" enctype="multipart/form-data"
+                style="display: flex; flex-direction: column; flex: 1; min-height: 0; margin: 0;">
                 @csrf
                 <input type="hidden" name="items_json" id="ordItemsJson">
                 <input type="hidden" name="pembayaran_tipe" value="belum_bayar">
@@ -2175,7 +2636,8 @@
                                 <span class="step-badge">1</span>
                                 <div>
                                     <h4 class="section-card-title">Informasi Pelanggan & Alur Produksi</h4>
-                                    <p class="section-card-desc">Identitas pemesan, status alur cetak, link file desain & finishing</p>
+                                    <p class="section-card-desc">Identitas pemesan, status alur cetak, link file desain
+                                        & finishing</p>
                                 </div>
                             </div>
                         </div>
@@ -2183,37 +2645,48 @@
                         <div class="form-row-2col">
                             <div class="form-group">
                                 <label for="ordCustomer">Nama Pelanggan <span style="color:#DC2626;">*</span></label>
-                                <input type="text" name="nama_pelanggan" id="ordCustomer" list="pelangganList" required placeholder="Ketik nama pelanggan..." autocomplete="off">
+                                <input type="text" name="nama_pelanggan" id="ordCustomer" list="pelangganList" required
+                                    placeholder="Ketik nama pelanggan..." autocomplete="off">
                                 <datalist id="pelangganList">
                                     @foreach($pelanggans ?? [] as $pel)
-                                        <option value="{{ $pel->nama }}">{{ $pel->kode_pelanggan }} - {{ $pel->nama }}</option>
+                                        <option value="{{ $pel->nama }}">{{ $pel->kode_pelanggan }} - {{ $pel->nama }}
+                                        </option>
                                     @endforeach
                                 </datalist>
                             </div>
                             <div class="form-group">
                                 <label>Status Alur Produksi</label>
-                                <div style="background: #FFFBEB; border: 1.5px solid #FDE68A; border-radius: 8px; padding: 0 12px; height: 38px; display: flex; align-items: center; justify-content: space-between;">
+                                <div
+                                    style="background: #FFFBEB; border: 1.5px solid #FDE68A; border-radius: 8px; padding: 0 12px; height: 38px; display: flex; align-items: center; justify-content: space-between;">
                                     <div style="display: flex; align-items: center; gap: 8px;">
-                                        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #D97706;"></span>
-                                        <span style="font-size: 12.5px; font-weight: 700; color: #92400E;">1. Antrean Cetak (Menunggu Mesin)</span>
+                                        <span
+                                            style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #D97706;"></span>
+                                        <span style="font-size: 12.5px; font-weight: 700; color: #92400E;">1. Antrean
+                                            Cetak (Menunggu Mesin)</span>
                                     </div>
-                                    <span style="font-size: 10.5px; background: #FEF3C7; color: #B45309; padding: 2px 7px; border-radius: 4px; font-weight: 700; text-transform: uppercase;">Otomatis</span>
+                                    <span
+                                        style="font-size: 10.5px; background: #FEF3C7; color: #B45309; padding: 2px 7px; border-radius: 4px; font-weight: 700; text-transform: uppercase;">Otomatis</span>
                                 </div>
                                 <input type="hidden" name="status" value="Antrean Cetak">
-                                <span style="font-size: 11px; color: #64748B; margin-top: 3px; display: block;">*Status alur produksi dapat diperbarui nanti setelah pesanan dibuat via tombol Aksi.</span>
+                                <span style="font-size: 11px; color: #64748B; margin-top: 3px; display: block;">*Status
+                                    alur produksi dapat diperbarui nanti setelah pesanan dibuat via tombol Aksi.</span>
                             </div>
                         </div>
 
                         <div class="form-row-2col" style="margin-top: 4px; align-items: flex-start;">
                             <!-- File Desain: File Laptop vs Link GDrive -->
                             <div class="form-group" style="margin-bottom: 0;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                    <label style="margin-bottom: 0; font-weight: 700; color: #334155;">File Desain Cetak</label>
+                                <div
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                    <label style="margin-bottom: 0; font-weight: 700; color: #334155;">File Desain
+                                        Cetak</label>
                                     <div class="file-tab-container">
-                                        <button type="button" id="tabBtnUpload" class="file-tab-btn active" onclick="switchDesignSource('upload')">
+                                        <button type="button" id="tabBtnUpload" class="file-tab-btn active"
+                                            onclick="switchDesignSource('upload')">
                                             <i class="fa-solid fa-laptop"></i> File Laptop
                                         </button>
-                                        <button type="button" id="tabBtnLink" class="file-tab-btn" onclick="switchDesignSource('link')">
+                                        <button type="button" id="tabBtnLink" class="file-tab-btn"
+                                            onclick="switchDesignSource('link')">
                                             <i class="fa-brands fa-google-drive"></i> Link Drive/URL
                                         </button>
                                     </div>
@@ -2221,37 +2694,53 @@
 
                                 <!-- Mode 1: Upload File dari Laptop -->
                                 <div id="fileUploadContainer">
-                                    <input type="file" name="file_upload" id="ordFileUpload" accept=".jpg,.jpeg,.png,.webp,.pdf,.tif,.tiff,.svg,.ai,.psd,.cdr,.zip" style="display: none;" onchange="validateAndPreviewFile(this)">
-                                    <div class="file-upload-dropzone" onclick="document.getElementById('ordFileUpload').click()">
+                                    <input type="file" name="file_upload" id="ordFileUpload"
+                                        accept=".jpg,.jpeg,.png,.webp,.pdf,.tif,.tiff,.svg,.ai,.psd,.cdr,.zip"
+                                        style="display: none;" onchange="validateAndPreviewFile(this)">
+                                    <div class="file-upload-dropzone"
+                                        onclick="document.getElementById('ordFileUpload').click()">
                                         <i class="fa-solid fa-cloud-arrow-up file-upload-icon"></i>
                                         <div style="flex: 1; text-align: left;">
-                                            <div style="font-size: 12.5px; font-weight: 700; color: #1E3A8A;">Pilih / Tarik File dari Laptop</div>
-                                            <div style="font-size: 11px; color: #64748B;">Mendukung: JPG, PNG, PDF, SVG, TIFF, PSD, CDR, ZIP (Maks. 50MB)</div>
+                                            <div style="font-size: 12.5px; font-weight: 700; color: #1E3A8A;">Pilih /
+                                                Tarik File dari Laptop</div>
+                                            <div style="font-size: 11px; color: #64748B;">Mendukung: JPG, PNG, PDF, SVG,
+                                                TIFF, PSD, CDR, ZIP (Maks. 50MB)</div>
                                         </div>
                                         <span class="file-upload-browse-btn">Browse</span>
                                     </div>
 
                                     <!-- Status Bar File Terpilih & Validasi -->
-                                    <div id="filePreviewBar" style="display: none; align-items: center; justify-content: space-between; background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 8px; padding: 7px 12px; margin-top: 6px;">
+                                    <div id="filePreviewBar"
+                                        style="display: none; align-items: center; justify-content: space-between; background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 8px; padding: 7px 12px; margin-top: 6px;">
                                         <div style="display: flex; align-items: center; gap: 8px; overflow: hidden;">
-                                            <i id="filePreviewIcon" class="fa-solid fa-file-image" style="color: #16A34A; font-size: 16px;"></i>
+                                            <i id="filePreviewIcon" class="fa-solid fa-file-image"
+                                                style="color: #16A34A; font-size: 16px;"></i>
                                             <div style="overflow: hidden;">
-                                                <div id="filePreviewName" style="font-size: 12px; font-weight: 700; color: #166534; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">desain.jpg</div>
-                                                <div id="filePreviewSize" style="font-size: 10.5px; color: #15803D;">0 KB • Lolos Verifikasi</div>
+                                                <div id="filePreviewName"
+                                                    style="font-size: 12px; font-weight: 700; color: #166534; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px;">
+                                                    desain.jpg</div>
+                                                <div id="filePreviewSize" style="font-size: 10.5px; color: #15803D;">0
+                                                    KB • Lolos Verifikasi</div>
                                             </div>
                                         </div>
-                                        <button type="button" onclick="removeSelectedFile()" style="background: none; border: none; color: #DC2626; cursor: pointer; padding: 4px; font-size: 13px;" title="Batalkan File">
+                                        <button type="button" onclick="removeSelectedFile()"
+                                            style="background: none; border: none; color: #DC2626; cursor: pointer; padding: 4px; font-size: 13px;"
+                                            title="Batalkan File">
                                             <i class="fa-solid fa-circle-xmark"></i>
                                         </button>
                                     </div>
 
                                     <!-- Warning Alert Anti-Spoofing (Client Side) -->
-                                    <div id="fileSpoofError" style="display: none; background: #FEF2F2; border: 1.5px solid #FCA5A5; border-radius: 8px; padding: 8px 12px; margin-top: 6px; color: #991B1B; font-size: 11.5px; line-height: 1.4;">
+                                    <div id="fileSpoofError"
+                                        style="display: none; background: #FEF2F2; border: 1.5px solid #FCA5A5; border-radius: 8px; padding: 8px 12px; margin-top: 6px; color: #991B1B; font-size: 11.5px; line-height: 1.4;">
                                         <div style="display: flex; align-items: flex-start; gap: 7px;">
-                                            <i class="fa-solid fa-circle-exclamation" style="font-size: 14px; margin-top: 2px; color: #DC2626;"></i>
+                                            <i class="fa-solid fa-circle-exclamation"
+                                                style="font-size: 14px; margin-top: 2px; color: #DC2626;"></i>
                                             <div>
-                                                <strong style="display: block; font-size: 12px;">Peringatan File Palsu Ditolak!</strong>
-                                                <span id="fileSpoofErrorMsg">File terdeteksi sebagai teks biasa yang diubah ekstensinya.</span>
+                                                <strong style="display: block; font-size: 12px;">Peringatan File Palsu
+                                                    Ditolak!</strong>
+                                                <span id="fileSpoofErrorMsg">File terdeteksi sebagai teks biasa yang
+                                                    diubah ekstensinya.</span>
                                             </div>
                                         </div>
                                     </div>
@@ -2260,29 +2749,42 @@
                                 <!-- Mode 2: Link Google Drive / URL -->
                                 <div id="fileLinkContainer" style="display: none;">
                                     <div style="position: relative;">
-                                        <input type="text" name="file_desain" id="ordFileDesain" placeholder="https://drive.google.com/file/d/..." autocomplete="off" style="padding-left: 32px;">
-                                        <i class="fa-brands fa-google-drive" style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #0EA5E9; font-size: 14px;"></i>
+                                        <input type="text" name="file_desain" id="ordFileDesain"
+                                            placeholder="https://drive.google.com/file/d/..." autocomplete="off"
+                                            style="padding-left: 32px;">
+                                        <i class="fa-brands fa-google-drive"
+                                            style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #0EA5E9; font-size: 14px;"></i>
                                     </div>
-                                    <span style="font-size: 11px; color: #64748B; margin-top: 3px; display: block;">Pastikan link Google Drive disetel ke <em>"Anyone with the link can view"</em>.</span>
+                                    <span
+                                        style="font-size: 11px; color: #64748B; margin-top: 3px; display: block;">Pastikan
+                                        link Google Drive disetel ke <em>"Anyone with the link can view"</em>.</span>
                                 </div>
                             </div>
 
                             <!-- Detail Finishing Cetak -->
                             <div class="form-group" style="margin-bottom: 0;">
                                 <label for="ordCatatanFinishing">Detail Finishing Cetak</label>
-                                <textarea name="catatan_finishing" id="ordCatatanFinishing" rows="3" placeholder="Contoh: Mata ayam 4 sudut, laminasi doff, selongsong atas-bawah..." style="resize: none; font-size: 12.5px; height: 78px; padding: 8px 11px;"></textarea>
+                                <textarea name="catatan_finishing" id="ordCatatanFinishing" rows="3"
+                                    placeholder="Contoh: Mata ayam 4 sudut, laminasi doff, selongsong atas-bawah..."
+                                    style="resize: none; font-size: 12.5px; height: 78px; padding: 8px 11px;"></textarea>
                             </div>
                         </div>
 
                         <!-- Quick Finishing Tag Pills -->
                         <div class="finishing-tags-row">
                             <span class="finishing-tag-title">Pilihan Finishing:</span>
-                            <button type="button" class="tag-pill-btn" onclick="addFinishingTag('Mata Ayam 4 Sudut')">Mata Ayam 4 Sudut</button>
-                            <button type="button" class="tag-pill-btn" onclick="addFinishingTag('Laminasi Glossy')">Laminasi Glossy</button>
-                            <button type="button" class="tag-pill-btn" onclick="addFinishingTag('Laminasi Doff')">Laminasi Doff</button>
-                            <button type="button" class="tag-pill-btn" onclick="addFinishingTag('Selongsong Atas-Bawah')">Selongsong Atas-Bawah</button>
-                            <button type="button" class="tag-pill-btn" onclick="addFinishingTag('Potong Pas')">Potong Pas</button>
-                            <button type="button" class="tag-pill-btn" onclick="addFinishingTag('Jilid Spiral')">Jilid Spiral</button>
+                            <button type="button" class="tag-pill-btn"
+                                onclick="addFinishingTag('Mata Ayam 4 Sudut')">Mata Ayam 4 Sudut</button>
+                            <button type="button" class="tag-pill-btn"
+                                onclick="addFinishingTag('Laminasi Glossy')">Laminasi Glossy</button>
+                            <button type="button" class="tag-pill-btn"
+                                onclick="addFinishingTag('Laminasi Doff')">Laminasi Doff</button>
+                            <button type="button" class="tag-pill-btn"
+                                onclick="addFinishingTag('Selongsong Atas-Bawah')">Selongsong Atas-Bawah</button>
+                            <button type="button" class="tag-pill-btn" onclick="addFinishingTag('Potong Pas')">Potong
+                                Pas</button>
+                            <button type="button" class="tag-pill-btn" onclick="addFinishingTag('Jilid Spiral')">Jilid
+                                Spiral</button>
                         </div>
                     </div>
 
@@ -2293,7 +2795,8 @@
                                 <span class="step-badge">2</span>
                                 <div>
                                     <h4 class="section-card-title">Keranjang Item & Kalkulator Dinamis</h4>
-                                    <p class="section-card-desc">Kalkulator otomatis ukuran meteran atau produk cetak lembaran</p>
+                                    <p class="section-card-desc">Kalkulator otomatis ukuran meteran atau produk cetak
+                                        lembaran</p>
                                 </div>
                             </div>
                             <span id="cartCountBadge" class="cart-badge-pill">0 Item Ditambahkan</span>
@@ -2301,23 +2804,29 @@
 
                         <!-- Builder Controls Workbench -->
                         <div class="cart-builder-box">
-                            <div style="display: grid; grid-template-columns: 1.6fr 1.1fr; gap: 12px; margin-bottom: 12px; align-items: flex-start;">
+                            <div
+                                style="display: grid; grid-template-columns: 1.6fr 1.1fr; gap: 12px; margin-bottom: 12px; align-items: flex-start;">
                                 <div class="form-group" style="margin-bottom: 0;">
                                     <label for="cartItemProduct">Pilih Produk Cetak</label>
                                     <select id="cartItemProduct">
                                         <option value="" disabled selected>-- Pilih Produk Percetakan --</option>
                                         @foreach($produks ?? [] as $prod)
                                             @php $isOut = ($prod->stok ?? 0) <= 0; @endphp
-                                            <option value="{{ $prod->nama_produk }}" data-harga="{{ $prod->harga }}" data-stok="{{ $prod->stok }}" {{ $isOut ? 'disabled style=color:#94A3B8;background:#F1F5F9;' : '' }}>
-                                                {{ $prod->nama_produk }} — Rp {{ number_format($prod->harga, 0, ',', '.') }} (Stok: {{ $isOut ? 'Habis' : $prod->stok }})
+                                            <option value="{{ $prod->nama_produk }}" data-harga="{{ $prod->harga }}"
+                                                data-stok="{{ $prod->stok }}" {{ $isOut ? 'disabled style=color:#94A3B8;background:#F1F5F9;' : '' }}>
+                                                {{ $prod->nama_produk }} — Rp {{ number_format($prod->harga, 0, ',', '.') }}
+                                                (Stok: {{ $isOut ? 'Habis' : $prod->stok }})
                                             </option>
                                         @endforeach
                                     </select>
                                 </div>
                                 <div style="margin-bottom: 0;">
-                                    <label style="font-size: 11.5px; font-weight: 600; color: #334155; margin-bottom: 5px; display: block;">Perhitungan Khusus</label>
+                                    <label
+                                        style="font-size: 11.5px; font-weight: 600; color: #334155; margin-bottom: 5px; display: block;">Perhitungan
+                                        Khusus</label>
                                     <label class="meter-switch-toggle" for="cartToggleMeter">
-                                        <span style="font-size: 12px; font-weight: 600; color: #1E3A8A;">Hitung Meteran (P &times; L)</span>
+                                        <span style="font-size: 12px; font-weight: 600; color: #1E3A8A;">Hitung Meteran
+                                            (P &times; L)</span>
                                         <input type="checkbox" id="cartToggleMeter">
                                     </label>
                                 </div>
@@ -2326,19 +2835,29 @@
                             <!-- Meteran Dynamic Mode (Panjang x Lebar) -->
                             <div id="meterFieldsRow" class="meter-calc-grid" style="display: none;">
                                 <div>
-                                    <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Panjang (Meter)</label>
-                                    <input type="number" id="meterPanjang" step="0.01" min="0.1" value="3.00" placeholder="3.0">
+                                    <label
+                                        style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Panjang
+                                        (Meter)</label>
+                                    <input type="number" id="meterPanjang" step="0.01" min="0.1" value="3.00"
+                                        placeholder="3.0">
                                 </div>
                                 <div>
-                                    <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Lebar (Meter)</label>
-                                    <input type="number" id="meterLebar" step="0.01" min="0.1" value="1.00" placeholder="1.0">
+                                    <label
+                                        style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Lebar
+                                        (Meter)</label>
+                                    <input type="number" id="meterLebar" step="0.01" min="0.1" value="1.00"
+                                        placeholder="1.0">
                                 </div>
                                 <div>
-                                    <label style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Jumlah (Qty)</label>
+                                    <label
+                                        style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Jumlah
+                                        (Qty)</label>
                                     <input type="number" id="meterQty" min="1" value="1" placeholder="1">
                                 </div>
                                 <div>
-                                    <label style="font-size: 11px; font-weight: 700; color: #1E3A8A; display: block; margin-bottom: 4px;">Total Luas</label>
+                                    <label
+                                        style="font-size: 11px; font-weight: 700; color: #1E3A8A; display: block; margin-bottom: 4px;">Total
+                                        Luas</label>
                                     <div class="meter-luas-badge">
                                         <span id="meterLuasPreview" class="val">3.00 m²</span>
                                     </div>
@@ -2347,40 +2866,65 @@
 
                             <!-- Standard Dynamic Mode: Modern Chips & Tactile Stepper (No Harsh Boxes!) -->
                             <div id="standardFieldsRow" style="margin-bottom: 14px;">
-                                
+
                                 <!-- 1. Pilihan Ukuran Produk: Modern Pill Chips -->
                                 <div style="margin-bottom: 12px;">
-                                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-                                        <label style="font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.3px;">PILIHAN UKURAN CETAK</label>
-                                        <span id="selectedSizeBadge" style="font-size: 11px; font-weight: 700; color: #1E3A8A; background: #EEF2FF; padding: 2px 8px; border-radius: 6px;">A4 (21 x 29.7 cm)</span>
+                                    <div
+                                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                                        <label
+                                            style="font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.3px;">PILIHAN
+                                            UKURAN CETAK</label>
+                                        <span id="selectedSizeBadge"
+                                            style="font-size: 11px; font-weight: 700; color: #1E3A8A; background: #EEF2FF; padding: 2px 8px; border-radius: 6px;">A4
+                                            (21 x 29.7 cm)</span>
                                     </div>
                                     <div class="size-chips-wrapper">
-                                        <button type="button" class="size-chip-btn active" data-size="A4 (21 x 29.7 cm)" onclick="selectSizeChip(this)">A4</button>
-                                        <button type="button" class="size-chip-btn" data-size="A3+ (32 x 48 cm)" onclick="selectSizeChip(this)">A3+</button>
-                                        <button type="button" class="size-chip-btn" data-size="F4 / Folio (21.5 x 33 cm)" onclick="selectSizeChip(this)">F4 / Folio</button>
-                                        <button type="button" class="size-chip-btn" data-size="Kartu Nama (9 x 5.5 cm)" onclick="selectSizeChip(this)">Kartu Nama (9×5.5)</button>
-                                        <button type="button" class="size-chip-btn" data-size="Standard" onclick="selectSizeChip(this)">Standard</button>
-                                        <button type="button" class="size-chip-btn" data-size="custom" onclick="selectSizeChip(this)">+ Ukuran Lain</button>
+                                        <button type="button" class="size-chip-btn active" data-size="A4 (21 x 29.7 cm)"
+                                            onclick="selectSizeChip(this)">A4</button>
+                                        <button type="button" class="size-chip-btn" data-size="A3+ (32 x 48 cm)"
+                                            onclick="selectSizeChip(this)">A3+</button>
+                                        <button type="button" class="size-chip-btn"
+                                            data-size="F4 / Folio (21.5 x 33 cm)" onclick="selectSizeChip(this)">F4 /
+                                            Folio</button>
+                                        <button type="button" class="size-chip-btn" data-size="Kartu Nama (9 x 5.5 cm)"
+                                            onclick="selectSizeChip(this)">Kartu Nama (9×5.5)</button>
+                                        <button type="button" class="size-chip-btn" data-size="Standard"
+                                            onclick="selectSizeChip(this)">Standard</button>
+                                        <button type="button" class="size-chip-btn" data-size="custom"
+                                            onclick="selectSizeChip(this)">+ Ukuran Lain</button>
                                     </div>
                                     <div id="customSizeInputWrap" style="display: none; margin-top: 8px;">
-                                        <input type="text" id="customSizeInput" placeholder="Ketik ukuran khusus (misal: 15 x 20 cm, B5, dll)..." style="width: 100%; border-radius: 8px; border: 1.5px solid #3B82F6; padding: 8px 12px; font-size: 12.5px; background: #F8FAFC;">
+                                        <input type="text" id="customSizeInput"
+                                            placeholder="Ketik ukuran khusus (misal: 15 x 20 cm, B5, dll)..."
+                                            style="width: 100%; border-radius: 8px; border: 1.5px solid #3B82F6; padding: 8px 12px; font-size: 12.5px; background: #F8FAFC;">
                                     </div>
                                     <input type="hidden" id="cartItemSize" value="A4 (21 x 29.7 cm)">
                                 </div>
 
                                 <!-- 2. Kontrol Jumlah (Stepper +/-) & Satuan Produk -->
-                                <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 10px 14px;">
+                                <div
+                                    style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 10px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px; padding: 10px 14px;">
                                     <div>
-                                        <div style="font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase;">Jumlah Pesanan</div>
-                                        <div class="qty-stepper-group" style="display: flex; align-items: center; gap: 6px; margin-top: 5px;">
-                                            <button type="button" class="stepper-btn" onclick="stepCartQty(-1)">&minus;</button>
-                                            <input type="number" id="cartItemQty" min="1" value="1" class="stepper-input">
-                                            <button type="button" class="stepper-btn" onclick="stepCartQty(1)">&plus;</button>
+                                        <div
+                                            style="font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase;">
+                                            Jumlah Pesanan</div>
+                                        <div class="qty-stepper-group"
+                                            style="display: flex; align-items: center; gap: 6px; margin-top: 5px;">
+                                            <button type="button" class="stepper-btn"
+                                                onclick="stepCartQty(-1)">&minus;</button>
+                                            <input type="number" id="cartItemQty" min="1" value="1"
+                                                class="stepper-input">
+                                            <button type="button" class="stepper-btn"
+                                                onclick="stepCartQty(1)">&plus;</button>
                                         </div>
                                     </div>
-                                    <div style="border-left: 1px solid #E2E8F0; padding-left: 14px; flex: 1; max-width: 160px;">
-                                        <div style="font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 5px;">Satuan Item</div>
-                                        <select id="cartItemUnit" style="width: 100%; border: 1px solid #CBD5E1; border-radius: 6px; padding: 6px 10px; font-size: 12.5px; font-weight: 700; color: #1E3A8A; background: #FFFFFF; outline: none; cursor: pointer;">
+                                    <div
+                                        style="border-left: 1px solid #E2E8F0; padding-left: 14px; flex: 1; max-width: 160px;">
+                                        <div
+                                            style="font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase; margin-bottom: 5px;">
+                                            Satuan Item</div>
+                                        <select id="cartItemUnit"
+                                            style="width: 100%; border: 1px solid #CBD5E1; border-radius: 6px; padding: 6px 10px; font-size: 12.5px; font-weight: 700; color: #1E3A8A; background: #FFFFFF; outline: none; cursor: pointer;">
                                             <option value="Pcs">Pcs</option>
                                             <option value="Box">Box</option>
                                             <option value="Rim">Rim</option>
@@ -2394,11 +2938,15 @@
 
                                 <!-- 3. Catatan Khusus Item: Toggle Elegan, Bukan Kotak Kaku Permanen! -->
                                 <div style="margin-top: 6px;">
-                                    <button type="button" id="btnToggleItemNote" onclick="toggleItemNoteInput()" style="background: none; border: none; color: #2563EB; font-size: 11.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; padding: 2px 0;">
-                                        <i class="fa-solid fa-pen-to-square"></i> <span id="toggleItemNoteText">+ Tambah Catatan Khusus Item Ini</span>
+                                    <button type="button" id="btnToggleItemNote" onclick="toggleItemNoteInput()"
+                                        style="background: none; border: none; color: #2563EB; font-size: 11.5px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 5px; padding: 2px 0;">
+                                        <i class="fa-solid fa-pen-to-square"></i> <span id="toggleItemNoteText">+ Tambah
+                                            Catatan Khusus Item Ini</span>
                                     </button>
                                     <div id="itemNoteInputWrap" style="display: none; margin-top: 6px;">
-                                        <input type="text" id="cartItemNote" placeholder="Tuliskan instruksi spesifik (misal: potong rounded corner, laminasi doff, dll)..." style="width: 100%; border-radius: 8px; border: 1px solid #CBD5E1; padding: 8px 12px; font-size: 12px; background: #FFFFFF;">
+                                        <input type="text" id="cartItemNote"
+                                            placeholder="Tuliskan instruksi spesifik (misal: potong rounded corner, laminasi doff, dll)..."
+                                            style="width: 100%; border-radius: 8px; border: 1px solid #CBD5E1; padding: 8px 12px; font-size: 12px; background: #FFFFFF;">
                                     </div>
                                 </div>
                             </div>
@@ -2421,15 +2969,19 @@
                                         <th>Item Produk</th>
                                         <th>Ukuran / Dimensi</th>
                                         <th>Qty</th>
+                                        <th>File Desain</th>
                                         <th>Subtotal</th>
                                         <th style="text-align: right;">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody id="cartTableBody">
                                     <tr id="cartEmptyRow">
-                                        <td colspan="5" style="text-align: center; color: #94A3B8; padding: 22px;">
-                                            <span style="font-weight:600; color: #64748B; display: block; font-size: 12.5px;">Keranjang masih kosong</span>
-                                            <div style="font-size:11.5px; margin-top:3px; color: #94A3B8;">Pilih produk di atas lalu klik <strong>Tambah ke Keranjang</strong>.</div>
+                                        <td colspan="6" style="text-align: center; color: #94A3B8; padding: 22px;">
+                                            <span
+                                                style="font-weight:600; color: #64748B; display: block; font-size: 12.5px;">Keranjang
+                                                masih kosong</span>
+                                            <div style="font-size:11.5px; margin-top:3px; color: #94A3B8;">Pilih produk
+                                                di atas lalu klik <strong>Tambah ke Keranjang</strong>.</div>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -2439,16 +2991,21 @@
                         <div class="cart-total-banner">
                             <div>
                                 <div class="total-label">Total Seluruh Pesanan:</div>
-                                <div style="font-size: 11px; color: #94A3B8;">Akumulasi seluruh item percetakan di atas</div>
+                                <div style="font-size: 11px; color: #94A3B8;">Akumulasi seluruh item percetakan di atas
+                                </div>
                             </div>
                             <div id="cartTotalDisplay" class="total-amount">Rp 0</div>
                         </div>
 
                         <!-- Info Alur Pembayaran Kasir -->
-                        <div style="background: #F0F9FF; border: 1px solid #BAE6FD; border-radius: 8px; padding: 12px 14px; margin-top: 14px; display: flex; align-items: flex-start; gap: 10px;">
-                            <i class="fa-solid fa-circle-info" style="color: #0284C7; font-size: 16px; margin-top: 2px; flex-shrink: 0;"></i>
+                        <div
+                            style="background: #F0F9FF; border: 1px solid #BAE6FD; border-radius: 8px; padding: 12px 14px; margin-top: 14px; display: flex; align-items: flex-start; gap: 10px;">
+                            <i class="fa-solid fa-circle-info"
+                                style="color: #0284C7; font-size: 16px; margin-top: 2px; flex-shrink: 0;"></i>
                             <div style="font-size: 12px; color: #0369A1; line-height: 1.45;">
-                                Pesanan akan otomatis diterbitkan dengan status tagihan <strong>Belum Lunas</strong>. Penerimaan uang kasir, pencatatan DP/pelunasan, hitung kembalian, dan cetak kuitansi dikelola terpusat di <strong>Menu Pembayaran</strong> di sidebar.
+                                Pesanan akan otomatis diterbitkan dengan status tagihan <strong>Belum Lunas</strong>.
+                                Penerimaan uang kasir, pencatatan DP/pelunasan, hitung kembalian, dan cetak kuitansi
+                                dikelola terpusat di <strong>Menu Pembayaran</strong> di sidebar.
                             </div>
                         </div>
                     </div>
@@ -2479,9 +3036,12 @@
             <form id="statusUpdateForm" method="POST" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
-                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; font-size: 12.5px;">
-                    <div style="color: #64748B;">Kode Pesanan: <strong id="stModalKode" style="color: #0F172A;">-</strong></div>
-                    <div style="color: #64748B; margin-top: 2px;">Pelanggan: <strong id="stModalPelanggan" style="color: #0F172A;">-</strong></div>
+                <div
+                    style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px 12px; margin-bottom: 14px; font-size: 12.5px;">
+                    <div style="color: #64748B;">Kode Pesanan: <strong id="stModalKode"
+                            style="color: #0F172A;">-</strong></div>
+                    <div style="color: #64748B; margin-top: 2px;">Pelanggan: <strong id="stModalPelanggan"
+                            style="color: #0F172A;">-</strong></div>
                 </div>
 
                 <div class="form-group">
@@ -2497,25 +3057,53 @@
 
                 <div class="form-group">
                     <label for="stCatatanFinishing">Perbarui Catatan Finishing</label>
-                    <input type="text" name="catatan_finishing" id="stCatatanFinishing" placeholder="Contoh: Tambah mata ayam sudut...">
+                    <input type="text" name="catatan_finishing" id="stCatatanFinishing"
+                        placeholder="Contoh: Tambah mata ayam sudut...">
                 </div>
 
-                <div class="form-group">
+                <!-- Single Item Design Section -->
+                <div class="form-group" id="stSingleItemContainer">
                     <label for="stFileDesain">Perbarui File / Link Desain</label>
                     <div id="stCurrentFileWrap" style="margin-bottom: 6px; font-size: 11.5px; display: none;">
-                        <a href="#" id="stCurrentFileLink" target="_blank" style="color: #2563EB; font-weight: 700; text-decoration: underline;">
+                        <a href="#" id="stCurrentFileLink" target="_blank"
+                            style="color: #2563EB; font-weight: 700; text-decoration: underline;">
                             <i class="fa-solid fa-arrow-up-right-from-square"></i> Lihat File Desain Saat Ini
                         </a>
                     </div>
                     <div style="display: flex; gap: 8px;">
-                        <input type="text" name="file_desain" id="stFileDesain" placeholder="Tautan Google Drive..." style="flex: 1;">
-                        <label for="stFileUpload" class="tag-pill-btn" style="height: 38px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; padding: 0 12px; white-space: nowrap;">
-                            <i class="fa-solid fa-upload"></i> Unggah Laptop
+                        <input type="text" name="file_desain" id="stFileDesain" placeholder="Tautan Google Drive..."
+                            style="flex: 1;">
+                        <label for="stFileUpload" class="tag-pill-btn"
+                            style="height: 38px; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; padding: 0 12px; white-space: nowrap;">
+                            <i class="fa-solid fa-upload"></i> Unggah Desain
                         </label>
-                        <input type="file" name="file_upload" id="stFileUpload" accept=".jpg,.jpeg,.png,.webp,.pdf,.tif,.tiff,.svg,.ai,.psd,.cdr,.zip" style="display: none;" onchange="handleStatusFileUpload(this)">
+                        <input type="file" name="file_upload" id="stFileUpload"
+                            accept=".jpg,.jpeg,.png,.webp,.pdf,.tif,.tiff,.svg,.ai,.psd,.cdr,.zip"
+                            style="display: none;" onchange="handleStatusFileUpload(this)">
                     </div>
-                    <div id="stFileChosenText" style="display: none; font-size: 11px; color: #16A34A; margin-top: 4px; font-weight: 600;">
-                        <i class="fa-solid fa-check"></i> File laptop terpilih: <span id="stFileChosenName"></span>
+
+                    <!-- Status File Preview & Verification Feedback -->
+                    <div id="stFileChosenText"
+                        style="display: none; font-size: 11.5px; color: #166534; background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 6px; padding: 6px 10px; margin-top: 8px; font-weight: 600;">
+                        <i class="fa-solid fa-circle-check" id="stFileChosenIcon" style="margin-right: 4px;"></i>
+                        <span id="stFileChosenName"></span>
+                    </div>
+
+                    <!-- Status File Anti-Spoofing Error Alert -->
+                    <div id="stFileSpoofError"
+                        style="display: none; font-size: 11.5px; color: #991B1B; background: #FEF2F2; border: 1px solid #FCA5A5; border-radius: 6px; padding: 6px 10px; margin-top: 8px; font-weight: 600;">
+                        <i class="fa-solid fa-circle-exclamation" style="margin-right: 4px;"></i>
+                        <span id="stFileSpoofErrorMsg"></span>
+                    </div>
+                </div>
+
+                <!-- Multi-Item Design Manager (Shown dynamically if order has >1 item) -->
+                <div class="form-group" id="stMultiItemsSection" style="display: none;">
+                    <label style="font-weight: 700; color: #1E293B; margin-bottom: 6px; display: block;">
+                        <i class="fa-solid fa-layer-group" style="color: #2563EB;"></i> Perbarui Desain Tiap Item Pesanan:
+                    </label>
+                    <div id="stMultiItemsList" style="display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; padding-right: 4px;">
+                        <!-- Rendered dynamically in JS -->
                     </div>
                 </div>
 
@@ -2539,33 +3127,59 @@
             </div>
 
             <!-- Print Target Document -->
-            <div id="spkPrintArea" style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; padding: 20px; font-size: 13px; color: #1E293B;">
-                <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #1E3A8A; padding-bottom: 12px; margin-bottom: 16px;">
+            <div id="spkPrintArea"
+                style="background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 10px; padding: 20px; font-size: 13px; color: #1E293B;">
+                <!-- Header SPK -->
+                <div
+                    style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #1E3A8A; padding-bottom: 12px; margin-bottom: 14px;">
                     <div>
-                        <div style="font-size: 18px; font-weight: 900; color: #1E3A8A; letter-spacing: -0.5px;">SIPEKAN DIGITAL PRINTING</div>
-                        <div style="font-size: 11.5px; color: #64748B; font-weight: 500;">Sistem Pengelolaan Kasir & Produksi Percetakan Modern</div>
-                        <div style="font-size: 11px; color: #94A3B8; margin-top: 2px;">Jl. Percetakan No. 45, Jakarta • Telp: (021) 555-0192</div>
+                        <div style="font-size: 20px; font-weight: 900; color: #1E3A8A; letter-spacing: -0.5px;">SIPEKAN
+                            PRINTING</div>
+                        <div style="font-size: 11px; color: #64748B;">Sistem Informasi & Manajemen Percetakan Digital
+                        </div>
                     </div>
                     <div style="text-align: right;">
-                        <div style="font-size: 14px; font-weight: 800; color: #0F172A;" id="spkKodePesanan">ORD-2026-000</div>
-                        <div style="font-size: 11.5px; color: #64748B;" id="spkTglPesanan">-</div>
-                        <div style="margin-top: 4px;">
-                            <span id="spkStatusBadge" style="background: #DCFCE7; color: #166534; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 800;">LUNAS</span>
+                        <span
+                            style="background: #1E3A8A; color: #FFFFFF; font-size: 11px; font-weight: 800; padding: 3px 10px; border-radius: 4px; text-transform: uppercase;">SPK
+                            PRODUKSI</span>
+                        <div style="font-size: 14px; font-weight: 800; color: #0F172A; margin-top: 4px;"
+                            id="spkKodePesanan">-</div>
+                        <div style="font-size: 11px; color: #64748B;" id="spkTglPesanan">-</div>
+                    </div>
+                </div>
+
+                <!-- Alert Status Badge -->
+                <div
+                    style="display: flex; justify-content: space-between; align-items: center; background: #F1F5F9; border-radius: 6px; padding: 8px 12px; margin-bottom: 14px;">
+                    <div style="font-size: 12px; color: #475569;">Dokumen resmi instruksi cetak bagian operator mesin &
+                        finishing</div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <span style="font-size: 11px; font-weight: 700; color: #475569;">STATUS BAYAR:</span>
+                        <div>
+                            <span id="spkStatusBadge"
+                                style="background: #DCFCE7; color: #166534; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 800;">LUNAS</span>
                         </div>
                     </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; background: #F8FAFC; padding: 12px; border-radius: 8px;">
+                <div
+                    style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; background: #F8FAFC; padding: 12px; border-radius: 8px;">
                     <div>
-                        <div style="font-size: 11px; color: #64748B; text-transform: uppercase; font-weight: 700;">Data Pemesan</div>
-                        <div style="font-size: 14px; font-weight: 800; color: #0F172A; margin-top: 2px;" id="spkPelanggan">-</div>
-                        <div style="font-size: 11.5px; color: #64748B; margin-top: 2px;" id="spkKontakPelanggan">Pelanggan SIPEKAN</div>
+                        <div style="font-size: 11px; color: #64748B; text-transform: uppercase; font-weight: 700;">Data
+                            Pemesan</div>
+                        <div style="font-size: 14px; font-weight: 800; color: #0F172A; margin-top: 2px;"
+                            id="spkPelanggan">-</div>
+                        <div style="font-size: 11.5px; color: #64748B; margin-top: 2px;" id="spkKontakPelanggan">
+                            Pelanggan SIPEKAN</div>
                     </div>
                     <div>
-                        <div style="font-size: 11px; color: #64748B; text-transform: uppercase; font-weight: 700;">Status Produksi & Desain</div>
-                        <div style="font-size: 13px; font-weight: 800; color: #1E3A8A; margin-top: 2px;" id="spkStatusProduksi">Antrean Cetak</div>
+                        <div style="font-size: 11px; color: #64748B; text-transform: uppercase; font-weight: 700;">
+                            Status Produksi & Desain</div>
+                        <div style="font-size: 13px; font-weight: 800; color: #1E3A8A; margin-top: 2px;"
+                            id="spkStatusProduksi">Antrean Cetak</div>
                         <div style="margin-top: 4px;" id="spkFileDesainWrapper">
-                            <a href="#" id="spkFileDesainLink" target="_blank" style="color: #2563EB; font-weight: 700; font-size: 11.5px; text-decoration: underline;">
+                            <a href="#" id="spkFileDesainLink" target="_blank"
+                                style="color: #2563EB; font-weight: 700; font-size: 11.5px; text-decoration: underline;">
                                 <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka File Desain
                             </a>
                         </div>
@@ -2581,6 +3195,7 @@
                                 <th style="padding: 8px 10px; text-align: left;">Item Produk</th>
                                 <th style="padding: 8px 10px; text-align: left;">Ukuran / Dimensi</th>
                                 <th style="padding: 8px 10px; text-align: center;">Qty</th>
+                                <th style="padding: 8px 10px; text-align: left;">File Desain</th>
                                 <th style="padding: 8px 10px; text-align: right;">Subtotal</th>
                             </tr>
                         </thead>
@@ -2591,9 +3206,12 @@
                 </div>
 
                 <!-- Finishing Note -->
-                <div style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px;">
-                    <div style="font-size: 11px; font-weight: 800; color: #92400E; text-transform: uppercase;">Instruksi Khusus Finishing:</div>
-                    <div id="spkFinishingNote" style="font-size: 12.5px; font-weight: 600; color: #78350F; margin-top: 2px;">
+                <div
+                    style="background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px;">
+                    <div style="font-size: 11px; font-weight: 800; color: #92400E; text-transform: uppercase;">Instruksi
+                        Khusus Finishing:</div>
+                    <div id="spkFinishingNote"
+                        style="font-size: 12.5px; font-weight: 600; color: #78350F; margin-top: 2px;">
                         Standar percetakan tanpa finishing khusus.
                     </div>
                 </div>
@@ -2609,15 +3227,18 @@
                             <span style="color: #64748B;">Status Bayar:</span>
                             <span id="spkStatusBayarText" style="font-weight: 700; color: #16A34A;">Lunas</span>
                         </div>
-                        <div style="display: flex; justify-content: space-between; border-top: 1px solid #CBD5E1; padding-top: 6px; margin-top: 4px;">
+                        <div
+                            style="display: flex; justify-content: space-between; border-top: 1px solid #CBD5E1; padding-top: 6px; margin-top: 4px;">
                             <span style="font-weight: 800; color: #DC2626;">Sisa Tagihan:</span>
-                            <strong id="spkSisaBayar" style="font-size: 14px; color: #DC2626; font-weight: 900;">Rp 0</strong>
+                            <strong id="spkSisaBayar" style="font-size: 14px; color: #DC2626; font-weight: 900;">Rp
+                                0</strong>
                         </div>
                     </div>
                 </div>
 
                 <!-- Signatures -->
-                <div style="display: flex; justify-content: space-between; text-align: center; font-size: 11px; color: #475569; padding-top: 16px; border-top: 1px dashed #CBD5E1;">
+                <div
+                    style="display: flex; justify-content: space-between; text-align: center; font-size: 11px; color: #475569; padding-top: 16px; border-top: 1px dashed #CBD5E1;">
                     <div style="width: 160px;">
                         <div>Operator Produksi / Kasir</div>
                         <div style="height: 48px;"></div>
@@ -2654,7 +3275,8 @@
                 @csrf
                 <input type="hidden" name="kode_pesanan" id="pelunasanKodePesanan">
 
-                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; font-size: 13px;">
+                <div
+                    style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 14px; margin-bottom: 14px; font-size: 13px;">
                     <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
                         <span style="color: #64748B;">No. Pesanan:</span>
                         <strong id="pelunasanDisplayKode" style="color: #1E3A8A;">-</strong>
@@ -2663,9 +3285,11 @@
                         <span style="color: #64748B;">Pelanggan:</span>
                         <strong id="pelunasanDisplayPelanggan" style="color: #0F172A;">-</strong>
                     </div>
-                    <div style="display: flex; justify-content: space-between; border-top: 1px solid #E2E8F0; padding-top: 6px; margin-top: 4px;">
+                    <div
+                        style="display: flex; justify-content: space-between; border-top: 1px solid #E2E8F0; padding-top: 6px; margin-top: 4px;">
                         <span style="color: #DC2626; font-weight: 700;">Sisa yang Harus Dilunasi:</span>
-                        <strong id="pelunasanDisplaySisa" style="color: #DC2626; font-weight: 800; font-size: 15px;">Rp 0</strong>
+                        <strong id="pelunasanDisplaySisa" style="color: #DC2626; font-weight: 800; font-size: 15px;">Rp
+                            0</strong>
                     </div>
                 </div>
 
@@ -2685,14 +3309,16 @@
 
                 <div class="form-group" id="pelunasanCashierBox">
                     <label for="pelunasanUangDiterima">Uang Diterima dari Pelanggan</label>
-                    <input type="number" name="uang_diterima" id="pelunasanUangDiterima" placeholder="Contoh: 100000" min="0" step="any">
+                    <input type="number" name="uang_diterima" id="pelunasanUangDiterima" placeholder="Contoh: 100000"
+                        min="0" step="any">
                     <div style="display: flex; gap: 4px; margin-top: 6px; flex-wrap: wrap;">
                         <button type="button" class="chip-btn" onclick="setPelunasanChip('pas')">Uang Pas</button>
                         <button type="button" class="chip-btn" onclick="setPelunasanChip(50000)">50k</button>
                         <button type="button" class="chip-btn" onclick="setPelunasanChip(100000)">100k</button>
                         <button type="button" class="chip-btn" onclick="setPelunasanChip(200000)">200k</button>
                     </div>
-                    <div id="pelunasanKembalianDisplay" style="margin-top: 6px; font-size: 12.5px; font-weight: 800; color: #16A34A; background: #DCFCE7; padding: 4px 8px; border-radius: 4px; display: inline-block;">
+                    <div id="pelunasanKembalianDisplay"
+                        style="margin-top: 6px; font-size: 12.5px; font-weight: 800; color: #16A34A; background: #DCFCE7; padding: 4px 8px; border-radius: 4px; display: inline-block;">
                         Kembalian: Rp 0
                     </div>
                 </div>
@@ -2707,6 +3333,28 @@
         </div>
     </div>
 
+    <!-- 5. MODAL GALERI DESAIN (MULTI-ITEM DESIGN VIEWER) -->
+    <div class="modal-overlay" id="designGalleryModalOverlay">
+        <div class="modal-box modal-lg">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <i class="fa-solid fa-images" style="color:#1E3A8A;"></i>
+                    Galeri File Desain — <span id="galleryKodePesanan" style="color:#2563EB;">-</span>
+                </h3>
+                <button type="button" class="close-modal-btn" onclick="closeDesignGalleryModal()">&times;</button>
+            </div>
+            <div style="font-size: 12.5px; color: #64748B; margin-bottom: 6px;">
+                Semua file desain cetak yang dilampirkan untuk masing-masing item pada pesanan ini:
+            </div>
+            <div id="galleryItemsContainer" class="gallery-grid">
+                <!-- Rendered dynamically via JS -->
+            </div>
+            <div class="modal-actions" style="margin-top: 18px;">
+                <button type="button" class="btn-cancel" onclick="closeDesignGalleryModal()">Tutup</button>
+            </div>
+        </div>
+    </div>
+
     <!-- JAVASCRIPT ENGINE FOR SIPEKAN -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -2716,247 +3364,293 @@
                     "{!! addslashes($prod->nama_produk) !!}": {{ $prod->harga ?? 0 }},
                 @endforeach
             };
-            const productStocks = {
-                @foreach($produks ?? [] as $prod)
-                    "{!! addslashes($prod->nama_produk) !!}": {{ $prod->stok ?? 0 }},
-                @endforeach
+        const productStocks = {
+            @foreach($produks ?? [] as $prod)
+                "{!! addslashes($prod->nama_produk) !!}": {{ $prod->stok ?? 0 }},
+            @endforeach
             };
 
-            // Multi-Item Cart State
-            let cartItems = [];
+        // Multi-Item Cart State
+        let cartItems = [];
+        let currentUploadedDesignFile = null;
 
-            // UI Elements
-            const modalOverlay = document.getElementById('orderModalOverlay');
-            const openBtn = document.getElementById('openOrderModal');
-            const closeBtn = document.getElementById('closeOrderModalBtn');
-            const cancelBtn = document.getElementById('cancelOrderModalBtn');
-            const addOrderForm = document.getElementById('addOrderForm');
+        // UI Elements
+        const modalOverlay = document.getElementById('orderModalOverlay');
+        const openBtn = document.getElementById('openOrderModal');
+        const closeBtn = document.getElementById('closeOrderModalBtn');
+        const cancelBtn = document.getElementById('cancelOrderModalBtn');
+        const addOrderForm = document.getElementById('addOrderForm');
 
-            const cartItemProduct = document.getElementById('cartItemProduct');
-            const cartToggleMeter = document.getElementById('cartToggleMeter');
-            const meterFieldsRow = document.getElementById('meterFieldsRow');
-            const standardFieldsRow = document.getElementById('standardFieldsRow');
-            const meterPanjang = document.getElementById('meterPanjang');
-            const meterLebar = document.getElementById('meterLebar');
-            const meterQty = document.getElementById('meterQty');
-            const meterLuasPreview = document.getElementById('meterLuasPreview');
-            const cartItemQty = document.getElementById('cartItemQty');
-            const cartItemUnit = document.getElementById('cartItemUnit');
-            const cartItemSize = document.getElementById('cartItemSize');
-            const cartItemNote = document.getElementById('cartItemNote');
-            const cartItemSubtotalPreview = document.getElementById('cartItemSubtotalPreview');
-            const btnAddToCart = document.getElementById('btnAddToCart');
-            const cartTableBody = document.getElementById('cartTableBody');
-            const cartTotalDisplay = document.getElementById('cartTotalDisplay');
-            const cartCountBadge = document.getElementById('cartCountBadge');
-            const ordItemsJson = document.getElementById('ordItemsJson');
+        const cartItemProduct = document.getElementById('cartItemProduct');
+        const cartToggleMeter = document.getElementById('cartToggleMeter');
+        const meterFieldsRow = document.getElementById('meterFieldsRow');
+        const standardFieldsRow = document.getElementById('standardFieldsRow');
+        const meterPanjang = document.getElementById('meterPanjang');
+        const meterLebar = document.getElementById('meterLebar');
+        const meterQty = document.getElementById('meterQty');
+        const meterLuasPreview = document.getElementById('meterLuasPreview');
+        const cartItemQty = document.getElementById('cartItemQty');
+        const cartItemUnit = document.getElementById('cartItemUnit');
+        const cartItemSize = document.getElementById('cartItemSize');
+        const cartItemNote = document.getElementById('cartItemNote');
+        const cartItemSubtotalPreview = document.getElementById('cartItemSubtotalPreview');
+        const btnAddToCart = document.getElementById('btnAddToCart');
+        const cartTableBody = document.getElementById('cartTableBody');
+        const cartTotalDisplay = document.getElementById('cartTotalDisplay');
+        const cartCountBadge = document.getElementById('cartCountBadge');
+        const ordItemsJson = document.getElementById('ordItemsJson');
 
-            // Dynamic Meteran Switch on Product selection
-            function isMeteranProduct(name) {
-                const lower = (name || '').toLowerCase();
-                return lower.includes('spanduk') || lower.includes('banner') || lower.includes('backlite') || lower.includes('meter');
+        // Dynamic Meteran Switch on Product selection
+        function isMeteranProduct(name) {
+            const lower = (name || '').toLowerCase();
+            return lower.includes('spanduk') || lower.includes('banner') || lower.includes('backlite') || lower.includes('meter');
+        }
+
+        function updateItemSubtotalPreview() {
+            const prodName = cartItemProduct.value;
+            const unitPrice = productPrices[prodName] || 0;
+            let subtotal = 0;
+
+            if (cartToggleMeter.checked) {
+                const p = parseFloat(meterPanjang.value) || 0;
+                const l = parseFloat(meterLebar.value) || 0;
+                const q = parseInt(meterQty.value) || 1;
+                const luas = Math.max(0.1, p * l);
+                meterLuasPreview.textContent = (luas * q).toFixed(2) + ' m²';
+                subtotal = Math.round(luas * unitPrice * q);
+            } else {
+                const q = parseInt(cartItemQty.value) || 1;
+                subtotal = Math.round(unitPrice * q);
             }
 
-            function updateItemSubtotalPreview() {
+            cartItemSubtotalPreview.textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
+            return subtotal;
+        }
+
+        if (cartItemProduct) {
+            cartItemProduct.addEventListener('change', function () {
+                const pName = this.value;
+                if (isMeteranProduct(pName)) {
+                    cartToggleMeter.checked = true;
+                }
+                toggleMeterView();
+                updateItemSubtotalPreview();
+            });
+        }
+
+        function toggleMeterView() {
+            if (cartToggleMeter.checked) {
+                meterFieldsRow.style.display = 'grid';
+                standardFieldsRow.style.display = 'none';
+            } else {
+                meterFieldsRow.style.display = 'none';
+                standardFieldsRow.style.display = 'grid';
+            }
+            updateItemSubtotalPreview();
+        }
+
+        if (cartToggleMeter) cartToggleMeter.addEventListener('change', toggleMeterView);
+        [meterPanjang, meterLebar, meterQty, cartItemQty].forEach(input => {
+            if (input) input.addEventListener('input', updateItemSubtotalPreview);
+        });
+
+        // Size Chips Selection Engine
+        window.selectSizeChip = function (btn) {
+            document.querySelectorAll('.size-chip-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const customWrap = document.getElementById('customSizeInputWrap');
+            const badge = document.getElementById('selectedSizeBadge');
+            const hiddenSize = document.getElementById('cartItemSize');
+
+            if (btn.dataset.size === 'custom') {
+                customWrap.style.display = 'block';
+                const customInput = document.getElementById('customSizeInput');
+                customInput.focus();
+                const val = customInput.value.trim() || 'Custom';
+                hiddenSize.value = val;
+                if (badge) badge.textContent = val;
+            } else {
+                customWrap.style.display = 'none';
+                hiddenSize.value = btn.dataset.size;
+                if (badge) badge.textContent = btn.dataset.size;
+            }
+        };
+
+        const customSizeInput = document.getElementById('customSizeInput');
+        if (customSizeInput) {
+            customSizeInput.addEventListener('input', function () {
+                const val = this.value.trim() || 'Custom';
+                document.getElementById('cartItemSize').value = val;
+                const badge = document.getElementById('selectedSizeBadge');
+                if (badge) badge.textContent = val;
+            });
+        }
+
+        // Quantity Stepper Engine
+        window.stepCartQty = function (delta) {
+            const qtyInput = document.getElementById('cartItemQty');
+            if (!qtyInput) return;
+            let q = parseInt(qtyInput.value) || 1;
+            q = Math.max(1, q + delta);
+            qtyInput.value = q;
+            updateItemSubtotalPreview();
+        };
+
+        // Toggle Item Note Input
+        window.toggleItemNoteInput = function () {
+            const wrap = document.getElementById('itemNoteInputWrap');
+            const txt = document.getElementById('toggleItemNoteText');
+            if (!wrap) return;
+            const isHidden = (wrap.style.display === 'none' || wrap.style.display === '');
+            wrap.style.display = isHidden ? 'block' : 'none';
+            if (txt) {
+                txt.textContent = isHidden ? '- Tutup Catatan Item' : '+ Tambah Catatan Khusus Item Ini';
+            }
+            if (isHidden) {
+                const noteInput = document.getElementById('cartItemNote');
+                if (noteInput) noteInput.focus();
+            }
+        };
+
+        // Add Item to Cart
+        if (btnAddToCart) {
+            btnAddToCart.addEventListener('click', function () {
                 const prodName = cartItemProduct.value;
+                if (!prodName) {
+                    alert('Pilih produk cetak terlebih dahulu!');
+                    return;
+                }
+
                 const unitPrice = productPrices[prodName] || 0;
-                let subtotal = 0;
+                let item = {};
+
+                // Get Design from Section 1 (File Upload or GDrive Link)
+                let itemFile = currentUploadedDesignFile;
+                const fileInp = document.getElementById('ordFileUpload');
+                if (!itemFile && fileInp && fileInp.files && fileInp.files[0]) {
+                    itemFile = fileInp.files[0];
+                }
+
+                const linkInp = document.getElementById('ordFileDesain');
+                const linkVal = linkInp ? linkInp.value.trim() : '';
+
+                let designName = null;
+                let designVal = null;
+                if (itemFile) {
+                    designName = itemFile.name;
+                    designVal = itemFile.name;
+                } else if (linkVal) {
+                    designName = 'Link Google Drive';
+                    designVal = linkVal;
+                }
 
                 if (cartToggleMeter.checked) {
-                    const p = parseFloat(meterPanjang.value) || 0;
-                    const l = parseFloat(meterLebar.value) || 0;
+                    const p = parseFloat(meterPanjang.value) || 1;
+                    const l = parseFloat(meterLebar.value) || 1;
                     const q = parseInt(meterQty.value) || 1;
-                    const luas = Math.max(0.1, p * l);
-                    meterLuasPreview.textContent = (luas * q).toFixed(2) + ' m²';
-                    subtotal = Math.round(luas * unitPrice * q);
+                    const luas = p * l;
+                    const sub = Math.round(luas * unitPrice * q);
+
+                    item = {
+                        nama_produk: prodName,
+                        ukuran: `${p} x ${l} Meter (${(luas * q).toFixed(1)} m²)`,
+                        qty: q,
+                        satuan: 'Meter',
+                        harga: unitPrice,
+                        subtotal: sub,
+                        catatan: 'Ukuran Meteran: ' + p + ' x ' + l + ' m',
+                        _fileObj: itemFile || null,
+                        file_name: designName,
+                        file_desain: designVal
+                    };
                 } else {
                     const q = parseInt(cartItemQty.value) || 1;
-                    subtotal = Math.round(unitPrice * q);
+                    const sz = (cartItemSize ? cartItemSize.value.trim() : '') || 'A4 (21 x 29.7 cm)';
+                    const u = cartItemUnit.value || 'Pcs';
+                    const sub = Math.round(unitPrice * q);
+                    const noteVal = cartItemNote ? cartItemNote.value.trim() : '';
+
+                    item = {
+                        nama_produk: prodName,
+                        ukuran: sz,
+                        qty: q,
+                        satuan: u,
+                        harga: unitPrice,
+                        subtotal: sub,
+                        catatan: noteVal,
+                        _fileObj: itemFile || null,
+                        file_name: designName,
+                        file_desain: designVal
+                    };
                 }
 
-                cartItemSubtotalPreview.textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
-                return subtotal;
-            }
-
-            if (cartItemProduct) {
-                cartItemProduct.addEventListener('change', function() {
-                    const pName = this.value;
-                    if (isMeteranProduct(pName)) {
-                        cartToggleMeter.checked = true;
-                    }
-                    toggleMeterView();
-                    updateItemSubtotalPreview();
-                });
-            }
-
-            function toggleMeterView() {
-                if (cartToggleMeter.checked) {
-                    meterFieldsRow.style.display = 'grid';
-                    standardFieldsRow.style.display = 'none';
-                } else {
-                    meterFieldsRow.style.display = 'none';
-                    standardFieldsRow.style.display = 'grid';
-                }
-                updateItemSubtotalPreview();
-            }
-
-            if (cartToggleMeter) cartToggleMeter.addEventListener('change', toggleMeterView);
-            [meterPanjang, meterLebar, meterQty, cartItemQty].forEach(input => {
-                if (input) input.addEventListener('input', updateItemSubtotalPreview);
-            });
-
-            // Size Chips Selection Engine
-            window.selectSizeChip = function(btn) {
-                document.querySelectorAll('.size-chip-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                const customWrap = document.getElementById('customSizeInputWrap');
-                const badge = document.getElementById('selectedSizeBadge');
-                const hiddenSize = document.getElementById('cartItemSize');
-                
-                if (btn.dataset.size === 'custom') {
-                    customWrap.style.display = 'block';
-                    const customInput = document.getElementById('customSizeInput');
-                    customInput.focus();
-                    const val = customInput.value.trim() || 'Custom';
-                    hiddenSize.value = val;
-                    if (badge) badge.textContent = val;
-                } else {
-                    customWrap.style.display = 'none';
-                    hiddenSize.value = btn.dataset.size;
-                    if (badge) badge.textContent = btn.dataset.size;
-                }
-            };
-
-            const customSizeInput = document.getElementById('customSizeInput');
-            if (customSizeInput) {
-                customSizeInput.addEventListener('input', function() {
-                    const val = this.value.trim() || 'Custom';
-                    document.getElementById('cartItemSize').value = val;
-                    const badge = document.getElementById('selectedSizeBadge');
-                    if (badge) badge.textContent = val;
-                });
-            }
-
-            // Quantity Stepper Engine
-            window.stepCartQty = function(delta) {
-                const qtyInput = document.getElementById('cartItemQty');
-                if (!qtyInput) return;
-                let q = parseInt(qtyInput.value) || 1;
-                q = Math.max(1, q + delta);
-                qtyInput.value = q;
-                updateItemSubtotalPreview();
-            };
-
-            // Toggle Item Note Input
-            window.toggleItemNoteInput = function() {
-                const wrap = document.getElementById('itemNoteInputWrap');
-                const txt = document.getElementById('toggleItemNoteText');
-                if (!wrap) return;
-                const isHidden = (wrap.style.display === 'none' || wrap.style.display === '');
-                wrap.style.display = isHidden ? 'block' : 'none';
-                if (txt) {
-                    txt.textContent = isHidden ? '- Tutup Catatan Item' : '+ Tambah Catatan Khusus Item Ini';
-                }
-                if (isHidden) {
-                    const noteInput = document.getElementById('cartItemNote');
-                    if (noteInput) noteInput.focus();
-                }
-            };
-
-            // Add Item to Cart
-            if (btnAddToCart) {
-                btnAddToCart.addEventListener('click', function() {
-                    const prodName = cartItemProduct.value;
-                    if (!prodName) {
-                        alert('Pilih produk cetak terlebih dahulu!');
-                        return;
-                    }
-
-                    const unitPrice = productPrices[prodName] || 0;
-                    let item = {};
-
-                    if (cartToggleMeter.checked) {
-                        const p = parseFloat(meterPanjang.value) || 1;
-                        const l = parseFloat(meterLebar.value) || 1;
-                        const q = parseInt(meterQty.value) || 1;
-                        const luas = p * l;
-                        const sub = Math.round(luas * unitPrice * q);
-
-                        item = {
-                            nama_produk: prodName,
-                            ukuran: `${p} x ${l} Meter (${(luas * q).toFixed(1)} m²)`,
-                            qty: q,
-                            satuan: 'Meter',
-                            harga: unitPrice,
-                            subtotal: sub,
-                            catatan: 'Ukuran Meteran: ' + p + ' x ' + l + ' m'
-                        };
-                    } else {
-                        const q = parseInt(cartItemQty.value) || 1;
-                        const sz = (cartItemSize ? cartItemSize.value.trim() : '') || 'A4 (21 x 29.7 cm)';
-                        const u = cartItemUnit.value || 'Pcs';
-                        const sub = Math.round(unitPrice * q);
-                        const noteVal = cartItemNote ? cartItemNote.value.trim() : '';
-
-                        item = {
-                            nama_produk: prodName,
-                            ukuran: sz,
-                            qty: q,
-                            satuan: u,
-                            harga: unitPrice,
-                            subtotal: sub,
-                            catatan: noteVal
-                        };
-                    }
-
-                    cartItems.push(item);
-                    renderCart();
-
-                    // Reset sub-fields
-                    if (cartItemNote) cartItemNote.value = '';
-                    const noteWrap = document.getElementById('itemNoteInputWrap');
-                    if (noteWrap) noteWrap.style.display = 'none';
-                    const noteTxt = document.getElementById('toggleItemNoteText');
-                    if (noteTxt) noteTxt.textContent = '+ Tambah Catatan Khusus Item Ini';
-                    cartItemQty.value = 1;
-                });
-            }
-
-            window.removeCartItem = function(index) {
-                cartItems.splice(index, 1);
+                cartItems.push(item);
                 renderCart();
-            };
 
-            function renderCart() {
-                if (!cartTableBody) return;
-                cartTableBody.innerHTML = '';
+                // Reset Section 1 File Desain Cetak so user can easily upload a NEW design for the next item
+                window.removeSelectedFile();
+                if (linkInp) linkInp.value = '';
+                window.switchDesignSource('upload');
+                currentUploadedDesignFile = null;
 
-                if (cartItems.length === 0) {
-                    cartTableBody.innerHTML = `
+                // Reset sub-fields
+                if (cartItemNote) cartItemNote.value = '';
+                const noteWrap = document.getElementById('itemNoteInputWrap');
+                if (noteWrap) noteWrap.style.display = 'none';
+                const noteTxt = document.getElementById('toggleItemNoteText');
+                if (noteTxt) noteTxt.textContent = '+ Tambah Catatan Khusus Item Ini';
+                cartItemQty.value = 1;
+            });
+        }
+
+        window.removeCartItem = function (index) {
+            cartItems.splice(index, 1);
+            renderCart();
+        };
+
+        function renderCart() {
+            if (!cartTableBody) return;
+            cartTableBody.innerHTML = '';
+
+            if (cartItems.length === 0) {
+                cartTableBody.innerHTML = `
                         <tr id="cartEmptyRow">
-                            <td colspan="5" style="text-align: center; color: #94A3B8; padding: 22px;">
+                            <td colspan="6" style="text-align: center; color: #94A3B8; padding: 22px;">
                                 <span style="font-weight:600; color: #64748B; display: block; font-size: 12.5px;">Keranjang masih kosong</span>
                                 <div style="font-size:11.5px; margin-top:3px; color: #94A3B8;">Pilih produk di atas lalu klik <strong>Tambah ke Keranjang</strong>.</div>
                             </td>
                         </tr>
                     `;
-                    cartTotalDisplay.textContent = 'Rp 0';
-                    cartCountBadge.textContent = '0 Item Ditambahkan';
-                    ordItemsJson.value = '';
-                    return;
+                cartTotalDisplay.textContent = 'Rp 0';
+                cartCountBadge.textContent = '0 Item Ditambahkan';
+                ordItemsJson.value = '';
+                return;
+            }
+
+            let total = 0;
+            cartItems.forEach((it, idx) => {
+                total += it.subtotal;
+
+                let designBadge = '<span style="font-size:11px; color:#94A3B8; font-style:italic;">Ikuti Master Order</span>';
+                if (it._fileObj) {
+                    designBadge = `<span class="cart-item-design-badge"><i class="fa-solid fa-file"></i> ${it._fileObj.name}</span>`;
+                } else if (it.file_desain) {
+                    if (it.file_desain.startsWith('http://') || it.file_desain.startsWith('https://')) {
+                        designBadge = `<a href="${it.file_desain}" target="_blank" class="cart-item-design-badge" style="text-decoration:none;"><i class="fa-brands fa-google-drive"></i> Link Drive</a>`;
+                    } else {
+                        designBadge = `<span class="cart-item-design-badge"><i class="fa-solid fa-file"></i> ${it.file_name || it.file_desain}</span>`;
+                    }
                 }
 
-                let total = 0;
-                cartItems.forEach((it, idx) => {
-                    total += it.subtotal;
-                    const tr = document.createElement('tr');
-                    tr.innerHTML = `
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
                         <td>
                             <div style="font-weight:700; color:#0F172A;">${it.nama_produk}</div>
                             ${it.catatan ? '<div style="font-size:11px; color:#64748B; margin-top:2px;">' + it.catatan + '</div>' : ''}
                         </td>
                         <td><span style="display:inline-block; padding:2px 8px; background:#F1F5F9; border-radius:6px; font-size:11.5px; font-weight:600; color:#475569; border:1px solid #E2E8F0;">${it.ukuran}</span></td>
                         <td style="font-weight:700; color:#1E293B;">${it.qty} ${it.satuan}</td>
+                        <td>${designBadge}</td>
                         <td style="font-weight:700; color:#1E3A8A;">Rp ${it.subtotal.toLocaleString('id-ID')}</td>
                         <td style="text-align:right;">
                             <button type="button" onclick="removeCartItem(${idx})" style="width:28px; height:28px; border-radius:6px; background:#FEF2F2; border:1px solid #FEE2E2; color:#DC2626; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; transition:all 0.15s;" title="Hapus Item">
@@ -2964,567 +3658,662 @@
                             </button>
                         </td>
                     `;
-                    cartTableBody.appendChild(tr);
+                cartTableBody.appendChild(tr);
+            });
+
+            cartTotalDisplay.textContent = 'Rp ' + total.toLocaleString('id-ID');
+            cartCountBadge.textContent = cartItems.length + ' Item Ditambahkan';
+
+            // Clean json for submission (strip DOM File object)
+            const cleanItems = cartItems.map(item => {
+                const copy = { ...item };
+                delete copy._fileObj;
+                return copy;
+            });
+            ordItemsJson.value = JSON.stringify(cleanItems);
+
+            // Populate single-item fallbacks for backward compatibility
+            if (cartItems.length > 0) {
+                document.getElementById('ordFallbackProduct').value = cartItems[0].nama_produk;
+                document.getElementById('ordFallbackTotal').value = total;
+                document.getElementById('ordFallbackJumlah').value = cartItems[0].qty;
+                document.getElementById('ordFallbackUnit').value = cartItems[0].satuan;
+                document.getElementById('ordFallbackUkuran').value = cartItems[0].ukuran;
+                document.getElementById('ordFallbackJumlahUkuran').value = cartItems[0].qty + ' ' + cartItems[0].satuan + ' (' + cartItems[0].ukuran + ')';
+            }
+        }
+
+        window.addFinishingTag = function (tag) {
+            const input = document.getElementById('ordCatatanFinishing');
+            if (!input) return;
+            const current = input.value.trim();
+            if (current.includes(tag)) return;
+            input.value = current ? current + ', ' + tag : tag;
+        };
+
+        // File Source Switcher & Anti-Spoofing Client Engine
+        window.switchDesignSource = function (mode) {
+            const tabUpload = document.getElementById('tabBtnUpload');
+            const tabLink = document.getElementById('tabBtnLink');
+            const boxUpload = document.getElementById('fileUploadContainer');
+            const boxLink = document.getElementById('fileLinkContainer');
+
+            if (mode === 'upload') {
+                if (tabUpload) tabUpload.classList.add('active');
+                if (tabLink) tabLink.classList.remove('active');
+                if (boxUpload) boxUpload.style.display = 'block';
+                if (boxLink) boxLink.style.display = 'none';
+                const linkInp = document.getElementById('ordFileDesain');
+                if (linkInp) linkInp.value = '';
+            } else {
+                if (tabLink) tabLink.classList.add('active');
+                if (tabUpload) tabUpload.classList.remove('active');
+                if (boxLink) boxLink.style.display = 'block';
+                if (boxUpload) boxUpload.style.display = 'none';
+                window.removeSelectedFile();
+            }
+        };
+
+        window.removeSelectedFile = function () {
+            currentUploadedDesignFile = null;
+            const input = document.getElementById('ordFileUpload');
+            if (input) input.value = '';
+            const pBar = document.getElementById('filePreviewBar');
+            if (pBar) pBar.style.display = 'none';
+            const sErr = document.getElementById('fileSpoofError');
+            if (sErr) sErr.style.display = 'none';
+        };
+
+        // Unified Anti-Spoofing & Deep Binary Inspection Engine for Design Files
+        function verifyDesignFileClient(file, callback) {
+            if (!file) return;
+
+            const ext = (file.name.split('.').pop() || '').toLowerCase();
+            const sizeFormatted = file.size > 1048576
+                ? (file.size / 1048576).toFixed(2) + ' MB'
+                : (file.size / 1024).toFixed(1) + ' KB';
+
+            // 1. Cek ukuran file kosong / 0 bytes
+            if (file.size <= 0) {
+                callback({
+                    valid: false,
+                    message: `File '${file.name}' tidak valid (file kosong / 0 KB).`
                 });
-
-                cartTotalDisplay.textContent = 'Rp ' + total.toLocaleString('id-ID');
-                cartCountBadge.textContent = cartItems.length + ' Item Ditambahkan';
-                ordItemsJson.value = JSON.stringify(cartItems);
-
-                // Populate single-item fallbacks for backward compatibility
-                if (cartItems.length > 0) {
-                    document.getElementById('ordFallbackProduct').value = cartItems[0].nama_produk;
-                    document.getElementById('ordFallbackTotal').value = total;
-                    document.getElementById('ordFallbackJumlah').value = cartItems[0].qty;
-                    document.getElementById('ordFallbackUnit').value = cartItems[0].satuan;
-                    document.getElementById('ordFallbackUkuran').value = cartItems[0].ukuran;
-                    document.getElementById('ordFallbackJumlahUkuran').value = cartItems[0].qty + ' ' + cartItems[0].satuan + ' (' + cartItems[0].ukuran + ')';
-                }
+                return;
             }
 
-            window.addFinishingTag = function(tag) {
-                const input = document.getElementById('ordCatatanFinishing');
-                if (!input) return;
-                const current = input.value.trim();
-                if (current.includes(tag)) return;
-                input.value = current ? current + ', ' + tag : tag;
-            };
+            // 2. Batas maksimal 50 MB
+            if (file.size > 52428800) {
+                callback({
+                    valid: false,
+                    message: `Ukuran file '${file.name}' melebihi batas maksimal 50 MB.`
+                });
+                return;
+            }
 
-            // File Source Switcher & Anti-Spoofing Client Engine
-            window.switchDesignSource = function(mode) {
-                const tabUpload = document.getElementById('tabBtnUpload');
-                const tabLink = document.getElementById('tabBtnLink');
-                const boxUpload = document.getElementById('fileUploadContainer');
-                const boxLink = document.getElementById('fileLinkContainer');
-                
-                if (mode === 'upload') {
-                    if (tabUpload) tabUpload.classList.add('active');
-                    if (tabLink) tabLink.classList.remove('active');
-                    if (boxUpload) boxUpload.style.display = 'block';
-                    if (boxLink) boxLink.style.display = 'none';
-                    const linkInp = document.getElementById('ordFileDesain');
-                    if (linkInp) linkInp.value = '';
-                } else {
-                    if (tabLink) tabLink.classList.add('active');
-                    if (tabUpload) tabUpload.classList.remove('active');
-                    if (boxLink) boxLink.style.display = 'block';
-                    if (boxUpload) boxUpload.style.display = 'none';
-                    window.removeSelectedFile();
-                }
-            };
+            const allowedExts = ['jpg', 'jpeg', 'png', 'webp', 'pdf', 'tif', 'tiff', 'svg', 'ai', 'psd', 'cdr', 'zip'];
+            if (!allowedExts.includes(ext)) {
+                callback({
+                    valid: false,
+                    message: `Format '.${ext}' tidak didukung.`
+                });
+                return;
+            }
 
-            window.removeSelectedFile = function() {
-                const input = document.getElementById('ordFileUpload');
-                if (input) input.value = '';
-                const pBar = document.getElementById('filePreviewBar');
-                if (pBar) pBar.style.display = 'none';
-                const sErr = document.getElementById('fileSpoofError');
-                if (sErr) sErr.style.display = 'none';
-            };
-
-            window.validateAndPreviewFile = function(input) {
-                const file = input.files[0];
-                if (!file) return;
-
-                const previewBar = document.getElementById('filePreviewBar');
-                const spoofAlert = document.getElementById('fileSpoofError');
-                const spoofMsg = document.getElementById('fileSpoofErrorMsg');
-                const nameEl = document.getElementById('filePreviewName');
-                const sizeEl = document.getElementById('filePreviewSize');
-                const iconEl = document.getElementById('filePreviewIcon');
-
-                if (previewBar) previewBar.style.display = 'none';
-                if (spoofAlert) spoofAlert.style.display = 'none';
-
-                const ext = file.name.split('.').pop().toLowerCase();
-                const sizeFormatted = file.size > 1048576 
-                    ? (file.size / 1048576).toFixed(2) + ' MB' 
-                    : (file.size / 1024).toFixed(1) + ' KB';
-
-                function showSpoofError(msg) {
-                    if (spoofAlert) {
-                        spoofAlert.style.display = 'block';
-                        spoofMsg.textContent = msg;
-                    }
-                    if (previewBar) previewBar.style.display = 'none';
-                    input.value = '';
-                }
-
-                function showFileValid(name, info, iconClass) {
-                    if (spoofAlert) spoofAlert.style.display = 'none';
-                    if (previewBar) previewBar.style.display = 'flex';
-                    if (nameEl) nameEl.textContent = name;
-                    if (sizeEl) sizeEl.textContent = info;
-                    if (iconEl) iconEl.className = 'fa-solid ' + iconClass;
-                }
-
-                // 1. Cek ukuran file > 50MB
-                if (file.size > 52428800) {
-                    showSpoofError(`Ukuran file (${sizeFormatted}) melebihi batas maksimal 50 MB!`);
+            // 3. Binary Magic Byte & Structure Validation
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const arr = new Uint8Array(e.target.result);
+                if (arr.length < 4) {
+                    callback({
+                        valid: false,
+                        message: `File '${file.name}' tidak valid.`
+                    });
                     return;
                 }
 
-                // 2. Uji Gambar Bitmap (JPG, PNG, WEBP)
+                // PNG Header Check: 89 50 4E 47 (\x89PNG)
+                if (ext === 'png') {
+                    if (!(arr[0] === 0x89 && arr[1] === 0x50 && arr[2] === 0x4E && arr[3] === 0x47)) {
+                        callback({
+                            valid: false,
+                            message: `File '${file.name}' bukan gambar PNG yang valid.`
+                        });
+                        return;
+                    }
+                }
+
+                // JPG/JPEG Header Check: FF D8 FF
+                if (ext === 'jpg' || ext === 'jpeg') {
+                    if (!(arr[0] === 0xFF && arr[1] === 0xD8 && arr[2] === 0xFF)) {
+                        callback({
+                            valid: false,
+                            message: `File '${file.name}' bukan gambar JPG yang valid.`
+                        });
+                        return;
+                    }
+                }
+
+                // PDF Header Check: 25 50 44 46 (%PDF)
+                if (ext === 'pdf') {
+                    if (!(arr[0] === 0x25 && arr[1] === 0x50 && arr[2] === 0x44 && arr[3] === 0x46)) {
+                        callback({
+                            valid: false,
+                            message: `File '${file.name}' bukan dokumen PDF yang valid.`
+                        });
+                        return;
+                    }
+                }
+
+                // ZIP Header Check: 50 4B (PK)
+                if (ext === 'zip') {
+                    if (!(arr[0] === 0x50 && arr[1] === 0x4B)) {
+                        callback({
+                            valid: false,
+                            message: `File '${file.name}' bukan file ZIP yang valid.`
+                        });
+                        return;
+                    }
+                }
+
+                // SVG Validation: verify XML <svg
+                if (ext === 'svg') {
+                    const textReader = new FileReader();
+                    textReader.onload = function (te) {
+                        const text = (te.target.result || '').toLowerCase();
+                        if (!text.includes('<svg')) {
+                            callback({
+                                valid: false,
+                                message: `File '${file.name}' bukan file SVG yang valid.`
+                            });
+                            return;
+                        }
+                        if (text.includes('<script') || text.includes('javascript:')) {
+                            callback({
+                                valid: false,
+                                message: `File SVG '${file.name}' tidak diizinkan (mengandung script).`
+                            });
+                            return;
+                        }
+                        callback({
+                            valid: true,
+                            name: file.name,
+                            info: `${sizeFormatted} • Vektor SVG Terverifikasi`,
+                            icon: 'fa-file-code'
+                        });
+                    };
+                    textReader.readAsText(file.slice(0, 4096));
+                    return;
+                }
+
+                // Visual Image Decode Test for Bitmap (JPG, PNG, WEBP)
                 if (['jpg', 'jpeg', 'png', 'webp'].includes(ext)) {
                     const objUrl = URL.createObjectURL(file);
                     const testImg = new Image();
-
-                    testImg.onload = function() {
+                    testImg.onload = function () {
                         URL.revokeObjectURL(objUrl);
                         if (testImg.naturalWidth <= 0 || testImg.naturalHeight <= 0) {
-                            showSpoofError(`File '${file.name}' tidak memiliki data visual gambar yang valid! Terdeteksi sebagai file teks biasa yang diubah ekstensinya.`);
+                            callback({
+                                valid: false,
+                                message: `File '${file.name}' bukan gambar yang valid.`
+                            });
                             return;
                         }
-                        showFileValid(file.name, `${sizeFormatted} (${testImg.naturalWidth}×${testImg.naturalHeight}px) • Lolos Verifikasi Gambar`, 'fa-file-image');
+                        callback({
+                            valid: true,
+                            name: file.name,
+                            info: `${sizeFormatted} (${testImg.naturalWidth}×${testImg.naturalHeight}px) • Terverifikasi`,
+                            icon: 'fa-file-image'
+                        });
                     };
-
-                    testImg.onerror = function() {
+                    testImg.onerror = function () {
                         URL.revokeObjectURL(objUrl);
-                        showSpoofError(`File '${file.name}' BUKAN gambar yang valid! Terdeteksi sebagai file teks biasa atau data korup yang dipalsukan menjadi .${ext}.`);
+                        callback({
+                            valid: false,
+                            message: `File '${file.name}' bukan gambar yang valid.`
+                        });
                     };
-
                     testImg.src = objUrl;
                     return;
                 }
 
-                // 3. Uji Vektor SVG
-                if (ext === 'svg') {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const text = e.target.result || '';
-                        if (!text.toLowerCase().includes('<svg')) {
-                            showSpoofError(`File '${file.name}' BUKAN format SVG vector! Terdeteksi teks biasa tanpa tag <svg> grafis.`);
-                            return;
-                        }
-                        if (text.toLowerCase().includes('<script') || text.toLowerCase().includes('javascript:')) {
-                            showSpoofError(`File SVG '${file.name}' mengandung skrip berbahaya dan ditolak.`);
-                            return;
-                        }
-                        showFileValid(file.name, `${sizeFormatted} • Vektor SVG Asli`, 'fa-file-code');
-                    };
-                    reader.readAsText(file.slice(0, 4096));
-                    return;
-                }
-
-                // 4. Uji Dokumen PDF
-                if (ext === 'pdf') {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const text = e.target.result || '';
-                        if (!text.startsWith('%PDF-')) {
-                            showSpoofError(`File '${file.name}' BUKAN dokumen PDF asli! Header '%PDF-' tidak ditemukan (tampaknya file teks yang di-rename).`);
-                            return;
-                        }
-                        showFileValid(file.name, `${sizeFormatted} • Dokumen PDF Terverifikasi`, 'fa-file-pdf');
-                    };
-                    reader.readAsText(file.slice(0, 10));
-                    return;
-                }
-
-                // 5. Format Khusus Percetakan Lainnya (TIFF, PSD, AI, CDR, ZIP)
+                // Other design files (TIFF, PSD, AI, CDR)
                 let icon = 'fa-file';
                 if (['tif', 'tiff', 'psd'].includes(ext)) icon = 'fa-file-image';
                 else if (['ai', 'cdr'].includes(ext)) icon = 'fa-file-pen';
+                else if (ext === 'pdf') icon = 'fa-file-pdf';
                 else if (ext === 'zip') icon = 'fa-file-zipper';
 
-                showFileValid(file.name, `${sizeFormatted} • File Siap Diunggah`, icon);
-            };
-
-            // Modal Toggles
-            if (openBtn) {
-                openBtn.addEventListener('click', () => {
-                    addOrderForm.reset();
-                    cartItems = [];
-                    renderCart();
-                    cartToggleMeter.checked = false;
-                    toggleMeterView();
-                    window.switchDesignSource('upload');
-                    window.removeSelectedFile();
-                    modalOverlay.classList.add('active');
+                callback({
+                    valid: true,
+                    name: file.name,
+                    info: `${sizeFormatted} • Terverifikasi`,
+                    icon: icon
                 });
-            }
-            if (closeBtn) closeBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
-            if (cancelBtn) cancelBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
-
-            // Auto-check customer from URL param
-            const urlParams = new URLSearchParams(window.location.search);
-            const prefillCust = urlParams.get('pelanggan');
-            if (prefillCust && openBtn) {
-                openBtn.click();
-                const cInput = document.getElementById('ordCustomer');
-                if (cInput) cInput.value = prefillCust;
-            }
-
-            // 2. STATUS UPDATE MODAL
-            const statusModalOverlay = document.getElementById('statusModalOverlay');
-            window.openStatusModal = function(p) {
-                if (!statusModalOverlay) return;
-                document.getElementById('statusUpdateForm').action = '/pesanan/' + p.id;
-                document.getElementById('stModalKode').textContent = p.kode_pesanan;
-                document.getElementById('stModalPelanggan').textContent = p.nama_pelanggan;
-                document.getElementById('stStatusSelect').value = p.status || 'Antrean Cetak';
-                document.getElementById('stCatatanFinishing').value = p.catatan_finishing || '';
-                document.getElementById('stFileDesain').value = p.file_desain || '';
-                document.getElementById('stFileUpload').value = '';
-                document.getElementById('stFileChosenText').style.display = 'none';
-
-                const curWrap = document.getElementById('stCurrentFileWrap');
-                const curLink = document.getElementById('stCurrentFileLink');
-                if (p.file_desain) {
-                    const fUrl = (p.file_desain.startsWith('http://') || p.file_desain.startsWith('https://')) 
-                        ? p.file_desain 
-                        : (p.file_desain.startsWith('/') ? p.file_desain : '/' + p.file_desain);
-                    curLink.href = fUrl;
-                    curWrap.style.display = 'block';
-                } else {
-                    curWrap.style.display = 'none';
-                }
-
-                statusModalOverlay.classList.add('active');
-            };
-            window.closeStatusModal = function() {
-                if (statusModalOverlay) statusModalOverlay.classList.remove('active');
             };
 
-            window.handleStatusFileUpload = function(input) {
-                const file = input.files[0];
-                if (!file) return;
-                document.getElementById('stFileChosenText').style.display = 'block';
-                document.getElementById('stFileChosenName').textContent = file.name + ' (' + (file.size / 1024).toFixed(1) + ' KB)';
-            };
+            reader.readAsArrayBuffer(file.slice(0, 16));
+        }
 
-            // 3. SPK & NOTA MODAL
-            const spkModalOverlay = document.getElementById('spkModalOverlay');
-            window.viewSpkDetail = function(p) {
-                if (!spkModalOverlay) return;
-                document.getElementById('spkKodePesanan').textContent = p.kode_pesanan;
-                document.getElementById('spkTglPesanan').textContent = p.tanggal_pesan ? p.tanggal_pesan : (p.created_at ? p.created_at.substring(0, 10) : '-');
-                document.getElementById('spkPelanggan').textContent = p.nama_pelanggan;
-                document.getElementById('spkStatusProduksi').textContent = p.status || 'Antrean Cetak';
+        window.validateAndPreviewFile = function (input) {
+            const file = input.files[0];
+            if (!file) return;
 
-                const isLunas = (p.status_pembayaran || '').toLowerCase() === 'lunas' || (p.status || '').toLowerCase() === 'selesai';
-                const spkBadge = document.getElementById('spkStatusBadge');
-                spkBadge.textContent = isLunas ? 'LUNAS' : (p.status_pembayaran || 'BELUM LUNAS');
-                spkBadge.style.background = isLunas ? '#DCFCE7' : '#FEF3C7';
-                spkBadge.style.color = isLunas ? '#166534' : '#92400E';
+            const previewBar = document.getElementById('filePreviewBar');
+            const spoofAlert = document.getElementById('fileSpoofError');
+            const spoofMsg = document.getElementById('fileSpoofErrorMsg');
+            const nameEl = document.getElementById('filePreviewName');
+            const sizeEl = document.getElementById('filePreviewSize');
+            const iconEl = document.getElementById('filePreviewIcon');
 
-                const fLink = document.getElementById('spkFileDesainLink');
-                const fWrap = document.getElementById('spkFileDesainWrapper');
-                if (p.file_desain) {
-                    const fUrl = (p.file_desain.startsWith('http://') || p.file_desain.startsWith('https://')) 
-                        ? p.file_desain 
-                        : (p.file_desain.startsWith('/') ? p.file_desain : '/' + p.file_desain);
-                    fLink.href = fUrl;
-                    fWrap.style.display = 'block';
-                } else {
-                    fWrap.style.display = 'none';
-                }
-
-                document.getElementById('spkFinishingNote').textContent = p.catatan_finishing || 'Standar percetakan tanpa finishing khusus.';
-                document.getElementById('spkTotalHarga').textContent = 'Rp ' + (parseFloat(p.total_harga) || 0).toLocaleString('id-ID');
-                document.getElementById('spkStatusBayarText').textContent = isLunas ? 'Lunas' : (p.status_pembayaran || 'DP');
-                document.getElementById('spkSisaBayar').textContent = 'Rp ' + (parseFloat(p.sisa_bayar) || (isLunas ? 0 : p.total_harga)).toLocaleString('id-ID');
-
-                // Render Items inside SPK table
-                const tbody = document.getElementById('spkItemsTableBody');
-                tbody.innerHTML = '';
-                let itemsList = [];
-                if (Array.isArray(p.detail_items) && p.detail_items.length > 0) {
-                    itemsList = p.detail_items;
-                } else {
-                    itemsList = [{
-                        nama_produk: p.nama_produk,
-                        ukuran: p.jumlah_ukuran || 'Standard',
-                        qty: 1,
-                        subtotal: p.total_harga
-                    }];
-                }
-
-                itemsList.forEach((it, idx) => {
-                    const tr = document.createElement('tr');
-                    tr.style.borderBottom = '1px solid #E2E8F0';
-                    tr.innerHTML = `
-                        <td style="padding: 6px 10px;">${idx + 1}</td>
-                        <td style="padding: 6px 10px;"><strong>${it.nama_produk}</strong></td>
-                        <td style="padding: 6px 10px;">${it.ukuran || '-'}</td>
-                        <td style="padding: 6px 10px; text-align: center;">${it.qty || 1} ${it.satuan || ''}</td>
-                        <td style="padding: 6px 10px; text-align: right; font-weight: 700;">Rp ${(parseFloat(it.subtotal) || 0).toLocaleString('id-ID')}</td>
-                    `;
-                    tbody.appendChild(tr);
-                });
-
-                spkModalOverlay.classList.add('active');
-            };
-            window.closeSpkModal = function() {
-                if (spkModalOverlay) spkModalOverlay.classList.remove('active');
-            };
-
-            // 4. QUICK SETTLEMENT (PELUNASAN CEPAT) MODAL
-            const pelunasanModalOverlay = document.getElementById('pelunasanModalOverlay');
-            const pelunasanJumlah = document.getElementById('pelunasanJumlah');
-            const pelunasanUangDiterima = document.getElementById('pelunasanUangDiterima');
-            const pelunasanKembalianDisplay = document.getElementById('pelunasanKembalianDisplay');
-
-            window.openPelunasanModal = function(p) {
-                if (!pelunasanModalOverlay) return;
-                const sisa = parseFloat(p.sisa_bayar) || parseFloat(p.total_harga) || 0;
-                document.getElementById('pelunasanKodePesanan').value = p.kode_pesanan;
-                document.getElementById('pelunasanDisplayKode').textContent = p.kode_pesanan;
-                document.getElementById('pelunasanDisplayPelanggan').textContent = p.nama_pelanggan;
-                document.getElementById('pelunasanDisplaySisa').textContent = 'Rp ' + sisa.toLocaleString('id-ID');
-                pelunasanJumlah.value = sisa;
-                pelunasanJumlah.max = sisa;
-                pelunasanUangDiterima.value = sisa;
-                calcPelunasanChange();
-                pelunasanModalOverlay.classList.add('active');
-            };
-
-            function calcPelunasanChange() {
-                const bayar = parseFloat(pelunasanJumlah.value) || 0;
-                const uang = parseFloat(pelunasanUangDiterima.value) || 0;
-                const diff = uang - bayar;
-                if (diff >= 0) {
-                    pelunasanKembalianDisplay.style.color = '#16A34A';
-                    pelunasanKembalianDisplay.style.background = '#DCFCE7';
-                    pelunasanKembalianDisplay.textContent = 'Kembalian: Rp ' + diff.toLocaleString('id-ID');
-                } else {
-                    pelunasanKembalianDisplay.style.color = '#DC2626';
-                    pelunasanKembalianDisplay.style.background = '#FEE2E2';
-                    pelunasanKembalianDisplay.textContent = 'Kurang: Rp ' + Math.abs(diff).toLocaleString('id-ID');
-                }
-            }
-
-            if (pelunasanJumlah) pelunasanJumlah.addEventListener('input', calcPelunasanChange);
-            if (pelunasanUangDiterima) pelunasanUangDiterima.addEventListener('input', calcPelunasanChange);
-
-            window.setPelunasanChip = function(nominal) {
-                const bayar = parseFloat(pelunasanJumlah.value) || 0;
-                if (nominal === 'pas') {
-                    pelunasanUangDiterima.value = bayar;
-                } else {
-                    pelunasanUangDiterima.value = nominal;
-                }
-                calcPelunasanChange();
-            };
-
-            window.closePelunasanModal = function() {
-                if (pelunasanModalOverlay) pelunasanModalOverlay.classList.remove('active');
-            };
-
-            // Form Submit Safety
-            if (addOrderForm) {
-                addOrderForm.addEventListener('submit', function(e) {
-                    if (cartItems.length === 0) {
-                        e.preventDefault();
-                        alert('Silakan tambahkan minimal 1 item ke keranjang cetak sebelum menyimpan pesanan!');
-                        return false;
+            verifyDesignFileClient(file, function (res) {
+                if (!res.valid) {
+                    currentUploadedDesignFile = null;
+                    if (spoofAlert) {
+                        spoofAlert.style.display = 'block';
+                        spoofMsg.textContent = res.message;
                     }
-                });
-            }
-
-            // Pagination & Unified Filtering (Search + Status Produksi + Status Bayar)
-            const tableTbody = document.querySelector('tbody');
-            const entryInfo = document.querySelector('.entry-info');
-            const paginationEl = document.querySelector('.pagination');
-            const searchInput = document.getElementById('tableSearchInput') || document.querySelector('.search-filter input');
-            const statusProdSelect = document.getElementById('filterStatusProd');
-            const statusBayarSelect = document.getElementById('filterStatusBayar');
-
-            let currentPage = 1;
-            const itemsPerPage = 10;
-
-            function updatePagination() {
-                if (!tableTbody) return;
-                const rows = Array.from(tableTbody.querySelectorAll('tr'));
-                const visibleRows = rows.filter(r => r.getAttribute('data-filter-hidden') !== 'true');
-                const totalItems = visibleRows.length;
-                const totalPages = Math.max(1, Math.ceil(totalItems / itemsPerPage));
-
-                if (currentPage > totalPages) currentPage = totalPages;
-
-                const startIdx = (currentPage - 1) * itemsPerPage;
-                const endIdx = startIdx + itemsPerPage;
-
-                rows.forEach(r => r.style.display = 'none');
-                visibleRows.slice(startIdx, endIdx).forEach(r => r.style.display = '');
-
-                if (entryInfo) {
-                    const startShow = totalItems === 0 ? 0 : startIdx + 1;
-                    const endShow = Math.min(endIdx, totalItems);
-                    entryInfo.textContent = `Menampilkan ${startShow} hingga ${endShow} dari ${totalItems} pesanan`;
-                }
-
-                if (paginationEl) {
-                    paginationEl.innerHTML = '';
-
-                    const prevBtn = document.createElement('button');
-                    prevBtn.className = 'page-btn';
-                    prevBtn.title = 'Halaman Sebelumnya';
-                    prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left" style="font-size: 11px;"></i>';
-                    prevBtn.disabled = currentPage === 1;
-                    prevBtn.addEventListener('click', () => { 
-                        if (currentPage > 1) { 
-                            currentPage--; 
-                            updatePagination(); 
-                        } 
-                    });
-                    paginationEl.appendChild(prevBtn);
-
-                    const selectWrap = document.createElement('div');
-                    selectWrap.className = 'page-select-container';
-
-                    const labelPre = document.createElement('span');
-                    labelPre.textContent = 'Halaman';
-                    selectWrap.appendChild(labelPre);
-
-                    const select = document.createElement('select');
-                    select.className = 'page-select-dropdown';
-                    select.title = 'Pilih Halaman';
-                    for (let p = 1; p <= totalPages; p++) {
-                        const opt = document.createElement('option');
-                        opt.value = p;
-                        opt.textContent = p;
-                        if (p === currentPage) opt.selected = true;
-                        select.appendChild(opt);
-                    }
-                    select.addEventListener('change', function() {
-                        currentPage = parseInt(this.value);
-                        updatePagination();
-                    });
-                    selectWrap.appendChild(select);
-
-                    const labelPost = document.createElement('span');
-                    labelPost.innerHTML = `dari <strong style="color:#1E293B;">${totalPages}</strong>`;
-                    selectWrap.appendChild(labelPost);
-
-                    paginationEl.appendChild(selectWrap);
-
-                    const nextBtn = document.createElement('button');
-                    nextBtn.className = 'page-btn';
-                    nextBtn.title = 'Halaman Selanjutnya';
-                    nextBtn.innerHTML = '<i class="fa-solid fa-chevron-right" style="font-size: 11px;"></i>';
-                    nextBtn.disabled = currentPage === totalPages || totalPages === 0;
-                    nextBtn.addEventListener('click', () => { 
-                        if (currentPage < totalPages) { 
-                            currentPage++; 
-                            updatePagination(); 
-                        } 
-                    });
-                    paginationEl.appendChild(nextBtn);
-                }
-            }
-
-            function applyTableFilters() {
-                if (!tableTbody) return;
-                const q = (searchInput ? searchInput.value : '').toLowerCase().trim();
-                const prodFilter = statusProdSelect ? statusProdSelect.value : '';
-                const bayarFilter = statusBayarSelect ? statusBayarSelect.value : '';
-
-                const rows = tableTbody.querySelectorAll('tr');
-                rows.forEach(r => {
-                    const textContent = r.textContent.toLowerCase();
-                    const textMatch = !q || textContent.includes(q);
-                    const prod = r.getAttribute('data-status-prod') || '';
-                    const bayar = (r.getAttribute('data-status-bayar') || '').toLowerCase();
-
-                    const prodMatch = !prodFilter || prod === prodFilter;
-                    let bayarMatch = true;
-                    if (bayarFilter === 'lunas') {
-                        bayarMatch = bayar === 'lunas';
-                    } else if (bayarFilter === 'dp') {
-                        bayarMatch = bayar.includes('dp');
-                    } else if (bayarFilter === 'belum_lunas') {
-                        bayarMatch = bayar !== 'lunas' && !bayar.includes('dp');
-                    }
-
-                    if (textMatch && prodMatch && bayarMatch) {
-                        r.removeAttribute('data-filter-hidden');
-                    } else {
-                        r.setAttribute('data-filter-hidden', 'true');
-                    }
-                });
-
-                currentPage = 1;
-                updatePagination();
-            }
-
-            if (tableTbody) updatePagination();
-
-            if (searchInput) {
-                searchInput.addEventListener('input', applyTableFilters);
-            }
-            if (statusProdSelect) {
-                statusProdSelect.addEventListener('change', applyTableFilters);
-            }
-            if (statusBayarSelect) {
-                statusBayarSelect.addEventListener('change', applyTableFilters);
-            }
-
-            // Dropdown Toggle
-            document.addEventListener('click', function (e) {
-                const toggle = e.target.closest('.action-toggle');
-                if (toggle) {
-                    e.stopPropagation();
-                    const menu = toggle.nextElementSibling;
-                    document.querySelectorAll('.dropdown-menu').forEach(m => {
-                        if (m !== menu) m.classList.remove('show');
-                    });
-                    if (menu) menu.classList.toggle('show');
+                    if (previewBar) previewBar.style.display = 'none';
+                    input.value = '';
                 } else {
-                    document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+                    currentUploadedDesignFile = file;
+                    if (spoofAlert) spoofAlert.style.display = 'none';
+                    if (previewBar) previewBar.style.display = 'flex';
+                    if (nameEl) nameEl.textContent = res.name;
+                    if (sizeEl) sizeEl.textContent = res.info;
+                    if (iconEl) iconEl.className = 'fa-solid ' + res.icon;
                 }
             });
+        };
 
-            // Multi-Item Popover Handler
-            const multiItemPopover = document.getElementById('multiItemPopover');
-            const popoverOrderCode = document.getElementById('popoverOrderCode');
-            const popoverCountBadge = document.getElementById('popoverItemCountBadge');
-            const popoverItemsList = document.getElementById('popoverItemsList');
-            const popoverTotalText = document.getElementById('popoverTotalText');
-            const popoverSpkBtn = document.getElementById('popoverSpkBtn');
-            let currentActiveBtn = null;
+        // Modal Toggles
+        if (openBtn) {
+            openBtn.addEventListener('click', () => {
+                addOrderForm.reset();
+                cartItems = [];
+                currentUploadedDesignFile = null;
+                renderCart();
+                cartToggleMeter.checked = false;
+                toggleMeterView();
+                window.switchDesignSource('upload');
+                window.removeSelectedFile();
+                modalOverlay.classList.add('active');
+            });
+        }
+        if (closeBtn) closeBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
+        if (cancelBtn) cancelBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
 
-            window.toggleItemsPopover = function(e, btn, items, kodePesanan, totalHarga, pesananObj) {
-                e.stopPropagation();
-                if (!multiItemPopover) return;
+        // Auto-check customer from URL param
+        const urlParams = new URLSearchParams(window.location.search);
+        const prefillCust = urlParams.get('pelanggan');
+        if (prefillCust && openBtn) {
+            openBtn.click();
+            const cInput = document.getElementById('ordCustomer');
+            if (cInput) cInput.value = prefillCust;
+        }
 
-                if (currentActiveBtn === btn && multiItemPopover.style.display === 'flex') {
-                    closeMultiItemPopover();
-                    return;
-                }
+        // 2. STATUS UPDATE MODAL
+        const statusModalOverlay = document.getElementById('statusModalOverlay');
+        window.openStatusModal = function (p) {
+            if (!statusModalOverlay) return;
+            document.getElementById('statusUpdateForm').action = '/pesanan/' + p.id;
+            document.getElementById('stModalKode').textContent = p.kode_pesanan;
+            document.getElementById('stModalPelanggan').textContent = p.nama_pelanggan;
+            document.getElementById('stStatusSelect').value = p.status || 'Antrean Cetak';
+            document.getElementById('stCatatanFinishing').value = p.catatan_finishing || '';
+            document.getElementById('stFileDesain').value = p.file_desain || '';
+            document.getElementById('stFileUpload').value = '';
+            
+            const chosenText = document.getElementById('stFileChosenText');
+            if (chosenText) chosenText.style.display = 'none';
+            const spoofAlert = document.getElementById('stFileSpoofError');
+            if (spoofAlert) spoofAlert.style.display = 'none';
 
-                if (currentActiveBtn) {
-                    currentActiveBtn.classList.remove('active');
-                }
+            const curWrap = document.getElementById('stCurrentFileWrap');
+            const curLink = document.getElementById('stCurrentFileLink');
+            if (p.file_desain) {
+                const fUrl = (p.file_desain.startsWith('http://') || p.file_desain.startsWith('https://'))
+                    ? p.file_desain
+                    : (p.file_desain.startsWith('/') ? p.file_desain : '/' + p.file_desain);
+                curLink.href = fUrl;
+                curWrap.style.display = 'block';
+            } else {
+                curWrap.style.display = 'none';
+            }
 
-                currentActiveBtn = btn;
-                btn.classList.add('active');
-
-                popoverOrderCode.textContent = kodePesanan;
-                const totalItems = Array.isArray(items) ? items.length : 0;
-                popoverCountBadge.textContent = `${totalItems} Produk`;
-                popoverTotalText.textContent = 'Rp ' + (parseFloat(totalHarga) || 0).toLocaleString('id-ID');
-
-                popoverSpkBtn.onclick = function() {
-                    closeMultiItemPopover();
-                    if (window.viewSpkDetail && pesananObj) {
-                        window.viewSpkDetail(pesananObj);
-                    }
-                };
-
-                // Render items inside popover
-                popoverItemsList.innerHTML = '';
-                if (Array.isArray(items) && items.length > 0) {
-                    items.forEach((it, idx) => {
-                        const isMain = idx === 0;
-                        const card = document.createElement('div');
-                        card.className = `popover-item-card ${isMain ? 'is-main' : ''}`;
+            // Multi-Item Design Editor in Status Modal
+            const multiSec = document.getElementById('stMultiItemsSection');
+            const multiList = document.getElementById('stMultiItemsList');
+            if (multiSec && multiList) {
+                if (Array.isArray(p.detail_items) && p.detail_items.length > 1) {
+                    multiSec.style.display = 'block';
+                    multiList.innerHTML = '';
+                    p.detail_items.forEach((it, idx) => {
+                        const itemCard = document.createElement('div');
+                        itemCard.style.cssText = 'background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px 12px;';
                         
-                        const ukuranText = it.ukuran ? ` • ${it.ukuran}` : '';
-                        const qtyText = `${it.qty || 1} ${it.satuan || 'Pcs'}${ukuranText}`;
-                        const subtotalVal = parseFloat(it.subtotal || it.harga || 0);
+                        let currentFileBadge = '';
+                        if (it.file_desain) {
+                            const fUrl = (it.file_desain.startsWith('http://') || it.file_desain.startsWith('https://'))
+                                ? it.file_desain
+                                : (it.file_desain.startsWith('/') ? it.file_desain : '/' + it.file_desain);
+                            currentFileBadge = `<a href="${fUrl}" target="_blank" style="font-size: 11px; color: #2563EB; font-weight: 700; text-decoration: none;"><i class="fa-solid fa-arrow-up-right-from-square"></i> Lihat Desain Item</a>`;
+                        } else {
+                            currentFileBadge = '<span style="font-size: 11px; color: #94A3B8;">(Belum ada desain khusus)</span>';
+                        }
 
-                        card.innerHTML = `
+                        itemCard.innerHTML = `
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                                <div style="font-size: 12px; font-weight: 700; color: #1E293B;">
+                                    ${idx + 1}. ${it.nama_produk} <span style="font-weight: 500; color: #64748B;">(${it.ukuran || 'Standard'}, ${it.qty} ${it.satuan || 'Pcs'})</span>
+                                </div>
+                                <div>${currentFileBadge}</div>
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                                <div>
+                                    <label style="font-size: 10.5px; font-weight: 700; color: #64748B; display: block; margin-bottom: 3px;">Upload File Baru</label>
+                                    <input type="file" name="item_file_${idx}" accept=".jpg,.jpeg,.png,.webp,.pdf,.tif,.tiff,.svg,.ai,.psd,.cdr,.zip" style="font-size: 11px; width: 100%;">
+                                </div>
+                                <div>
+                                    <label style="font-size: 10.5px; font-weight: 700; color: #64748B; display: block; margin-bottom: 3px;">Atau Link GDrive Baru</label>
+                                    <input type="text" name="item_link_${idx}" placeholder="https://drive.google.com/..." value="${(it.file_desain && it.file_desain.startsWith('http')) ? it.file_desain : ''}" style="font-size: 11.5px; width: 100%; border: 1px solid #CBD5E1; border-radius: 6px; padding: 4px 8px;">
+                                </div>
+                            </div>
+                        `;
+                        multiList.appendChild(itemCard);
+                    });
+                } else {
+                    multiSec.style.display = 'none';
+                    multiList.innerHTML = '';
+                }
+            }
+
+            statusModalOverlay.classList.add('active');
+        };
+        window.closeStatusModal = function () {
+            if (statusModalOverlay) statusModalOverlay.classList.remove('active');
+        };
+
+        window.handleStatusFileUpload = function (input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const chosenText = document.getElementById('stFileChosenText');
+            const chosenName = document.getElementById('stFileChosenName');
+            const chosenIcon = document.getElementById('stFileChosenIcon');
+            const spoofAlert = document.getElementById('stFileSpoofError');
+            const spoofMsg = document.getElementById('stFileSpoofErrorMsg');
+
+            verifyDesignFileClient(file, function (res) {
+                if (!res.valid) {
+                    if (spoofAlert) {
+                        spoofAlert.style.display = 'block';
+                        spoofMsg.textContent = res.message;
+                    }
+                    if (chosenText) chosenText.style.display = 'none';
+                    input.value = '';
+                } else {
+                    if (spoofAlert) spoofAlert.style.display = 'none';
+                    if (chosenText) chosenText.style.display = 'block';
+                    if (chosenName) chosenName.textContent = res.name + ' (' + res.info + ')';
+                    if (chosenIcon) chosenIcon.className = 'fa-solid ' + res.icon;
+                }
+            });
+        };
+
+        // 3. SPK & NOTA MODAL
+        const spkModalOverlay = document.getElementById('spkModalOverlay');
+        window.viewSpkDetail = function (p) {
+            if (!spkModalOverlay) return;
+            document.getElementById('spkKodePesanan').textContent = p.kode_pesanan;
+            document.getElementById('spkTglPesanan').textContent = p.tanggal_pesan ? p.tanggal_pesan : (p.created_at ? p.created_at.substring(0, 10) : '-');
+            document.getElementById('spkPelanggan').textContent = p.nama_pelanggan;
+            document.getElementById('spkStatusProduksi').textContent = p.status || 'Antrean Cetak';
+
+            const isLunas = (p.status_pembayaran || '').toLowerCase() === 'lunas' || (p.status || '').toLowerCase() === 'selesai';
+            const spkBadge = document.getElementById('spkStatusBadge');
+            spkBadge.textContent = isLunas ? 'LUNAS' : (p.status_pembayaran || 'BELUM LUNAS');
+            spkBadge.style.background = isLunas ? '#DCFCE7' : '#FEF3C7';
+            spkBadge.style.color = isLunas ? '#166534' : '#92400E';
+
+            const fLink = document.getElementById('spkFileDesainLink');
+            const fWrap = document.getElementById('spkFileDesainWrapper');
+            if (p.file_desain) {
+                const fUrl = (p.file_desain.startsWith('http://') || p.file_desain.startsWith('https://'))
+                    ? p.file_desain
+                    : (p.file_desain.startsWith('/') ? p.file_desain : '/' + p.file_desain);
+                fLink.href = fUrl;
+                fWrap.style.display = 'block';
+            } else {
+                fWrap.style.display = 'none';
+            }
+
+            document.getElementById('spkFinishingNote').textContent = p.catatan_finishing || 'Standar percetakan tanpa finishing khusus.';
+            document.getElementById('spkTotalHarga').textContent = 'Rp ' + (parseFloat(p.total_harga) || 0).toLocaleString('id-ID');
+            document.getElementById('spkStatusBayarText').textContent = isLunas ? 'Lunas' : (p.status_pembayaran || 'DP');
+            document.getElementById('spkSisaBayar').textContent = 'Rp ' + (parseFloat(p.sisa_bayar) || (isLunas ? 0 : p.total_harga)).toLocaleString('id-ID');
+
+            // Render Items inside SPK table
+            const tbody = document.getElementById('spkItemsTableBody');
+            tbody.innerHTML = '';
+            let itemsList = [];
+            if (Array.isArray(p.detail_items) && p.detail_items.length > 0) {
+                itemsList = p.detail_items;
+            } else {
+                itemsList = [{
+                    nama_produk: p.nama_produk,
+                    ukuran: p.jumlah_ukuran || 'Standard',
+                    qty: 1,
+                    satuan: '',
+                    subtotal: p.total_harga,
+                    file_desain: p.file_desain
+                }];
+            }
+
+            itemsList.forEach((it, idx) => {
+                const tr = document.createElement('tr');
+                tr.style.borderBottom = '1px solid #E2E8F0';
+
+                let dLinkHtml = '<span style="color:#94A3B8; font-size:11px;">Ikuti Order</span>';
+                const fPath = it.file_desain || p.file_desain;
+                if (fPath) {
+                    const fUrl = (fPath.startsWith('http://') || fPath.startsWith('https://'))
+                        ? fPath
+                        : (fPath.startsWith('/') ? fPath : '/' + fPath);
+                    dLinkHtml = `<a href="${fUrl}" target="_blank" style="color:#2563EB; font-weight:700; text-decoration:none; display:inline-flex; align-items:center; gap:3px;"><i class="fa-solid fa-file-arrow-down"></i> Buka File</a>`;
+                }
+
+                tr.innerHTML = `
+                        <td style="padding: 6px 10px;">${idx + 1}</td>
+                        <td style="padding: 6px 10px;">
+                            <strong>${it.nama_produk}</strong>
+                            ${it.catatan ? '<div style="font-size:10.5px; color:#64748B;">' + it.catatan + '</div>' : ''}
+                        </td>
+                        <td style="padding: 6px 10px;">${it.ukuran || '-'}</td>
+                        <td style="padding: 6px 10px; text-align: center;">${it.qty || 1} ${it.satuan || ''}</td>
+                        <td style="padding: 6px 10px;">${dLinkHtml}</td>
+                        <td style="padding: 6px 10px; text-align: right; font-weight: 700;">Rp ${(parseFloat(it.subtotal) || 0).toLocaleString('id-ID')}</td>
+                    `;
+                tbody.appendChild(tr);
+            });
+
+            spkModalOverlay.classList.add('active');
+        };
+        window.closeSpkModal = function () {
+            if (spkModalOverlay) spkModalOverlay.classList.remove('active');
+        };
+
+        // 4. QUICK SETTLEMENT (PELUNASAN CEPAT) MODAL
+        const pelunasanModalOverlay = document.getElementById('pelunasanModalOverlay');
+        const pelunasanJumlah = document.getElementById('pelunasanJumlah');
+        const pelunasanUangDiterima = document.getElementById('pelunasanUangDiterima');
+        const pelunasanKembalianDisplay = document.getElementById('pelunasanKembalianDisplay');
+
+        window.openPelunasanModal = function (p) {
+            if (!pelunasanModalOverlay) return;
+            const sisa = parseFloat(p.sisa_bayar) || parseFloat(p.total_harga) || 0;
+            document.getElementById('pelunasanKodePesanan').value = p.kode_pesanan;
+            document.getElementById('pelunasanDisplayKode').textContent = p.kode_pesanan;
+            document.getElementById('pelunasanDisplayPelanggan').textContent = p.nama_pelanggan;
+            document.getElementById('pelunasanDisplaySisa').textContent = 'Rp ' + sisa.toLocaleString('id-ID');
+            pelunasanJumlah.value = sisa;
+            pelunasanJumlah.max = sisa;
+            pelunasanUangDiterima.value = sisa;
+            calcPelunasanChange();
+            pelunasanModalOverlay.classList.add('active');
+        };
+
+        function calcPelunasanChange() {
+            const bayar = parseFloat(pelunasanJumlah.value) || 0;
+            const uang = parseFloat(pelunasanUangDiterima.value) || 0;
+            const diff = uang - bayar;
+            if (diff >= 0) {
+                pelunasanKembalianDisplay.style.color = '#16A34A';
+                pelunasanKembalianDisplay.style.background = '#DCFCE7';
+                pelunasanKembalianDisplay.textContent = 'Kembalian: Rp ' + diff.toLocaleString('id-ID');
+            } else {
+                pelunasanKembalianDisplay.style.color = '#DC2626';
+                pelunasanKembalianDisplay.style.background = '#FEE2E2';
+                pelunasanKembalianDisplay.textContent = 'Kurang: Rp ' + Math.abs(diff).toLocaleString('id-ID');
+            }
+        }
+
+        if (pelunasanJumlah) pelunasanJumlah.addEventListener('input', calcPelunasanChange);
+        if (pelunasanUangDiterima) pelunasanUangDiterima.addEventListener('input', calcPelunasanChange);
+
+        window.setPelunasanChip = function (nominal) {
+            const bayar = parseFloat(pelunasanJumlah.value) || 0;
+            if (nominal === 'pas') {
+                pelunasanUangDiterima.value = bayar;
+            } else {
+                pelunasanUangDiterima.value = nominal;
+            }
+            calcPelunasanChange();
+        };
+
+        window.closePelunasanModal = function () {
+            if (pelunasanModalOverlay) pelunasanModalOverlay.classList.remove('active');
+        };
+
+        // Form Submit Safety & Dynamic Item File Attachment
+        if (addOrderForm) {
+            addOrderForm.addEventListener('submit', function (e) {
+                if (cartItems.length === 0) {
+                    e.preventDefault();
+                    alert('Silakan tambahkan minimal 1 item ke keranjang cetak sebelum menyimpan pesanan!');
+                    return false;
+                }
+
+                // Remove previous dynamic item file inputs if any
+                document.querySelectorAll('.dynamic-item-file-input').forEach(el => el.remove());
+
+                // Create DataTransfer inputs for each item that has an uploaded File
+                cartItems.forEach((it, idx) => {
+                    if (it._fileObj instanceof File) {
+                        const dt = new DataTransfer();
+                        dt.items.add(it._fileObj);
+                        const fileInp = document.createElement('input');
+                        fileInp.type = 'file';
+                        fileInp.name = `item_file_${idx}`;
+                        fileInp.className = 'dynamic-item-file-input';
+                        fileInp.style.display = 'none';
+                        fileInp.files = dt.files;
+                        addOrderForm.appendChild(fileInp);
+                    }
+                });
+
+                // Clean JSON payload
+                const cleanItems = cartItems.map(item => {
+                    const copy = { ...item };
+                    delete copy._fileObj;
+                    return copy;
+                });
+                ordItemsJson.value = JSON.stringify(cleanItems);
+            });
+        }
+
+        // Dropdown Toggle
+        document.addEventListener('click', function (e) {
+            const toggle = e.target.closest('.action-toggle');
+            if (toggle) {
+                e.stopPropagation();
+                const menu = toggle.nextElementSibling;
+                document.querySelectorAll('.dropdown-menu').forEach(m => {
+                    if (m !== menu) m.classList.remove('show');
+                });
+                if (menu) menu.classList.toggle('show');
+            } else {
+                document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+            }
+        });
+
+        // Multi-Item Popover Handler
+        const multiItemPopover = document.getElementById('multiItemPopover');
+        const popoverOrderCode = document.getElementById('popoverOrderCode');
+        const popoverCountBadge = document.getElementById('popoverItemCountBadge');
+        const popoverItemsList = document.getElementById('popoverItemsList');
+        const popoverTotalText = document.getElementById('popoverTotalText');
+        const popoverSpkBtn = document.getElementById('popoverSpkBtn');
+        let currentActiveBtn = null;
+
+        window.toggleItemsPopover = function (e, btn, items, kodePesanan, totalHarga, pesananObj) {
+            e.stopPropagation();
+            if (!multiItemPopover) return;
+
+            if (currentActiveBtn === btn && multiItemPopover.style.display === 'flex') {
+                closeMultiItemPopover();
+                return;
+            }
+
+            if (currentActiveBtn) {
+                currentActiveBtn.classList.remove('active');
+            }
+
+            currentActiveBtn = btn;
+            btn.classList.add('active');
+
+            popoverOrderCode.textContent = kodePesanan;
+            const totalItems = Array.isArray(items) ? items.length : 0;
+            popoverCountBadge.textContent = `${totalItems} Produk`;
+            popoverTotalText.textContent = 'Rp ' + (parseFloat(totalHarga) || 0).toLocaleString('id-ID');
+
+            popoverSpkBtn.onclick = function () {
+                closeMultiItemPopover();
+                if (window.viewSpkDetail && pesananObj) {
+                    window.viewSpkDetail(pesananObj);
+                }
+            };
+
+            // Render items inside popover
+            popoverItemsList.innerHTML = '';
+            if (Array.isArray(items) && items.length > 0) {
+                items.forEach((it, idx) => {
+                    const isMain = idx === 0;
+                    const card = document.createElement('div');
+                    card.className = `popover-item-card ${isMain ? 'is-main' : ''}`;
+
+                    const ukuranText = it.ukuran ? ` • ${it.ukuran}` : '';
+                    const qtyText = `${it.qty || 1} ${it.satuan || 'Pcs'}${ukuranText}`;
+                    const subtotalVal = parseFloat(it.subtotal || it.harga || 0);
+
+                    // Design file badge/link
+                    let designInfoHtml = '';
+                    const itemDesign = it.file_desain || (pesananObj && pesananObj.file_desain ? pesananObj.file_desain : null);
+                    if (itemDesign) {
+                        const fUrl = (itemDesign.startsWith('http://') || itemDesign.startsWith('https://'))
+                            ? itemDesign
+                            : (itemDesign.startsWith('/') ? itemDesign : '/' + itemDesign);
+                        designInfoHtml = `
+                            <div style="margin-top: 5px; display: flex; align-items: center; justify-content: space-between; font-size: 11px; background: #F8FAFC; padding: 3px 8px; border-radius: 5px; border: 1px solid #E2E8F0;">
+                                <span style="color: #475569;"><i class="fa-solid fa-file-image" style="color:#2563EB;"></i> Desain:</span>
+                                <a href="${fUrl}" target="_blank" onclick="event.stopPropagation();" style="color: #2563EB; font-weight: 700; text-decoration: none; display: inline-flex; align-items: center; gap: 4px;">
+                                    Buka File <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 10px;"></i>
+                                </a>
+                            </div>
+                        `;
+                    }
+
+                    card.innerHTML = `
                             <div class="popover-item-title-row">
                                 <span class="popover-item-name">${idx + 1}. ${it.nama_produk}</span>
                                 <span class="popover-item-badge ${isMain ? 'main' : 'extra'}">
@@ -3535,66 +4324,164 @@
                                 <span>${qtyText}</span>
                                 <span class="popover-item-subtotal">Rp ${subtotalVal.toLocaleString('id-ID')}</span>
                             </div>
+                            ${designInfoHtml}
                         `;
-                        popoverItemsList.appendChild(card);
-                    });
-                } else {
-                    popoverItemsList.innerHTML = '<div style="font-size:12px; color:#94A3B8; text-align:center; padding:12px;">Tidak ada rincian item.</div>';
-                }
+                    popoverItemsList.appendChild(card);
+                });
+            } else {
+                popoverItemsList.innerHTML = '<div style="font-size:12px; color:#94A3B8; text-align:center; padding:12px;">Tidak ada rincian item.</div>';
+            }
 
-                // Show popover to calculate dimensions
-                multiItemPopover.style.display = 'flex';
+            // Show popover to calculate dimensions
+            multiItemPopover.style.display = 'flex';
 
-                // Position dynamically using getBoundingClientRect()
-                const rect = btn.getBoundingClientRect();
-                const popoverWidth = multiItemPopover.offsetWidth || 340;
-                const popoverHeight = multiItemPopover.offsetHeight || 260;
+            // Position dynamically using getBoundingClientRect()
+            const rect = btn.getBoundingClientRect();
+            const popoverWidth = multiItemPopover.offsetWidth || 340;
+            const popoverHeight = multiItemPopover.offsetHeight || 260;
 
-                let left = rect.left;
-                if (left + popoverWidth > window.innerWidth - 12) {
-                    left = window.innerWidth - popoverWidth - 12;
-                }
-                left = Math.max(12, left);
+            let left = rect.left;
+            if (left + popoverWidth > window.innerWidth - 12) {
+                left = window.innerWidth - popoverWidth - 12;
+            }
+            left = Math.max(12, left);
 
-                let top = rect.bottom + 6;
-                if (top + popoverHeight > window.innerHeight - 12 && rect.top > popoverHeight + 12) {
-                    top = rect.top - popoverHeight - 6;
-                }
-                top = Math.max(12, top);
+            let top = rect.bottom + 6;
+            if (top + popoverHeight > window.innerHeight - 12 && rect.top > popoverHeight + 12) {
+                top = rect.top - popoverHeight - 6;
+            }
+            top = Math.max(12, top);
 
-                multiItemPopover.style.top = `${top}px`;
-                multiItemPopover.style.left = `${left}px`;
-            };
+            multiItemPopover.style.top = `${top}px`;
+            multiItemPopover.style.left = `${left}px`;
+        };
 
-            window.closeMultiItemPopover = function() {
-                if (!multiItemPopover) return;
-                multiItemPopover.style.display = 'none';
-                if (currentActiveBtn) {
-                    currentActiveBtn.classList.remove('active');
-                    currentActiveBtn = null;
-                }
-            };
+        window.closeMultiItemPopover = function () {
+            if (!multiItemPopover) return;
+            multiItemPopover.style.display = 'none';
+            if (currentActiveBtn) {
+                currentActiveBtn.classList.remove('active');
+                currentActiveBtn = null;
+            }
+        };
 
-            // Close popover when clicking anywhere outside
-            document.addEventListener('click', function(e) {
-                if (multiItemPopover && multiItemPopover.style.display === 'flex') {
-                    if (!multiItemPopover.contains(e.target) && (!currentActiveBtn || !currentActiveBtn.contains(e.target))) {
-                        closeMultiItemPopover();
-                    }
-                }
-            });
-
-            // Close on Escape key
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape') {
+        // Close popover when clicking anywhere outside
+        document.addEventListener('click', function (e) {
+            if (multiItemPopover && multiItemPopover.style.display === 'flex') {
+                if (!multiItemPopover.contains(e.target) && (!currentActiveBtn || !currentActiveBtn.contains(e.target))) {
                     closeMultiItemPopover();
                 }
+            }
+        });
+
+        // 5. DESIGN GALLERY MODAL (MULTI-ITEM DESIGN VIEWER)
+        const galleryModalOverlay = document.getElementById('designGalleryModalOverlay');
+        const galleryTitleCode = document.getElementById('galleryKodePesanan');
+        const galleryContainer = document.getElementById('galleryItemsContainer');
+
+        window.openDesignGalleryModal = function (items, kodePesanan, masterFile) {
+            if (!galleryModalOverlay || !galleryContainer) return;
+
+            galleryTitleCode.textContent = kodePesanan;
+            galleryContainer.innerHTML = '';
+
+            let itemsList = [];
+            if (Array.isArray(items) && items.length > 0) {
+                itemsList = items;
+            } else if (masterFile) {
+                itemsList = [{
+                    nama_produk: 'Produk Utama',
+                    ukuran: 'Standard',
+                    qty: 1,
+                    satuan: 'Pcs',
+                    file_desain: masterFile
+                }];
+            }
+
+            itemsList.forEach((it, idx) => {
+                const fPath = it.file_desain || masterFile;
+                const card = document.createElement('div');
+                card.className = 'gallery-card';
+
+                let thumbHtml = '';
+                let btnHtml = '';
+
+                if (fPath) {
+                    const fUrl = (fPath.startsWith('http://') || fPath.startsWith('https://'))
+                        ? fPath
+                        : (fPath.startsWith('/') ? fPath : '/' + fPath);
+
+                    const isImage = /\.(jpg|jpeg|png|webp|gif|svg)$/i.test(fPath);
+                    const isDrive = (fPath.startsWith('http://') || fPath.startsWith('https://'));
+
+                    if (isImage) {
+                        thumbHtml = `
+                            <img src="${fUrl}" alt="Desain Item ${idx + 1}" class="gallery-thumb-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div style="display:none; align-items:center; justify-content:center; width:100%; height:100%; color:#2563EB; font-size:32px;">
+                                <i class="fa-solid fa-file-image"></i>
+                            </div>
+                        `;
+                    } else if (isDrive) {
+                        thumbHtml = `
+                            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; color:#0284C7; gap:6px;">
+                                <i class="fa-brands fa-google-drive" style="font-size:36px;"></i>
+                                <span style="font-size:11px; font-weight:700;">Google Drive</span>
+                            </div>
+                        `;
+                    } else {
+                        const ext = (fPath.split('.').pop() || 'FILE').toUpperCase();
+                        thumbHtml = `
+                            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; color:#2563EB; gap:6px;">
+                                <i class="fa-solid fa-file-lines" style="font-size:36px;"></i>
+                                <span style="font-size:11px; font-weight:700;">${ext}</span>
+                            </div>
+                        `;
+                    }
+
+                    btnHtml = `
+                        <a href="${fUrl}" target="_blank" class="gallery-card-btn">
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka File Desain
+                        </a>
+                    `;
+                } else {
+                    thumbHtml = `<div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; color:#94A3B8; font-size:11px;">Tidak ada file</div>`;
+                    btnHtml = `<span style="font-size:11px; color:#94A3B8; text-align:center; padding:6px;">Tanpa Desain</span>`;
+                }
+
+                card.innerHTML = `
+                    <div class="gallery-thumb-wrap">
+                        ${thumbHtml}
+                        <span style="position:absolute; top:8px; left:8px; background:rgba(15, 23, 42, 0.75); color:#fff; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">Item ${idx + 1}</span>
+                    </div>
+                    <div class="gallery-card-body">
+                        <div class="gallery-card-title">${it.nama_produk}</div>
+                        <div class="gallery-card-meta">${it.ukuran || 'Standard'} • ${it.qty || 1} ${it.satuan || 'Pcs'}</div>
+                        ${btnHtml}
+                    </div>
+                `;
+                galleryContainer.appendChild(card);
             });
 
-            // Close on window resize or scroll
-            window.addEventListener('resize', closeMultiItemPopover);
+            galleryModalOverlay.classList.add('active');
+        };
+
+        window.closeDesignGalleryModal = function () {
+            if (galleryModalOverlay) galleryModalOverlay.classList.remove('active');
+        };
+
+        // Close on Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeMultiItemPopover();
+                closeDesignGalleryModal();
+            }
+        });
+
+        // Close on window resize or scroll
+        window.addEventListener('resize', closeMultiItemPopover);
         });
     </script>
     @include('layouts.navbar_assets')
 </body>
+
 </html>

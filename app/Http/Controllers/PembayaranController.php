@@ -34,11 +34,14 @@ class PembayaranController extends Controller
             ->pluck('total_dibayar', 'kode_pesanan')
             ->toArray();
 
-        // Ambil daftar kode_pesanan yang benar-benar sudah LUNAS (sisa <= 0 atau status Lunas)
-        $lunasOrderCodes = Pesanan::whereRaw('LOWER(status_pembayaran) = ?', ['lunas'])
-            ->orWhere('sisa_bayar', '<=', 0)
-            ->pluck('kode_pesanan')
-            ->toArray();
+        // Ambil daftar kode_pesanan yang benar-benar sudah LUNAS berdasarkan akumulasi pembayaran & status
+        $lunasOrderCodes = [];
+        foreach ($pesanans as $p) {
+            $paid = $paidByOrder[$p->kode_pesanan] ?? 0;
+            if (($p->total_harga > 0 && $paid >= $p->total_harga) || (strtolower($p->status_pembayaran ?? '') === 'lunas' && ($paid > 0 || $p->sisa_bayar <= 0))) {
+                $lunasOrderCodes[] = $p->kode_pesanan;
+            }
+        }
 
         return view('pembayaran', compact('pembayarans', 'pesanans', 'lunasOrderCodes', 'paidByOrder'));
     }

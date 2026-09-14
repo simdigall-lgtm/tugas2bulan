@@ -220,6 +220,9 @@
         .content-body {
             padding: 32px;
             flex: 1;
+            max-width: 1600px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .page-header {
@@ -492,12 +495,6 @@
         }
 
         @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-            .main-wrapper {
-                margin-left: 0;
-            }
             .metrics-grid {
                 grid-template-columns: 1fr;
             }
@@ -848,8 +845,13 @@
                             x: {
                                 grid: { color: '#F1F5F9' },
                                 ticks: {
+                                    maxRotation: 0,
+                                    minRotation: 0,
+                                    autoSkip: true,
+                                    maxTicksLimit: 7,
                                     precision: 0,
-                                    stepSize: 1
+                                    font: { size: 11, weight: '600' },
+                                    color: '#64748B'
                                 },
                                 beginAtZero: true
                             },

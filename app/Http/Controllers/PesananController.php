@@ -126,13 +126,46 @@ class PesananController extends Controller
         $year = date('Y');
         $kodePesanan = "ORD-{$year}-" . str_pad($lastId, 3, '0', STR_PAD_LEFT);
 
-        // Upload File Desain dari Laptop dengan Verifikasi Ketat Anti-Spoofing ATAU Link Drive
+        // Upload File Desain Utama dari Laptop ATAU Link Drive
         $fileDesain = $request->input('file_desain');
         if ($request->hasFile('file_upload')) {
             try {
-                $fileDesain = $this->validateAndStoreDesignFile($request, $kodePesanan);
+                $fileDesain = $this->validateAndSaveSingleUploadedFile($request->file('file_upload'), $kodePesanan, 'utama');
             } catch (\Exception $e) {
                 return back()->withInput()->with('error', $e->getMessage());
+            }
+        }
+
+        // Upload & Asosiasikan File Desain untuk Masing-Masing Item (Multi-Item Design Support)
+        if (!empty($items)) {
+            foreach ($items as $idx => &$it) {
+                $fileKey = "item_file_{$idx}";
+                $linkKey = "item_link_{$idx}";
+
+                if ($request->hasFile($fileKey)) {
+                    try {
+                        $itPath = $this->validateAndSaveSingleUploadedFile($request->file($fileKey), $kodePesanan, "item_" . ($idx + 1));
+                        $it['file_desain'] = $itPath;
+                    } catch (\Exception $e) {
+                        return back()->withInput()->with('error', "Item " . ($idx + 1) . " ({$it['nama_produk']}): " . $e->getMessage());
+                    }
+                } elseif ($request->filled($linkKey)) {
+                    $it['file_desain'] = $request->input($linkKey);
+                } elseif (!empty($it['file_desain'])) {
+                    // Retain link/path from cart builder
+                    $it['file_desain'] = $it['file_desain'];
+                } elseif (!empty($fileDesain)) {
+                    // Fallback to master file if available
+                    $it['file_desain'] = $fileDesain;
+                } else {
+                    $it['file_desain'] = null;
+                }
+            }
+            unset($it);
+
+            // Jika fileDesain utama kosong, gunakan file desain item pertama sebagai representasi
+            if (empty($fileDesain) && !empty($items[0]['file_desain'])) {
+                $fileDesain = $items[0]['file_desain'];
             }
         }
 
@@ -198,12 +231,11 @@ class PesananController extends Controller
             Pelanggan::create([
                 'kode_pelanggan' => 'CUST-' . str_pad($nextCusId, 3, '0', STR_PAD_LEFT),
                 'nama' => $validated['nama_pelanggan'],
-                'email' => strtolower(str_replace(' ', '', $validated['nama_pelanggan'])) . '@gmail.com',
-                'no_hp' => '+62 812-' . rand(1000, 9999) . '-' . rand(1000, 9999),
-                'alamat' => 'Jakarta, Indonesia',
-                'total_pesanan' => 1,
-                'tanggal_daftar' => now()->toDateString(),
+                'telepon' => '-',
+                'email' => null,
+                'alamat' => '-',
                 'status' => 'Aktif',
+                'total_pesanan' => 1,
             ]);
         }
 
@@ -226,13 +258,41 @@ class PesananController extends Controller
 
         if ($request->hasFile('file_upload')) {
             try {
-                $filePath = $this->validateAndStoreDesignFile($request, $pesanan->kode_pesanan);
+                $filePath = $this->validateAndSaveSingleUploadedFile($request->file('file_upload'), $pesanan->kode_pesanan, 'update');
                 $updateData['file_desain'] = $filePath;
             } catch (\Exception $e) {
                 return back()->withInput()->with('error', $e->getMessage());
             }
         } elseif ($request->filled('file_desain')) {
             $updateData['file_desain'] = $request->input('file_desain');
+        }
+
+        // Update detail_items per-item designs if submitted
+        $detailItems = $pesanan->detail_items;
+        if (is_array($detailItems) && count($detailItems) > 0) {
+            $hasItemUpdate = false;
+            foreach ($detailItems as $idx => &$it) {
+                $fileKey = "item_file_{$idx}";
+                $linkKey = "item_link_{$idx}";
+
+                if ($request->hasFile($fileKey)) {
+                    try {
+                        $itPath = $this->validateAndSaveSingleUploadedFile($request->file($fileKey), $pesanan->kode_pesanan, "item_" . ($idx + 1));
+                        $it['file_desain'] = $itPath;
+                        $hasItemUpdate = true;
+                    } catch (\Exception $e) {
+                        return back()->withInput()->with('error', "Item " . ($idx + 1) . " ({$it['nama_produk']}): " . $e->getMessage());
+                    }
+                } elseif ($request->filled($linkKey)) {
+                    $it['file_desain'] = $request->input($linkKey);
+                    $hasItemUpdate = true;
+                }
+            }
+            unset($it);
+
+            if ($hasItemUpdate) {
+                $updateData['detail_items'] = $detailItems;
+            }
         }
 
         $pesanan->update($updateData);
@@ -242,24 +302,17 @@ class PesananController extends Controller
 
     /**
      * Validasi Ketat Anti-Spoofing & Penyimpanan File Desain Percetakan
-     * Mencegah file teks biasa yang sengaja diubah ekstensinya menjadi .jpg, .svg, .pdf, dll.
      */
-    private function validateAndStoreDesignFile(Request $request, $kodePesanan)
+    private function validateAndSaveSingleUploadedFile($file, $kodePesanan, $suffix = '')
     {
-        if (!$request->hasFile('file_upload')) {
-            return $request->input('file_desain');
-        }
-
-        $file = $request->file('file_upload');
-
-        if (!$file->isValid()) {
-            throw new \Exception("File desain gagal diunggah atau rusak saat proses transfer.");
+        if (!$file || !$file->isValid()) {
+            throw new \Exception("File desain gagal diunggah atau rusak.");
         }
 
         // Batas maksimal ukuran file: 50 MB
         $maxBytes = 50 * 1024 * 1024;
         if ($file->getSize() > $maxBytes) {
-            throw new \Exception("Ukuran file terlalu besar (" . round($file->getSize() / 1024 / 1024, 1) . " MB). Maksimal 50 MB!");
+            throw new \Exception("Ukuran file terlalu besar (" . round($file->getSize() / 1024 / 1024, 1) . " MB). Maksimal 50 MB.");
         }
 
         $origName = $file->getClientOriginalName();
@@ -268,7 +321,7 @@ class PesananController extends Controller
 
         $allowedExts = ['jpg', 'jpeg', 'png', 'webp', 'pdf', 'tif', 'tiff', 'svg', 'ai', 'psd', 'cdr', 'zip'];
         if (!in_array($ext, $allowedExts)) {
-            throw new \Exception("Ekstensi file '.{$ext}' tidak diizinkan! Gunakan format percetakan: JPG, PNG, PDF, TIFF, SVG, AI, PSD, CDR, ZIP.");
+            throw new \Exception("Format '.{$ext}' tidak didukung.");
         }
 
         // 1. Deteksi Magic MIME menggunakan finfo PHP
@@ -285,19 +338,19 @@ class PesananController extends Controller
         if (in_array($ext, ['jpg', 'jpeg', 'png', 'webp'])) {
             // Tolak jika terdeteksi text biasa atau script
             if (str_starts_with($mime, 'text/') || $mime === 'application/x-empty' || str_contains($mime, 'script')) {
-                throw new \Exception("VALIDASI DITOLAK: File '{$origName}' terdeteksi sebagai teks biasa yang diubah ekstensinya menjadi .{$ext}! Harap unggah file gambar grafis asli.");
+                throw new \Exception("File '{$origName}' bukan gambar {$ext} yang valid.");
             }
 
             // getimagesize memverifikasi struktur biner header gambar yang sebenarnya
             $imgInfo = @getimagesize($filePath);
             if ($imgInfo === false || empty($imgInfo[0]) || empty($imgInfo[1])) {
-                throw new \Exception("VALIDASI DITOLAK: File '{$origName}' bukan gambar yang valid! Header biner gambar tidak ditemukan atau rusak (file teks yang diganti ekstensi).");
+                throw new \Exception("File '{$origName}' bukan gambar yang valid.");
             }
 
             // Verifikasi MIME internal dari parser gambar
             $validMimes = ['image/jpeg', 'image/png', 'image/webp'];
             if (!in_array($mime, $validMimes) && !in_array($imgInfo['mime'], $validMimes)) {
-                throw new \Exception("VALIDASI DITOLAK: Format biner file '{$origName}' tidak cocok dengan ekstensi gambar .{$ext}.");
+                throw new \Exception("File '{$origName}' bukan gambar yang valid.");
             }
         }
 
@@ -305,9 +358,8 @@ class PesananController extends Controller
         elseif ($ext === 'svg') {
             $content = file_get_contents($filePath);
 
-            // File teks biasa tidak memiliki tag <svg
             if (!preg_match('/<svg[\s\S]*?>/i', $content)) {
-                throw new \Exception("VALIDASI DITOLAK: File '{$origName}' terdeteksi sebagai file teks biasa tanpa elemen vektor grafik SVG!");
+                throw new \Exception("File '{$origName}' bukan file SVG yang valid.");
             }
 
             // Validasi kelayakan sintaks XML
@@ -317,20 +369,19 @@ class PesananController extends Controller
             libxml_clear_errors();
 
             if ($xml === false || strtolower($xml->getName()) !== 'svg') {
-                throw new \Exception("VALIDASI DITOLAK: File '{$origName}' bukan format SVG vector yang valid (struktur XML rusak atau palsu).");
+                throw new \Exception("File '{$origName}' bukan format SVG yang valid.");
             }
 
             // Sanitasi keamanan SVG
             if (stripos($content, '<script') !== false || stripos($content, 'javascript:') !== false) {
-                throw new \Exception("VALIDASI DITOLAK: File SVG '{$origName}' ditolak karena mengandung script berbahaya!");
+                throw new \Exception("File SVG '{$origName}' tidak diizinkan.");
             }
         }
 
         // 4. DETEKSI DOKUMEN PDF
         elseif ($ext === 'pdf') {
-            // PDF resmi wajib memiliki magic byte '%PDF-' di awal
             if (!str_starts_with($headerBytes, '%PDF-')) {
-                throw new \Exception("VALIDASI DITOLAK: File '{$origName}' bukan dokumen PDF asli! Magic header '%PDF-' tidak ditemukan (tampaknya file teks yang di-rename).");
+                throw new \Exception("File '{$origName}' bukan dokumen PDF yang valid.");
             }
         }
 
@@ -338,27 +389,27 @@ class PesananController extends Controller
         elseif (in_array($ext, ['tif', 'tiff'])) {
             $isTiff = str_starts_with($headerBytes, "II*\x00") || str_starts_with($headerBytes, "MM\x00*");
             if (!$isTiff) {
-                throw new \Exception("VALIDASI DITOLAK: File '{$origName}' bukan file format TIFF percetakan yang valid.");
+                throw new \Exception("File '{$origName}' bukan file TIFF yang valid.");
             }
         }
         elseif ($ext === 'psd') {
             if (!str_starts_with($headerBytes, '8BPS')) {
-                throw new \Exception("VALIDASI DITOLAK: File '{$origName}' bukan file format Adobe Photoshop (.psd) asli.");
+                throw new \Exception("File '{$origName}' bukan file PSD yang valid.");
             }
         }
         elseif ($ext === 'zip') {
             if (!str_starts_with($headerBytes, "PK\x03\x04")) {
-                throw new \Exception("VALIDASI DITOLAK: File '{$origName}' bukan arsip berkas ZIP yang valid.");
+                throw new \Exception("File '{$origName}' bukan file ZIP yang valid.");
             }
         }
         elseif ($ext === 'ai') {
             if (!str_starts_with($headerBytes, '%PDF-') && !str_starts_with($headerBytes, '%!PS')) {
-                throw new \Exception("VALIDASI DITOLAK: File '{$origName}' bukan file Adobe Illustrator (.ai) asli.");
+                throw new \Exception("File '{$origName}' bukan file AI yang valid.");
             }
         }
         elseif ($ext === 'cdr') {
             if (!str_starts_with($headerBytes, 'RIFF') && !str_starts_with($headerBytes, "PK\x03\x04")) {
-                throw new \Exception("VALIDASI DITOLAK: File '{$origName}' bukan file CorelDraw (.cdr) asli.");
+                throw new \Exception("File '{$origName}' bukan file CDR yang valid.");
             }
         }
 

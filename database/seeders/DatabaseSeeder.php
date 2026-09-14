@@ -13,10 +13,10 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         \App\Models\User::updateOrCreate(
-            ['email' => 'admin@primagrafika.com'],
+            ['email' => 'admin@gmail.com'],
             [
                 'name' => 'admin',
-                'password' => bcrypt('123'),
+                'password' => bcrypt('123456'),
             ]
         );
 

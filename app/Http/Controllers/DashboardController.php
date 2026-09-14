@@ -35,6 +35,22 @@ class DashboardController extends Controller
             9 => 'Sep', 10 => 'Okt', 11 => 'Nov', 12 => 'Des'
         ];
 
+        // Realistic strategic monthly target baseline for performance tracking
+        $baseTargets = [
+            1 => 6000000,   // Jan: Rp 6 Jt
+            2 => 8000000,   // Feb: Rp 8 Jt
+            3 => 10000000,  // Mar: Rp 10 Jt
+            4 => 11000000,  // Apr: Rp 11 Jt
+            5 => 14000000,  // Mei: Rp 14 Jt
+            6 => 16500000,  // Jun: Rp 16.5 Jt
+            7 => 20000000,  // Jul: Rp 20 Jt
+            8 => 32000000,  // Agt: Rp 32 Jt
+            9 => 30000000,  // Sep: Rp 30 Jt
+            10 => 33000000, // Okt: Rp 33 Jt
+            11 => 36000000, // Nov: Rp 36 Jt
+            12 => 40000000, // Des: Rp 40 Jt
+        ];
+
         // Real Sales Data for current year, only up to the current month ($thisMonth)
         // Automatically adds new months as time progresses
         $monthlyLabels = [];
@@ -46,7 +62,7 @@ class DashboardController extends Controller
                 ->whereMonth('tanggal_pesan', $m)
                 ->sum('total_harga');
             $monthlyRevenue[] = $rev;
-            $monthlyTarget[] = $rev > 0 ? (float) ($rev * 1.15) : 0;
+            $monthlyTarget[] = (float) ($baseTargets[$m] ?? ($rev > 0 ? $rev * 1.1 : 0));
         }
 
         // If current year total is zero, calculate across all data but still cap at $thisMonth
@@ -56,7 +72,7 @@ class DashboardController extends Controller
             for ($m = 1; $m <= $thisMonth; $m++) {
                 $rev = (float) Pesanan::whereMonth('tanggal_pesan', $m)->sum('total_harga');
                 $monthlyRevenue[] = $rev;
-                $monthlyTarget[] = $rev > 0 ? (float) ($rev * 1.15) : 0;
+                $monthlyTarget[] = (float) ($baseTargets[$m] ?? ($rev > 0 ? $rev * 1.1 : 0));
             }
         }
 

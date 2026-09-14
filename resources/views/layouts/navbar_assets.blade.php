@@ -744,6 +744,7 @@
     .sidebar {
         width: 210px !important;
     }
+
     .main-wrapper {
         margin-left: 210px !important;
         width: calc(100% - 210px) !important;
@@ -752,9 +753,11 @@
     }
 
     /* Sticky Topbar Standard Across All Pages */
-    html, body {
+    html,
+    body {
         overflow-x: clip !important;
     }
+
     .topbar {
         position: sticky !important;
         top: 0 !important;
@@ -772,37 +775,227 @@
         box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.12) !important;
     }
 
-    /* Responsive adjustments */
+    /* ===================================================
+       Global Comprehensive Responsive System
+    =================================================== */
+    @media (max-width: 1024px) {
+        .metrics-grid {
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 16px !important;
+        }
+
+        .charts-grid-2col,
+        .charts-grid-2col-equal {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
+        }
+    }
+
     @media (max-width: 768px) {
+        /* 1. Mobile Sidebar & Drawer Overlay */
         .mobile-toggle-btn {
-            display: inline-flex;
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex-shrink: 0 !important;
+            margin-right: 6px !important;
         }
 
         .sidebar {
-            width: 240px !important;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
+            display: flex !important;
+            width: 250px !important;
+            position: fixed !important;
+            top: 0 !important;
+            bottom: 0 !important;
+            left: 0 !important;
+            transform: translateX(-100%) !important;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+            z-index: 1050 !important;
+            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18) !important;
+            background: #FFFFFF !important;
         }
 
         .sidebar.active {
-            transform: translateX(0);
+            transform: translateX(0) !important;
         }
 
         .main-wrapper {
             margin-left: 0 !important;
             width: 100% !important;
             max-width: 100vw !important;
+            min-width: 0 !important;
+            overflow-x: clip !important;
+        }
+
+        /* 2. Topbar Header for Mobile (Clean, No-Overflow) */
+        .topbar {
+            height: 58px !important;
+            padding: 0 12px !important;
+            gap: 8px !important;
+            justify-content: space-between !important;
+        }
+
+        .topbar > div:first-child {
+            display: flex !important;
+            align-items: center !important;
+            flex: 1 1 auto !important;
+            min-width: 0 !important;
         }
 
         .search-container,
         .search-wrap {
-            width: 180px;
+            min-width: 0 !important;
+            width: 100% !important;
+            max-width: 160px !important;
+            flex: 1 1 auto !important;
         }
 
-        .user-name-label {
-            display: none;
+        .search-input {
+            width: 100% !important;
+            font-size: 12px !important;
+            padding: 0 8px 0 28px !important;
+            height: 36px !important;
+        }
+
+        .search-icon {
+            left: 9px !important;
+            font-size: 12px !important;
+        }
+
+        .topbar-right {
+            gap: 6px !important;
+            flex-shrink: 0 !important;
+            align-items: center !important;
+        }
+
+        /* Hide bulky clock widget on mobile screens so user profile & notifications are always reachable */
+        .jakarta-clock-widget {
+            display: none !important;
+        }
+
+        .icon-btn {
+            width: 36px !important;
+            height: 36px !important;
+            font-size: 14px !important;
+            flex-shrink: 0 !important;
+        }
+
+        .user-name-label,
+        .profile-chevron {
+            display: none !important;
+        }
+
+        .user-profile {
+            padding: 2px !important;
+            gap: 0 !important;
+        }
+
+        .avatar-img {
+            width: 34px !important;
+            height: 34px !important;
+        }
+
+        /* 3. Content Body & Layout Grids */
+        .content-body {
+            padding: 18px 14px !important;
+        }
+
+        .page-header {
+            margin-bottom: 18px !important;
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 10px !important;
+        }
+
+        .page-title {
+            font-size: 22px !important;
+        }
+
+        .page-subtitle {
+            font-size: 12.5px !important;
+        }
+
+        .metrics-grid {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+            margin-bottom: 20px !important;
+        }
+
+        .charts-grid-2col,
+        .charts-grid-2col-equal,
+        .grid-2col {
+            grid-template-columns: 1fr !important;
+            gap: 16px !important;
+            margin-bottom: 20px !important;
+        }
+
+        .chart-card {
+            padding: 16px !important;
+            border-radius: 10px !important;
+        }
+
+        .chart-container {
+            min-height: 220px !important;
+            height: 240px !important;
+        }
+
+        .table-card,
+        .card,
+        .settings-card {
+            border-radius: 10px !important;
+            margin-bottom: 18px !important;
+        }
+
+        .table-responsive {
+            width: 100% !important;
+            overflow-x: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+        }
+
+        .form-row,
+        .form-row-2col {
+            grid-template-columns: 1fr !important;
+            gap: 14px !important;
+        }
+
+        .action-bar {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 10px !important;
+        }
+
+        .action-bar button,
+        .action-bar .btn-primary {
+            width: 100% !important;
+            justify-content: center !important;
         }
     }
+
+    @media (max-width: 480px) {
+        .search-container,
+        .search-wrap {
+            max-width: 125px !important;
+        }
+
+        .search-input {
+            padding-left: 24px !important;
+            font-size: 11.5px !important;
+        }
+
+        .search-icon {
+            left: 7px !important;
+            font-size: 11px !important;
+        }
+
+        .page-title {
+            font-size: 20px !important;
+        }
+
+        .content-body {
+            padding: 14px 10px !important;
+        }
+    }
+
     /* ===================================================
        Enhanced Help Center Modal Styles
     =================================================== */
@@ -1202,7 +1395,8 @@
             <!-- Search Bar inside Help Center -->
             <div class="help-search-input-box">
                 <i class="fa-solid fa-magnifying-glass"></i>
-                <input type="text" id="helpFilterInput" placeholder="Cari topik panduan, alur fitur, atau tanya jawab..." autocomplete="off">
+                <input type="text" id="helpFilterInput"
+                    placeholder="Cari topik panduan, alur fitur, atau tanya jawab..." autocomplete="off">
             </div>
         </div>
 
@@ -1241,10 +1435,13 @@
                         <div class="workflow-step-content">
                             <div class="workflow-step-title">
                                 <span>1. Registrasi & Manajemen Pelanggan</span>
-                                <span class="badge" style="background:#E0E7FF; color:#3730A3; font-size:10.5px; padding:2px 8px; border-radius:4px;">Master Data</span>
+                                <span class="badge"
+                                    style="background:#E0E7FF; color:#3730A3; font-size:10.5px; padding:2px 8px; border-radius:4px;">Master
+                                    Data</span>
                             </div>
                             <div class="workflow-step-desc">
-                                Catat data pelanggan baru (Nama, Nomor WhatsApp, Email, & Alamat). Riwayat pemesanan pelanggan akan otomatis tersimpan untuk kemudahan re-order.
+                                Catat data pelanggan baru (Nama, Nomor WhatsApp, Email, & Alamat). Riwayat pemesanan
+                                pelanggan akan otomatis tersimpan untuk kemudahan re-order.
                             </div>
                             <a href="{{ route('pelanggan') }}" class="workflow-quick-link">
                                 <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Menu Pelanggan
@@ -1258,10 +1455,12 @@
                         <div class="workflow-step-content">
                             <div class="workflow-step-title">
                                 <span>2. Kelola Katalog Produk & Tarif Cetak</span>
-                                <span class="badge" style="background:#FEF3C7; color:#92400E; font-size:10.5px; padding:2px 8px; border-radius:4px;">Katalog</span>
+                                <span class="badge"
+                                    style="background:#FEF3C7; color:#92400E; font-size:10.5px; padding:2px 8px; border-radius:4px;">Katalog</span>
                             </div>
                             <div class="workflow-step-desc">
-                                Atur varian produk cetak (Banner/Spanduk, Brosur, Stiker Vinyl, Kartu Nama), satuan ukuran (m² / lembar / rim), serta tarif harga dasar per item.
+                                Atur varian produk cetak (Banner/Spanduk, Brosur, Stiker Vinyl, Kartu Nama), satuan
+                                ukuran (m² / lembar / rim), serta tarif harga dasar per item.
                             </div>
                             <a href="{{ route('produk') }}" class="workflow-quick-link">
                                 <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Menu Produk
@@ -1275,10 +1474,12 @@
                         <div class="workflow-step-content">
                             <div class="workflow-step-title">
                                 <span>3. Buat & Pantau Pesanan (Order Cetak)</span>
-                                <span class="badge" style="background:#DBEAFE; color:#1E40AF; font-size:10.5px; padding:2px 8px; border-radius:4px;">Transaksi</span>
+                                <span class="badge"
+                                    style="background:#DBEAFE; color:#1E40AF; font-size:10.5px; padding:2px 8px; border-radius:4px;">Transaksi</span>
                             </div>
                             <div class="workflow-step-desc">
-                                Input pesanan pelanggan dengan memilih produk dan jumlah. Sistem menghitung total biaya otomatis. Pantau progres pengerjaan: <em>Menunggu &rarr; Diproses &rarr; Selesai</em>.
+                                Input pesanan pelanggan dengan memilih produk dan jumlah. Sistem menghitung total biaya
+                                otomatis. Pantau progres pengerjaan: <em>Menunggu &rarr; Diproses &rarr; Selesai</em>.
                             </div>
                             <a href="{{ route('pesanan') }}" class="workflow-quick-link">
                                 <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Menu Pesanan
@@ -1292,10 +1493,12 @@
                         <div class="workflow-step-content">
                             <div class="workflow-step-title">
                                 <span>4. Pembayaran Kasir & Cetak Invoice</span>
-                                <span class="badge" style="background:#DCFCE7; color:#166534; font-size:10.5px; padding:2px 8px; border-radius:4px;">Kasir</span>
+                                <span class="badge"
+                                    style="background:#DCFCE7; color:#166534; font-size:10.5px; padding:2px 8px; border-radius:4px;">Kasir</span>
                             </div>
                             <div class="workflow-step-desc">
-                                Catat transaksi pembayaran melalui Tunai, Transfer Bank, atau QRIS. Status pembayaran mendukung Uang Muka (DP / Belum Lunas) hingga Pelunasan (Lunas) & cetak struk kwitansi.
+                                Catat transaksi pembayaran melalui Tunai, Transfer Bank, atau QRIS. Status pembayaran
+                                mendukung Uang Muka (DP / Belum Lunas) hingga Pelunasan (Lunas) & cetak struk kwitansi.
                             </div>
                             <a href="{{ route('pembayaran') }}" class="workflow-quick-link">
                                 <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Menu Pembayaran
@@ -1309,10 +1512,13 @@
                         <div class="workflow-step-content">
                             <div class="workflow-step-title">
                                 <span>5. Rekapitulasi Laporan & Export Data</span>
-                                <span class="badge" style="background:#F3E8FF; color:#6B21A8; font-size:10.5px; padding:2px 8px; border-radius:4px;">Analitik</span>
+                                <span class="badge"
+                                    style="background:#F3E8FF; color:#6B21A8; font-size:10.5px; padding:2px 8px; border-radius:4px;">Analitik</span>
                             </div>
                             <div class="workflow-step-desc">
-                                Analisis performa omset cetak harian, mingguan, dan bulanan. Filter data berdasarkan tanggal dan unduh laporan resmi dalam format <strong>PDF</strong> atau <strong>Excel</strong>.
+                                Analisis performa omset cetak harian, mingguan, dan bulanan. Filter data berdasarkan
+                                tanggal dan unduh laporan resmi dalam format <strong>PDF</strong> atau
+                                <strong>Excel</strong>.
                             </div>
                             <a href="{{ route('laporan') }}" class="workflow-quick-link">
                                 <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka Menu Laporan
@@ -1332,55 +1538,72 @@
                     <!-- FAQ 1 -->
                     <div class="faq-item searchable-item active">
                         <button type="button" class="faq-question-btn">
-                            <span><i class="fa-regular fa-file-lines" style="color:#2563EB; margin-right:8px;"></i> Bagaimana cara mencetak struk atau invoice pesanan?</span>
+                            <span><i class="fa-regular fa-file-lines" style="color:#2563EB; margin-right:8px;"></i>
+                                Bagaimana cara mencetak struk atau invoice pesanan?</span>
                             <i class="fa-solid fa-chevron-down faq-chevron"></i>
                         </button>
                         <div class="faq-answer-body">
-                            Buka menu <strong>Pembayaran</strong> atau <strong>Pesanan</strong>, klik tombol opsi aksi (titik tiga `⋮`) pada baris transaksi yang diinginkan, kemudian pilih <strong>Cetak Kwitansi / Struk</strong>. Anda juga bisa menekan tombol cetak langsung dari modal detail invoice.
+                            Buka menu <strong>Pembayaran</strong> atau <strong>Pesanan</strong>, klik tombol opsi aksi
+                            (titik tiga `⋮`) pada baris transaksi yang diinginkan, kemudian pilih <strong>Cetak Kwitansi
+                                / Struk</strong>. Anda juga bisa menekan tombol cetak langsung dari modal detail
+                            invoice.
                         </div>
                     </div>
 
                     <!-- FAQ 2 -->
                     <div class="faq-item searchable-item">
                         <button type="button" class="faq-question-btn">
-                            <span><i class="fa-solid fa-circle-check" style="color:#10B981; margin-right:8px;"></i> Bagaimana mengubah status pesanan yang sudah selesai dicetak?</span>
+                            <span><i class="fa-solid fa-circle-check" style="color:#10B981; margin-right:8px;"></i>
+                                Bagaimana mengubah status pesanan yang sudah selesai dicetak?</span>
                             <i class="fa-solid fa-chevron-down faq-chevron"></i>
                         </button>
                         <div class="faq-answer-body">
-                            Buka menu <strong>Pesanan</strong>, cari kode pesanan pelanggan, klik tombol <strong>Edit</strong>, ubah kolom status dari <em>Diproses</em> menjadi <strong>Selesai</strong>, lalu klik <strong>Simpan Perubahan</strong>. Sistem akan otomatis memperbarui data dan mengirimkan status ke dasbor.
+                            Buka menu <strong>Pesanan</strong>, cari kode pesanan pelanggan, klik tombol
+                            <strong>Edit</strong>, ubah kolom status dari <em>Diproses</em> menjadi
+                            <strong>Selesai</strong>, lalu klik <strong>Simpan Perubahan</strong>. Sistem akan otomatis
+                            memperbarui data dan mengirimkan status ke dasbor.
                         </div>
                     </div>
 
                     <!-- FAQ 3 -->
                     <div class="faq-item searchable-item">
                         <button type="button" class="faq-question-btn">
-                            <span><i class="fa-solid fa-money-bill-wave" style="color:#F59E0B; margin-right:8px;"></i> Bagaimana jika pelanggan hanya membayar uang muka (DP) terlebih dahulu?</span>
+                            <span><i class="fa-solid fa-money-bill-wave" style="color:#F59E0B; margin-right:8px;"></i>
+                                Bagaimana jika pelanggan hanya membayar uang muka (DP) terlebih dahulu?</span>
                             <i class="fa-solid fa-chevron-down faq-chevron"></i>
                         </button>
                         <div class="faq-answer-body">
-                            Pada formulir <strong>Tambah Pembayaran</strong>, masukkan jumlah uang muka yang dibayarkan. Pilih status <strong>Belum Lunas</strong>. Sisa tagihan akan tercatat otomatis dan dapat dilunasi kapan saja saat pesanan selesai diambil.
+                            Pada formulir <strong>Tambah Pembayaran</strong>, masukkan jumlah uang muka yang dibayarkan.
+                            Pilih status <strong>Belum Lunas</strong>. Sisa tagihan akan tercatat otomatis dan dapat
+                            dilunasi kapan saja saat pesanan selesai diambil.
                         </div>
                     </div>
 
                     <!-- FAQ 4 -->
                     <div class="faq-item searchable-item">
                         <button type="button" class="faq-question-btn">
-                            <span><i class="fa-solid fa-file-excel" style="color:#059669; margin-right:8px;"></i> Bagaimana cara mengekspor laporan keuangan ke format Excel atau PDF?</span>
+                            <span><i class="fa-solid fa-file-excel" style="color:#059669; margin-right:8px;"></i>
+                                Bagaimana cara mengekspor laporan keuangan ke format Excel atau PDF?</span>
                             <i class="fa-solid fa-chevron-down faq-chevron"></i>
                         </button>
                         <div class="faq-answer-body">
-                            Masuk ke menu <strong>Laporan</strong>, atur filter rentang tanggal dan jenis laporan yang ingin ditampilkan, kemudian klik tombol <strong>Export PDF</strong> atau <strong>Export Excel</strong> di pojok kanan atas tabel laporan.
+                            Masuk ke menu <strong>Laporan</strong>, atur filter rentang tanggal dan jenis laporan yang
+                            ingin ditampilkan, kemudian klik tombol <strong>Export PDF</strong> atau <strong>Export
+                                Excel</strong> di pojok kanan atas tabel laporan.
                         </div>
                     </div>
 
                     <!-- FAQ 5 -->
                     <div class="faq-item searchable-item">
                         <button type="button" class="faq-question-btn">
-                            <span><i class="fa-solid fa-shield-halved" style="color:#6366F1; margin-right:8px;"></i> Bagaimana cara mengaktifkan keamanan Two-Factor Authentication (2FA)?</span>
+                            <span><i class="fa-solid fa-shield-halved" style="color:#6366F1; margin-right:8px;"></i>
+                                Bagaimana cara mengaktifkan keamanan Two-Factor Authentication (2FA)?</span>
                             <i class="fa-solid fa-chevron-down faq-chevron"></i>
                         </button>
                         <div class="faq-answer-body">
-                            Buka menu <strong>Pengaturan</strong>, cari bagian <em>Keamanan Autentikasi 2FA</em>, aktifkan tombol switch, lalu scan QR Code menggunakan aplikasi Google Authenticator di smartphone Anda dan masukkan 6 digit token untuk verifikasi.
+                            Buka menu <strong>Pengaturan</strong>, cari bagian <em>Keamanan Autentikasi 2FA</em>,
+                            aktifkan tombol switch, lalu scan QR Code menggunakan aplikasi Google Authenticator di
+                            smartphone Anda dan masukkan 6 digit token untuk verifikasi.
                         </div>
                     </div>
                 </div>
@@ -1398,7 +1621,9 @@
                             <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Fokus Pencarian Global</div>
                             <div style="font-size: 11.5px; color: #64748B;">Cari menu & data cepat</div>
                         </div>
-                        <button type="button" id="triggerSearchShortcutBtn" class="kbd-badge" style="cursor:pointer; background:#EEF2FF; border-color:#C7D2FE;" title="Klik untuk mencoba">
+                        <button type="button" id="triggerSearchShortcutBtn" class="kbd-badge"
+                            style="cursor:pointer; background:#EEF2FF; border-color:#C7D2FE;"
+                            title="Klik untuk mencoba">
                             / (Garis Miring)
                         </button>
                     </div>
@@ -1408,14 +1633,16 @@
                             <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Tutup Modal & Popup</div>
                             <div style="font-size: 11.5px; color: #64748B;">Kembali ke halaman utama</div>
                         </div>
-                        <button type="button" id="triggerEscShortcutBtn" class="kbd-badge" style="cursor:pointer;" title="Klik untuk mencoba">
+                        <button type="button" id="triggerEscShortcutBtn" class="kbd-badge" style="cursor:pointer;"
+                            title="Klik untuk mencoba">
                             Esc
                         </button>
                     </div>
 
                     <div class="shortcut-item-card searchable-item">
                         <div>
-                            <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Cetak Halaman / Invoice</div>
+                            <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Cetak Halaman / Invoice
+                            </div>
                             <div style="font-size: 11.5px; color: #64748B;">Buka dialog cetak printer</div>
                         </div>
                         <span class="kbd-badge">Ctrl + P</span>
@@ -1430,9 +1657,12 @@
                     </div>
                 </div>
 
-                <div style="margin-top: 18px; padding: 12px 16px; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 10px; font-size: 12px; color: #475569; display: flex; align-items: center; gap: 10px;">
+                <div
+                    style="margin-top: 18px; padding: 12px 16px; background: #F8FAFC; border: 1px dashed #CBD5E1; border-radius: 10px; font-size: 12px; color: #475569; display: flex; align-items: center; gap: 10px;">
                     <i class="fa-solid fa-lightbulb" style="color: #F59E0B; font-size: 16px;"></i>
-                    <span><strong>Tips Produktivitas:</strong> Tekan tombol <kbd style="background:#FFF; padding:2px 6px; border:1px solid #CBD5E1; border-radius:4px;">/</kbd> di mana saja pada aplikasi untuk langsung mencari nama pelanggan atau nomor pesanan.</span>
+                    <span><strong>Tips Produktivitas:</strong> Tekan tombol <kbd
+                            style="background:#FFF; padding:2px 6px; border:1px solid #CBD5E1; border-radius:4px;">/</kbd>
+                        di mana saja pada aplikasi untuk langsung mencari nama pelanggan atau nomor pesanan.</span>
                 </div>
             </div>
 
@@ -1450,7 +1680,9 @@
                         </div>
                         <div style="font-size: 13px; font-weight: 700; color: #0F172A;">WhatsApp CS Helpdesk</div>
                         <div style="font-size: 11.5px; color: #64748B;">Respon cepat untuk kasir & admin</div>
-                        <a href="https://wa.me/6281234567890?text=Halo%20Tim%20Support%20SIPEKAN,%20saya%20membutuhkan%20bantuan" target="_blank" class="btn-primary" style="background:#16A34A; color:white; padding:6px 14px; border-radius:6px; font-size:11.5px; font-weight:700; text-decoration:none; margin-top:4px;">
+                        <a href="https://wa.me/6281234567890?text=Halo%20Tim%20Support%20SIPEKAN,%20saya%20membutuhkan%20bantuan"
+                            target="_blank" class="btn-primary"
+                            style="background:#16A34A; color:white; padding:6px 14px; border-radius:6px; font-size:11.5px; font-weight:700; text-decoration:none; margin-top:4px;">
                             Chat WhatsApp
                         </a>
                     </div>
@@ -1462,7 +1694,8 @@
                         </div>
                         <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Layanan Telepon Kantor</div>
                         <div style="font-size: 11.5px; color: #64748B;">Senin – Sabtu (08:00 – 17:00 WIB)</div>
-                        <a href="tel:+62215550192" class="btn-primary" style="background:#2563EB; color:white; padding:6px 14px; border-radius:6px; font-size:11.5px; font-weight:700; text-decoration:none; margin-top:4px;">
+                        <a href="tel:+62215550192" class="btn-primary"
+                            style="background:#2563EB; color:white; padding:6px 14px; border-radius:6px; font-size:11.5px; font-weight:700; text-decoration:none; margin-top:4px;">
                             +62 21 555 0192
                         </a>
                     </div>
@@ -1474,22 +1707,29 @@
                         </div>
                         <div style="font-size: 13px; font-weight: 700; color: #0F172A;">Email Dukungan Teknis</div>
                         <div style="font-size: 11.5px; color: #64748B;">Kirim tiket & laporan bug</div>
-                        <a href="mailto:support@sipekan.co.id?subject=Bantuan%20Sistem%20SIPEKAN" class="btn-primary" style="background:#4F46E5; color:white; padding:6px 14px; border-radius:6px; font-size:11.5px; font-weight:700; text-decoration:none; margin-top:4px;">
+                        <a href="mailto:support@sipekan.co.id?subject=Bantuan%20Sistem%20SIPEKAN" class="btn-primary"
+                            style="background:#4F46E5; color:white; padding:6px 14px; border-radius:6px; font-size:11.5px; font-weight:700; text-decoration:none; margin-top:4px;">
                             support@sipekan.co.id
                         </a>
                     </div>
                 </div>
 
                 <!-- Server & System Status Info -->
-                <div style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;">
+                <div
+                    style="background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between;">
                     <div style="display: flex; align-items: center; gap: 10px;">
-                        <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #10B981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);"></span>
+                        <span
+                            style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #10B981; box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);"></span>
                         <div>
-                            <div style="font-size: 12.5px; font-weight: 700; color: #0F172A;">Status Sistem SIPEKAN: Beroperasi Normal</div>
-                            <div style="font-size: 11.5px; color: #64748B;">Database, Layanan Cloudflare, & Kasir Terhubung</div>
+                            <div style="font-size: 12.5px; font-weight: 700; color: #0F172A;">Status Sistem SIPEKAN:
+                                Beroperasi Normal</div>
+                            <div style="font-size: 11.5px; color: #64748B;">Database, Layanan Cloudflare, & Kasir
+                                Terhubung</div>
                         </div>
                     </div>
-                    <div style="font-size: 11px; font-weight: 700; color: #64748B; background: #E2E8F0; padding: 3px 8px; border-radius: 6px;">v2.4 Pro</div>
+                    <div
+                        style="font-size: 11px; font-weight: 700; color: #64748B; background: #E2E8F0; padding: 3px 8px; border-radius: 6px;">
+                        v2.4 Pro</div>
                 </div>
             </div>
         </div>
@@ -1498,9 +1738,12 @@
         <div class="help-modal-footer">
             <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; color: #64748B;">
                 <i class="fa-solid fa-circle-info" style="color: #2563EB;"></i>
-                <span>Tekan <kbd style="background:#FFF; padding:1px 5px; border:1px solid #CBD5E1; border-radius:4px; font-size:11px;">Esc</kbd> untuk menutup panduan</span>
+                <span>Tekan <kbd
+                        style="background:#FFF; padding:1px 5px; border:1px solid #CBD5E1; border-radius:4px; font-size:11px;">Esc</kbd>
+                    untuk menutup panduan</span>
             </div>
-            <button type="button" class="closeHelpModal" style="background: #1E3A8A; color: #FFFFFF; border: none; padding: 8px 18px; border-radius: 8px; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all 0.15s ease;">
+            <button type="button" class="closeHelpModal"
+                style="background: #1E3A8A; color: #FFFFFF; border: none; padding: 8px 18px; border-radius: 8px; font-size: 12.5px; font-weight: 700; cursor: pointer; transition: all 0.15s ease;">
                 Tutup Panduan
             </button>
         </div>
@@ -1525,9 +1768,11 @@
                     style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid #E2E8F0;">
                 <div>
                     <div style="font-weight: 800; font-size: 16px; color: #0F172A;">
-                        {{ $authUserName ?? 'Admin SIPEKAN' }}</div>
+                        {{ $authUserName ?? 'Admin SIPEKAN' }}
+                    </div>
                     <div style="font-size: 12.5px; color: #64748B;">
-                        {{ ($isKasir ?? false) ? 'Staff Kasir Operasional' : 'Super Administrator' }}</div>
+                        {{ ($isKasir ?? false) ? 'Staff Kasir Operasional' : 'Super Administrator' }}
+                    </div>
                     <span
                         style="display: inline-block; background-color: #DCFCE7; color: #16A34A; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 10px; margin-top: 4px;">Status:
                         Aktif</span>
@@ -1575,7 +1820,7 @@
                 hour12: false
             };
             const timeStr = new Intl.DateTimeFormat('id-ID', options).format(now).replace(/\./g, ':');
-            clockEl.textContent = timeStr + ' WIB';
+            clockEl.textContent = timeStr + '';
         }
         setInterval(updateJakartaClock, 1000);
         updateJakartaClock();
@@ -1592,47 +1837,47 @@
             { title: 'Pengaturan Sistem', category: 'Menu & Navigasi', catClass: 'cat-menu', sub: 'Konfigurasi Aplikasi & Profil', icon: 'fa-gear', url: '{{ route("pengaturan") }}' },
 
             @foreach($dbPelanggan as $pel)
-                {
-                        title: {!! json_encode($pel->nama ?? 'Pelanggan') !!},
-                        category: 'Pelanggan',
-                        catClass: 'cat-pelanggan',
-                        sub: {!! json_encode(($pel->kode_pelanggan ? $pel->kode_pelanggan . ' • ' : '') . ($pel->no_hp ?? $pel->email ?? 'Data Pelanggan')) !!},
-                        icon: 'fa-building',
-                        url: '{{ route("pelanggan") }}?search=' + encodeURIComponent({!! json_encode($pel->nama ?? '') !!})
-                    },
+                    {
+                    title: {!! json_encode($pel->nama ?? 'Pelanggan') !!},
+                    category: 'Pelanggan',
+                    catClass: 'cat-pelanggan',
+                    sub: {!! json_encode(($pel->kode_pelanggan ? $pel->kode_pelanggan . ' • ' : '') . ($pel->no_hp ?? $pel->email ?? 'Data Pelanggan')) !!},
+                    icon: 'fa-building',
+                    url: '{{ route("pelanggan") }}?search=' + encodeURIComponent({!! json_encode($pel->nama ?? '') !!})
+                },
             @endforeach
 
             @foreach($dbProduk as $prod)
-                {
-                        title: {!! json_encode($prod->nama_produk ?? 'Produk') !!},
-                        category: 'Produk',
-                        catClass: 'cat-produk',
-                        sub: {!! json_encode(($prod->kategori ? $prod->kategori . ' • ' : '') . 'Rp ' . number_format($prod->harga ?? 0, 0, ',', '.')) !!},
-                        icon: 'fa-box',
-                        url: '{{ route("produk") }}?search=' + encodeURIComponent({!! json_encode($prod->nama_produk ?? '') !!})
-                    },
+                    {
+                    title: {!! json_encode($prod->nama_produk ?? 'Produk') !!},
+                    category: 'Produk',
+                    catClass: 'cat-produk',
+                    sub: {!! json_encode(($prod->kategori ? $prod->kategori . ' • ' : '') . 'Rp ' . number_format($prod->harga ?? 0, 0, ',', '.')) !!},
+                    icon: 'fa-box',
+                    url: '{{ route("produk") }}?search=' + encodeURIComponent({!! json_encode($prod->nama_produk ?? '') !!})
+                },
             @endforeach
 
             @foreach($dbPesanan as $ord)
-                {
-                        title: {!! json_encode(($ord->kode_pesanan ?? 'ORD') . ' - ' . ($ord->nama_pelanggan ?? '')) !!},
-                        category: 'Pesanan',
-                        catClass: 'cat-pesanan',
-                        sub: {!! json_encode(($ord->nama_produk ?? '') . ' • Rp ' . number_format($ord->total_harga ?? 0, 0, ',', '.') . ' (' . ($ord->status ?? 'Diproses') . ')') !!},
-                        icon: 'fa-receipt',
-                        url: '{{ route("pesanan") }}?search=' + encodeURIComponent({!! json_encode($ord->kode_pesanan ?? '') !!})
-                    },
+                    {
+                    title: {!! json_encode(($ord->kode_pesanan ?? 'ORD') . ' - ' . ($ord->nama_pelanggan ?? '')) !!},
+                    category: 'Pesanan',
+                    catClass: 'cat-pesanan',
+                    sub: {!! json_encode(($ord->nama_produk ?? '') . ' • Rp ' . number_format($ord->total_harga ?? 0, 0, ',', '.') . ' (' . ($ord->status ?? 'Diproses') . ')') !!},
+                    icon: 'fa-receipt',
+                    url: '{{ route("pesanan") }}?search=' + encodeURIComponent({!! json_encode($ord->kode_pesanan ?? '') !!})
+                },
             @endforeach
 
             @foreach($dbPembayaran as $pay)
-                {
-                        title: {!! json_encode(($pay->kode_pembayaran ?? 'PAY') . ' (' . ($pay->kode_pesanan ?? '') . ')') !!},
-                        category: 'Pembayaran',
-                        catClass: 'cat-pembayaran',
-                        sub: {!! json_encode(($pay->metode ?? 'Tunai') . ' • Rp ' . number_format($pay->jumlah ?? 0, 0, ',', '.') . ' (' . ($pay->status ?? 'Lunas') . ')') !!},
-                        icon: 'fa-money-bill-wave',
-                        url: '{{ route("pembayaran") }}?search=' + encodeURIComponent({!! json_encode($pay->kode_pembayaran ?? '') !!})
-                    },
+                    {
+                    title: {!! json_encode(($pay->kode_pembayaran ?? 'PAY') . ' (' . ($pay->kode_pesanan ?? '') . ')') !!},
+                    category: 'Pembayaran',
+                    catClass: 'cat-pembayaran',
+                    sub: {!! json_encode(($pay->metode ?? 'Tunai') . ' • Rp ' . number_format($pay->jumlah ?? 0, 0, ',', '.') . ' (' . ($pay->status ?? 'Lunas') . ')') !!},
+                    icon: 'fa-money-bill-wave',
+                    url: '{{ route("pembayaran") }}?search=' + encodeURIComponent({!! json_encode($pay->kode_pembayaran ?? '') !!})
+                },
             @endforeach
     ];
 
@@ -1851,7 +2096,7 @@
         }
 
         document.querySelectorAll('.notif-item').forEach((item, index) => {
-            item.addEventListener('click', function() {
+            item.addEventListener('click', function () {
                 const id = this.getAttribute('data-notif-id') || String(index + 1);
                 let readItems = JSON.parse(localStorage.getItem('sipekan_read_notif_ids') || '[]');
                 if (!readItems.includes(id)) {

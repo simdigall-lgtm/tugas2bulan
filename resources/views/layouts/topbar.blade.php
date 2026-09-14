@@ -101,7 +101,7 @@
         <!-- Jakarta Digital Clock Widget -->
         <div class="jakarta-clock-widget" title="Waktu Indonesia Barat (WIB) - Jakarta">
             <i class="fa-regular fa-clock" style="color: #2563EB; font-size: 14px;"></i>
-            <span id="digitalClockTime" style="font-weight: 700; color: #0F172A; font-size: 13px;">--:--:-- WIB</span>
+            <span id="digitalClockTime" style="font-weight: 700; color: #0F172A; font-size: 13px;">--:--:--</span>
         </div>
 
         <!-- Notification Button & Dropdown -->

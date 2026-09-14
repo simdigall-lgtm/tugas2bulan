@@ -505,38 +505,121 @@
         .custom-table tr:last-child td { border-bottom: none; }
         .inv-code { color: #1E3A8A; font-weight: 700; white-space: nowrap; }
 
-        /* Production Status Badges */
-        .status-badge {
+        /* Production Status Badges (Minimal, Enterprise, Cohesive) */
+        .badge-prod {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
-            padding: 3.5px 10px;
-            border-radius: 20px;
-            font-size: 11px;
-            font-weight: 700;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 11.5px;
+            font-weight: 600;
             white-space: nowrap;
+            line-height: 1.3;
         }
-        .badge-antrean-cetak { background: #E0F2FE; color: #0369A1; border: 1px solid #BAE6FD; }
-        .badge-sedang-dicetak { background: #FEF3C7; color: #B45309; border: 1px solid #FDE68A; }
-        .badge-finishing { background: #F3E8FF; color: #7E22CE; border: 1px solid #E9D5FF; }
-        .badge-siap-diambil { background: #CCFBF1; color: #0F766E; border: 1px solid #99F6E4; }
-        .badge-selesai { background: #DCFCE7; color: #15803D; border: 1px solid #BBF7D0; }
 
-        /* Payment Badges */
-        .badge-pay {
+        .badge-prod::before {
+            content: '';
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .badge-antrean-cetak {
+            background: #F1F5F9;
+            color: #334155;
+            border: 1px solid #E2E8F0;
+        }
+        .badge-antrean-cetak::before {
+            background: #64748B;
+        }
+
+        .badge-sedang-dicetak {
+            background: #FFFBEB;
+            color: #92400E;
+            border: 1px solid #FDE68A;
+        }
+        .badge-sedang-dicetak::before {
+            background: #F59E0B;
+        }
+
+        .badge-finishing {
+            background: #FAF5FF;
+            color: #6B21A8;
+            border: 1px solid #E9D5FF;
+        }
+        .badge-finishing::before {
+            background: #A855F7;
+        }
+
+        .badge-siap-diambil {
+            background: #F0FDFA;
+            color: #0F766E;
+            border: 1px solid #99F6E4;
+        }
+        .badge-siap-diambil::before {
+            background: #14B8A6;
+        }
+
+        .badge-selesai {
+            background: #F0FDF4;
+            color: #166534;
+            border: 1px solid #BBF7D0;
+        }
+        .badge-selesai::before {
+            background: #22C55E;
+        }
+
+        .badge-diproses {
+            background: #EFF6FF;
+            color: #1D4ED8;
+            border: 1px solid #BFDBFE;
+        }
+        .badge-diproses::before {
+            background: #3B82F6;
+        }
+
+        /* Subtle Payment Status Sub-Tags (Clean & Non-distracting) */
+        .pay-sub-tag {
             display: inline-flex;
             align-items: center;
             gap: 4px;
+            font-size: 11px;
+            font-weight: 600;
             padding: 2px 7px;
-            border-radius: 6px;
-            font-size: 10.5px;
-            font-weight: 700;
-            margin-left: 6px;
-            vertical-align: middle;
+            border-radius: 4px;
+            line-height: 1.25;
         }
-        .badge-pay-lunas { background: #DCFCE7; color: #166534; border: 1px solid #86EFAC; }
-        .badge-pay-dp { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
-        .badge-pay-belum { background: #FEE2E2; color: #991B1B; border: 1px solid #FECACA; }
+
+        .pay-sub-tag i {
+            font-size: 10px;
+        }
+
+        .pay-sub-tag.pay-sub-lunas {
+            background: #F0FDF4;
+            color: #166534;
+            border: 1px solid #DCFCE7;
+        }
+
+        .pay-sub-tag.pay-sub-dp {
+            background: #FFFBEB;
+            color: #B45309;
+            border: 1px solid #FEF3C7;
+        }
+
+        .pay-sub-tag.pay-sub-unpaid {
+            background: #FFF1F2;
+            color: #BE123C;
+            border: 1px solid #FFE4E6;
+        }
+
+        .pay-sub-tag .sisa-note {
+            font-size: 10px;
+            font-weight: 500;
+            opacity: 0.9;
+        }
 
         /* Pagination Controls */
         .table-pagination-footer {
@@ -652,8 +735,6 @@
             .active-period-badge { width: 100%; justify-content: space-between; }
         }
         @media (max-width: 768px) {
-            .sidebar { display: none; }
-            .main-wrapper { margin-left: 0; width: 100%; max-width: 100%; }
             .segmented-filter-container { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); }
             .btn-segmented { justify-content: center; }
             .export-actions-group { width: 100%; display: flex; }
@@ -871,7 +952,7 @@
                 </a>
 
                 <!-- 5. Sisa Piutang / Belum Lunas -->
-                <a href="{{ route('pembayaran') }}" class="stat-card" title="Klik untuk melihat transaksi pembayaran & sisa piutang">
+                <a href="{{ route('pesanan', ['status_bayar' => 'belum_lunas']) }}" class="stat-card" title="Klik untuk melihat semua pesanan belum lunas & perlu pelunasan">
                     <div>
                         <div class="stat-header">
                             <span class="stat-label">BELUM LUNAS</span>
@@ -910,14 +991,14 @@
                 </div>
 
                 <!-- Product Revenue Bar Chart -->
-                <div class="card">
+                <div class="card" id="distribusiOmzetCard">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
                         <div>
-                            <h2 class="card-title">Kontribusi Omzet Produk</h2>
-                            <p class="card-desc">Persentase kontribusi per kategori produk cetak.</p>
+                            <h2 class="card-title">Omzet per Produk</h2>
+                            <p class="card-desc">Distribusi nilai transaksi berdasarkan kategori cetak.</p>
                         </div>
-                        <span style="font-size:12px; font-weight:700; color:#15803D; background:#DCFCE7; padding:4px 10px; border-radius:6px;">
-                            <i class="fa-solid fa-pie-chart"></i> Top 6 Produk
+                        <span style="font-size:12px; font-weight:700; color:#0F766E; background:#CCFBF1; padding:4px 10px; border-radius:6px;">
+                            <i class="fa-solid fa-ranking-star"></i> Kontribusi Produk
                         </span>
                     </div>
                     <div class="chart-container-laporan">
@@ -926,7 +1007,7 @@
                 </div>
             </div>
 
-            <!-- Detail Transaksi Table with Search, Status Filter & Pagination -->
+            <!-- Detailed Transactions Table Card -->
             <div class="card" id="detailTransaksiCard">
                 <div class="card-header-row">
                     <div>
@@ -979,7 +1060,7 @@
                                 <th>PELANGGAN</th>
                                 <th>TANGGAL PESAN</th>
                                 <th>PRODUK & SPESIFIKASI</th>
-                                <th class="col-nilai-transaksi">NILAI TRANSAKSI</th>
+                                <th>TOTAL & BAYAR</th>
                                 <th>STATUS PRODUKSI</th>
                             </tr>
                         </thead>
@@ -995,9 +1076,7 @@
 
                                     $stBayar = $pes->status_pembayaran ?? (strtolower($stProd) === 'selesai' ? 'Lunas' : 'Belum Lunas');
                                     $stBayarLower = strtolower($stBayar);
-                                    $payBadgeClass = 'badge-pay-belum';
-                                    if ($stBayarLower === 'lunas') $payBadgeClass = 'badge-pay-lunas';
-                                    elseif ($stBayarLower === 'dp') $payBadgeClass = 'badge-pay-dp';
+                                    $sisaTagihan = floatval($pes->sisa_bayar ?? ($stBayarLower === 'lunas' ? 0 : $pes->total_harga));
                                 @endphp
                                 <tr data-status="{{ $stProd }}" data-order-code="{{ $pes->kode_pesanan }}" data-customer="{{ $pes->nama_pelanggan }}" data-product="{{ $pes->nama_produk }}">
                                     <td class="inv-code">{{ $pes->kode_pesanan }}</td>
@@ -1011,19 +1090,30 @@
                                             <div style="font-size:11.5px; color:#64748B; margin-top:2px;">{{ $pes->jumlah_ukuran }}</div>
                                         @endif
                                     </td>
-                                    <td class="col-nilai-transaksi">
-                                        <div style="display:flex; align-items:center;">
-                                            <span style="font-weight:700; color:#0F172A;">Rp {{ number_format($pes->total_harga, 0, ',', '.') }}</span>
-                                            <span class="badge-pay {{ $payBadgeClass }}" title="Status Pembayaran: {{ $stBayar }}">
-                                                {{ $stBayar }}
-                                            </span>
+                                    <td>
+                                        <div style="font-weight:700; color:#0F172A; font-size:13.5px; letter-spacing:-0.01em;">
+                                            Rp {{ number_format($pes->total_harga, 0, ',', '.') }}
                                         </div>
-                                        @if($stBayarLower === 'dp' && $pes->sisa_bayar > 0)
-                                            <div style="font-size:11px; color:#DC2626; margin-top:2px; font-weight:600;">Sisa: Rp {{ number_format($pes->sisa_bayar, 0, ',', '.') }}</div>
-                                        @endif
+                                        <div style="margin-top: 3px;">
+                                            @if($stBayarLower === 'lunas')
+                                                <span class="pay-sub-tag pay-sub-lunas" title="Pembayaran: Lunas">
+                                                    <i class="fa-solid fa-circle-check"></i> Lunas
+                                                </span>
+                                            @elseif($stBayarLower === 'dp' || str_contains($stBayarLower, 'dp'))
+                                                <span class="pay-sub-tag pay-sub-dp" title="{{ $sisaTagihan > 0 ? 'Sisa tagihan: Rp ' . number_format($sisaTagihan, 0, ',', '.') : 'Pembayaran: DP' }}">
+                                                    <i class="fa-solid fa-clock"></i> DP @if($sisaTagihan > 0)<span class="sisa-note">(Sisa Rp {{ number_format($sisaTagihan, 0, ',', '.') }})</span>@endif
+                                                </span>
+                                            @else
+                                                <span class="pay-sub-tag pay-sub-unpaid" title="{{ $sisaTagihan > 0 ? 'Sisa tagihan: Rp ' . number_format($sisaTagihan, 0, ',', '.') : 'Belum Lunas' }}">
+                                                    <i class="fa-solid fa-circle-exclamation"></i> Belum Lunas
+                                                </span>
+                                            @endif
+                                        </div>
                                     </td>
                                     <td>
-                                        <span class="status-badge {{ $stProdClass }}">{{ $stProd }}</span>
+                                        <span class="badge-prod {{ $stProdClass }}">
+                                            {{ $stProd }}
+                                        </span>
                                     </td>
                                 </tr>
                             @empty
@@ -1170,7 +1260,7 @@
             }
 
             // 2. Kontribusi Omzet Produk Chart
-            const canvasShare = document.getElementById('laporanShareChart');
+            const canvasShare = document.getElementById('laporanShareChart') || document.getElementById('laporanCategoryChart');
             if (canvasShare) {
                 const ctxShare = canvasShare.getContext('2d');
                 const shareChart = new Chart(ctxShare, {
@@ -1206,6 +1296,12 @@
                             x: {
                                 grid: { color: '#F1F5F9' },
                                 ticks: {
+                                    maxRotation: 0,
+                                    minRotation: 0,
+                                    autoSkip: true,
+                                    maxTicksLimit: 7,
+                                    font: { size: 11, weight: '600' },
+                                    color: '#64748B',
                                     callback: function(val) { return val + '%'; }
                                 },
                                 beginAtZero: true

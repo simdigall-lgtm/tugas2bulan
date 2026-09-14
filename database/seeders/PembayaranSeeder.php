@@ -68,12 +68,10 @@ class PembayaranSeeder extends Seeder
             ['ORD-2026-041', '2026-08-29', 'Tunai', 1100000, 'Lunas'],
 
             // Sep
-            ['ORD-2026-042', '2026-09-02', 'Transfer Bank (BCA)', 10000000, 'Lunas'],
+            ['ORD-2026-042', '2026-09-02', 'Transfer Bank (BCA)', 5000000, 'Belum Lunas'],
             ['ORD-2026-043', '2026-09-05', 'Transfer Bank (Mandiri)', 6750000, 'Lunas'],
             ['ORD-2026-044', '2026-09-08', 'QRIS', 5250000, 'Lunas'],
-            ['ORD-2026-045', '2026-09-10', 'Transfer Bank (BCA)', 3750000, 'Lunas'],
-            ['ORD-2026-046', '2026-09-11', 'Tunai', 1350000, 'Lunas'],
-            ['ORD-2026-047', '2026-09-12', 'Tunai', 1200000, 'Lunas'],
+            ['ORD-2026-045', '2026-09-10', 'Transfer Bank (BCA)', 2000000, 'Belum Lunas'],
         ];
 
         foreach ($orders as $idx => $ord) {

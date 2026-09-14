@@ -317,10 +317,10 @@
 
         <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 22px;">
             <img src="{{ asset('assets/images/sipekan-logo.png') }}?v={{ file_exists(public_path('assets/images/sipekan-logo.png')) ? filemtime(public_path('assets/images/sipekan-logo.png')) : time() }}" alt="SIPEKAN Logo"
-                style="height: 46px; width: auto; object-fit: contain; flex-shrink: 0; display: block;">
-            <div style="display: flex; flex-direction: column; justify-content: space-between; height: 46px;">
-                <h1 class="brand-title" style="margin: 0; font-size: 22px; font-weight: 800; line-height: 1.1; letter-spacing: -0.4px;">SIPEKAN</h1>
-                <p class="brand-subtitle" style="margin: 0; font-size: 12.5px; font-weight: 500; line-height: 1.25; color: #4B5563;">Verifikasi Keamanan Google Authenticator</p>
+                style="height: 54px; width: auto; object-fit: contain; flex-shrink: 0; display: block;">
+            <div style="display: flex; flex-direction: column; justify-content: center; gap: 3px;">
+                <h1 class="brand-title" style="margin: 0; font-size: 23px; font-weight: 800; line-height: 1.1; letter-spacing: -0.4px;">SIPEKAN</h1>
+                <p class="brand-subtitle" style="margin: 0; font-size: 13px; font-weight: 500; line-height: 1.25; color: #4B5563;">Verifikasi Keamanan Google Authenticator</p>
             </div>
         </div>
 
