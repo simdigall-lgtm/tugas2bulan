@@ -185,74 +185,155 @@ class LaporanController extends Controller
 
         $pesananSelesai = $pesanans;
 
-        // Monthly Trend from filtered orders (Sorted Chronologically)
-        $monthlyTrendMap = [];
         $monthNamesIndo = [
             1 => 'Jan', 2 => 'Feb', 3 => 'Mar', 4 => 'Apr',
             5 => 'Mei', 6 => 'Jun', 7 => 'Jul', 8 => 'Agu',
             9 => 'Sep', 10 => 'Okt', 11 => 'Nov', 12 => 'Des'
         ];
 
-        // Pre-populate months in the current view range strictly up to current month ($currentMonth)
+        // Check view granularities
+        $isSingleDayView = ($startDate === $endDate);
         $startCarbon = \Carbon\Carbon::parse($startDate);
         $endCarbon = \Carbon\Carbon::parse($endDate);
-        if ($startCarbon->year == $currentYear && $endCarbon->year == $currentYear) {
-            $startM = (int) $startCarbon->month;
-            $endM = min((int) $endCarbon->month, $currentMonth);
-            for ($m = $startM; $m <= $endM; $m++) {
-                $k = sprintf('%04d-%02d', $currentYear, $m);
-                $shortLabel = $monthNamesIndo[$m] ?? date('M', mktime(0, 0, 0, $m, 1));
-                $monthlyTrendMap[$k] = [
-                    'label' => $shortLabel,
-                    'full_label' => $shortLabel . ' ' . $currentYear,
+        $diffDays = $startCarbon->diffInDays($endCarbon);
+
+        if ($isSingleDayView) {
+            // 1. Hourly Trend for Single Day (Hari Ini): Waktu Lokal WIB (Asia/Jakarta)
+            $hourlyBuckets = [
+                '08:00' => '08:00',
+                '10:00' => '10:00',
+                '12:00' => '12:00',
+                '14:00' => '14:00',
+                '16:00' => '16:00',
+                '18:00' => '18:00',
+                '20:00' => '20:00',
+                '22:00' => '22:00',
+            ];
+            $todayHoursMap = [];
+            foreach ($hourlyBuckets as $k => $label) {
+                $todayHoursMap[$k] = [
+                    'label' => $label,
+                    'full_label' => "Pukul {$label} WIB (" . date('d M Y', strtotime($startDate)) . ")",
                     'total' => 0
                 ];
             }
-        }
 
-        foreach ($pesanans as $p) {
-            if (!$p->tanggal_pesan) continue;
-            $time = strtotime($p->tanggal_pesan);
-            $y = date('Y', $time);
-            $mNum = (int) date('n', $time);
-            $key = date('Y-m', $time);
-            $shortLabel = $monthNamesIndo[$mNum] ?? date('M', $time);
-            $fullLabel = $shortLabel . ' ' . $y;
+            foreach ($pesanans as $p) {
+                // Pastikan created_at dikonversi ke WIB (Asia/Jakarta) agar selaras dengan jam navbar
+                if ($p->created_at) {
+                    $timeWib = $p->created_at->copy()->setTimezone('Asia/Jakarta');
+                    $h = (int) $timeWib->format('H');
+                } else {
+                    $h = 12;
+                }
 
-            if (!isset($monthlyTrendMap[$key])) {
-                $monthlyTrendMap[$key] = [
+                if ($h < 9) $slot = '08:00';
+                elseif ($h < 11) $slot = '10:00';
+                elseif ($h < 13) $slot = '12:00';
+                elseif ($h < 15) $slot = '14:00';
+                elseif ($h < 17) $slot = '16:00';
+                elseif ($h < 19) $slot = '18:00';
+                elseif ($h < 21) $slot = '20:00';
+                else $slot = '22:00';
+
+                $todayHoursMap[$slot]['total'] += (float) $p->total_harga;
+            }
+
+            $trendLabels = array_column($todayHoursMap, 'label');
+            $trendFullLabels = array_column($todayHoursMap, 'full_label');
+            $trendValues = array_column($todayHoursMap, 'total');
+        } elseif ($diffDays <= 31) {
+            // 2. Daily Trend for 1 Month or Range <= 31 Days (Bulan Ini): Harian
+            $dailyTrendMap = [];
+            $curr = $startCarbon->copy();
+            while ($curr->lte($endCarbon)) {
+                $dStr = $curr->toDateString();
+                $shortLabel = $curr->format('d M');
+                $mIndo = $monthNamesIndo[(int)$curr->format('n')] ?? $curr->format('M');
+                $fullLabel = $curr->format('j') . ' ' . $mIndo . ' ' . $curr->format('Y');
+                $dailyTrendMap[$dStr] = [
                     'label' => $shortLabel,
                     'full_label' => $fullLabel,
                     'total' => 0
                 ];
+                $curr->addDay();
             }
-            $monthlyTrendMap[$key]['total'] += (float) $p->total_harga;
-        }
 
-        // Sort keys ascending chronologically
-        ksort($monthlyTrendMap);
-
-        if (empty($monthlyTrendMap)) {
-            $trendLabels = [];
-            $trendFullLabels = [];
-            $trendValues = [];
-            for ($m = 1; $m <= $currentMonth; $m++) {
-                $lbl = $monthNamesIndo[$m] ?? 'Bln ' . $m;
-                $trendLabels[] = $lbl;
-                $trendFullLabels[] = $lbl . ' ' . $currentYear;
-                $trendValues[] = 0;
+            foreach ($pesanans as $p) {
+                if (!$p->tanggal_pesan) continue;
+                $dStr = date('Y-m-d', strtotime($p->tanggal_pesan));
+                if (isset($dailyTrendMap[$dStr])) {
+                    $dailyTrendMap[$dStr]['total'] += (float) $p->total_harga;
+                }
             }
+
+            $trendLabels = array_column($dailyTrendMap, 'label');
+            $trendFullLabels = array_column($dailyTrendMap, 'full_label');
+            $trendValues = array_column($dailyTrendMap, 'total');
         } else {
-            $trendLabels = array_column($monthlyTrendMap, 'label');
-            $trendFullLabels = array_column($monthlyTrendMap, 'full_label');
-            $trendValues = array_column($monthlyTrendMap, 'total');
+            // 3. Monthly Trend for Ranges > 31 Days (Kuartal, Tahun Ini): Bulanan
+            $monthlyTrendMap = [];
+
+            // Pre-populate months in the current view range strictly up to current month ($currentMonth)
+            if ($startCarbon->year == $currentYear && $endCarbon->year == $currentYear) {
+                $startM = (int) $startCarbon->month;
+                $endM = min((int) $endCarbon->month, $currentMonth);
+                for ($m = $startM; $m <= $endM; $m++) {
+                    $k = sprintf('%04d-%02d', $currentYear, $m);
+                    $shortLabel = $monthNamesIndo[$m] ?? date('M', mktime(0, 0, 0, $m, 1));
+                    $monthlyTrendMap[$k] = [
+                        'label' => $shortLabel,
+                        'full_label' => $shortLabel . ' ' . $currentYear,
+                        'total' => 0
+                    ];
+                }
+            }
+
+            foreach ($pesanans as $p) {
+                if (!$p->tanggal_pesan) continue;
+                $time = strtotime($p->tanggal_pesan);
+                $y = date('Y', $time);
+                $mNum = (int) date('n', $time);
+                $key = date('Y-m', $time);
+                $shortLabel = $monthNamesIndo[$mNum] ?? date('M', $time);
+                $fullLabel = $shortLabel . ' ' . $y;
+
+                if (!isset($monthlyTrendMap[$key])) {
+                    $monthlyTrendMap[$key] = [
+                        'label' => $shortLabel,
+                        'full_label' => $fullLabel,
+                        'total' => 0
+                    ];
+                }
+                $monthlyTrendMap[$key]['total'] += (float) $p->total_harga;
+            }
+
+            // Sort keys ascending chronologically
+            ksort($monthlyTrendMap);
+
+            if (empty($monthlyTrendMap)) {
+                $trendLabels = [];
+                $trendFullLabels = [];
+                $trendValues = [];
+                for ($m = 1; $m <= $currentMonth; $m++) {
+                    $lbl = $monthNamesIndo[$m] ?? 'Bln ' . $m;
+                    $trendLabels[] = $lbl;
+                    $trendFullLabels[] = $lbl . ' ' . $currentYear;
+                    $trendValues[] = 0;
+                }
+            } else {
+                $trendLabels = array_column($monthlyTrendMap, 'label');
+                $trendFullLabels = array_column($monthlyTrendMap, 'full_label');
+                $trendValues = array_column($monthlyTrendMap, 'total');
+            }
         }
 
         // Product Revenue Contribution
         $productShareMap = [];
         $totalRev = max(1, $totalPendapatan);
         foreach ($pesanans as $p) {
-            $prod = $p->nama_produk ?: 'Lainnya';
+            $rawProd = $p->nama_produk ?: 'Lainnya';
+            $prod = trim(preg_replace('/\s*\(\+.*?\)/i', '', $rawProd));
             if (!isset($productShareMap[$prod])) {
                 $productShareMap[$prod] = 0;
             }

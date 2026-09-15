@@ -276,7 +276,13 @@
         }
 
         .customer-search-box .search-icon {
+            position: absolute;
             left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94A3B8;
+            font-size: 14px;
+            pointer-events: none;
         }
 
         .customer-search-box input {
@@ -871,6 +877,21 @@
                 </button>
             </div>
 
+            <!-- Search & Filter Toolbar Khusus Pelanggan -->
+            <div class="filter-toolbar">
+                <div class="customer-search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" id="customerSearchInput" placeholder="Cari nama, ID, no. HP, atau alamat pelanggan...">
+                </div>
+                <div class="filter-actions">
+                    <select class="filter-select" id="filterStatusSelect" title="Saring berdasarkan status keaktifan">
+                        <option value="">Semua Status</option>
+                        <option value="aktif">Aktif</option>
+                        <option value="nonaktif">Nonaktif</option>
+                    </select>
+                </div>
+            </div>
+
             <!-- Customer Data Table Card -->
             <div class="table-card">
                 <div class="table-responsive">
@@ -1243,6 +1264,24 @@
         const resetFilterBtn = document.getElementById('resetFilterBtn');
         const applyFilterBtn = document.getElementById('applyFilterBtn');
         const filterStatusSelect = document.getElementById('filterStatusSelect');
+        const customerSearchInput = document.getElementById('customerSearchInput');
+
+        if (customerSearchInput) {
+            customerSearchInput.addEventListener('input', function () {
+                const query = this.value.toLowerCase().trim();
+                const rows = tbody.querySelectorAll('tr');
+                rows.forEach(r => {
+                    const text = r.textContent.toLowerCase();
+                    if (!query || text.includes(query)) {
+                        r.removeAttribute('data-search-hidden');
+                    } else {
+                        r.setAttribute('data-search-hidden', 'true');
+                    }
+                });
+                currentPage = 1;
+                updatePagination();
+            });
+        }
 
         // Select All Checkbox Handler
         const selectAllCb = document.getElementById('selectAll');

@@ -837,6 +837,20 @@
             padding: 4px;
         }
 
+        .gallery-grid.is-single {
+            display: flex;
+            justify-content: center;
+        }
+
+        .gallery-grid.is-single .gallery-card {
+            max-width: 440px;
+            width: 100%;
+        }
+
+        .gallery-grid.is-single .gallery-thumb-wrap {
+            height: 250px;
+        }
+
         .gallery-card {
             background: #FFFFFF;
             border: 1.5px solid #E2E8F0;
@@ -2200,25 +2214,7 @@
                                 @endphp
                                 <tr data-status-prod="{{ $stProd }}" data-status-bayar="{{ $stBayarLower }}">
                                     <td class="td-nowrap">
-                                        <div style="display: flex; align-items: center; gap: 4px;">
-                                            <span class="order-code">{{ $pesanan->kode_pesanan }}</span>
-                                            @if($itemsCount > 1)
-                                                <button type="button" class="design-file-icon multi"
-                                                    onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}")'
-                                                    title="Buka Galeri Desain ({{ $itemsCount }} File)">
-                                                    <i class="fa-solid fa-images"></i>
-                                                    <span>{{ $itemsCount }} Desain</span>
-                                                </button>
-                                            @elseif(!empty($pesanan->file_desain))
-                                                @php
-                                                    $fUrl = \Illuminate\Support\Str::startsWith($pesanan->file_desain, ['http://', 'https://']) ? $pesanan->file_desain : asset(ltrim($pesanan->file_desain, '/'));
-                                                @endphp
-                                                <a href="{{ $fUrl }}" target="_blank" class="design-file-icon"
-                                                    title="Buka File Desain ({{ basename($pesanan->file_desain) }})">
-                                                    <i class="fa-solid fa-file-image"></i>
-                                                </a>
-                                            @endif
-                                        </div>
+                                        <div class="order-code">{{ $pesanan->kode_pesanan }}</div>
                                         <div style="font-size: 11px; color: #94A3B8; margin-top: 2px;">
                                             {{ $pesanan->tanggal_pesan ? date('d M Y', strtotime($pesanan->tanggal_pesan)) : ($pesanan->created_at ? $pesanan->created_at->format('d M Y') : '-') }}
                                         </div>
@@ -2242,21 +2238,32 @@
                                         @if($itemsCount > 1)
                                             <div style="margin-top: 4px;">
                                                 <button type="button" class="badge-multi-item-btn"
-                                                    onclick='toggleItemsPopover(event, this, @json($detailItems), "{{ $pesanan->kode_pesanan }}", {{ $pesanan->total_harga }}, @json($pesanan))'
-                                                    title="{{ $otherTooltip }}">
-                                                    <i class="fa-solid fa-layer-group"></i> +{{ $itemsCount - 1 }} produk
-                                                    lainnya
-                                                    <i class="fa-solid fa-chevron-down chevron-icon"></i>
+                                                    onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}", @json($pesanan))'
+                                                    title="Klik untuk melihat preview galeri desain ({{ $itemsCount }} item)">
+                                                    <i class="fa-solid fa-images"></i> Lihat Desain (+{{ $itemsCount - 1 }} lainnya)
+                                                    <i class="fa-solid fa-chevron-right chevron-icon"></i>
                                                 </button>
                                             </div>
                                         @else
                                             @php
                                                 $subUkuran = trim($pesanan->jumlah_ukuran ?? '');
                                                 $isMacam = stripos($subUkuran, 'macam') !== false;
+                                                $hasDesign = !empty($pesanan->file_desain) || (!empty($detailItems[0]['file_desain']));
                                             @endphp
                                             @if(!$isMacam && !empty($subUkuran) && $subUkuran !== '-')
                                                 <div style="color: #64748B; font-size: 11.5px; margin-top: 2px;">
                                                     {{ $subUkuran }}
+                                                </div>
+                                            @endif
+
+                                            @if($hasDesign)
+                                                <div style="margin-top: 4px;">
+                                                    <button type="button" class="badge-multi-item-btn"
+                                                        onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}", @json($pesanan))'
+                                                        title="Klik untuk melihat preview file desain">
+                                                        <i class="fa-solid fa-image"></i> Lihat Desain
+                                                        <i class="fa-solid fa-chevron-right chevron-icon"></i>
+                                                    </button>
                                                 </div>
                                             @endif
                                         @endif
@@ -2294,8 +2301,8 @@
                                                     class="fa-solid fa-ellipsis-vertical"></i></button>
                                             <div class="dropdown-menu">
                                                 <button type="button" class="dropdown-item"
-                                                    onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}")'>
-                                                    <i class="fa-solid fa-images" style="color:#2563EB;"></i> Galeri File Desain ({{ $itemsCount }})
+                                                    onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}", @json($pesanan))'>
+                                                    <i class="fa-solid {{ $itemsCount > 1 ? 'fa-images' : 'fa-image' }}" style="color:#2563EB;"></i> {{ $itemsCount > 1 ? "Galeri File Desain ({$itemsCount})" : "Lihat File Desain" }}
                                                 </button>
                                                 <button type="button" class="dropdown-item"
                                                     onclick='viewSpkDetail(@json($pesanan))'>
@@ -2679,7 +2686,7 @@
                                 <div
                                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                                     <label style="margin-bottom: 0; font-weight: 700; color: #334155;">File Desain
-                                        Cetak</label>
+                                        Cetak <span style="color:#DC2626; font-size: 11px;">* (Wajib)</span></label>
                                     <div class="file-tab-container">
                                         <button type="button" id="tabBtnUpload" class="file-tab-btn active"
                                             onclick="switchDesignSource('upload')">
@@ -3333,17 +3340,17 @@
         </div>
     </div>
 
-    <!-- 5. MODAL GALERI DESAIN (MULTI-ITEM DESIGN VIEWER) -->
+    <!-- 5. MODAL GALERI DESAIN (MULTI-ITEM & SINGLE-ITEM DESIGN VIEWER) -->
     <div class="modal-overlay" id="designGalleryModalOverlay">
         <div class="modal-box modal-lg">
             <div class="modal-header">
                 <h3 class="modal-title">
-                    <i class="fa-solid fa-images" style="color:#1E3A8A;"></i>
-                    Galeri File Desain — <span id="galleryKodePesanan" style="color:#2563EB;">-</span>
+                    <i class="fa-solid fa-images" id="galleryModalTitleIcon" style="color:#1E3A8A;"></i>
+                    <span id="galleryModalHeadingText">Galeri File Desain</span> — <span id="galleryKodePesanan" style="color:#2563EB;">-</span>
                 </h3>
                 <button type="button" class="close-modal-btn" onclick="closeDesignGalleryModal()">&times;</button>
             </div>
-            <div style="font-size: 12.5px; color: #64748B; margin-bottom: 6px;">
+            <div style="font-size: 12.5px; color: #64748B; margin-bottom: 6px;" id="galleryModalSubtitle">
                 Semua file desain cetak yang dilampirkan untuk masing-masing item pada pesanan ini:
             </div>
             <div id="galleryItemsContainer" class="gallery-grid">
@@ -4204,6 +4211,25 @@
                     return false;
                 }
 
+                // Validasi Wajib Desain (File Upload Laptop, Link GDrive, atau File per Item)
+                const masterFileInp = document.getElementById('ordFileUpload');
+                const masterLinkInp = document.getElementById('ordFileDesain');
+                const hasMasterUpload = Boolean(currentUploadedDesignFile instanceof File) || Boolean(masterFileInp && masterFileInp.files && masterFileInp.files.length > 0);
+                const hasMasterLink = Boolean(masterLinkInp && masterLinkInp.value.trim());
+                const hasItemDesign = cartItems.some(it => Boolean(it._fileObj instanceof File) || Boolean(it.file_desain && String(it.file_desain).trim()));
+
+                if (!hasMasterUpload && !hasMasterLink && !hasItemDesign) {
+                    e.preventDefault();
+                    alert('Pesanan belum memiliki file desain!\n\nSilakan upload file desain dari laptop atau cantumkan link Google Drive pada Bagian 1 sebelum menyimpan pesanan.');
+                    const dropzone = document.querySelector('.file-upload-dropzone') || masterLinkInp;
+                    if (dropzone) {
+                        dropzone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        dropzone.style.outline = '2px dashed #DC2626';
+                        setTimeout(() => { dropzone.style.outline = ''; }, 3500);
+                    }
+                    return false;
+                }
+
                 // Remove previous dynamic item file inputs if any
                 document.querySelectorAll('.dynamic-item-file-input').forEach(el => el.remove());
 
@@ -4374,12 +4400,15 @@
             }
         });
 
-        // 5. DESIGN GALLERY MODAL (MULTI-ITEM DESIGN VIEWER)
+        // 5. DESIGN GALLERY MODAL (MULTI-ITEM & SINGLE-ITEM DESIGN VIEWER)
         const galleryModalOverlay = document.getElementById('designGalleryModalOverlay');
         const galleryTitleCode = document.getElementById('galleryKodePesanan');
+        const galleryModalHeadingText = document.getElementById('galleryModalHeadingText');
+        const galleryModalTitleIcon = document.getElementById('galleryModalTitleIcon');
+        const galleryModalSubtitle = document.getElementById('galleryModalSubtitle');
         const galleryContainer = document.getElementById('galleryItemsContainer');
 
-        window.openDesignGalleryModal = function (items, kodePesanan, masterFile) {
+        window.openDesignGalleryModal = function (items, kodePesanan, masterFile, pesananObj) {
             if (!galleryModalOverlay || !galleryContainer) return;
 
             galleryTitleCode.textContent = kodePesanan;
@@ -4388,6 +4417,14 @@
             let itemsList = [];
             if (Array.isArray(items) && items.length > 0) {
                 itemsList = items;
+            } else if (pesananObj) {
+                itemsList = [{
+                    nama_produk: pesananObj.nama_produk ? pesananObj.nama_produk.replace(/\s*\(\+\s*\d+\s*produk lainnya\)/i, '') : 'Produk Utama',
+                    ukuran: pesananObj.jumlah_ukuran || 'Standard',
+                    qty: 1,
+                    satuan: '',
+                    file_desain: masterFile || pesananObj.file_desain
+                }];
             } else if (masterFile) {
                 itemsList = [{
                     nama_produk: 'Produk Utama',
@@ -4398,8 +4435,24 @@
                 }];
             }
 
+            const isSingle = itemsList.length <= 1;
+
+            if (galleryModalHeadingText) {
+                galleryModalHeadingText.textContent = isSingle ? 'Preview File Desain' : 'Galeri File Desain';
+            }
+            if (galleryModalTitleIcon) {
+                galleryModalTitleIcon.className = isSingle ? 'fa-solid fa-image' : 'fa-solid fa-images';
+            }
+            if (galleryModalSubtitle) {
+                galleryModalSubtitle.textContent = isSingle
+                    ? 'File desain cetak yang dilampirkan pada pesanan ini:'
+                    : `Semua file desain cetak yang dilampirkan untuk masing-masing item pada pesanan ini (${itemsList.length} item):`;
+            }
+
+            galleryContainer.className = isSingle ? 'gallery-grid is-single' : 'gallery-grid';
+
             itemsList.forEach((it, idx) => {
-                const fPath = it.file_desain || masterFile;
+                const fPath = it.file_desain || masterFile || (pesananObj ? pesananObj.file_desain : null);
                 const card = document.createElement('div');
                 card.className = 'gallery-card';
 
@@ -4416,25 +4469,27 @@
 
                     if (isImage) {
                         thumbHtml = `
-                            <img src="${fUrl}" alt="Desain Item ${idx + 1}" class="gallery-thumb-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                            <div style="display:none; align-items:center; justify-content:center; width:100%; height:100%; color:#2563EB; font-size:32px;">
-                                <i class="fa-solid fa-file-image"></i>
-                            </div>
+                            <a href="${fUrl}" target="_blank" title="Klik untuk memperbesar / buka file" style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; text-decoration:none;">
+                                <img src="${fUrl}" alt="Desain ${it.nama_produk || 'Item'}" class="gallery-thumb-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div style="display:none; align-items:center; justify-content:center; width:100%; height:100%; color:#2563EB; font-size:36px;">
+                                    <i class="fa-solid fa-file-image"></i>
+                                </div>
+                            </a>
                         `;
                     } else if (isDrive) {
                         thumbHtml = `
-                            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; color:#0284C7; gap:6px;">
+                            <a href="${fUrl}" target="_blank" title="Buka di Google Drive" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; color:#0284C7; gap:6px; text-decoration:none;">
                                 <i class="fa-brands fa-google-drive" style="font-size:36px;"></i>
                                 <span style="font-size:11px; font-weight:700;">Google Drive</span>
-                            </div>
+                            </a>
                         `;
                     } else {
                         const ext = (fPath.split('.').pop() || 'FILE').toUpperCase();
                         thumbHtml = `
-                            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; color:#2563EB; gap:6px;">
+                            <a href="${fUrl}" target="_blank" title="Buka / Download File" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; color:#2563EB; gap:6px; text-decoration:none;">
                                 <i class="fa-solid fa-file-lines" style="font-size:36px;"></i>
                                 <span style="font-size:11px; font-weight:700;">${ext}</span>
-                            </div>
+                            </a>
                         `;
                     }
 
@@ -4444,18 +4499,24 @@
                         </a>
                     `;
                 } else {
-                    thumbHtml = `<div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; color:#94A3B8; font-size:11px;">Tidak ada file</div>`;
-                    btnHtml = `<span style="font-size:11px; color:#94A3B8; text-align:center; padding:6px;">Tanpa Desain</span>`;
+                    thumbHtml = `<div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; color:#94A3B8; font-size:11.5px; font-weight:600;">Tidak ada file desain</div>`;
+                    btnHtml = `<span style="font-size:11px; color:#94A3B8; text-align:center; padding:6px; background:#F8FAFC; border-radius:6px;">Tanpa Desain</span>`;
                 }
+
+                const itemBadgeLabel = isSingle ? 'Desain Produk' : `Item ${idx + 1}`;
+                let metaParts = [];
+                if (it.ukuran && it.ukuran !== '-') metaParts.push(it.ukuran);
+                if (it.qty) metaParts.push(`${it.qty} ${it.satuan || 'Pcs'}`.trim());
+                const metaString = metaParts.join(' • ') || 'Standard';
 
                 card.innerHTML = `
                     <div class="gallery-thumb-wrap">
                         ${thumbHtml}
-                        <span style="position:absolute; top:8px; left:8px; background:rgba(15, 23, 42, 0.75); color:#fff; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">Item ${idx + 1}</span>
+                        <span style="position:absolute; top:8px; left:8px; background:rgba(15, 23, 42, 0.75); color:#fff; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">${itemBadgeLabel}</span>
                     </div>
                     <div class="gallery-card-body">
-                        <div class="gallery-card-title">${it.nama_produk}</div>
-                        <div class="gallery-card-meta">${it.ukuran || 'Standard'} • ${it.qty || 1} ${it.satuan || 'Pcs'}</div>
+                        <div class="gallery-card-title">${it.nama_produk || 'Produk Cetak'}</div>
+                        <div class="gallery-card-meta">${metaString}</div>
                         ${btnHtml}
                     </div>
                 `;
@@ -4468,6 +4529,14 @@
         window.closeDesignGalleryModal = function () {
             if (galleryModalOverlay) galleryModalOverlay.classList.remove('active');
         };
+
+        if (galleryModalOverlay) {
+            galleryModalOverlay.addEventListener('click', function (e) {
+                if (e.target === galleryModalOverlay) {
+                    closeDesignGalleryModal();
+                }
+            });
+        }
 
         // Close on Escape key
         document.addEventListener('keydown', function (e) {

@@ -169,6 +169,21 @@ class PesananController extends Controller
             }
         }
 
+        // Validasi Wajib Desain Cetak (Master File atau File per Item)
+        $hasAnyItemDesign = false;
+        if (!empty($items)) {
+            foreach ($items as $it) {
+                if (!empty($it['file_desain'])) {
+                    $hasAnyItemDesign = true;
+                    break;
+                }
+            }
+        }
+
+        if (empty($fileDesain) && !$hasAnyItemDesign) {
+            return back()->withInput()->with('error', 'Pesanan wajib menyertakan file desain cetak! Silakan upload file dari laptop atau cantumkan tautan Google Drive.');
+        }
+
         // Payment Handling: Lunas, DP, or Belum Bayar (Default is belum_bayar, managed in Menu Pembayaran)
         $pembayaranTipe = $request->input('pembayaran_tipe', 'belum_bayar');
         $metodeBayar = $request->input('metode_pembayaran', 'Tunai');

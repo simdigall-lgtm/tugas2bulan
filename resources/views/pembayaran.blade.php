@@ -277,8 +277,8 @@
         /* 2 Column Grid Layout */
         .grid-2col {
             display: grid;
-            grid-template-columns: 380px minmax(0, 1fr);
-            gap: 20px;
+            grid-template-columns: 305px minmax(0, 1fr);
+            gap: 16px;
             align-items: start;
         }
 
@@ -444,11 +444,30 @@
             white-space: nowrap;
         }
 
-        .custom-table tr:last-child td {
-            border-bottom: none;
+        .custom-table tr:hover td {
+            background: #F8FAFC;
         }
 
-        .custom-table tr:hover td {
+        .custom-table th:nth-child(6),
+        .custom-table td:nth-child(6) {
+            min-width: 135px;
+            padding-right: 8px;
+        }
+
+        .custom-table th:last-child,
+        .custom-table td:last-child {
+            position: sticky;
+            right: 0;
+            background: #FFFFFF;
+            box-shadow: -4px 0 8px rgba(0, 0, 0, 0.04);
+            z-index: 2;
+            text-align: center;
+            width: 55px;
+            min-width: 55px;
+            padding: 8px 4px;
+        }
+
+        .custom-table tr:hover td:last-child {
             background: #F8FAFC;
         }
 
@@ -828,9 +847,9 @@
                                 <button type="button" id="btnPayTypeDp" class="pay-type-card" onclick="selectPaymentType('dp')">
                                     <div style="display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 800; color: #B45309; white-space: nowrap;">
                                         <i class="fa-solid fa-clock" style="color: #D97706; flex-shrink: 0;"></i>
-                                        <span style="white-space: nowrap;">Bayar DP / Sebagian</span>
+                                        <span style="white-space: nowrap;">Bayar DP/Sebagian</span>
                                     </div>
-                                    <div style="font-size: 11px; color: #64748B; margin-top: 3px; text-align: left; white-space: nowrap;">Input nominal DP</div>
+                                    <div style="font-size: 6px; color: #64748B; margin-top: 3px; text-align: left; white-space: nowrap;">Input nominal DP</div>
                                 </button>
                             </div>
                         </div>
@@ -920,13 +939,13 @@
                         <table class="custom-table" id="payTable">
                             <thead>
                                 <tr>
-                                    <th>NO. BAYAR</th>
-                                    <th>PESANAN</th>
-                                    <th>TANGGAL</th>
-                                    <th>METODE</th>
-                                    <th>JUMLAH</th>
-                                    <th>STATUS</th>
-                                    <th style="text-align: right;">AKSI</th>
+                                    <th style="min-width: 95px;">NO. BAYAR</th>
+                                    <th style="min-width: 95px;">PESANAN</th>
+                                    <th style="min-width: 85px;">TANGGAL</th>
+                                    <th style="min-width: 80px;">METODE</th>
+                                    <th style="min-width: 95px;">JUMLAH</th>
+                                    <th style="min-width: 135px;">STATUS</th>
+                                    <th style="width: 55px; text-align: center;">AKSI</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -951,13 +970,13 @@
                                     <td>{{ $pem->tanggal_bayar ? \Carbon\Carbon::parse($pem->tanggal_bayar)->format('d M Y') : ($pem->tanggal ? \Carbon\Carbon::parse($pem->tanggal)->format('d M Y') : '-') }}</td>
                                     <td>{{ $pem->metode_pembayaran ?? $pem->metode }}</td>
                                     <td style="white-space: nowrap; font-weight: 700; color: #0F172A;">Rp {{ number_format($pem->jumlah, 0, ',', '.') }}</td>
-                                    <td>
+                                    <td style="min-width: 135px; padding-right: 8px;">
                                         <span class="status-badge {{ $isStLunas ? 'status-lunas' : 'status-menunggu' }}" style="{{ !$isStLunas ? 'background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A;' : '' }}">
                                             <i class="fa-solid {{ $isStLunas ? 'fa-circle-check' : 'fa-clock' }}" style="font-size: 10.5px; margin-right: 4px;"></i>
                                             {{ $isStLunas ? 'Sudah Lunas' : ($pem->status ?? 'Belum Lunas') }}
                                         </span>
                                     </td>
-                                    <td style="text-align: right; white-space: nowrap;">
+                                    <td style="width: 55px; text-align: center; white-space: nowrap;">
                                         <button type="button" onclick="openReceiptModal({{ json_encode([
                                             'kode_pembayaran' => $pem->kode_pembayaran,
                                             'kode_pesanan' => $pem->kode_pesanan,
@@ -970,14 +989,14 @@
                                             'status' => $pem->status,
                                             'uang_diterima' => $uangDiterimaVal,
                                             'kembalian' => $kembalianVal,
-                                        ]) }})" style="background: #EEF2FF; color: #1E3A8A; border: 1px solid #C7D2FE; padding: 4px 9px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 4px;" title="Cetak Nota Pembayaran">
+                                        ]) }})" style="background: #EEF2FF; color: #1E3A8A; border: 1px solid #C7D2FE; width: 30px; height: 30px; padding: 0; border-radius: 6px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s ease;" title="Cetak Nota Pembayaran">
                                             <i class="fa-solid fa-receipt"></i>
                                         </button>
                                         @if(!($isKasir ?? false))
                                             <form action="{{ route('pembayaran.destroy', $pem->id) }}" method="POST" style="display:inline; margin-left: 4px;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus catatan pembayaran {{ $pem->kode_pembayaran }}?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" style="background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; padding: 4px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; cursor: pointer;" title="Hapus Pembayaran">
+                                                <button type="submit" style="background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; width: 30px; height: 30px; padding: 0; border-radius: 6px; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;" title="Hapus Pembayaran">
                                                     <i class="fa-regular fa-trash-can"></i>
                                                 </button>
                                             </form>

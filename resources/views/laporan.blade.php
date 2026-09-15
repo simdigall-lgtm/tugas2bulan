@@ -992,13 +992,13 @@
 
                 <!-- Product Revenue Bar Chart -->
                 <div class="card" id="distribusiOmzetCard">
-                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
-                        <div>
-                            <h2 class="card-title">Omzet per Produk</h2>
-                            <p class="card-desc">Distribusi nilai transaksi berdasarkan kategori cetak.</p>
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; gap: 12px;">
+                        <div style="min-width: 0;">
+                            <h2 class="card-title" style="white-space: nowrap;">Omzet per Produk</h2>
+                            <p class="card-desc" style="margin-bottom:0; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">Distribusi nilai transaksi berdasarkan kategori cetak.</p>
                         </div>
-                        <span style="font-size:12px; font-weight:700; color:#0F766E; background:#CCFBF1; padding:4px 10px; border-radius:6px;">
-                            <i class="fa-solid fa-ranking-star"></i> Kontribusi Produk
+                        <span style="font-size:12px; font-weight:700; color:#0F766E; background:#CCFBF1; padding:5px 12px; border-radius:6px; white-space: nowrap; flex-shrink: 0; display: inline-flex; align-items: center; gap: 6px;">
+                            <i class="fa-solid fa-ranking-star"></i> <span>Kontribusi Produk</span>
                         </span>
                     </div>
                     <div class="chart-container-laporan">
@@ -1224,16 +1224,20 @@
                                 ticks: {
                                     maxRotation: 0,
                                     minRotation: 0,
-                                    autoSkip: false,
+                                    autoSkip: true,
+                                    maxTicksLimit: 12,
                                     font: { size: 11, weight: '600' },
                                     color: '#64748B'
                                 }
                             },
                             y: {
-                                suggestedMin: 0,
+                                beginAtZero: true,
+                                min: 0,
+                                suggestedMax: 100000,
                                 grid: { color: '#F1F5F9' },
                                 ticks: {
                                     callback: function(val) {
+                                        if (val < 0) return '';
                                         if (val === 0) return 'Rp 0';
                                         if (val >= 1000000000) {
                                             let m = val / 1000000000;
@@ -1247,7 +1251,7 @@
                                             let rb = val / 1000;
                                             return 'Rp ' + (rb % 1 === 0 ? rb : rb.toFixed(1).replace('.', ',')) + ' Rb';
                                         }
-                                        return 'Rp ' + val.toLocaleString('id-ID');
+                                        return 'Rp ' + Math.round(val).toLocaleString('id-ID');
                                     }
                                 }
                             }
@@ -1310,7 +1314,14 @@
                                 grid: { display: false },
                                 ticks: {
                                     font: { size: 12, weight: '600' },
-                                    color: '#334155'
+                                    color: '#334155',
+                                    callback: function(val, index) {
+                                        let label = this.getLabelForValue(val);
+                                        if (label && label.length > 22) {
+                                            return label.substring(0, 20) + '...';
+                                        }
+                                        return label;
+                                    }
                                 }
                             }
                         }
