@@ -169,18 +169,14 @@ class PesananController extends Controller
             }
         }
 
-        // Validasi Wajib Desain Cetak (Master File atau File per Item)
-        $hasAnyItemDesign = false;
+        // Validasi Wajib Desain Cetak (Setiap Item Wajib Memiliki File/Link Desain)
         if (!empty($items)) {
-            foreach ($items as $it) {
-                if (!empty($it['file_desain'])) {
-                    $hasAnyItemDesign = true;
-                    break;
+            foreach ($items as $idx => $it) {
+                if (empty($it['file_desain']) && empty($fileDesain)) {
+                    return back()->withInput()->with('error', "Item " . ($idx + 1) . " ({$it['nama_produk']}) wajib menyertakan file desain atau link Google Drive!");
                 }
             }
-        }
-
-        if (empty($fileDesain) && !$hasAnyItemDesign) {
+        } elseif (empty($fileDesain)) {
             return back()->withInput()->with('error', 'Pesanan wajib menyertakan file desain cetak! Silakan upload file dari laptop atau cantumkan tautan Google Drive.');
         }
 

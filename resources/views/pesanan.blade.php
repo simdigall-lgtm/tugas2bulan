@@ -397,6 +397,7 @@
             color: #334155;
             border: 1px solid #E2E8F0;
         }
+
         .badge-antrean-cetak::before {
             background: #64748B;
         }
@@ -406,6 +407,7 @@
             color: #92400E;
             border: 1px solid #FDE68A;
         }
+
         .badge-sedang-dicetak::before {
             background: #F59E0B;
         }
@@ -415,6 +417,7 @@
             color: #6B21A8;
             border: 1px solid #E9D5FF;
         }
+
         .badge-finishing::before {
             background: #A855F7;
         }
@@ -424,6 +427,7 @@
             color: #0F766E;
             border: 1px solid #99F6E4;
         }
+
         .badge-siap-diambil::before {
             background: #14B8A6;
         }
@@ -433,6 +437,7 @@
             color: #166534;
             border: 1px solid #BBF7D0;
         }
+
         .badge-selesai::before {
             background: #22C55E;
         }
@@ -442,6 +447,7 @@
             color: #1D4ED8;
             border: 1px solid #BFDBFE;
         }
+
         .badge-diproses::before {
             background: #3B82F6;
         }
@@ -451,6 +457,7 @@
             color: #64748B;
             border: 1px solid #E2E8F0;
         }
+
         .badge-menunggu::before {
             background: #94A3B8;
         }
@@ -837,20 +844,6 @@
             padding: 4px;
         }
 
-        .gallery-grid.is-single {
-            display: flex;
-            justify-content: center;
-        }
-
-        .gallery-grid.is-single .gallery-card {
-            max-width: 440px;
-            width: 100%;
-        }
-
-        .gallery-grid.is-single .gallery-thumb-wrap {
-            height: 250px;
-        }
-
         .gallery-card {
             background: #FFFFFF;
             border: 1.5px solid #E2E8F0;
@@ -949,16 +942,19 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
         .cart-item-design-badge.has-file {
             background: #EFF6FF;
             color: #1D4ED8;
             border: 1px solid #BFDBFE;
         }
+
         .cart-item-design-badge.is-link {
             background: #ECFEFF;
             color: #0E7490;
             border: 1px solid #CFFAFE;
         }
+
         .cart-item-design-badge.is-empty {
             color: #94A3B8;
             font-style: italic;
@@ -2142,11 +2138,13 @@
                     <div class="toolbar-search-wrap">
                         <i class="fa-solid fa-magnifying-glass"></i>
                         <input type="text" id="tableSearchInput" class="toolbar-search-input"
-                            placeholder="Cari kode pesanan, nama pelanggan, produk..." oninput="if(window.applyTableFilters) window.applyTableFilters()">
+                            placeholder="Cari kode pesanan, nama pelanggan, produk..."
+                            oninput="if(window.applyTableFilters) window.applyTableFilters()">
                     </div>
                     <div class="toolbar-filters-wrap">
                         <select id="filterStatusProd" class="toolbar-select"
-                            title="Saring berdasarkan status alur produksi" onchange="if(window.applyTableFilters) window.applyTableFilters()">
+                            title="Saring berdasarkan status alur produksi"
+                            onchange="if(window.applyTableFilters) window.applyTableFilters()">
                             <option value="">Semua Status Produksi</option>
                             <option value="Antrean Cetak">Antrean Cetak</option>
                             <option value="Sedang Dicetak">Sedang Dicetak</option>
@@ -2155,7 +2153,8 @@
                             <option value="Selesai">Selesai</option>
                         </select>
                         <select id="filterStatusBayar" class="toolbar-select"
-                            title="Saring berdasarkan status pembayaran" onchange="if(window.applyTableFilters) window.applyTableFilters()">
+                            title="Saring berdasarkan status pembayaran"
+                            onchange="if(window.applyTableFilters) window.applyTableFilters()">
                             <option value="">Semua Pembayaran</option>
                             <option value="lunas">Lunas</option>
                             <option value="dp">DP</option>
@@ -2173,7 +2172,7 @@
                                 <th style="min-width: 200px;">PRODUK</th>
                                 <th style="width: 155px;">TOTAL & BAYAR</th>
                                 <th style="width: 150px;">STATUS PRODUKSI</th>
-                                <th style="text-align:right; width: 60px;">AKSI</th>
+                                <th style="text-align:right; min-width: 90px;">AKSI</th>
                             </tr>
                         </thead>
                         <tbody id="pesananMainTableBody">
@@ -2214,7 +2213,9 @@
                                 @endphp
                                 <tr data-status-prod="{{ $stProd }}" data-status-bayar="{{ $stBayarLower }}">
                                     <td class="td-nowrap">
-                                        <div class="order-code">{{ $pesanan->kode_pesanan }}</div>
+                                        <div style="display: flex; align-items: center; gap: 4px;">
+                                            <span class="order-code">{{ $pesanan->kode_pesanan }}</span>
+                                        </div>
                                         <div style="font-size: 11px; color: #94A3B8; margin-top: 2px;">
                                             {{ $pesanan->tanggal_pesan ? date('d M Y', strtotime($pesanan->tanggal_pesan)) : ($pesanan->created_at ? $pesanan->created_at->format('d M Y') : '-') }}
                                         </div>
@@ -2226,7 +2227,8 @@
                                             </div>
                                             <div>
                                                 <div style="font-weight: 700; color: #0F172A;">
-                                                    {{ $pesanan->nama_pelanggan }}</div>
+                                                    {{ $pesanan->nama_pelanggan }}
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
@@ -2238,38 +2240,28 @@
                                         @if($itemsCount > 1)
                                             <div style="margin-top: 4px;">
                                                 <button type="button" class="badge-multi-item-btn"
-                                                    onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}", @json($pesanan))'
-                                                    title="Klik untuk melihat preview galeri desain ({{ $itemsCount }} item)">
-                                                    <i class="fa-solid fa-images"></i> Lihat Desain (+{{ $itemsCount - 1 }} lainnya)
-                                                    <i class="fa-solid fa-chevron-right chevron-icon"></i>
+                                                    onclick='toggleItemsPopover(event, this, @json($detailItems), "{{ $pesanan->kode_pesanan }}", {{ $pesanan->total_harga }}, @json($pesanan))'
+                                                    title="{{ $otherTooltip }}">
+                                                    <i class="fa-solid fa-layer-group"></i> +{{ $itemsCount - 1 }} produk
+                                                    lainnya
+                                                    <i class="fa-solid fa-chevron-down chevron-icon"></i>
                                                 </button>
                                             </div>
                                         @else
                                             @php
                                                 $subUkuran = trim($pesanan->jumlah_ukuran ?? '');
                                                 $isMacam = stripos($subUkuran, 'macam') !== false;
-                                                $hasDesign = !empty($pesanan->file_desain) || (!empty($detailItems[0]['file_desain']));
                                             @endphp
                                             @if(!$isMacam && !empty($subUkuran) && $subUkuran !== '-')
                                                 <div style="color: #64748B; font-size: 11.5px; margin-top: 2px;">
                                                     {{ $subUkuran }}
                                                 </div>
                                             @endif
-
-                                            @if($hasDesign)
-                                                <div style="margin-top: 4px;">
-                                                    <button type="button" class="badge-multi-item-btn"
-                                                        onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}", @json($pesanan))'
-                                                        title="Klik untuk melihat preview file desain">
-                                                        <i class="fa-solid fa-image"></i> Lihat Desain
-                                                        <i class="fa-solid fa-chevron-right chevron-icon"></i>
-                                                    </button>
-                                                </div>
-                                            @endif
                                         @endif
                                     </td>
                                     <td class="td-nowrap">
-                                        <div style="font-weight: 700; color: #0F172A; font-size: 13.5px; letter-spacing: -0.01em;">
+                                        <div
+                                            style="font-weight: 700; color: #0F172A; font-size: 13.5px; letter-spacing: -0.01em;">
                                             Rp {{ number_format($pesanan->total_harga, 0, ',', '.') }}
                                         </div>
                                         <div style="margin-top: 3px;">
@@ -2280,7 +2272,9 @@
                                             @elseif($stBayarLower === 'dp' || str_contains($stBayarLower, 'dp'))
                                                 <span class="pay-sub-tag pay-sub-dp"
                                                     title="{{ $sisaTagihan > 0 ? 'Sisa tagihan: Rp ' . number_format($sisaTagihan, 0, ',', '.') : 'Pembayaran: DP' }}">
-                                                    <i class="fa-solid fa-clock"></i> DP @if($sisaTagihan > 0)<span class="sisa-note">(Sisa Rp {{ number_format($sisaTagihan, 0, ',', '.') }})</span>@endif
+                                                    <i class="fa-solid fa-clock"></i> DP @if($sisaTagihan > 0)<span
+                                                        class="sisa-note">(Sisa Rp
+                                                    {{ number_format($sisaTagihan, 0, ',', '.') }})</span>@endif
                                                 </span>
                                             @else
                                                 <span class="pay-sub-tag pay-sub-unpaid"
@@ -2296,13 +2290,32 @@
                                         </span>
                                     </td>
                                     <td class="td-nowrap" style="text-align:right;">
-                                        <div class="action-dropdown">
-                                            <button type="button" class="action-icon-btn action-toggle" title="Menu Aksi"><i
-                                                    class="fa-solid fa-ellipsis-vertical"></i></button>
+                                        <div style="display: inline-flex; align-items: center; justify-content: flex-end; gap: 6px;">
+                                            @if($itemsCount > 1)
+                                                <button type="button" class="design-file-icon multi"
+                                                    onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}")'
+                                                    title="Buka Galeri Desain ({{ $itemsCount }} File)">
+                                                    <i class="fa-solid fa-images"></i>
+                                                    <span>{{ $itemsCount }} Desain</span>
+                                                </button>
+                                            @elseif(!empty($pesanan->file_desain))
+                                                @php
+                                                    $fUrl = \Illuminate\Support\Str::startsWith($pesanan->file_desain, ['http://', 'https://']) ? $pesanan->file_desain : asset(ltrim($pesanan->file_desain, '/'));
+                                                @endphp
+                                                <a href="{{ $fUrl }}" target="_blank" class="design-file-icon"
+                                                    title="Buka File Desain ({{ basename($pesanan->file_desain) }})">
+                                                    <i class="fa-solid fa-file-image"></i>
+                                                </a>
+                                            @endif
+
+                                            <div class="action-dropdown">
+                                                <button type="button" class="action-icon-btn action-toggle" title="Menu Aksi"><i
+                                                        class="fa-solid fa-ellipsis-vertical"></i></button>
                                             <div class="dropdown-menu">
                                                 <button type="button" class="dropdown-item"
-                                                    onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}", @json($pesanan))'>
-                                                    <i class="fa-solid {{ $itemsCount > 1 ? 'fa-images' : 'fa-image' }}" style="color:#2563EB;"></i> {{ $itemsCount > 1 ? "Galeri File Desain ({$itemsCount})" : "Lihat File Desain" }}
+                                                    onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}")'>
+                                                    <i class="fa-solid fa-images" style="color:#2563EB;"></i> Galeri File
+                                                    Desain ({{ $itemsCount }})
                                                 </button>
                                                 <button type="button" class="dropdown-item"
                                                     onclick='viewSpkDetail(@json($pesanan))'>
@@ -2686,7 +2699,7 @@
                                 <div
                                     style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
                                     <label style="margin-bottom: 0; font-weight: 700; color: #334155;">File Desain
-                                        Cetak <span style="color:#DC2626; font-size: 11px;">* (Wajib)</span></label>
+                                        Cetak <span style="color: #DC2626; font-size: 11.5px; font-weight: 800;">* (Wajib Diunggah)</span></label>
                                     <div class="file-tab-container">
                                         <button type="button" id="tabBtnUpload" class="file-tab-btn active"
                                             onclick="switchDesignSource('upload')">
@@ -3107,9 +3120,11 @@
                 <!-- Multi-Item Design Manager (Shown dynamically if order has >1 item) -->
                 <div class="form-group" id="stMultiItemsSection" style="display: none;">
                     <label style="font-weight: 700; color: #1E293B; margin-bottom: 6px; display: block;">
-                        <i class="fa-solid fa-layer-group" style="color: #2563EB;"></i> Perbarui Desain Tiap Item Pesanan:
+                        <i class="fa-solid fa-layer-group" style="color: #2563EB;"></i> Perbarui Desain Tiap Item
+                        Pesanan:
                     </label>
-                    <div id="stMultiItemsList" style="display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; padding-right: 4px;">
+                    <div id="stMultiItemsList"
+                        style="display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; padding-right: 4px;">
                         <!-- Rendered dynamically in JS -->
                     </div>
                 </div>
@@ -3340,17 +3355,17 @@
         </div>
     </div>
 
-    <!-- 5. MODAL GALERI DESAIN (MULTI-ITEM & SINGLE-ITEM DESIGN VIEWER) -->
+    <!-- 5. MODAL GALERI DESAIN (MULTI-ITEM DESIGN VIEWER) -->
     <div class="modal-overlay" id="designGalleryModalOverlay">
         <div class="modal-box modal-lg">
             <div class="modal-header">
                 <h3 class="modal-title">
-                    <i class="fa-solid fa-images" id="galleryModalTitleIcon" style="color:#1E3A8A;"></i>
-                    <span id="galleryModalHeadingText">Galeri File Desain</span> — <span id="galleryKodePesanan" style="color:#2563EB;">-</span>
+                    <i class="fa-solid fa-images" style="color:#1E3A8A;"></i>
+                    Galeri File Desain — <span id="galleryKodePesanan" style="color:#2563EB;">-</span>
                 </h3>
                 <button type="button" class="close-modal-btn" onclick="closeDesignGalleryModal()">&times;</button>
             </div>
-            <div style="font-size: 12.5px; color: #64748B; margin-bottom: 6px;" id="galleryModalSubtitle">
+            <div style="font-size: 12.5px; color: #64748B; margin-bottom: 6px;">
                 Semua file desain cetak yang dilampirkan untuk masing-masing item pada pesanan ini:
             </div>
             <div id="galleryItemsContainer" class="gallery-grid">
@@ -3541,6 +3556,25 @@
                 const linkInp = document.getElementById('ordFileDesain');
                 const linkVal = linkInp ? linkInp.value.trim() : '';
 
+                // VALIDASI WAJIB: Pastikan ada file desain yang diupload atau link Google Drive
+                if (!itemFile && !linkVal) {
+                    alert('Wajib mengunggah file desain (dari laptop) atau memasukkan link Google Drive terlebih dahulu sebelum menambahkan item ke keranjang!');
+                    const dropzone = document.querySelector('.file-upload-dropzone');
+                    if (dropzone) {
+                        dropzone.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        dropzone.style.border = '2px dashed #DC2626';
+                        dropzone.style.background = '#FEF2F2';
+                        setTimeout(() => {
+                            dropzone.style.border = '';
+                            dropzone.style.background = '';
+                        }, 2500);
+                    }
+                    if (linkInp && document.getElementById('fileLinkContainer') && document.getElementById('fileLinkContainer').style.display !== 'none') {
+                        linkInp.focus();
+                    }
+                    return;
+                }
+
                 let designName = null;
                 let designVal = null;
                 if (itemFile) {
@@ -3594,19 +3628,44 @@
                 cartItems.push(item);
                 renderCart();
 
-                // Reset Section 1 File Desain Cetak so user can easily upload a NEW design for the next item
+                // Reset Section 1: File Desain Cetak agar siap untuk item berikutnya
                 window.removeSelectedFile();
                 if (linkInp) linkInp.value = '';
                 window.switchDesignSource('upload');
                 currentUploadedDesignFile = null;
 
-                // Reset sub-fields
+                // Reset Section 2: Kembalikan Pilihan Produk & Kontrol ke Status Default
+                if (cartItemProduct) cartItemProduct.value = '';
+                if (cartToggleMeter) cartToggleMeter.checked = false;
+                toggleMeterView();
+
+                if (meterPanjang) meterPanjang.value = '1.00';
+                if (meterLebar) meterLebar.value = '1.00';
+                if (meterQty) meterQty.value = 1;
+
+                if (cartItemQty) cartItemQty.value = 1;
                 if (cartItemNote) cartItemNote.value = '';
                 const noteWrap = document.getElementById('itemNoteInputWrap');
                 if (noteWrap) noteWrap.style.display = 'none';
                 const noteTxt = document.getElementById('toggleItemNoteText');
                 if (noteTxt) noteTxt.textContent = '+ Tambah Catatan Khusus Item Ini';
-                cartItemQty.value = 1;
+
+                // Reset Size Chips to default (A4)
+                document.querySelectorAll('.size-chip-btn').forEach((b, i) => {
+                    if (i === 0) b.classList.add('active');
+                    else b.classList.remove('active');
+                });
+                const customWrap = document.getElementById('customSizeInputWrap');
+                if (customWrap) customWrap.style.display = 'none';
+                const customInput = document.getElementById('customSizeInput');
+                if (customInput) customInput.value = '';
+                const hiddenSize = document.getElementById('cartItemSize');
+                if (hiddenSize) hiddenSize.value = 'A4 (21 x 29.7 cm)';
+                const badge = document.getElementById('selectedSizeBadge');
+                if (badge) badge.textContent = 'A4 (21 x 29.7 cm)';
+
+                // Update preview subtotal to 0
+                updateItemSubtotalPreview();
             });
         }
 
@@ -3940,10 +3999,12 @@
                 cartItems = [];
                 currentUploadedDesignFile = null;
                 renderCart();
+                if (cartItemProduct) cartItemProduct.value = '';
                 cartToggleMeter.checked = false;
                 toggleMeterView();
                 window.switchDesignSource('upload');
                 window.removeSelectedFile();
+                updateItemSubtotalPreview();
                 modalOverlay.classList.add('active');
             });
         }
@@ -3970,7 +4031,7 @@
             document.getElementById('stCatatanFinishing').value = p.catatan_finishing || '';
             document.getElementById('stFileDesain').value = p.file_desain || '';
             document.getElementById('stFileUpload').value = '';
-            
+
             const chosenText = document.getElementById('stFileChosenText');
             if (chosenText) chosenText.style.display = 'none';
             const spoofAlert = document.getElementById('stFileSpoofError');
@@ -3998,7 +4059,7 @@
                     p.detail_items.forEach((it, idx) => {
                         const itemCard = document.createElement('div');
                         itemCard.style.cssText = 'background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 10px 12px;';
-                        
+
                         let currentFileBadge = '';
                         if (it.file_desain) {
                             const fUrl = (it.file_desain.startsWith('http://') || it.file_desain.startsWith('https://'))
@@ -4211,22 +4272,11 @@
                     return false;
                 }
 
-                // Validasi Wajib Desain (File Upload Laptop, Link GDrive, atau File per Item)
-                const masterFileInp = document.getElementById('ordFileUpload');
-                const masterLinkInp = document.getElementById('ordFileDesain');
-                const hasMasterUpload = Boolean(currentUploadedDesignFile instanceof File) || Boolean(masterFileInp && masterFileInp.files && masterFileInp.files.length > 0);
-                const hasMasterLink = Boolean(masterLinkInp && masterLinkInp.value.trim());
-                const hasItemDesign = cartItems.some(it => Boolean(it._fileObj instanceof File) || Boolean(it.file_desain && String(it.file_desain).trim()));
-
-                if (!hasMasterUpload && !hasMasterLink && !hasItemDesign) {
+                // Validasi bahwa setiap item dalam keranjang memiliki file desain
+                const unassignedItem = cartItems.find(item => !item._fileObj && !item.file_desain);
+                if (unassignedItem) {
                     e.preventDefault();
-                    alert('Pesanan belum memiliki file desain!\n\nSilakan upload file desain dari laptop atau cantumkan link Google Drive pada Bagian 1 sebelum menyimpan pesanan.');
-                    const dropzone = document.querySelector('.file-upload-dropzone') || masterLinkInp;
-                    if (dropzone) {
-                        dropzone.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                        dropzone.style.outline = '2px dashed #DC2626';
-                        setTimeout(() => { dropzone.style.outline = ''; }, 3500);
-                    }
+                    alert(`Item "${unassignedItem.nama_produk}" belum memiliki file desain atau link Google Drive! Wajib mengunggah desain sebelum pesanan disimpan.`);
                     return false;
                 }
 
@@ -4400,15 +4450,12 @@
             }
         });
 
-        // 5. DESIGN GALLERY MODAL (MULTI-ITEM & SINGLE-ITEM DESIGN VIEWER)
+        // 5. DESIGN GALLERY MODAL (MULTI-ITEM DESIGN VIEWER)
         const galleryModalOverlay = document.getElementById('designGalleryModalOverlay');
         const galleryTitleCode = document.getElementById('galleryKodePesanan');
-        const galleryModalHeadingText = document.getElementById('galleryModalHeadingText');
-        const galleryModalTitleIcon = document.getElementById('galleryModalTitleIcon');
-        const galleryModalSubtitle = document.getElementById('galleryModalSubtitle');
         const galleryContainer = document.getElementById('galleryItemsContainer');
 
-        window.openDesignGalleryModal = function (items, kodePesanan, masterFile, pesananObj) {
+        window.openDesignGalleryModal = function (items, kodePesanan, masterFile) {
             if (!galleryModalOverlay || !galleryContainer) return;
 
             galleryTitleCode.textContent = kodePesanan;
@@ -4417,14 +4464,6 @@
             let itemsList = [];
             if (Array.isArray(items) && items.length > 0) {
                 itemsList = items;
-            } else if (pesananObj) {
-                itemsList = [{
-                    nama_produk: pesananObj.nama_produk ? pesananObj.nama_produk.replace(/\s*\(\+\s*\d+\s*produk lainnya\)/i, '') : 'Produk Utama',
-                    ukuran: pesananObj.jumlah_ukuran || 'Standard',
-                    qty: 1,
-                    satuan: '',
-                    file_desain: masterFile || pesananObj.file_desain
-                }];
             } else if (masterFile) {
                 itemsList = [{
                     nama_produk: 'Produk Utama',
@@ -4435,24 +4474,8 @@
                 }];
             }
 
-            const isSingle = itemsList.length <= 1;
-
-            if (galleryModalHeadingText) {
-                galleryModalHeadingText.textContent = isSingle ? 'Preview File Desain' : 'Galeri File Desain';
-            }
-            if (galleryModalTitleIcon) {
-                galleryModalTitleIcon.className = isSingle ? 'fa-solid fa-image' : 'fa-solid fa-images';
-            }
-            if (galleryModalSubtitle) {
-                galleryModalSubtitle.textContent = isSingle
-                    ? 'File desain cetak yang dilampirkan pada pesanan ini:'
-                    : `Semua file desain cetak yang dilampirkan untuk masing-masing item pada pesanan ini (${itemsList.length} item):`;
-            }
-
-            galleryContainer.className = isSingle ? 'gallery-grid is-single' : 'gallery-grid';
-
             itemsList.forEach((it, idx) => {
-                const fPath = it.file_desain || masterFile || (pesananObj ? pesananObj.file_desain : null);
+                const fPath = it.file_desain || masterFile;
                 const card = document.createElement('div');
                 card.className = 'gallery-card';
 
@@ -4469,27 +4492,25 @@
 
                     if (isImage) {
                         thumbHtml = `
-                            <a href="${fUrl}" target="_blank" title="Klik untuk memperbesar / buka file" style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; text-decoration:none;">
-                                <img src="${fUrl}" alt="Desain ${it.nama_produk || 'Item'}" class="gallery-thumb-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                <div style="display:none; align-items:center; justify-content:center; width:100%; height:100%; color:#2563EB; font-size:36px;">
-                                    <i class="fa-solid fa-file-image"></i>
-                                </div>
-                            </a>
+                            <img src="${fUrl}" alt="Desain Item ${idx + 1}" class="gallery-thumb-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <div style="display:none; align-items:center; justify-content:center; width:100%; height:100%; color:#2563EB; font-size:32px;">
+                                <i class="fa-solid fa-file-image"></i>
+                            </div>
                         `;
                     } else if (isDrive) {
                         thumbHtml = `
-                            <a href="${fUrl}" target="_blank" title="Buka di Google Drive" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; color:#0284C7; gap:6px; text-decoration:none;">
+                            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; color:#0284C7; gap:6px;">
                                 <i class="fa-brands fa-google-drive" style="font-size:36px;"></i>
                                 <span style="font-size:11px; font-weight:700;">Google Drive</span>
-                            </a>
+                            </div>
                         `;
                     } else {
                         const ext = (fPath.split('.').pop() || 'FILE').toUpperCase();
                         thumbHtml = `
-                            <a href="${fUrl}" target="_blank" title="Buka / Download File" style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; color:#2563EB; gap:6px; text-decoration:none;">
+                            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; color:#2563EB; gap:6px;">
                                 <i class="fa-solid fa-file-lines" style="font-size:36px;"></i>
                                 <span style="font-size:11px; font-weight:700;">${ext}</span>
-                            </a>
+                            </div>
                         `;
                     }
 
@@ -4499,24 +4520,18 @@
                         </a>
                     `;
                 } else {
-                    thumbHtml = `<div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; color:#94A3B8; font-size:11.5px; font-weight:600;">Tidak ada file desain</div>`;
-                    btnHtml = `<span style="font-size:11px; color:#94A3B8; text-align:center; padding:6px; background:#F8FAFC; border-radius:6px;">Tanpa Desain</span>`;
+                    thumbHtml = `<div style="display:flex; align-items:center; justify-content:center; width:100%; height:100%; color:#94A3B8; font-size:11px;">Tidak ada file</div>`;
+                    btnHtml = `<span style="font-size:11px; color:#94A3B8; text-align:center; padding:6px;">Tanpa Desain</span>`;
                 }
-
-                const itemBadgeLabel = isSingle ? 'Desain Produk' : `Item ${idx + 1}`;
-                let metaParts = [];
-                if (it.ukuran && it.ukuran !== '-') metaParts.push(it.ukuran);
-                if (it.qty) metaParts.push(`${it.qty} ${it.satuan || 'Pcs'}`.trim());
-                const metaString = metaParts.join(' • ') || 'Standard';
 
                 card.innerHTML = `
                     <div class="gallery-thumb-wrap">
                         ${thumbHtml}
-                        <span style="position:absolute; top:8px; left:8px; background:rgba(15, 23, 42, 0.75); color:#fff; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">${itemBadgeLabel}</span>
+                        <span style="position:absolute; top:8px; left:8px; background:rgba(15, 23, 42, 0.75); color:#fff; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">Item ${idx + 1}</span>
                     </div>
                     <div class="gallery-card-body">
-                        <div class="gallery-card-title">${it.nama_produk || 'Produk Cetak'}</div>
-                        <div class="gallery-card-meta">${metaString}</div>
+                        <div class="gallery-card-title">${it.nama_produk}</div>
+                        <div class="gallery-card-meta">${it.ukuran || 'Standard'} • ${it.qty || 1} ${it.satuan || 'Pcs'}</div>
                         ${btnHtml}
                     </div>
                 `;
@@ -4529,14 +4544,6 @@
         window.closeDesignGalleryModal = function () {
             if (galleryModalOverlay) galleryModalOverlay.classList.remove('active');
         };
-
-        if (galleryModalOverlay) {
-            galleryModalOverlay.addEventListener('click', function (e) {
-                if (e.target === galleryModalOverlay) {
-                    closeDesignGalleryModal();
-                }
-            });
-        }
 
         // Close on Escape key
         document.addEventListener('keydown', function (e) {
