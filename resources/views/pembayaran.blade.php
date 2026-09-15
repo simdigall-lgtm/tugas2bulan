@@ -277,7 +277,7 @@
         /* 2 Column Grid Layout */
         .grid-2col {
             display: grid;
-            grid-template-columns: 305px minmax(0, 1fr);
+            grid-template-columns: 335px minmax(0, 1fr);
             gap: 16px;
             align-items: start;
         }
@@ -609,7 +609,7 @@
         .pay-type-card {
             border: 1.5px solid #CBD5E1;
             border-radius: 8px;
-            padding: 9px 12px;
+            padding: 9px 10px;
             background: #FFFFFF;
             cursor: pointer;
             transition: all 0.15s ease;
@@ -693,11 +693,11 @@
                                         
                                         $statusBadgeText = '';
                                         if ($isAlreadyLunas) {
-                                            $statusBadgeText = ' [LUNAS]';
+                                            $statusBadgeText = ' • Lunas';
                                         } elseif ($alreadyPaid > 0) {
-                                            $statusBadgeText = ' [DP - Sisa Rp ' . number_format($remaining, 0, ',', '.') . ']';
+                                            $statusBadgeText = ' • Sisa Rp ' . number_format($remaining, 0, ',', '.');
                                         } else {
-                                            $statusBadgeText = ' [Belum Bayar - Rp ' . number_format($remaining, 0, ',', '.') . ']';
+                                            $statusBadgeText = ' (Rp ' . number_format($remaining, 0, ',', '.') . ')';
                                         }
                                     @endphp
                                     <option value="{{ $p->kode_pesanan }}" 
@@ -709,7 +709,7 @@
                                         data-tanggal="{{ $orderDateVal }}"
                                         data-tanggal-fmt="{{ $orderDateFormatted }}"
                                         {{ $isAlreadyLunas ? 'disabled style=color:#94A3B8;background:#F1F5F9;' : '' }}>
-                                        {{ $p->kode_pesanan }} – {{ $p->nama_pelanggan }}{{ $statusBadgeText }}
+                                        {{ $p->kode_pesanan }} • {{ Str::limit($p->nama_pelanggan, 14) }}{{ $statusBadgeText }}
                                     </option>
                                 @endforeach
                             </select>
@@ -838,18 +838,18 @@
                             <label style="font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 6px; display: block; white-space: nowrap;">Pilihan Pembayaran:</label>
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
                                 <button type="button" id="btnPayTypeFull" class="pay-type-card active" onclick="selectPaymentType('full')">
-                                    <div style="display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 800; color: #1E3A8A; white-space: nowrap;">
+                                    <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; color: #1E3A8A; white-space: nowrap;">
                                         <i class="fa-solid fa-circle-check" style="color: #16A34A; flex-shrink: 0;"></i>
-                                        <span style="white-space: nowrap;">Pelunasan Penuh</span>
+                                        <span style="white-space: nowrap;">Bayar Lunas</span>
                                     </div>
                                     <div id="fullPayDisplay" style="font-size: 11px; color: #64748B; margin-top: 3px; text-align: left; white-space: nowrap;">Sisa: Rp 0</div>
                                 </button>
                                 <button type="button" id="btnPayTypeDp" class="pay-type-card" onclick="selectPaymentType('dp')">
-                                    <div style="display: flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 800; color: #B45309; white-space: nowrap;">
+                                    <div style="display: flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 800; color: #B45309; white-space: nowrap;">
                                         <i class="fa-solid fa-clock" style="color: #D97706; flex-shrink: 0;"></i>
-                                        <span style="white-space: nowrap;">Bayar DP/Sebagian</span>
+                                        <span style="white-space: nowrap;">Bayar DP</span>
                                     </div>
-                                    <div style="font-size: 6px; color: #64748B; margin-top: 3px; text-align: left; white-space: nowrap;">Input nominal DP</div>
+                                    <div style="font-size: 11px; color: #64748B; margin-top: 3px; text-align: left; white-space: nowrap;">Input nominal DP</div>
                                 </button>
                             </div>
                         </div>
@@ -883,7 +883,7 @@
                             </div>
 
                             <!-- Live Status Info Sisa Tagihan -->
-                            <div id="livePayStatusPreview" style="display: none; margin-top: 8px; font-size: 11.5px; padding: 7px 10px; border-radius: 6px; font-weight: 700; white-space: nowrap;"></div>
+                            <div id="livePayStatusPreview" style="display: none; margin-top: 8px; font-size: 11.5px; padding: 7px 10px; border-radius: 6px; font-weight: 700; line-height: 1.4;"></div>
                         </div>
 
                         <!-- Cashier Change Box (Hanya Tampil Jika Tunai) -->
