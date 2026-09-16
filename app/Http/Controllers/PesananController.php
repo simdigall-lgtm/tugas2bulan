@@ -37,7 +37,12 @@ class PesananController extends Controller
     {
         $validated = $request->validate([
             'nama_pelanggan' => 'required|string|max:255',
+            'catatan_finishing' => 'required|string|min:2',
             'status' => 'nullable|string',
+        ], [
+            'nama_pelanggan.required' => 'Nama pelanggan wajib diisi.',
+            'catatan_finishing.required' => 'Detail Finishing Cetak wajib diisi.',
+            'catatan_finishing.min' => 'Detail Finishing Cetak minimal 2 karakter.',
         ]);
 
         $statusProduksi = 'Antrean Cetak'; // Selalu otomatis antrean cetak untuk pesanan baru
@@ -58,9 +63,14 @@ class PesananController extends Controller
         if (!empty($items)) {
             // Multi-Item Processing
             $itemCount = count($items);
-            foreach ($items as $idx => $it) {
+            foreach ($items as $idx => &$it) {
                 $sub = floatval($it['subtotal'] ?? 0);
                 $totalHarga += $sub;
+
+                // Sanitasi satuan: Jika satuan tertulis 'Meter', ubah menjadi 'Pcs'
+                if (isset($it['satuan']) && strtolower($it['satuan']) === 'meter') {
+                    $it['satuan'] = 'Pcs';
+                }
 
                 // Decrement stock for product
                 $prod = Produk::where('nama_produk', $it['nama_produk'])->first();
@@ -69,6 +79,7 @@ class PesananController extends Controller
                     $prod->decrement('stok', min($q, $prod->stok));
                 }
             }
+            unset($it);
 
             $namaProdukUtama = $items[0]['nama_produk'];
             if ($itemCount > 1) {
@@ -76,7 +87,10 @@ class PesananController extends Controller
                 $jumlahUkuranSummary = "{$itemCount} Macam Item";
             } else {
                 $firstQty = $items[0]['qty'] ?? 1;
-                $firstUnit = $items[0]['satuan'] ?? 'pcs';
+                $firstUnit = $items[0]['satuan'] ?? 'Pcs';
+                if (strtolower($firstUnit) === 'meter') {
+                    $firstUnit = 'Pcs';
+                }
                 $firstUkuran = $items[0]['ukuran'] ?? '';
                 $jumlahUkuranSummary = trim("{$firstQty} {$firstUnit} " . ($firstUkuran ? "({$firstUkuran})" : ""));
             }
@@ -105,6 +119,9 @@ class PesananController extends Controller
 
             $jumlahVal = $request->input('jumlah_val', $request->input('jumlah', '1'));
             $jumlahUnit = $request->input('jumlah_unit', 'Pcs');
+            if (strtolower($jumlahUnit) === 'meter') {
+                $jumlahUnit = 'Pcs';
+            }
             $ukuranVal = trim($request->input('ukuran_val', $request->input('ukuran', '')));
             $formattedUkuran = !empty($ukuranVal) ? " ({$ukuranVal})" : '';
             $jumlahUkuranSummary = "{$jumlahVal} {$jumlahUnit}{$formattedUkuran}";

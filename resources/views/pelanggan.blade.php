@@ -834,18 +834,39 @@
         @media (max-width: 768px) {
             .page-header-row {
                 flex-direction: column;
-                align-items: flex-start;
-                gap: 16px;
+                align-items: stretch;
+                gap: 14px;
+            }
+
+            .btn-add {
+                width: 100%;
+                justify-content: center;
             }
 
             .filter-toolbar {
                 flex-direction: column;
                 align-items: stretch;
+                gap: 10px;
+            }
+
+            .filter-actions,
+            .filter-select {
+                width: 100%;
             }
 
             .customer-search-box,
             .customer-search-box input {
                 width: 100%;
+            }
+
+            .custom-table th,
+            .custom-table td {
+                white-space: nowrap;
+            }
+
+            .modal-box {
+                max-width: 95% !important;
+                padding: 20px 16px;
             }
         }
     </style>

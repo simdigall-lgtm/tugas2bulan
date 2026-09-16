@@ -714,6 +714,44 @@
                 flex-direction: column;
                 gap: 16px;
             }
+
+            .pesanan-table-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                padding: 12px 14px;
+            }
+
+            .toolbar-search-wrap {
+                min-width: 100%;
+                max-width: 100%;
+            }
+
+            .toolbar-filters-wrap {
+                width: 100%;
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 8px;
+            }
+
+            .toolbar-filters-wrap .toolbar-select {
+                width: 100%;
+            }
+
+            .cart-builder-box {
+                padding: 10px 8px;
+            }
+
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)) !important;
+                gap: 10px !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .toolbar-filters-wrap {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Unified Pesanan Table Toolbar */
@@ -1004,6 +1042,56 @@
         .badge-multi-item-btn.active .chevron-icon {
             transform: rotate(180deg);
             color: #FFFFFF;
+        }
+
+        /* Clean & Minimalist Product Badges in Column Produk */
+        .badge-multi-product-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            background: #EEF2FF;
+            color: #1E3A8A;
+            padding: 2.5px 8px;
+            border-radius: 5px;
+            font-weight: 700;
+            font-size: 11px;
+            border: 1px solid #C7D2FE;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            line-height: 1.3;
+            text-align: left;
+            user-select: none;
+        }
+
+        .badge-multi-product-btn:hover {
+            background: #E0E7FF;
+            border-color: #818CF8;
+            color: #1E40AF;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(30, 58, 138, 0.12);
+        }
+
+        .badge-single-design-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #F8FAFC;
+            color: #334155;
+            padding: 2px 7px;
+            border-radius: 5px;
+            font-weight: 600;
+            font-size: 11px;
+            border: 1px solid #CBD5E1;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            line-height: 1.3;
+            user-select: none;
+        }
+
+        .badge-single-design-btn:hover {
+            background: #EEF2FF;
+            border-color: #A5B4FC;
+            color: #1E3A8A;
         }
 
         /* Floating Popover */
@@ -2237,24 +2325,47 @@
                                             {{ $cleanProductName ?: '-' }}
                                         </div>
 
+                                        @php
+                                            $subUkuran = trim($pesanan->jumlah_ukuran ?? '');
+                                            // Ubah satuan historis "Meter" pada Qty menjadi "Pcs" (cth: "19 Meter (" -> "19 Pcs (")
+                                            $subUkuran = preg_replace('/^(\d+)\s+Meter\s*\(/i', '$1 Pcs (', $subUkuran);
+                                            $isMacam = stripos($subUkuran, 'macam') !== false;
+
+                                            $singleItemForGallery = !empty($detailItems) ? $detailItems : [[
+                                                'nama_produk' => $cleanProductName,
+                                                'ukuran' => $subUkuran ?: 'Standard',
+                                                'qty' => $pesanan->jumlah ?? 1,
+                                                'satuan' => 'Pcs',
+                                                'file_desain' => $pesanan->file_desain
+                                            ]];
+
+                                            $hasDesignFile = !empty($pesanan->file_desain) || (isset($detailItems[0]['file_desain']) && !empty($detailItems[0]['file_desain']));
+                                        @endphp
+
                                         @if($itemsCount > 1)
                                             <div style="margin-top: 4px;">
-                                                <button type="button" class="badge-multi-item-btn"
-                                                    onclick='toggleItemsPopover(event, this, @json($detailItems), "{{ $pesanan->kode_pesanan }}", {{ $pesanan->total_harga }}, @json($pesanan))'
-                                                    title="{{ $otherTooltip }}">
-                                                    <i class="fa-solid fa-layer-group"></i> +{{ $itemsCount - 1 }} produk
-                                                    lainnya
-                                                    <i class="fa-solid fa-chevron-down chevron-icon"></i>
+                                                <button type="button" class="badge-multi-product-btn"
+                                                    onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}", @json($pesanan))'
+                                                    title="Lihat detail item & galeri desain">
+                                                    <i class="fa-solid fa-layer-group"></i>
+                                                    <span>+{{ $itemsCount - 1 }} produk lainnya</span>
                                                 </button>
                                             </div>
                                         @else
-                                            @php
-                                                $subUkuran = trim($pesanan->jumlah_ukuran ?? '');
-                                                $isMacam = stripos($subUkuran, 'macam') !== false;
-                                            @endphp
                                             @if(!$isMacam && !empty($subUkuran) && $subUkuran !== '-')
                                                 <div style="color: #64748B; font-size: 11.5px; margin-top: 2px;">
                                                     {{ $subUkuran }}
+                                                </div>
+                                            @endif
+
+                                            @if($hasDesignFile)
+                                                <div style="margin-top: 4px;">
+                                                    <button type="button" class="badge-single-design-btn"
+                                                        onclick='openDesignGalleryModal(@json($singleItemForGallery), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}", @json($pesanan))'
+                                                        title="Lihat Pratinjau Desain">
+                                                        <i class="fa-regular fa-image"></i>
+                                                        <span>Lihat Desain</span>
+                                                    </button>
                                                 </div>
                                             @endif
                                         @endif
@@ -2291,31 +2402,13 @@
                                     </td>
                                     <td class="td-nowrap" style="text-align:right;">
                                         <div style="display: inline-flex; align-items: center; justify-content: flex-end; gap: 6px;">
-                                            @if($itemsCount > 1)
-                                                <button type="button" class="design-file-icon multi"
-                                                    onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}")'
-                                                    title="Buka Galeri Desain ({{ $itemsCount }} File)">
-                                                    <i class="fa-solid fa-images"></i>
-                                                    <span>{{ $itemsCount }} Desain</span>
-                                                </button>
-                                            @elseif(!empty($pesanan->file_desain))
-                                                @php
-                                                    $fUrl = \Illuminate\Support\Str::startsWith($pesanan->file_desain, ['http://', 'https://']) ? $pesanan->file_desain : asset(ltrim($pesanan->file_desain, '/'));
-                                                @endphp
-                                                <a href="{{ $fUrl }}" target="_blank" class="design-file-icon"
-                                                    title="Buka File Desain ({{ basename($pesanan->file_desain) }})">
-                                                    <i class="fa-solid fa-file-image"></i>
-                                                </a>
-                                            @endif
-
                                             <div class="action-dropdown">
                                                 <button type="button" class="action-icon-btn action-toggle" title="Menu Aksi"><i
                                                         class="fa-solid fa-ellipsis-vertical"></i></button>
                                             <div class="dropdown-menu">
                                                 <button type="button" class="dropdown-item"
-                                                    onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}")'>
-                                                    <i class="fa-solid fa-images" style="color:#2563EB;"></i> Galeri File
-                                                    Desain ({{ $itemsCount }})
+                                                    onclick='openDesignGalleryModal(@json($itemsCount > 1 ? $detailItems : $singleItemForGallery), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}", @json($pesanan))'>
+                                                    <i class="fa-solid fa-images" style="color:#2563EB;"></i> {{ $itemsCount > 1 ? "Galeri File Desain ({$itemsCount})" : "Pratinjau File Desain" }}
                                                 </button>
                                                 <button type="button" class="dropdown-item"
                                                     onclick='viewSpkDetail(@json($pesanan))'>
@@ -2783,16 +2876,27 @@
 
                             <!-- Detail Finishing Cetak -->
                             <div class="form-group" style="margin-bottom: 0;">
-                                <label for="ordCatatanFinishing">Detail Finishing Cetak</label>
-                                <textarea name="catatan_finishing" id="ordCatatanFinishing" rows="3"
-                                    placeholder="Contoh: Mata ayam 4 sudut, laminasi doff, selongsong atas-bawah..."
-                                    style="resize: none; font-size: 12.5px; height: 78px; padding: 8px 11px;"></textarea>
+                                <label for="ordCatatanFinishing" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
+                                    <span style="font-weight: 700; color: #1E293B;">Detail Finishing Cetak <span style="color: #DC2626; font-size: 13px;">*</span></span>
+                                    <span style="font-size: 10.5px; font-weight: 700; color: #DC2626; background: #FEF2F2; border: 1px solid #FCA5A5; padding: 1px 7px; border-radius: 4px;">
+                                        <i class="fa-solid fa-circle-exclamation"></i> Wajib Diisi
+                                    </span>
+                                </label>
+                                <textarea name="catatan_finishing" id="ordCatatanFinishing" rows="3" required
+                                    placeholder="Pilih opsi finishing cepat di bawah atau ketik instruksi finishing spesifik (contoh: Mata ayam 4 sudut, potong pas, laminasi doff, dll)..."
+                                    style="resize: none; font-size: 12.5px; height: 78px; padding: 8px 11px; transition: border-color 0.2s ease, background 0.2s ease;"></textarea>
+                                <div id="finishingErrorAlert" style="display: none; margin-top: 6px; padding: 7px 10px; background: #FEF2F2; border: 1px solid #F87171; border-radius: 6px; color: #B91C1C; font-size: 11.5px; font-weight: 700; align-items: center; gap: 6px;">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    <span>Detail Finishing Cetak wajib diisi sebelum menyimpan pesanan! Pilih salah satu tombol di bawah atau ketik instruksinya.</span>
+                                </div>
                             </div>
                         </div>
 
                         <!-- Quick Finishing Tag Pills -->
                         <div class="finishing-tags-row">
-                            <span class="finishing-tag-title">Pilihan Finishing:</span>
+                            <span class="finishing-tag-title">Pilihan Cepat:</span>
+                            <button type="button" class="tag-pill-btn"
+                                onclick="addFinishingTag('Standar / Tanpa Finishing')"><i class="fa-solid fa-check" style="color: #16A34A;"></i> Standar / Tanpa Finishing</button>
                             <button type="button" class="tag-pill-btn"
                                 onclick="addFinishingTag('Mata Ayam 4 Sudut')">Mata Ayam 4 Sudut</button>
                             <button type="button" class="tag-pill-btn"
@@ -2871,8 +2975,15 @@
                                 <div>
                                     <label
                                         style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Jumlah
-                                        (Qty)</label>
-                                    <input type="number" id="meterQty" min="1" value="1" placeholder="1">
+                                        (Pcs / Buah)</label>
+                                    <div class="compound-input-group" style="height: 36px;">
+                                        <input type="number" id="meterQty" min="1" value="1" placeholder="1" style="text-align: center; font-weight: 700;">
+                                        <select id="meterUnit" style="border: none; border-left: 1px solid #CBD5E1; background: #F8FAFC; font-weight: 700; font-size: 11.5px; color: #1E3A8A; padding: 0 6px;">
+                                            <option value="Pcs" selected>Pcs</option>
+                                            <option value="Lembar">Lembar</option>
+                                            <option value="Spanduk">Spanduk</option>
+                                        </select>
+                                    </div>
                                 </div>
                                 <div>
                                     <label
@@ -3340,8 +3451,7 @@
                         <button type="button" class="chip-btn" onclick="setPelunasanChip(200000)">200k</button>
                     </div>
                     <div id="pelunasanKembalianDisplay"
-                        style="margin-top: 6px; font-size: 12.5px; font-weight: 800; color: #16A34A; background: #DCFCE7; padding: 4px 8px; border-radius: 4px; display: inline-block;">
-                        Kembalian: Rp 0
+                        style="margin-top: 6px; font-size: 12.5px; font-weight: 800; color: #16A34A; background: #DCFCE7; padding: 4px 8px; border-radius: 4px; display: none;">
                     </div>
                 </div>
 
@@ -3355,7 +3465,7 @@
         </div>
     </div>
 
-    <!-- 5. MODAL GALERI DESAIN (MULTI-ITEM DESIGN VIEWER) -->
+    <!-- 5. MODAL GALERI DESAIN (MULTI-ITEM & SINGLE-ITEM DESIGN VIEWER) -->
     <div class="modal-overlay" id="designGalleryModalOverlay">
         <div class="modal-box modal-lg">
             <div class="modal-header">
@@ -3365,13 +3475,16 @@
                 </h3>
                 <button type="button" class="close-modal-btn" onclick="closeDesignGalleryModal()">&times;</button>
             </div>
-            <div style="font-size: 12.5px; color: #64748B; margin-bottom: 6px;">
+            <div id="gallerySubtitleText" style="font-size: 12.5px; color: #64748B; margin-bottom: 6px;">
                 Semua file desain cetak yang dilampirkan untuk masing-masing item pada pesanan ini:
             </div>
             <div id="galleryItemsContainer" class="gallery-grid">
                 <!-- Rendered dynamically via JS -->
             </div>
-            <div class="modal-actions" style="margin-top: 18px;">
+            <div class="modal-actions" style="margin-top: 18px; display: flex; justify-content: flex-end; gap: 8px;">
+                <button type="button" class="btn-cancel" id="gallerySpkBtn" style="display: none; background: #EFF6FF; color: #1D4ED8; border-color: #BFDBFE;">
+                    <i class="fa-solid fa-print"></i> Cetak SPK / Nota
+                </button>
                 <button type="button" class="btn-cancel" onclick="closeDesignGalleryModal()">Tutup</button>
             </div>
         </div>
@@ -3591,12 +3704,14 @@
                     const q = parseInt(meterQty.value) || 1;
                     const luas = p * l;
                     const sub = Math.round(luas * unitPrice * q);
+                    const meterUnitEl = document.getElementById('meterUnit');
+                    const mUnit = (meterUnitEl ? meterUnitEl.value : 'Pcs') || 'Pcs';
 
                     item = {
                         nama_produk: prodName,
                         ukuran: `${p} x ${l} Meter (${(luas * q).toFixed(1)} m²)`,
                         qty: q,
-                        satuan: 'Meter',
+                        satuan: mUnit,
                         harga: unitPrice,
                         subtotal: sub,
                         catatan: 'Ukuran Meteran: ' + p + ' x ' + l + ' m',
@@ -3708,6 +3823,8 @@
                     }
                 }
 
+                const unitDisplay = (it.satuan && it.satuan.toLowerCase() === 'meter') ? 'Pcs' : (it.satuan || 'Pcs');
+
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                         <td>
@@ -3715,7 +3832,7 @@
                             ${it.catatan ? '<div style="font-size:11px; color:#64748B; margin-top:2px;">' + it.catatan + '</div>' : ''}
                         </td>
                         <td><span style="display:inline-block; padding:2px 8px; background:#F1F5F9; border-radius:6px; font-size:11.5px; font-weight:600; color:#475569; border:1px solid #E2E8F0;">${it.ukuran}</span></td>
-                        <td style="font-weight:700; color:#1E293B;">${it.qty} ${it.satuan}</td>
+                        <td style="font-weight:700; color:#1E293B;">${it.qty} ${unitDisplay}</td>
                         <td>${designBadge}</td>
                         <td style="font-weight:700; color:#1E3A8A;">Rp ${it.subtotal.toLocaleString('id-ID')}</td>
                         <td style="text-align:right;">
@@ -3743,9 +3860,9 @@
                 document.getElementById('ordFallbackProduct').value = cartItems[0].nama_produk;
                 document.getElementById('ordFallbackTotal').value = total;
                 document.getElementById('ordFallbackJumlah').value = cartItems[0].qty;
-                document.getElementById('ordFallbackUnit').value = cartItems[0].satuan;
+                document.getElementById('ordFallbackUnit').value = (cartItems[0].satuan && cartItems[0].satuan.toLowerCase() === 'meter') ? 'Pcs' : cartItems[0].satuan;
                 document.getElementById('ordFallbackUkuran').value = cartItems[0].ukuran;
-                document.getElementById('ordFallbackJumlahUkuran').value = cartItems[0].qty + ' ' + cartItems[0].satuan + ' (' + cartItems[0].ukuran + ')';
+                document.getElementById('ordFallbackJumlahUkuran').value = cartItems[0].qty + ' ' + ((cartItems[0].satuan && cartItems[0].satuan.toLowerCase() === 'meter') ? 'Pcs' : cartItems[0].satuan) + ' (' + cartItems[0].ukuran + ')';
             }
         }
 
@@ -3753,9 +3870,32 @@
             const input = document.getElementById('ordCatatanFinishing');
             if (!input) return;
             const current = input.value.trim();
-            if (current.includes(tag)) return;
-            input.value = current ? current + ', ' + tag : tag;
+            if (tag === 'Standar / Tanpa Finishing') {
+                input.value = tag;
+            } else if (current === 'Standar / Tanpa Finishing') {
+                input.value = tag;
+            } else {
+                if (current.includes(tag)) return;
+                input.value = current ? current + ', ' + tag : tag;
+            }
+
+            input.style.borderColor = '#CBD5E1';
+            input.style.background = '#FFFFFF';
+            const alertBox = document.getElementById('finishingErrorAlert');
+            if (alertBox) alertBox.style.display = 'none';
         };
+
+        const finishingInputEl = document.getElementById('ordCatatanFinishing');
+        if (finishingInputEl) {
+            finishingInputEl.addEventListener('input', function () {
+                if (this.value.trim()) {
+                    this.style.borderColor = '#CBD5E1';
+                    this.style.background = '#FFFFFF';
+                    const alertBox = document.getElementById('finishingErrorAlert');
+                    if (alertBox) alertBox.style.display = 'none';
+                }
+            });
+        }
 
         // File Source Switcher & Anti-Spoofing Client Engine
         window.switchDesignSource = function (mode) {
@@ -4005,11 +4145,56 @@
                 window.switchDesignSource('upload');
                 window.removeSelectedFile();
                 updateItemSubtotalPreview();
+
+                // Reset state validasi finishing
+                const fAlert = document.getElementById('finishingErrorAlert');
+                if (fAlert) fAlert.style.display = 'none';
+                const fInput = document.getElementById('ordCatatanFinishing');
+                if (fInput) {
+                    fInput.style.borderColor = '#CBD5E1';
+                    fInput.style.background = '#FFFFFF';
+                }
+
                 modalOverlay.classList.add('active');
             });
         }
         if (closeBtn) closeBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
         if (cancelBtn) cancelBtn.addEventListener('click', () => modalOverlay.classList.remove('active'));
+
+        // Form Submit Validation: Finishing & Cart wajib terisi
+        if (addOrderForm) {
+            addOrderForm.addEventListener('submit', function (e) {
+                const cust = document.getElementById('ordCustomer');
+                if (!cust || !cust.value.trim()) {
+                    e.preventDefault();
+                    alert('Nama Pelanggan wajib diisi!');
+                    if (cust) cust.focus();
+                    return false;
+                }
+
+                const finishingInput = document.getElementById('ordCatatanFinishing');
+                const finishingVal = finishingInput ? finishingInput.value.trim() : '';
+                if (!finishingVal) {
+                    e.preventDefault();
+                    const alertBox = document.getElementById('finishingErrorAlert');
+                    if (alertBox) alertBox.style.display = 'flex';
+                    if (finishingInput) {
+                        finishingInput.style.borderColor = '#DC2626';
+                        finishingInput.style.background = '#FEF2F2';
+                        finishingInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                        finishingInput.focus();
+                    }
+                    alert('Detail Finishing Cetak wajib diisi sebelum menyimpan pesanan! Silakan pilih opsi finishing cepat (misal: Standar / Tanpa Finishing, Mata Ayam, dll) atau ketik catatan finishing.');
+                    return false;
+                }
+
+                if (cartItems.length === 0) {
+                    e.preventDefault();
+                    alert('Keranjang pesanan masih kosong! Silakan pilih produk cetak lalu klik Tambah ke Keranjang sebelum menyimpan pesanan.');
+                    return false;
+                }
+            });
+        }
 
         // Auto-check customer from URL param
         const urlParams = new URLSearchParams(window.location.search);
@@ -4235,11 +4420,16 @@
             const bayar = parseFloat(pelunasanJumlah.value) || 0;
             const uang = parseFloat(pelunasanUangDiterima.value) || 0;
             const diff = uang - bayar;
-            if (diff >= 0) {
+            if (diff === 0) {
+                pelunasanKembalianDisplay.style.display = 'none';
+                pelunasanKembalianDisplay.textContent = '';
+            } else if (diff > 0) {
+                pelunasanKembalianDisplay.style.display = 'inline-block';
                 pelunasanKembalianDisplay.style.color = '#16A34A';
                 pelunasanKembalianDisplay.style.background = '#DCFCE7';
                 pelunasanKembalianDisplay.textContent = 'Kembalian: Rp ' + diff.toLocaleString('id-ID');
             } else {
+                pelunasanKembalianDisplay.style.display = 'inline-block';
                 pelunasanKembalianDisplay.style.color = '#DC2626';
                 pelunasanKembalianDisplay.style.background = '#FEE2E2';
                 pelunasanKembalianDisplay.textContent = 'Kurang: Rp ' + Math.abs(diff).toLocaleString('id-ID');
@@ -4455,7 +4645,7 @@
         const galleryTitleCode = document.getElementById('galleryKodePesanan');
         const galleryContainer = document.getElementById('galleryItemsContainer');
 
-        window.openDesignGalleryModal = function (items, kodePesanan, masterFile) {
+        window.openDesignGalleryModal = function (items, kodePesanan, masterFile, pesananObj) {
             if (!galleryModalOverlay || !galleryContainer) return;
 
             galleryTitleCode.textContent = kodePesanan;
@@ -4466,12 +4656,19 @@
                 itemsList = items;
             } else if (masterFile) {
                 itemsList = [{
-                    nama_produk: 'Produk Utama',
-                    ukuran: 'Standard',
-                    qty: 1,
+                    nama_produk: (pesananObj && pesananObj.nama_produk) ? pesananObj.nama_produk : 'Produk Utama',
+                    ukuran: (pesananObj && pesananObj.jumlah_ukuran) ? pesananObj.jumlah_ukuran : 'Standard',
+                    qty: (pesananObj && pesananObj.jumlah) ? pesananObj.jumlah : 1,
                     satuan: 'Pcs',
                     file_desain: masterFile
                 }];
+            }
+
+            const subEl = document.getElementById('gallerySubtitleText');
+            if (subEl) {
+                subEl.textContent = itemsList.length > 1
+                    ? `Menampilkan ${itemsList.length} rincian item produk cetak beserta file desain pada pesanan ini:`
+                    : `Pratinjau berkas desain cetak dan spesifikasi item untuk pesanan ini:`;
             }
 
             itemsList.forEach((it, idx) => {
@@ -4492,7 +4689,7 @@
 
                     if (isImage) {
                         thumbHtml = `
-                            <img src="${fUrl}" alt="Desain Item ${idx + 1}" class="gallery-thumb-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            <img src="${fUrl}" alt="Desain ${it.nama_produk || 'Item'}" class="gallery-thumb-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                             <div style="display:none; align-items:center; justify-content:center; width:100%; height:100%; color:#2563EB; font-size:32px;">
                                 <i class="fa-solid fa-file-image"></i>
                             </div>
@@ -4516,7 +4713,7 @@
 
                     btnHtml = `
                         <a href="${fUrl}" target="_blank" class="gallery-card-btn">
-                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka File Desain
+                            <i class="fa-solid fa-arrow-up-right-from-square"></i> Buka File Asli
                         </a>
                     `;
                 } else {
@@ -4524,19 +4721,40 @@
                     btnHtml = `<span style="font-size:11px; color:#94A3B8; text-align:center; padding:6px;">Tanpa Desain</span>`;
                 }
 
+                const unitDisplay = (it.satuan && it.satuan.toLowerCase() === 'meter') ? 'Pcs' : (it.satuan || 'Pcs');
+                const badgeLabel = itemsList.length > 1 ? `Item ${idx + 1}` : `Item Produk`;
+                const subtotalText = (it.subtotal || it.harga) ? `<div style="font-size:12px; font-weight:800; color:#1E3A8A; margin-top:2px;">Rp ${(parseFloat(it.subtotal || it.harga || 0)).toLocaleString('id-ID')}</div>` : '';
+                const noteText = it.catatan ? `<div style="font-size:10.5px; color:#64748B; background:#F8FAFC; padding:3px 6px; border-radius:4px; border:1px solid #E2E8F0; margin-top:3px;"><i class="fa-solid fa-note-sticky"></i> ${it.catatan}</div>` : '';
+
                 card.innerHTML = `
                     <div class="gallery-thumb-wrap">
                         ${thumbHtml}
-                        <span style="position:absolute; top:8px; left:8px; background:rgba(15, 23, 42, 0.75); color:#fff; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">Item ${idx + 1}</span>
+                        <span style="position:absolute; top:8px; left:8px; background:rgba(15, 23, 42, 0.8); color:#fff; font-size:10px; font-weight:800; padding:2px 7px; border-radius:4px;">${badgeLabel}</span>
                     </div>
                     <div class="gallery-card-body">
-                        <div class="gallery-card-title">${it.nama_produk}</div>
-                        <div class="gallery-card-meta">${it.ukuran || 'Standard'} • ${it.qty || 1} ${it.satuan || 'Pcs'}</div>
+                        <div class="gallery-card-title" title="${it.nama_produk}">${it.nama_produk}</div>
+                        <div class="gallery-card-meta">${it.ukuran || 'Standard'} • ${it.qty || 1} ${unitDisplay}</div>
+                        ${subtotalText}
+                        ${noteText}
                         ${btnHtml}
                     </div>
                 `;
                 galleryContainer.appendChild(card);
             });
+
+            // Action button in modal footer
+            const spkBtn = document.getElementById('gallerySpkBtn');
+            if (spkBtn) {
+                if (pesananObj) {
+                    spkBtn.style.display = 'inline-flex';
+                    spkBtn.onclick = function () {
+                        closeDesignGalleryModal();
+                        if (window.viewSpkDetail) window.viewSpkDetail(pesananObj);
+                    };
+                } else {
+                    spkBtn.style.display = 'none';
+                }
+            }
 
             galleryModalOverlay.classList.add('active');
         };

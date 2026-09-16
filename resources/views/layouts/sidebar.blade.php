@@ -1,7 +1,7 @@
 <!-- Sidebar Navigation -->
 <aside class="sidebar">
     <div>
-        <div class="sidebar-brand">
+        <div class="sidebar-brand" style="display: flex; align-items: center; justify-content: space-between;">
             <a href="{{ route('dashboard') }}" title="Ke Dasbor Utama" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 11px;">
                 <img src="{{ asset('assets/images/sipekan-logo.png') }}?v={{ file_exists(public_path('assets/images/sipekan-logo.png')) ? filemtime(public_path('assets/images/sipekan-logo.png')) : time() }}" alt="SIPEKAN Logo" style="height: 44px; width: auto; object-fit: contain; flex-shrink: 0; display: block;">
                 <div style="display: flex; flex-direction: column; justify-content: center; gap: 2px;">
@@ -9,6 +9,9 @@
                     <div class="brand-tag" style="line-height: 1.2; font-size: 11px; margin: 0; color: #64748B; font-weight: 500;">{{ ($isKasir ?? false) ? 'Konsol Kasir' : 'Konsol Admin' }}</div>
                 </div>
             </a>
+            <button type="button" class="sidebar-close-btn" id="sidebarCloseBtn" title="Tutup Navigasi">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
         </div>
 
         <nav class="sidebar-menu">

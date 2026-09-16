@@ -309,6 +309,52 @@
         .btn-link:hover {
             color: #111827;
         }
+
+        /* Responsive Breakpoints for Mobile */
+        @media (max-width: 480px) {
+            body {
+                padding: 16px 12px;
+            }
+
+            .twofa-card {
+                padding: 24px 16px;
+                border-radius: 14px;
+            }
+
+            .brand-title {
+                font-size: 20px;
+            }
+
+            .brand-subtitle {
+                font-size: 12.5px;
+                margin-bottom: 14px;
+            }
+
+            .otp-inputs-wrapper {
+                gap: 5px;
+                margin-bottom: 18px;
+            }
+
+            .otp-digit-input {
+                width: calc((100% - 25px) / 6);
+                max-width: 46px;
+                height: 52px;
+                font-size: 18px;
+                border-radius: 8px;
+            }
+
+            .setup-qr-wrapper {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+
+            .footer-actions {
+                flex-direction: column;
+                gap: 12px;
+                align-items: center;
+            }
+        }
     </style>
 </head>
 <body>

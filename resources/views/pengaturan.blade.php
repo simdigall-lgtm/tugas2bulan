@@ -432,6 +432,20 @@
                 align-items: flex-start;
             }
         }
+
+        @media (max-width: 480px) {
+            .settings-card {
+                border-radius: 12px;
+            }
+            .card-section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .section-icon {
+                display: none;
+            }
+        }
     </style>
 </head>
 

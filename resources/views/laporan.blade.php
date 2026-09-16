@@ -749,6 +749,19 @@
             .table-filter-controls { width: 100%; justify-content: space-between; }
         }
 
+        @media (max-width: 480px) {
+            .segmented-filter-container {
+                grid-template-columns: 1fr;
+            }
+            .table-filter-controls {
+                flex-direction: column;
+                gap: 8px;
+            }
+            .table-filter-controls select {
+                width: 100%;
+            }
+        }
+
         /* Print Media Styling */
         @media print {
             .sidebar, .topbar, .filter-card, .table-toolbar, .table-pagination-footer, .btn-export, .brand-tag { display: none !important; }

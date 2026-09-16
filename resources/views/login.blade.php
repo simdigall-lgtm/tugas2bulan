@@ -445,7 +445,6 @@
             margin: 0;
         }
 
-        /* Responsive Breakpoints */
         @media (max-width: 820px) {
             .login-card {
                 flex-direction: column;
@@ -458,6 +457,39 @@
 
             .login-form-container {
                 padding: 36px 28px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 16px 12px;
+            }
+
+            .login-card {
+                border-radius: 14px;
+            }
+
+            .login-form-container {
+                padding: 26px 18px;
+            }
+
+            .brand-title {
+                font-size: 21px !important;
+            }
+
+            .brand-subtitle {
+                font-size: 12px !important;
+            }
+
+            .form-subrow {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .forgot-modal-box {
+                padding: 20px 16px;
+                border-radius: 14px;
             }
         }
     </style>

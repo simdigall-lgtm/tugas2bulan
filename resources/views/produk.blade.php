@@ -688,6 +688,51 @@
             font-size: 13.5px;
             cursor: pointer;
         }
+
+        /* Responsive Media Queries */
+        @media (max-width: 768px) {
+            .page-header-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 14px;
+            }
+
+            .btn-add {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .card-header-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+                padding: 16px 14px;
+            }
+
+            .filter-input-box {
+                width: 100%;
+            }
+
+            .custom-table th,
+            .custom-table td {
+                white-space: nowrap;
+            }
+
+            .modal-box {
+                max-width: 95% !important;
+                padding: 20px 16px;
+            }
+
+            .form-actions {
+                flex-direction: column-reverse;
+                gap: 8px;
+            }
+
+            .form-actions button {
+                width: 100%;
+                justify-content: center;
+            }
+        }
     </style>
 </head>
 

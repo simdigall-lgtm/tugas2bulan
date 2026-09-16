@@ -638,6 +638,40 @@
                 overflow-x: auto;
             }
         }
+
+        @media (max-width: 768px) {
+            .page-header-row {
+                margin-bottom: 16px;
+            }
+
+            .card-header-row {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+                padding: 14px 16px;
+            }
+
+            .custom-table th,
+            .custom-table td {
+                white-space: nowrap;
+            }
+
+            .quick-cash-row {
+                flex-wrap: wrap;
+                gap: 6px;
+            }
+
+            .quick-cash-btn {
+                flex: 1 1 calc(50% - 6px);
+                text-align: center;
+                justify-content: center;
+            }
+
+            .modal-box {
+                max-width: 95% !important;
+                padding: 20px 16px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -896,10 +930,7 @@
                             </div>
                             <input type="number" name="uang_diterima" id="uangDiterimaInput" class="form-control" placeholder="Contoh: 100000" min="0" step="any" style="font-size: 13.5px; font-weight: 700; color: #0F172A;">
                             
-                            <div style="margin-top: 10px;">
-                                <div id="liveKembalianDisplay" style="font-size: 12px; font-weight: 800; color: #16A34A; background: #DCFCE7; border: 1px solid #BBF7D0; padding: 6px 12px; border-radius: 6px; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap;">
-                                    <i class="fa-solid fa-check-double"></i> <span>Kembalian: Rp 0 (Uang Pas)</span>
-                                </div>
+                            <div id="liveKembalianDisplay" style="margin-top: 10px; font-size: 12px; font-weight: 800; color: #16A34A; background: #DCFCE7; border: 1px solid #BBF7D0; padding: 6px 12px; border-radius: 6px; display: none; align-items: center; gap: 6px; white-space: nowrap;">
                             </div>
                             <div id="cashierWarningUnderpaid" style="display: none; margin-top: 8px; font-size: 11.5px; color: #DC2626; font-weight: 700; background: #FEE2E2; border: 1px solid #FECACA; padding: 6px 10px; border-radius: 6px; white-space: nowrap;">
                                 <i class="fa-solid fa-triangle-exclamation"></i> Uang tunai fisik kurang dari tagihan! Silakan sesuaikan nominal.
@@ -1326,13 +1357,12 @@
                 const btnSubmit = document.getElementById('btnSubmitPayment');
 
                 if (diff === 0) {
-                    liveKembalianDisplay.style.color = '#166534';
-                    liveKembalianDisplay.style.background = '#DCFCE7';
-                    liveKembalianDisplay.style.border = '1px solid #BBF7D0';
-                    liveKembalianDisplay.innerHTML = '<i class="fa-solid fa-check-double"></i> <span>Kembalian: Rp 0 (Uang Pas)</span>';
+                    liveKembalianDisplay.style.display = 'none';
+                    liveKembalianDisplay.innerHTML = '';
                     if (warnUnderpaid) warnUnderpaid.style.display = 'none';
                     if (btnSubmit) btnSubmit.disabled = false;
                 } else if (diff > 0) {
+                    liveKembalianDisplay.style.display = 'inline-flex';
                     liveKembalianDisplay.style.color = '#065F46';
                     liveKembalianDisplay.style.background = '#D1FAE5';
                     liveKembalianDisplay.style.border = '1px solid #A7F3D0';
@@ -1340,6 +1370,7 @@
                     if (warnUnderpaid) warnUnderpaid.style.display = 'none';
                     if (btnSubmit) btnSubmit.disabled = false;
                 } else {
+                    liveKembalianDisplay.style.display = 'inline-flex';
                     liveKembalianDisplay.style.color = '#991B1B';
                     liveKembalianDisplay.style.background = '#FEE2E2';
                     liveKembalianDisplay.style.border = '1px solid #FECACA';

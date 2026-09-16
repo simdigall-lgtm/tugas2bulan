@@ -775,8 +775,13 @@
         box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.12) !important;
     }
 
+    /* Close button in mobile sidebar drawer */
+    .sidebar-close-btn {
+        display: none !important;
+    }
+
     /* ===================================================
-       Global Comprehensive Responsive System
+       Global Comprehensive Responsive System (Bug-Free Standard)
     =================================================== */
     @media (max-width: 1024px) {
         .metrics-grid {
@@ -801,9 +806,32 @@
             margin-right: 6px !important;
         }
 
+        .sidebar-close-btn {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            width: 32px !important;
+            height: 32px !important;
+            border-radius: 8px !important;
+            background: #F1F5F9 !important;
+            border: 1px solid #E2E8F0 !important;
+            color: #64748B !important;
+            font-size: 15px !important;
+            cursor: pointer !important;
+            transition: all 0.2s ease !important;
+            margin-left: auto !important;
+            flex-shrink: 0 !important;
+        }
+
+        .sidebar-close-btn:hover {
+            background: #E2E8F0 !important;
+            color: #0F172A !important;
+        }
+
         .sidebar {
             display: flex !important;
-            width: 250px !important;
+            width: 260px !important;
+            max-width: 82vw !important;
             position: fixed !important;
             top: 0 !important;
             bottom: 0 !important;
@@ -811,12 +839,16 @@
             transform: translateX(-100%) !important;
             transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
             z-index: 1050 !important;
-            box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18) !important;
+            box-shadow: 4px 0 28px rgba(15, 23, 42, 0.25) !important;
             background: #FFFFFF !important;
         }
 
         .sidebar.active {
             transform: translateX(0) !important;
+        }
+
+        .sidebar-overlay {
+            z-index: 1040 !important;
         }
 
         .main-wrapper {
@@ -846,13 +878,13 @@
         .search-wrap {
             min-width: 0 !important;
             width: 100% !important;
-            max-width: 160px !important;
+            max-width: 180px !important;
             flex: 1 1 auto !important;
         }
 
         .search-input {
             width: 100% !important;
-            font-size: 12px !important;
+            font-size: 12.5px !important;
             padding: 0 8px 0 28px !important;
             height: 36px !important;
         }
@@ -868,7 +900,7 @@
             align-items: center !important;
         }
 
-        /* Hide bulky clock widget on mobile screens so user profile & notifications are always reachable */
+        /* Hide clock widget on mobile screens so actions fit cleanly */
         .jakarta-clock-widget {
             display: none !important;
         }
@@ -895,30 +927,75 @@
             height: 34px !important;
         }
 
-        /* 3. Content Body & Layout Grids */
-        .content-body {
-            padding: 18px 14px !important;
+        /* Responsive Dropdowns (Fixed modal style on mobile to avoid offscreen cut-offs) */
+        .search-dropdown-menu {
+            position: fixed !important;
+            top: 62px !important;
+            left: 12px !important;
+            right: 12px !important;
+            width: auto !important;
+            min-width: 0 !important;
+            max-width: none !important;
+            max-height: 70vh !important;
+            border-radius: 12px !important;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.22) !important;
+            z-index: 1020 !important;
         }
 
-        .page-header {
-            margin-bottom: 18px !important;
+        .notif-dropdown-card {
+            position: fixed !important;
+            top: 62px !important;
+            left: 12px !important;
+            right: 12px !important;
+            width: auto !important;
+            max-width: none !important;
+            max-height: 75vh !important;
+            border-radius: 14px !important;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.22) !important;
+            z-index: 1020 !important;
+        }
+
+        .profile-dropdown-card {
+            position: absolute !important;
+            top: calc(100% + 10px) !important;
+            right: 0 !important;
+            width: 250px !important;
+            max-width: calc(100vw - 24px) !important;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.2) !important;
+            z-index: 1020 !important;
+        }
+
+        /* 3. Content Body & Layout Grids */
+        .content-body {
+            padding: 16px 12px !important;
+        }
+
+        .page-header,
+        .page-header-row {
+            margin-bottom: 16px !important;
             flex-direction: column !important;
             align-items: flex-start !important;
-            gap: 10px !important;
+            gap: 12px !important;
         }
 
         .page-title {
-            font-size: 22px !important;
+            font-size: 21px !important;
         }
 
         .page-subtitle {
-            font-size: 12.5px !important;
+            font-size: 12px !important;
+        }
+
+        .btn-add,
+        .btn-primary {
+            width: 100% !important;
+            justify-content: center !important;
         }
 
         .metrics-grid {
             grid-template-columns: 1fr !important;
             gap: 12px !important;
-            margin-bottom: 20px !important;
+            margin-bottom: 18px !important;
         }
 
         .charts-grid-2col,
@@ -926,11 +1003,11 @@
         .grid-2col {
             grid-template-columns: 1fr !important;
             gap: 16px !important;
-            margin-bottom: 20px !important;
+            margin-bottom: 18px !important;
         }
 
         .chart-card {
-            padding: 16px !important;
+            padding: 14px !important;
             border-radius: 10px !important;
         }
 
@@ -943,7 +1020,20 @@
         .card,
         .settings-card {
             border-radius: 10px !important;
-            margin-bottom: 18px !important;
+            margin-bottom: 16px !important;
+        }
+
+        .card-header-row {
+            flex-direction: column !important;
+            align-items: stretch !important;
+            gap: 12px !important;
+            padding: 14px 16px !important;
+        }
+
+        .filter-input-box,
+        .customer-search-box {
+            width: 100% !important;
+            max-width: 100% !important;
         }
 
         .table-responsive {
@@ -953,9 +1043,11 @@
         }
 
         .form-row,
-        .form-row-2col {
+        .form-row-2col,
+        .form-row-3col,
+        .form-row-4col {
             grid-template-columns: 1fr !important;
-            gap: 14px !important;
+            gap: 12px !important;
         }
 
         .action-bar {
@@ -969,17 +1061,70 @@
             width: 100% !important;
             justify-content: center !important;
         }
+
+        /* 4. Universal Responsive Modals */
+        .app-modal-overlay,
+        .modal-overlay {
+            padding: 10px !important;
+            align-items: center !important;
+        }
+
+        .app-modal-box,
+        .modal-box {
+            width: 100% !important;
+            max-width: 100% !important;
+            max-height: 94vh !important;
+            padding: 18px 16px !important;
+            border-radius: 14px !important;
+            margin: 0 !important;
+        }
+
+        .modal-box.modal-lg,
+        .modal-box.structured-modal {
+            max-width: 100% !important;
+            padding: 0 !important;
+        }
+
+        .modal-header {
+            padding: 14px 16px !important;
+        }
+
+        .modal-title {
+            font-size: 15px !important;
+        }
+
+        .modal-subtitle {
+            font-size: 11px !important;
+        }
+
+        .modal-body-scroll {
+            padding: 14px 12px !important;
+            max-height: calc(94vh - 120px) !important;
+        }
+
+        .modal-footer {
+            padding: 12px 14px !important;
+            flex-direction: column-reverse !important;
+            gap: 8px !important;
+        }
+
+        .modal-footer button,
+        .modal-footer .btn-primary,
+        .modal-footer .btn-secondary {
+            width: 100% !important;
+            justify-content: center !important;
+        }
     }
 
     @media (max-width: 480px) {
         .search-container,
         .search-wrap {
-            max-width: 125px !important;
+            max-width: 120px !important;
         }
 
         .search-input {
             padding-left: 24px !important;
-            font-size: 11.5px !important;
+            font-size: 11px !important;
         }
 
         .search-icon {
@@ -988,11 +1133,11 @@
         }
 
         .page-title {
-            font-size: 20px !important;
+            font-size: 19px !important;
         }
 
         .content-body {
-            padding: 14px 10px !important;
+            padding: 12px 8px !important;
         }
     }
 
@@ -1881,21 +2026,56 @@
             @endforeach
     ];
 
-        // Mobile Sidebar Toggle Logic
+        // Mobile Sidebar Toggle & Drawer Logic
         const mobileBtn = document.getElementById('mobileMenuBtn');
+        const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
         const sidebar = document.querySelector('.sidebar');
         const overlay = document.getElementById('sidebarOverlay');
 
-        if (mobileBtn && sidebar && overlay) {
+        function openMobileSidebar() {
+            if (sidebar) sidebar.classList.add('active');
+            if (overlay) overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileSidebar() {
+            if (sidebar) sidebar.classList.remove('active');
+            if (overlay) overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        if (mobileBtn && sidebar) {
             mobileBtn.addEventListener('click', function (e) {
                 e.stopPropagation();
-                sidebar.classList.toggle('active');
-                overlay.classList.toggle('active');
+                if (sidebar.classList.contains('active')) {
+                    closeMobileSidebar();
+                } else {
+                    openMobileSidebar();
+                }
             });
+        }
 
+        if (sidebarCloseBtn) {
+            sidebarCloseBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                closeMobileSidebar();
+            });
+        }
+
+        if (overlay) {
             overlay.addEventListener('click', function () {
-                sidebar.classList.remove('active');
-                overlay.classList.remove('active');
+                closeMobileSidebar();
+            });
+        }
+
+        // Auto close drawer when clicking a navigation link on mobile
+        if (sidebar) {
+            sidebar.querySelectorAll('.sidebar-menu a, .sidebar-bottom a').forEach(link => {
+                link.addEventListener('click', function () {
+                    if (window.innerWidth <= 768) {
+                        closeMobileSidebar();
+                    }
+                });
             });
         }
 
