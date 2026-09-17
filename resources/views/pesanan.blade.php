@@ -1302,6 +1302,7 @@
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             backdrop-filter: blur(4px);
             padding: 16px;
+            overflow-x: hidden;
         }
 
         .modal-overlay.active {
@@ -1314,16 +1315,19 @@
             border-radius: 14px;
             width: 100%;
             max-width: 520px;
+            box-sizing: border-box;
             padding: 24px 28px;
             box-shadow: 0 24px 48px rgba(15, 23, 42, 0.2), 0 0 0 1px rgba(226, 232, 240, 0.8);
             transform: translateY(-8px) scale(0.99);
             transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
             max-height: 92vh;
             overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .modal-box.modal-lg {
             max-width: 860px !important;
+            width: 100% !important;
         }
 
         /* Structured Pinned-Header & Pinned-Footer Layout for Order Modal */
@@ -1334,6 +1338,7 @@
             overflow: hidden;
             max-height: 92vh;
             border-radius: 16px;
+            box-sizing: border-box;
         }
 
         .modal-overlay.active .modal-box {
@@ -1412,11 +1417,14 @@
         .modal-body-scroll {
             padding: 18px 22px;
             overflow-y: auto;
+            overflow-x: hidden;
             max-height: calc(92vh - 130px);
             display: flex;
             flex-direction: column;
             gap: 14px;
             background: #F8FAFC;
+            box-sizing: border-box;
+            width: 100%;
         }
 
         /* Order Section Cards */
@@ -1427,6 +1435,9 @@
             padding: 14px 16px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
             transition: border-color 0.15s ease;
+            max-width: 100%;
+            box-sizing: border-box;
+            flex-shrink: 0;
         }
 
         .order-section-card:hover {
@@ -2288,7 +2299,31 @@
                                         : (is_string($pesanan->detail_items) ? json_decode($pesanan->detail_items, true) : []);
                                     $itemsCount = is_array($detailItems) ? count($detailItems) : 1;
 
+                                    // Ambil nama-nama produk unik yang dipesan
+                                    $uniqueNames = [];
+                                    if (!empty($detailItems)) {
+                                        foreach ($detailItems as $dit) {
+                                            $pName = trim($dit['nama_produk'] ?? '');
+                                            if ($pName !== '' && !in_array($pName, $uniqueNames)) {
+                                                $uniqueNames[] = $pName;
+                                            }
+                                        }
+                                    }
+
                                     $cleanProductName = trim(preg_replace('/\s*\(\+\s*\d+\s*produk lainnya\)/i', '', $pesanan->nama_produk ?? ''));
+                                    $cleanBaseName = trim(preg_replace('/,\s*dll\.?$/i', '', $cleanProductName));
+
+                                    if ($itemsCount > 1) {
+                                        if (count($uniqueNames) >= 2) {
+                                            $displayProductName = $uniqueNames[0] . ', ' . $uniqueNames[1] . ', dll.';
+                                        } elseif (count($uniqueNames) === 1) {
+                                            $displayProductName = $uniqueNames[0] . ', dll.';
+                                        } else {
+                                            $displayProductName = $cleanBaseName ? ($cleanBaseName . ', dll.') : 'Multi Produk, dll.';
+                                        }
+                                    } else {
+                                        $displayProductName = $cleanBaseName ?: ($uniqueNames[0] ?? ($pesanan->nama_produk ?: '-'));
+                                    }
 
                                     $otherItemsList = [];
                                     if ($itemsCount > 1) {
@@ -2322,7 +2357,7 @@
                                     </td>
                                     <td class="product-cell" style="white-space: normal !important;">
                                         <div style="font-weight: 700; color: #0F172A; font-size: 13px; line-height: 1.35;">
-                                            {{ $cleanProductName ?: '-' }}
+                                            {{ $displayProductName }}
                                         </div>
 
                                         @php
@@ -2332,7 +2367,7 @@
                                             $isMacam = stripos($subUkuran, 'macam') !== false;
 
                                             $singleItemForGallery = !empty($detailItems) ? $detailItems : [[
-                                                'nama_produk' => $cleanProductName,
+                                                'nama_produk' => $displayProductName,
                                                 'ukuran' => $subUkuran ?: 'Standard',
                                                 'qty' => $pesanan->jumlah ?? 1,
                                                 'satuan' => 'Pcs',
@@ -2348,7 +2383,7 @@
                                                     onclick='openDesignGalleryModal(@json($detailItems), "{{ $pesanan->kode_pesanan }}", "{{ $pesanan->file_desain }}", @json($pesanan))'
                                                     title="Lihat detail item & galeri desain">
                                                     <i class="fa-solid fa-layer-group"></i>
-                                                    <span>+{{ $itemsCount - 1 }} produk lainnya</span>
+                                                    <span>Lihat Semua ({{ $itemsCount }} Item)</span>
                                                 </button>
                                             </div>
                                         @else
@@ -2790,17 +2825,17 @@
                             <!-- File Desain: File Laptop vs Link GDrive -->
                             <div class="form-group" style="margin-bottom: 0;">
                                 <div
-                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                                    <label style="margin-bottom: 0; font-weight: 700; color: #334155;">File Desain
-                                        Cetak <span style="color: #DC2626; font-size: 11.5px; font-weight: 800;">* (Wajib Diunggah)</span></label>
-                                    <div class="file-tab-container">
+                                    style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 8px;">
+                                    <label style="margin-bottom: 0; font-weight: 700; color: #334155; font-size: 12px; white-space: nowrap;">File Desain
+                                        Cetak <span style="color: #DC2626; font-size: 11.5px; font-weight: 800;">*</span></label>
+                                    <div class="file-tab-container" style="flex-shrink: 0;">
                                         <button type="button" id="tabBtnUpload" class="file-tab-btn active"
                                             onclick="switchDesignSource('upload')">
-                                            <i class="fa-solid fa-laptop"></i> File Laptop
+                                            <i class="fa-solid fa-laptop"></i> File
                                         </button>
                                         <button type="button" id="tabBtnLink" class="file-tab-btn"
                                             onclick="switchDesignSource('link')">
-                                            <i class="fa-brands fa-google-drive"></i> Link Drive/URL
+                                            <i class="fa-brands fa-google-drive"></i> Link Drive
                                         </button>
                                     </div>
                                 </div>
@@ -2883,7 +2918,7 @@
                                     </span>
                                 </label>
                                 <textarea name="catatan_finishing" id="ordCatatanFinishing" rows="3" required
-                                    placeholder="Pilih opsi finishing cepat di bawah atau ketik instruksi finishing spesifik (contoh: Mata ayam 4 sudut, potong pas, laminasi doff, dll)..."
+                                    placeholder="Pilih opsi finishing di bawah atau ketik instruksi finishing..."
                                     style="resize: none; font-size: 12.5px; height: 78px; padding: 8px 11px; transition: border-color 0.2s ease, background 0.2s ease;"></textarea>
                                 <div id="finishingErrorAlert" style="display: none; margin-top: 6px; padding: 7px 10px; background: #FEF2F2; border: 1px solid #F87171; border-radius: 6px; color: #B91C1C; font-size: 11.5px; font-weight: 700; align-items: center; gap: 6px;">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
@@ -2961,16 +2996,20 @@
                                 <div>
                                     <label
                                         style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Panjang
-                                        (Meter)</label>
-                                    <input type="number" id="meterPanjang" step="0.01" min="0.1" value="3.00"
-                                        placeholder="3.0">
+                                        (Meter) <span style="font-size: 10px; color: #64748B; font-weight: 500;">(Maks 50m)</span></label>
+                                    <input type="number" id="meterPanjang" step="any" min="0.1" max="50" value="3"
+                                        placeholder="Contoh: 3 atau 1.5"
+                                        oninput="sanitizeMeterInput(this, 50)"
+                                        onblur="enforceMeterBounds(this, 0.1, 50, 3)">
                                 </div>
                                 <div>
                                     <label
                                         style="font-size: 11px; font-weight: 700; color: #475569; display: block; margin-bottom: 4px;">Lebar
-                                        (Meter)</label>
-                                    <input type="number" id="meterLebar" step="0.01" min="0.1" value="1.00"
-                                        placeholder="1.0">
+                                        (Meter) <span style="font-size: 10px; color: #64748B; font-weight: 500;">(Maks 30m)</span></label>
+                                    <input type="number" id="meterLebar" step="any" min="0.1" max="30" value="1"
+                                        placeholder="Contoh: 1 atau 1.5"
+                                        oninput="sanitizeMeterInput(this, 30)"
+                                        onblur="enforceMeterBounds(this, 0.1, 30, 1)">
                                 </div>
                                 <div>
                                     <label
@@ -2990,7 +3029,7 @@
                                         style="font-size: 11px; font-weight: 700; color: #1E3A8A; display: block; margin-bottom: 4px;">Total
                                         Luas</label>
                                     <div class="meter-luas-badge">
-                                        <span id="meterLuasPreview" class="val">3.00 m²</span>
+                                        <span id="meterLuasPreview" class="val">3 m²</span>
                                     </div>
                                 </div>
                             </div>
@@ -3001,33 +3040,17 @@
                                 <!-- 1. Pilihan Ukuran Produk: Modern Pill Chips -->
                                 <div style="margin-bottom: 12px;">
                                     <div
-                                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                                        style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; gap: 8px; min-width: 0;">
                                         <label
-                                            style="font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.3px;">PILIHAN
+                                            style="font-size: 11px; font-weight: 700; color: #475569; text-transform: uppercase; letter-spacing: 0.3px; white-space: nowrap; flex-shrink: 0;">PILIHAN
                                             UKURAN CETAK</label>
                                         <span id="selectedSizeBadge"
-                                            style="font-size: 11px; font-weight: 700; color: #1E3A8A; background: #EEF2FF; padding: 2px 8px; border-radius: 6px;">A4
+                                            style="font-size: 11px; font-weight: 700; color: #1E3A8A; background: #EEF2FF; padding: 2px 8px; border-radius: 6px; max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; display: inline-block; text-align: right;"
+                                            title="A4 (21 x 29.7 cm)">A4
                                             (21 x 29.7 cm)</span>
                                     </div>
-                                    <div class="size-chips-wrapper">
-                                        <button type="button" class="size-chip-btn active" data-size="A4 (21 x 29.7 cm)"
-                                            onclick="selectSizeChip(this)">A4</button>
-                                        <button type="button" class="size-chip-btn" data-size="A3+ (32 x 48 cm)"
-                                            onclick="selectSizeChip(this)">A3+</button>
-                                        <button type="button" class="size-chip-btn"
-                                            data-size="F4 / Folio (21.5 x 33 cm)" onclick="selectSizeChip(this)">F4 /
-                                            Folio</button>
-                                        <button type="button" class="size-chip-btn" data-size="Kartu Nama (9 x 5.5 cm)"
-                                            onclick="selectSizeChip(this)">Kartu Nama (9×5.5)</button>
-                                        <button type="button" class="size-chip-btn" data-size="Standard"
-                                            onclick="selectSizeChip(this)">Standard</button>
-                                        <button type="button" class="size-chip-btn" data-size="custom"
-                                            onclick="selectSizeChip(this)">+ Ukuran Lain</button>
-                                    </div>
-                                    <div id="customSizeInputWrap" style="display: none; margin-top: 8px;">
-                                        <input type="text" id="customSizeInput"
-                                            placeholder="Ketik ukuran khusus (misal: 15 x 20 cm, B5, dll)..."
-                                            style="width: 100%; border-radius: 8px; border: 1.5px solid #3B82F6; padding: 8px 12px; font-size: 12.5px; background: #F8FAFC;">
+                                    <div class="size-chips-wrapper" id="sizeChipsWrapper">
+                                        <!-- Chip ukuran akan disesuaikan otomatis dengan produk yang dipilih -->
                                     </div>
                                     <input type="hidden" id="cartItemSize" value="A4 (21 x 29.7 cm)">
                                 </div>
@@ -3387,8 +3410,8 @@
 
             <div class="modal-actions">
                 <button type="button" class="btn-cancel" onclick="closeSpkModal()">Tutup</button>
-                <button type="button" class="btn-save" onclick="window.print()">
-                    <i class="fa-solid fa-print"></i> Cetak Dokumen SPK
+                <button type="button" class="btn-save" id="btnDownloadSpkPdf" onclick="downloadSpkPdf()" style="background: #1B3B6F; color: #FFFFFF; border: none; padding: 9px 20px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-file-pdf"></i> <span>Unduh PDF SPK</span>
                 </button>
             </div>
         </div>
@@ -3490,6 +3513,9 @@
         </div>
     </div>
 
+    <!-- html2pdf for Direct PDF Generation -->
+    <script src="{{ asset('assets/js/html2pdf.bundle.min.js') }}"></script>
+
     <!-- JAVASCRIPT ENGINE FOR SIPEKAN -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -3541,34 +3567,251 @@
             return lower.includes('spanduk') || lower.includes('banner') || lower.includes('backlite') || lower.includes('meter');
         }
 
+        // Sanitasi dan Batasan Ukuran Meteran
+        window.sanitizeMeterInput = function (input, maxVal) {
+            if (!input) return;
+            let val = input.value;
+            if (val === '') {
+                updateItemSubtotalPreview();
+                return;
+            }
+
+            // Batasi angka di belakang koma / titik maksimal 2 digit (cegah 000000 berlebih)
+            if (val.includes('.') || val.includes(',')) {
+                const sep = val.includes('.') ? '.' : ',';
+                const parts = val.split(sep);
+                if (parts[1] && parts[1].length > 2) {
+                    val = parts[0] + sep + parts[1].slice(0, 2);
+                    input.value = val;
+                }
+            }
+
+            let num = parseFloat(val.replace(',', '.'));
+            if (!isNaN(num) && num > maxVal) {
+                input.value = maxVal;
+            }
+            updateItemSubtotalPreview();
+        };
+
+        window.enforceMeterBounds = function (input, minVal, maxVal, defaultVal) {
+            if (!input) return;
+            let val = input.value;
+            let num = parseFloat(val.replace(',', '.'));
+            if (isNaN(num) || num < minVal) {
+                // Tampilkan angka bersih tanpa .00 jika bulat, atau sesuai desimal (misal 3 atau 1.5)
+                input.value = parseFloat(defaultVal.toFixed(2));
+            } else if (num > maxVal) {
+                input.value = parseFloat(maxVal.toFixed(2));
+            } else {
+                // parseFloat(num.toFixed(2)) otomatis membersihkan 0 berlebih:
+                // 50.00 -> 50, 1.00 -> 1, 1.50 -> 1.5, 1.25 -> 1.25
+                input.value = parseFloat(num.toFixed(2));
+            }
+            updateItemSubtotalPreview();
+        };
+
         function updateItemSubtotalPreview() {
             const prodName = cartItemProduct.value;
             const unitPrice = productPrices[prodName] || 0;
+            const availableStock = productStocks[prodName] !== undefined ? productStocks[prodName] : null;
             let subtotal = 0;
 
             if (cartToggleMeter.checked) {
-                const p = parseFloat(meterPanjang.value) || 0;
-                const l = parseFloat(meterLebar.value) || 0;
-                const q = parseInt(meterQty.value) || 1;
-                const luas = Math.max(0.1, p * l);
-                meterLuasPreview.textContent = (luas * q).toFixed(2) + ' m²';
-                subtotal = Math.round(luas * unitPrice * q);
+                let p = parseFloat((meterPanjang.value || '').replace(',', '.'));
+                let l = parseFloat((meterLebar.value || '').replace(',', '.'));
+                let q = parseInt(meterQty.value);
+
+                let hasError = false;
+
+                if (isNaN(p) || p < 0.1) {
+                    hasError = true;
+                    meterPanjang.style.borderColor = '#DC2626';
+                    meterPanjang.style.background = '#FEF2F2';
+                } else if (p > 50) {
+                    p = 50;
+                    meterPanjang.value = 50;
+                    meterPanjang.style.borderColor = '';
+                    meterPanjang.style.background = '';
+                } else {
+                    meterPanjang.style.borderColor = '';
+                    meterPanjang.style.background = '';
+                }
+
+                if (isNaN(l) || l < 0.1) {
+                    hasError = true;
+                    meterLebar.style.borderColor = '#DC2626';
+                    meterLebar.style.background = '#FEF2F2';
+                } else if (l > 30) {
+                    l = 30;
+                    meterLebar.value = 30;
+                    meterLebar.style.borderColor = '';
+                    meterLebar.style.background = '';
+                } else {
+                    meterLebar.style.borderColor = '';
+                    meterLebar.style.background = '';
+                }
+
+                if (isNaN(q) || q < 1) q = 1;
+
+                if (hasError) {
+                    meterLuasPreview.textContent = '0 m²';
+                    subtotal = 0;
+                } else {
+                    const luas = p * l;
+                    const totalLuas = luas * q;
+                    const cleanLuas = parseFloat(totalLuas.toFixed(2));
+                    meterLuasPreview.textContent = totalLuas > 0 ? (cleanLuas + ' m²') : '0 m²';
+                    subtotal = Math.round(luas * unitPrice * q);
+                }
+
+                if (availableStock !== null && q > availableStock) {
+                    meterQty.style.borderColor = '#DC2626';
+                    meterQty.style.background = '#FEF2F2';
+                } else {
+                    meterQty.style.borderColor = '';
+                    meterQty.style.background = '';
+                }
             } else {
-                const q = parseInt(cartItemQty.value) || 1;
+                let q = parseInt(cartItemQty.value);
+                if (isNaN(q) || q < 1) q = 1;
                 subtotal = Math.round(unitPrice * q);
+
+                if (availableStock !== null && q > availableStock) {
+                    cartItemQty.style.borderColor = '#DC2626';
+                    cartItemQty.style.background = '#FEF2F2';
+                } else {
+                    cartItemQty.style.borderColor = '';
+                    cartItemQty.style.background = '';
+                }
             }
 
             cartItemSubtotalPreview.textContent = 'Rp ' + subtotal.toLocaleString('id-ID');
             return subtotal;
         }
 
+        function getSizesForProduct(productName) {
+            const lower = (productName || '').toLowerCase();
+            if (lower.includes('kartu') || lower.includes('nama') || lower.includes('id card')) {
+                return {
+                    defaultUnit: 'Box',
+                    sizes: [
+                        { label: 'Standard (9×5.5 cm)', value: 'Standard (9 x 5.5 cm)' },
+                        { label: 'Slim (9×5 cm)', value: 'Slim (9 x 5 cm)' },
+                        { label: 'Square (6×6 cm)', value: 'Square (6 x 6 cm)' },
+                        { label: 'ID Card (8.5×5.4 cm)', value: 'ID Card (8.5 x 5.4 cm)' }
+                    ]
+                };
+            }
+            if (lower.includes('brosur') || lower.includes('flyer') || lower.includes('pamflet') || lower.includes('leaflet')) {
+                return {
+                    defaultUnit: 'Rim',
+                    sizes: [
+                        { label: 'A4 (21×29.7 cm)', value: 'A4 (21 x 29.7 cm)' },
+                        { label: 'A5 (14.8×21 cm)', value: 'A5 (14.8 x 21 cm)' },
+                        { label: 'A6 (10.5×14.8 cm)', value: 'A6 (10.5 x 14.8 cm)' },
+                        { label: 'DL / Lipat 3 (10×21 cm)', value: 'DL (10 x 21 cm)' },
+                        { label: 'B5 (17.6×25 cm)', value: 'B5 (17.6 x 25 cm)' }
+                    ]
+                };
+            }
+            if (lower.includes('stiker') || lower.includes('sticker') || lower.includes('label')) {
+                return {
+                    defaultUnit: 'Lembar',
+                    sizes: [
+                        { label: 'A3+ (32×48 cm)', value: 'A3+ (32 x 48 cm)' },
+                        { label: 'A4 (21×29.7 cm)', value: 'A4 (21 x 29.7 cm)' },
+                        { label: 'Kotak 5×5 cm', value: 'Kotak 5 x 5 cm' },
+                        { label: 'Kotak 7×7 cm', value: 'Kotak 7 x 7 cm' },
+                        { label: 'Kotak 10×10 cm', value: 'Kotak 10 x 10 cm' }
+                    ]
+                };
+            }
+            if (lower.includes('kalender')) {
+                return {
+                    defaultUnit: 'Pcs',
+                    sizes: [
+                        { label: 'Meja Standar (21×15 cm)', value: 'Meja Standar (21 x 15 cm)' },
+                        { label: 'Meja Mini (15×10 cm)', value: 'Meja Mini (15 x 10 cm)' },
+                        { label: 'Dinding A3 (30×42 cm)', value: 'Dinding A3 (30 x 42 cm)' },
+                        { label: 'Dinding Standar (38×53 cm)', value: 'Dinding Standar (38 x 53 cm)' }
+                    ]
+                };
+            }
+            if (lower.includes('spanduk') || lower.includes('banner') || lower.includes('baliho') || lower.includes('flexi')) {
+                return {
+                    defaultUnit: 'Pcs',
+                    sizes: [
+                        { label: '3×1 Meter', value: '3 x 1 Meter' },
+                        { label: '2×1 Meter', value: '2 x 1 Meter' },
+                        { label: '1×1 Meter', value: '1 x 1 Meter' },
+                        { label: 'X-Banner (60×160 cm)', value: 'X-Banner (60 x 160 cm)' },
+                        { label: 'Roll Banner (80×200 cm)', value: 'Roll Banner (80 x 200 cm)' }
+                    ]
+                };
+            }
+            // Default General Printing Sizes
+            return {
+                defaultUnit: 'Pcs',
+                sizes: [
+                    { label: 'A4 (21×29.7 cm)', value: 'A4 (21 x 29.7 cm)' },
+                    { label: 'A3+ (32×48 cm)', value: 'A3+ (32 x 48 cm)' },
+                    { label: 'F4 / Folio (21.5×33 cm)', value: 'F4 / Folio (21.5 x 33 cm)' },
+                    { label: 'A5 (14.8×21 cm)', value: 'A5 (14.8 x 21 cm)' },
+                    { label: 'Standard', value: 'Standard' }
+                ]
+            };
+        }
+
+        function updateSizeChips(productName) {
+            const wrapper = document.getElementById('sizeChipsWrapper');
+            const badge = document.getElementById('selectedSizeBadge');
+            const hiddenSize = document.getElementById('cartItemSize');
+            const unitSelect = document.getElementById('cartItemUnit');
+
+            if (!wrapper) return;
+            const config = getSizesForProduct(productName);
+
+            if (unitSelect && config.defaultUnit) {
+                const opt = Array.from(unitSelect.options).find(o => o.value.toLowerCase() === config.defaultUnit.toLowerCase());
+                if (opt) unitSelect.value = opt.value;
+            }
+
+            wrapper.innerHTML = '';
+            config.sizes.forEach((s, idx) => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'size-chip-btn' + (idx === 0 ? ' active' : '');
+                btn.dataset.size = s.value;
+                btn.textContent = s.label;
+                btn.onclick = function () {
+                    selectSizeChip(this);
+                };
+                wrapper.appendChild(btn);
+            });
+
+            const defaultSize = config.sizes[0].value;
+            if (hiddenSize) hiddenSize.value = defaultSize;
+            if (badge) {
+                badge.textContent = defaultSize;
+                badge.title = defaultSize;
+            }
+        }
+
         if (cartItemProduct) {
             cartItemProduct.addEventListener('change', function () {
                 const pName = this.value;
+                const stock = productStocks[pName] !== undefined ? productStocks[pName] : null;
                 if (isMeteranProduct(pName)) {
                     cartToggleMeter.checked = true;
+                } else {
+                    cartToggleMeter.checked = false;
                 }
                 toggleMeterView();
+                updateSizeChips(pName);
+                if (stock !== null && stock > 0) {
+                    if (meterQty) meterQty.max = stock;
+                    if (cartItemQty) cartItemQty.max = stock;
+                }
                 updateItemSubtotalPreview();
             });
         }
@@ -3593,33 +3836,19 @@
         window.selectSizeChip = function (btn) {
             document.querySelectorAll('.size-chip-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            const customWrap = document.getElementById('customSizeInputWrap');
             const badge = document.getElementById('selectedSizeBadge');
             const hiddenSize = document.getElementById('cartItemSize');
+            const chosenSize = btn.dataset.size || 'Standard';
 
-            if (btn.dataset.size === 'custom') {
-                customWrap.style.display = 'block';
-                const customInput = document.getElementById('customSizeInput');
-                customInput.focus();
-                const val = customInput.value.trim() || 'Custom';
-                hiddenSize.value = val;
-                if (badge) badge.textContent = val;
-            } else {
-                customWrap.style.display = 'none';
-                hiddenSize.value = btn.dataset.size;
-                if (badge) badge.textContent = btn.dataset.size;
+            if (hiddenSize) hiddenSize.value = chosenSize;
+            if (badge) {
+                badge.textContent = chosenSize;
+                badge.title = chosenSize;
             }
         };
 
-        const customSizeInput = document.getElementById('customSizeInput');
-        if (customSizeInput) {
-            customSizeInput.addEventListener('input', function () {
-                const val = this.value.trim() || 'Custom';
-                document.getElementById('cartItemSize').value = val;
-                const badge = document.getElementById('selectedSizeBadge');
-                if (badge) badge.textContent = val;
-            });
-        }
+        // Inisialisasi awal pilihan ukuran
+        updateSizeChips(cartItemProduct ? cartItemProduct.value : '');
 
         // Quantity Stepper Engine
         window.stepCartQty = function (delta) {
@@ -3657,6 +3886,38 @@
                 }
 
                 const unitPrice = productPrices[prodName] || 0;
+
+                // Validasi Ketersediaan Stok Produk
+                const availableStock = productStocks[prodName] !== undefined ? productStocks[prodName] : 999999;
+                if (availableStock <= 0) {
+                    alert(`Stok untuk produk "${prodName}" sedang HABIS! Silakan pilih produk lain.`);
+                    return;
+                }
+
+                const currentQtyInCart = cartItems
+                    .filter(it => it.nama_produk === prodName)
+                    .reduce((acc, it) => acc + (parseInt(it.qty) || 0), 0);
+
+                const reqQty = cartToggleMeter.checked
+                    ? (parseInt(meterQty.value) || 1)
+                    : (parseInt(cartItemQty.value) || 1);
+
+                if (reqQty <= 0) {
+                    alert('Jumlah pesanan minimal 1!');
+                    return;
+                }
+
+                if ((currentQtyInCart + reqQty) > availableStock) {
+                    const sisaStok = Math.max(0, availableStock - currentQtyInCart);
+                    alert(`Jumlah pesanan (${reqQty} pcs) melebihi stok yang tersedia!\n\n• Stok Produk: ${availableStock} pcs\n• Sudah di Keranjang: ${currentQtyInCart} pcs\n• Maksimal yang dapat ditambahkan: ${sisaStok} pcs`);
+                    if (cartToggleMeter.checked && meterQty) {
+                        meterQty.focus();
+                    } else if (cartItemQty) {
+                        cartItemQty.focus();
+                    }
+                    return;
+                }
+
                 let item = {};
 
                 // Get Design from Section 1 (File Upload or GDrive Link)
@@ -3699,22 +3960,42 @@
                 }
 
                 if (cartToggleMeter.checked) {
-                    const p = parseFloat(meterPanjang.value) || 1;
-                    const l = parseFloat(meterLebar.value) || 1;
-                    const q = parseInt(meterQty.value) || 1;
+                    const rawP = parseFloat((meterPanjang.value || '').replace(',', '.'));
+                    const rawL = parseFloat((meterLebar.value || '').replace(',', '.'));
+                    const q = parseInt(meterQty.value);
+
+                    if (isNaN(rawP) || rawP < 0.1 || rawP > 50) {
+                        alert('Panjang meteran tidak valid! Masukkan angka antara 0.1 sampai 50 meter.');
+                        meterPanjang.focus();
+                        return;
+                    }
+                    if (isNaN(rawL) || rawL < 0.1 || rawL > 30) {
+                        alert('Lebar meteran tidak valid! Masukkan angka antara 0.1 sampai 30 meter.');
+                        meterLebar.focus();
+                        return;
+                    }
+                    if (isNaN(q) || q < 1) {
+                        alert('Jumlah item minimal 1!');
+                        meterQty.focus();
+                        return;
+                    }
+
+                    const p = parseFloat(rawP.toFixed(2));
+                    const l = parseFloat(rawL.toFixed(2));
                     const luas = p * l;
+                    const totalLuas = parseFloat((luas * q).toFixed(2));
                     const sub = Math.round(luas * unitPrice * q);
                     const meterUnitEl = document.getElementById('meterUnit');
                     const mUnit = (meterUnitEl ? meterUnitEl.value : 'Pcs') || 'Pcs';
 
                     item = {
                         nama_produk: prodName,
-                        ukuran: `${p} x ${l} Meter (${(luas * q).toFixed(1)} m²)`,
+                        ukuran: `${p} x ${l} Meter (${totalLuas} m²)`,
                         qty: q,
                         satuan: mUnit,
                         harga: unitPrice,
                         subtotal: sub,
-                        catatan: 'Ukuran Meteran: ' + p + ' x ' + l + ' m',
+                        catatan: '',
                         _fileObj: itemFile || null,
                         file_name: designName,
                         file_desain: designVal
@@ -3754,9 +4035,21 @@
                 if (cartToggleMeter) cartToggleMeter.checked = false;
                 toggleMeterView();
 
-                if (meterPanjang) meterPanjang.value = '1.00';
-                if (meterLebar) meterLebar.value = '1.00';
-                if (meterQty) meterQty.value = 1;
+                if (meterPanjang) {
+                    meterPanjang.value = '3';
+                    meterPanjang.style.borderColor = '';
+                    meterPanjang.style.background = '';
+                }
+                if (meterLebar) {
+                    meterLebar.value = '1';
+                    meterLebar.style.borderColor = '';
+                    meterLebar.style.background = '';
+                }
+                if (meterQty) {
+                    meterQty.value = 1;
+                    meterQty.style.borderColor = '';
+                    meterQty.style.background = '';
+                }
 
                 if (cartItemQty) cartItemQty.value = 1;
                 if (cartItemNote) cartItemNote.value = '';
@@ -3770,14 +4063,7 @@
                     if (i === 0) b.classList.add('active');
                     else b.classList.remove('active');
                 });
-                const customWrap = document.getElementById('customSizeInputWrap');
-                if (customWrap) customWrap.style.display = 'none';
-                const customInput = document.getElementById('customSizeInput');
-                if (customInput) customInput.value = '';
-                const hiddenSize = document.getElementById('cartItemSize');
-                if (hiddenSize) hiddenSize.value = 'A4 (21 x 29.7 cm)';
-                const badge = document.getElementById('selectedSizeBadge');
-                if (badge) badge.textContent = 'A4 (21 x 29.7 cm)';
+                updateSizeChips('');
 
                 // Update preview subtotal to 0
                 updateItemSubtotalPreview();
@@ -3829,9 +4115,9 @@
                 tr.innerHTML = `
                         <td>
                             <div style="font-weight:700; color:#0F172A;">${it.nama_produk}</div>
-                            ${it.catatan ? '<div style="font-size:11px; color:#64748B; margin-top:2px;">' + it.catatan + '</div>' : ''}
+                            ${(it.catatan && !it.catatan.toLowerCase().includes('ukuran meteran')) ? '<div style="font-size:11px; color:#64748B; margin-top:2px;">' + it.catatan + '</div>' : ''}
                         </td>
-                        <td><span style="display:inline-block; padding:2px 8px; background:#F1F5F9; border-radius:6px; font-size:11.5px; font-weight:600; color:#475569; border:1px solid #E2E8F0;">${it.ukuran}</span></td>
+                        <td><span style="display:inline-block; padding:2px 8px; background:#F1F5F9; border-radius:6px; font-size:11.5px; font-weight:600; color:#475569; border:1px solid #E2E8F0; max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;" title="${it.ukuran}">${it.ukuran}</span></td>
                         <td style="font-weight:700; color:#1E293B;">${it.qty} ${unitDisplay}</td>
                         <td>${designBadge}</td>
                         <td style="font-weight:700; color:#1E3A8A;">Rp ${it.subtotal.toLocaleString('id-ID')}</td>
@@ -4142,6 +4428,7 @@
                 if (cartItemProduct) cartItemProduct.value = '';
                 cartToggleMeter.checked = false;
                 toggleMeterView();
+                updateSizeChips('');
                 window.switchDesignSource('upload');
                 window.removeSelectedFile();
                 updateItemSubtotalPreview();
@@ -4380,7 +4667,7 @@
                         <td style="padding: 6px 10px;">${idx + 1}</td>
                         <td style="padding: 6px 10px;">
                             <strong>${it.nama_produk}</strong>
-                            ${it.catatan ? '<div style="font-size:10.5px; color:#64748B;">' + it.catatan + '</div>' : ''}
+                            ${(it.catatan && !it.catatan.toLowerCase().includes('ukuran meteran')) ? '<div style="font-size:10.5px; color:#64748B;">' + it.catatan + '</div>' : ''}
                         </td>
                         <td style="padding: 6px 10px;">${it.ukuran || '-'}</td>
                         <td style="padding: 6px 10px; text-align: center;">${it.qty || 1} ${it.satuan || ''}</td>
@@ -4394,6 +4681,55 @@
         };
         window.closeSpkModal = function () {
             if (spkModalOverlay) spkModalOverlay.classList.remove('active');
+        };
+
+        // Download SPK PDF directly using html2pdf
+        window.downloadSpkPdf = function () {
+            const element = document.getElementById('spkPrintArea');
+            if (!element) return;
+            const kodePesanan = (document.getElementById('spkKodePesanan') ? document.getElementById('spkKodePesanan').textContent.trim() : '') || 'SPK';
+            const btn = document.getElementById('btnDownloadSpkPdf');
+            const origHtml = btn ? btn.innerHTML : 'Unduh PDF SPK';
+
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Menghasilkan PDF...';
+            }
+
+            if (window.showAppToast) window.showAppToast('Menyiapkan berkas PDF SPK...', 'info');
+
+            const opt = {
+                margin: [8, 8, 8, 8],
+                filename: `SPK_${kodePesanan}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+                jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+            };
+
+            const containerHtml = `
+                <div style="background: #ffffff; color: #0f172a; padding: 24px 28px; font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; width: 100%;">
+                    ${element.innerHTML}
+                </div>
+            `;
+
+            if (typeof html2pdf !== 'undefined') {
+                html2pdf().set(opt).from(containerHtml).save().then(() => {
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = origHtml;
+                    }
+                    if (window.showAppToast) window.showAppToast(`Dokumen SPK (${kodePesanan}.pdf) berhasil diunduh!`, 'success');
+                }).catch(err => {
+                    console.error('Error generating SPK PDF:', err);
+                    if (btn) {
+                        btn.disabled = false;
+                        btn.innerHTML = origHtml;
+                    }
+                    if (window.showAppToast) window.showAppToast('Gagal mengunduh berkas PDF SPK', 'error');
+                });
+            } else {
+                window.print();
+            }
         };
 
         // 4. QUICK SETTLEMENT (PELUNASAN CEPAT) MODAL
@@ -4468,6 +4804,28 @@
                     e.preventDefault();
                     alert(`Item "${unassignedItem.nama_produk}" belum memiliki file desain atau link Google Drive! Wajib mengunggah desain sebelum pesanan disimpan.`);
                     return false;
+                }
+
+                // Validasi bahwa total kuantitas pesanan tidak melebihi stok yang tersedia di gudang
+                const qtyPerProd = {};
+                cartItems.forEach(it => {
+                    const pName = it.nama_produk;
+                    const q = parseInt(it.qty) || 1;
+                    qtyPerProd[pName] = (qtyPerProd[pName] || 0) + q;
+                });
+
+                for (const [pName, totalQ] of Object.entries(qtyPerProd)) {
+                    const st = productStocks[pName] !== undefined ? productStocks[pName] : 999999;
+                    if (st <= 0) {
+                        e.preventDefault();
+                        alert(`Stok untuk produk "${pName}" sedang HABIS! Silakan hapus item tersebut dari keranjang.`);
+                        return false;
+                    }
+                    if (totalQ > st) {
+                        e.preventDefault();
+                        alert(`Total pesanan untuk produk "${pName}" (${totalQ} pcs) melebihi stok yang tersedia (${st} pcs)! Silakan sesuaikan jumlah pesanan Anda.`);
+                        return false;
+                    }
                 }
 
                 // Remove previous dynamic item file inputs if any
@@ -4724,7 +5082,8 @@
                 const unitDisplay = (it.satuan && it.satuan.toLowerCase() === 'meter') ? 'Pcs' : (it.satuan || 'Pcs');
                 const badgeLabel = itemsList.length > 1 ? `Item ${idx + 1}` : `Item Produk`;
                 const subtotalText = (it.subtotal || it.harga) ? `<div style="font-size:12px; font-weight:800; color:#1E3A8A; margin-top:2px;">Rp ${(parseFloat(it.subtotal || it.harga || 0)).toLocaleString('id-ID')}</div>` : '';
-                const noteText = it.catatan ? `<div style="font-size:10.5px; color:#64748B; background:#F8FAFC; padding:3px 6px; border-radius:4px; border:1px solid #E2E8F0; margin-top:3px;"><i class="fa-solid fa-note-sticky"></i> ${it.catatan}</div>` : '';
+                const isUkuranMeteran = it.catatan && it.catatan.toLowerCase().includes('ukuran meteran');
+                const noteText = (it.catatan && !isUkuranMeteran) ? `<div style="font-size:10.5px; color:#64748B; background:#F8FAFC; padding:3px 6px; border-radius:4px; border:1px solid #E2E8F0; margin-top:3px;"><i class="fa-solid fa-note-sticky"></i> ${it.catatan}</div>` : '';
 
                 card.innerHTML = `
                     <div class="gallery-thumb-wrap">

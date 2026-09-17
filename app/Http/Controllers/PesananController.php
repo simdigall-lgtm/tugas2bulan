@@ -61,7 +61,28 @@ class PesananController extends Controller
         $jumlahUkuranSummary = '';
 
         if (!empty($items)) {
-            // Multi-Item Processing
+            // 1. Validasi Total Stok per Produk terlebih dahulu
+            $qtyPerProduct = [];
+            foreach ($items as $it) {
+                $pName = trim($it['nama_produk'] ?? '');
+                $q = intval($it['qty'] ?? 1);
+                if ($q <= 0) $q = 1;
+                $qtyPerProduct[$pName] = ($qtyPerProduct[$pName] ?? 0) + $q;
+            }
+
+            foreach ($qtyPerProduct as $pName => $totalRequestedQty) {
+                $prod = Produk::where('nama_produk', $pName)->first();
+                if ($prod) {
+                    if ($prod->stok <= 0) {
+                        return back()->withInput()->with('error', "Stok untuk produk '{$prod->nama_produk}' sedang HABIS!");
+                    }
+                    if ($totalRequestedQty > $prod->stok) {
+                        return back()->withInput()->with('error', "Jumlah pesanan untuk '{$prod->nama_produk}' ({$totalRequestedQty} pcs) melebihi stok yang tersedia ({$prod->stok} pcs)!");
+                    }
+                }
+            }
+
+            // 2. Hitung subtotal & sanitasi satuan
             $itemCount = count($items);
             foreach ($items as $idx => &$it) {
                 $sub = floatval($it['subtotal'] ?? 0);
@@ -71,19 +92,35 @@ class PesananController extends Controller
                 if (isset($it['satuan']) && strtolower($it['satuan']) === 'meter') {
                     $it['satuan'] = 'Pcs';
                 }
-
-                // Decrement stock for product
-                $prod = Produk::where('nama_produk', $it['nama_produk'])->first();
-                $q = intval($it['qty'] ?? 1);
-                if ($prod && $prod->stok > 0) {
-                    $prod->decrement('stok', min($q, $prod->stok));
-                }
             }
             unset($it);
 
-            $namaProdukUtama = $items[0]['nama_produk'];
+            // 3. Kurangi stok produk secara tepat setelah validasi lolos
+            foreach ($qtyPerProduct as $pName => $totalRequestedQty) {
+                $prod = Produk::where('nama_produk', $pName)->first();
+                if ($prod) {
+                    $prod->stok = max(0, $prod->stok - $totalRequestedQty);
+                    $prod->save();
+                }
+            }
+
+            // Ambil nama-nama produk unik yang dipesan
+            $uniqueNames = [];
+            foreach ($items as $it) {
+                $pName = trim($it['nama_produk'] ?? '');
+                if ($pName !== '' && !in_array($pName, $uniqueNames)) {
+                    $uniqueNames[] = $pName;
+                }
+            }
+
             if ($itemCount > 1) {
-                $namaProdukUtama .= " (+ " . ($itemCount - 1) . " produk lainnya)";
+                if (count($uniqueNames) >= 2) {
+                    $namaProdukUtama = $uniqueNames[0] . ', ' . $uniqueNames[1] . ', dll.';
+                } elseif (count($uniqueNames) === 1) {
+                    $namaProdukUtama = $uniqueNames[0] . ', dll.';
+                } else {
+                    $namaProdukUtama = ($items[0]['nama_produk'] ?? 'Produk Cetak') . ', dll.';
+                }
                 $jumlahUkuranSummary = "{$itemCount} Macam Item";
             } else {
                 $firstQty = $items[0]['qty'] ?? 1;
@@ -93,6 +130,7 @@ class PesananController extends Controller
                 }
                 $firstUkuran = $items[0]['ukuran'] ?? '';
                 $jumlahUkuranSummary = trim("{$firstQty} {$firstUnit} " . ($firstUkuran ? "({$firstUkuran})" : ""));
+                $namaProdukUtama = $items[0]['nama_produk'] ?? 'Produk Cetak';
             }
         } else {
             // Single Item Fallback
@@ -114,7 +152,8 @@ class PesananController extends Controller
                 if ($requestedQty > $produk->stok) {
                     return back()->withInput()->with('error', "Jumlah pesanan ({$requestedQty}) melebihi stok yang tersedia ({$produk->stok})!");
                 }
-                $produk->decrement('stok', min($requestedQty, $produk->stok));
+                $produk->stok = max(0, $produk->stok - $requestedQty);
+                $produk->save();
             }
 
             $jumlahVal = $request->input('jumlah_val', $request->input('jumlah', '1'));

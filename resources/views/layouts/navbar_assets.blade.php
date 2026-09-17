@@ -1905,14 +1905,20 @@
             </div>
             <button class="app-modal-close closeProfileModal">&times;</button>
         </div>
-        <form id="profileForm"
-            onsubmit="event.preventDefault(); alert('Profil berhasil diperbarui!'); document.getElementById('profileModal').classList.remove('active');">
+        <form id="profileForm">
+            @csrf
             <div
                 style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid #F1F5F9;">
-                <img src="{{ asset('assets/images/admin-avatar.png') }}" alt="User"
-                    style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid #E2E8F0;">
+                <div style="position: relative; cursor: pointer;" id="profileAvatarWrapper" title="Klik untuk mengganti foto profil">
+                    <img id="profileModalAvatarImg" class="user-avatar-sync" src="{{ asset('assets/images/admin-avatar.png') }}?v={{ file_exists(public_path('assets/images/admin-avatar.png')) ? filemtime(public_path('assets/images/admin-avatar.png')) : time() }}" alt="User"
+                        style="width: 64px; height: 64px; border-radius: 50%; object-fit: cover; border: 2px solid #E2E8F0; display: block;">
+                    <span style="position: absolute; bottom: 0; right: 0; background: #1B3B6F; color: #fff; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; border: 2px solid #fff; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
+                        <i class="fa-solid fa-camera"></i>
+                    </span>
+                    <input type="file" id="profileAvatarFileInput" accept="image/png, image/jpeg, image/jpg, image/webp" style="display: none;">
+                </div>
                 <div>
-                    <div style="font-weight: 800; font-size: 16px; color: #0F172A;">
+                    <div id="profileModalDisplayName" style="font-weight: 800; font-size: 16px; color: #0F172A;">
                         {{ $authUserName ?? 'Admin SIPEKAN' }}
                     </div>
                     <div style="font-size: 12.5px; color: #64748B;">
@@ -1928,23 +1934,24 @@
                 <label
                     style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px;">Nama
                     Lengkap</label>
-                <input type="text" value="{{ $authUserName ?? 'Admin SIPEKAN' }}"
+                <input type="text" name="name" id="profileModalNameInput" value="{{ $authUserName ?? 'Admin SIPEKAN' }}" required
                     style="width: 100%; border: 1px solid #CBD5E1; border-radius: 8px; padding: 9px 12px; font-size: 13.5px; outline: none;">
             </div>
 
             <div style="margin-bottom: 14px;">
                 <label
                     style="display: block; font-size: 13px; font-weight: 700; color: #334155; margin-bottom: 6px;">Email</label>
-                <input type="email" value="{{ $authUserEmail ?? 'admin@sipekan.co.id' }}"
+                <input type="email" name="email" id="profileModalEmailInput" value="{{ $authUserEmail ?? 'admin@sipekan.co.id' }}" required
                     style="width: 100%; border: 1px solid #CBD5E1; border-radius: 8px; padding: 9px 12px; font-size: 13.5px; outline: none;">
             </div>
 
             <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px;">
                 <button type="button" class="closeProfileModal"
                     style="background-color: #F1F5F9; color: #475569; border: none; padding: 9px 18px; border-radius: 8px; font-weight: 600; cursor: pointer;">Batal</button>
-                <button type="submit"
-                    style="background-color: #1B3B6F; color: white; border: none; padding: 9px 20px; border-radius: 8px; font-weight: 700; cursor: pointer;">Simpan
-                    Perubahan</button>
+                <button type="submit" id="btnSubmitProfile"
+                    style="background-color: #1B3B6F; color: white; border: none; padding: 9px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                    <span>Simpan Perubahan</span>
+                </button>
             </div>
         </form>
     </div>
@@ -2434,6 +2441,118 @@
                 if (e.target === profileModal) {
                     profileModal.classList.remove('active');
                 }
+            });
+        }
+
+        // Profile Form AJAX Submission
+        const profileForm = document.getElementById('profileForm');
+        const profileModalNameInput = document.getElementById('profileModalNameInput');
+        const profileModalEmailInput = document.getElementById('profileModalEmailInput');
+        const btnSubmitProfile = document.getElementById('btnSubmitProfile');
+
+        if (profileForm) {
+            profileForm.addEventListener('submit', function (e) {
+                e.preventDefault();
+                const nameVal = profileModalNameInput ? profileModalNameInput.value.trim() : '';
+                const emailVal = profileModalEmailInput ? profileModalEmailInput.value.trim() : '';
+
+                if (!nameVal || !emailVal) {
+                    if (window.showAppToast) window.showAppToast('Nama dan email wajib diisi!', 'warning');
+                    return;
+                }
+
+                const originalBtnHtml = btnSubmitProfile ? btnSubmitProfile.innerHTML : 'Simpan Perubahan';
+                if (btnSubmitProfile) {
+                    btnSubmitProfile.disabled = true;
+                    btnSubmitProfile.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> <span>Menyimpan...</span>';
+                }
+
+                fetch('{{ route("profile.update") }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        name: nameVal,
+                        email: emailVal
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (btnSubmitProfile) {
+                        btnSubmitProfile.disabled = false;
+                        btnSubmitProfile.innerHTML = originalBtnHtml;
+                    }
+                    if (data.success) {
+                        // Update UI text across topbar, modal & page
+                        document.querySelectorAll('.user-name-label').forEach(el => el.textContent = data.name);
+                        document.querySelectorAll('.profile-header-name').forEach(el => el.textContent = data.name);
+                        document.querySelectorAll('.profile-header-email').forEach(el => el.textContent = data.email);
+                        const modalDisplayName = document.getElementById('profileModalDisplayName');
+                        if (modalDisplayName) modalDisplayName.textContent = data.name;
+
+                        if (profileModal) profileModal.classList.remove('active');
+                        if (window.showAppToast) window.showAppToast(data.message || 'Profil berhasil diperbarui!', 'success');
+                    } else {
+                        if (window.showAppToast) window.showAppToast(data.message || 'Gagal menyimpan profil.', 'error');
+                    }
+                })
+                .catch(err => {
+                    if (btnSubmitProfile) {
+                        btnSubmitProfile.disabled = false;
+                        btnSubmitProfile.innerHTML = originalBtnHtml;
+                    }
+                    console.error('Error updating profile:', err);
+                    if (window.showAppToast) window.showAppToast('Terjadi kesalahan saat menyimpan profil.', 'error');
+                });
+            });
+        }
+
+        // Profile Avatar Upload AJAX
+        const profileAvatarWrapper = document.getElementById('profileAvatarWrapper');
+        const profileAvatarFileInput = document.getElementById('profileAvatarFileInput');
+        if (profileAvatarWrapper && profileAvatarFileInput) {
+            profileAvatarWrapper.addEventListener('click', function () {
+                profileAvatarFileInput.click();
+            });
+
+            profileAvatarFileInput.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                if (file.size > 2 * 1024 * 1024) {
+                    if (window.showAppToast) window.showAppToast('Ukuran foto profil melebihi 2MB!', 'warning');
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('avatar', file);
+                formData.append('_token', '{{ csrf_token() }}');
+
+                if (window.showAppToast) window.showAppToast('Mengunggah foto profil...', 'info');
+
+                fetch('{{ route("profile.avatar") }}', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'Accept': 'application/json' }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success && data.avatar_url) {
+                        document.querySelectorAll('.avatar-img, .profile-header-avatar, #profileModalAvatarImg').forEach(img => {
+                            img.src = data.avatar_url;
+                        });
+                        if (window.showAppToast) window.showAppToast(data.message || 'Foto profil berhasil diperbarui!', 'success');
+                    } else {
+                        if (window.showAppToast) window.showAppToast(data.message || 'Gagal mengunggah foto profil.', 'error');
+                    }
+                })
+                .catch(err => {
+                    console.error('Error uploading avatar:', err);
+                    if (window.showAppToast) window.showAppToast('Terjadi kesalahan saat mengunggah foto.', 'error');
+                });
             });
         }
 

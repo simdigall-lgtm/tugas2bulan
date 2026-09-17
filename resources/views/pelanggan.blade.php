@@ -930,7 +930,7 @@
                         </thead>
                         <tbody>
                             @forelse($pelanggans ?? [] as $p)
-                                <tr class="customer-row" data-customer='@json($p)' style="cursor: pointer;">
+                                <tr class="customer-row" data-customer='@json($p)' data-status="{{ strtolower($p->status ?? 'aktif') }}" style="cursor: pointer;">
                                     <td class="cus-id">{{ $p->kode_pelanggan }}</td>
                                     <td>
                                         <div class="customer-cell">
@@ -1579,7 +1579,10 @@
                         const alamat = (custData && custData.alamat ? custData.alamat : text).toLowerCase();
                         if (!alamat.includes(city)) match = false;
                     }
-                    if (status && !text.includes(status)) match = false;
+                    if (status) {
+                        const rowSt = (r.getAttribute('data-status') || (custData && custData.status ? custData.status : '') || '').toLowerCase().trim();
+                        if (rowSt !== status) match = false;
+                    }
 
                     // Filter Date Range
                     if (startDate || endDate) {
@@ -1614,8 +1617,9 @@
                 const rows = tbody.querySelectorAll('tr');
                 rows.forEach(r => {
                     const text = r.textContent.toLowerCase();
+                    const rowStatus = (r.getAttribute('data-status') || '').toLowerCase().trim();
                     let match = true;
-                    if (selected && !text.includes(selected)) match = false;
+                    if (selected && rowStatus !== selected) match = false;
                     if (selectedCity && !text.includes(selectedCity)) match = false;
 
                     if (match) {
@@ -1639,9 +1643,10 @@
                 const rows = tbody.querySelectorAll('tr');
                 rows.forEach(r => {
                     const text = r.textContent.toLowerCase();
+                    const rowStatus = (r.getAttribute('data-status') || '').toLowerCase().trim();
                     let match = true;
                     if (selectedCity && !text.includes(selectedCity)) match = false;
-                    if (selectedStatus && !text.includes(selectedStatus)) match = false;
+                    if (selectedStatus && rowStatus !== selectedStatus) match = false;
 
                     if (match) {
                         r.removeAttribute('data-filter-hidden');

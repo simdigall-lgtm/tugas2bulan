@@ -87,6 +87,12 @@ Route::middleware([AuthCheckSession::class])->group(function () {
     // Laporan & Pengaturan
     Route::get('/laporan', [LaporanController::class, 'index'])->name('laporan');
     Route::get('/pengaturan', [PengaturanController::class, 'index'])->name('pengaturan');
+    Route::post('/pengaturan', [PengaturanController::class, 'update'])->name('pengaturan.update');
+    Route::post('/pengaturan/logo', [PengaturanController::class, 'updateLogo'])->name('pengaturan.logo');
+
+    // Profile & Avatar Modal Routes
+    Route::post('/profile/update', [PengaturanController::class, 'updateProfile'])->name('profile.update');
+    Route::post('/profile/avatar', [PengaturanController::class, 'updateAvatar'])->name('profile.avatar');
 });
 
 

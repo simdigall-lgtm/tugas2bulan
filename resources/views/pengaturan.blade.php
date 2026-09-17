@@ -24,7 +24,8 @@
             min-height: 100vh;
         }
 
-        html, body {
+        html,
+        body {
             max-width: 100vw;
             overflow-x: clip;
         }
@@ -437,11 +438,13 @@
             .settings-card {
                 border-radius: 12px;
             }
+
             .card-section-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 8px;
             }
+
             .section-icon {
                 display: none;
             }
@@ -476,8 +479,8 @@
 
                     <!-- Logo & Profile Upload -->
                     <div class="profile-upload">
-                        <img src="{{ asset('assets/images/sipekan-logo.png') }}?v={{ file_exists(public_path('assets/images/sipekan-logo.png')) ? filemtime(public_path('assets/images/sipekan-logo.png')) : time() }}" alt="Logo Perusahaan"
-                            class="profile-avatar" id="profileAvatar"
+                        <img src="{{ asset('assets/images/sipekan-logo.png') }}?v={{ file_exists(public_path('assets/images/sipekan-logo.png')) ? filemtime(public_path('assets/images/sipekan-logo.png')) : time() }}"
+                            alt="Logo Perusahaan" class="profile-avatar" id="profileAvatar"
                             style="object-fit: contain; background: #fff; padding: 4px;">
                         <div class="upload-info">
                             <div class="upload-name">Logo</div>
@@ -491,13 +494,13 @@
 
                     <div class="form-group">
                         <label for="companyName">Nama Perusahaan</label>
-                        <input type="text" id="companyName" class="form-control" value="SIPEKAN (CV Prima Grafika)">
+                        <input type="text" id="companyName" class="form-control" value="{{ $settings['company_name'] ?? ($companySettings['company_name'] ?? 'SIPEKAN (CV Prima Grafika)') }}">
                     </div>
 
                     <div class="form-group">
                         <label for="companyAddress">Alamat Lengkap</label>
                         <textarea id="companyAddress"
-                            class="form-control">Jl. Percetakan Negara No. 45, Komplek Ruko Sentra Niaga Blok B2, Jakarta Pusat, DKI Jakarta 10560</textarea>
+                            class="form-control">{{ $settings['company_address'] ?? ($companySettings['company_address'] ?? 'Jl. Percetakan Negara No. 45, Komplek Ruko Sentra Niaga Blok B2, Jakarta Pusat, DKI Jakarta 10560') }}</textarea>
                     </div>
 
                     <div class="form-row">
@@ -506,7 +509,7 @@
                             <div class="input-wrap">
                                 <i class="input-icon fa-solid fa-phone"></i>
                                 <input type="text" id="companyPhone" class="form-control with-icon"
-                                    value="+62 21 555 0192">
+                                    value="{{ $settings['company_phone'] ?? ($companySettings['company_phone'] ?? '+62 21 555 0192') }}">
                             </div>
                         </div>
                         <div class="form-group">
@@ -514,7 +517,7 @@
                             <div class="input-wrap">
                                 <i class="input-icon fa-regular fa-envelope"></i>
                                 <input type="email" id="companyEmail" class="form-control with-icon"
-                                    value="info@sipekan.co.id">
+                                    value="{{ $settings['company_email'] ?? ($companySettings['company_email'] ?? 'info@sipekan.co.id') }}">
                             </div>
                         </div>
                     </div>
@@ -522,12 +525,14 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="companyNpwp">NPWP</label>
-                            <input type="text" id="companyNpwp" class="form-control" placeholder="00.000.000.0-000.000">
+                            <input type="text" id="companyNpwp" class="form-control" placeholder="00.000.000.0-000.000"
+                                value="{{ $settings['company_npwp'] ?? ($companySettings['company_npwp'] ?? '') }}">
                         </div>
                         <div class="form-group">
                             <label for="companyWebsite">Website</label>
                             <input type="text" id="companyWebsite" class="form-control"
-                                placeholder="https://sipekan.co.id">
+                                placeholder="https://sipekan.co.id"
+                                value="{{ $settings['company_website'] ?? ($companySettings['company_website'] ?? '') }}">
                         </div>
                     </div>
 
@@ -546,21 +551,27 @@
                 </div>
                 <div class="card-body">
 
+                    @php
+                        $curr = $settings['currency'] ?? ($companySettings['currency'] ?? 'IDR');
+                        $df = $settings['date_format'] ?? ($companySettings['date_format'] ?? 'DD/MM/YYYY');
+                        $tz = $settings['timezone'] ?? ($companySettings['timezone'] ?? 'Asia/Jakarta');
+                    @endphp
+
                     <div class="form-row">
                         <div class="form-group">
                             <label for="currency">Mata Uang Default</label>
                             <select id="currency" class="form-control">
-                                <option value="IDR" selected>Indonesian Rupiah (IDR)</option>
-                                <option value="USD">US Dollar (USD)</option>
-                                <option value="SGD">Singapore Dollar (SGD)</option>
+                                <option value="IDR" {{ $curr === 'IDR' ? 'selected' : '' }}>Indonesian Rupiah (IDR)</option>
+                                <option value="USD" {{ $curr === 'USD' ? 'selected' : '' }}>US Dollar (USD)</option>
+                                <option value="SGD" {{ $curr === 'SGD' ? 'selected' : '' }}>Singapore Dollar (SGD)</option>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="dateFormat">Format Tanggal</label>
                             <select id="dateFormat" class="form-control">
-                                <option value="DD/MM/YYYY" selected>DD/MM/YYYY (09/09/2026)</option>
-                                <option value="MM/DD/YYYY">MM/DD/YYYY (09/09/2026)</option>
-                                <option value="YYYY-MM-DD">YYYY-MM-DD (2026-09-09)</option>
+                                <option value="DD/MM/YYYY" {{ $df === 'DD/MM/YYYY' ? 'selected' : '' }}>DD/MM/YYYY (09/09/2026)</option>
+                                <option value="MM/DD/YYYY" {{ $df === 'MM/DD/YYYY' ? 'selected' : '' }}>MM/DD/YYYY (09/09/2026)</option>
+                                <option value="YYYY-MM-DD" {{ $df === 'YYYY-MM-DD' ? 'selected' : '' }}>YYYY-MM-DD (2026-09-09)</option>
                             </select>
                         </div>
                     </div>
@@ -568,9 +579,9 @@
                     <div class="form-group" style="max-width: 50%; padding-right: 10px;">
                         <label for="timezone">Zona Waktu</label>
                         <select id="timezone" class="form-control">
-                            <option value="Asia/Jakarta" selected>(UTC+07:00) Waktu Indonesia Barat</option>
-                            <option value="Asia/Makassar">(UTC+08:00) Waktu Indonesia Tengah</option>
-                            <option value="Asia/Jayapura">(UTC+09:00) Waktu Indonesia Timur</option>
+                            <option value="Asia/Jakarta" {{ $tz === 'Asia/Jakarta' ? 'selected' : '' }}>(UTC+07:00) Waktu Indonesia Barat</option>
+                            <option value="Asia/Makassar" {{ $tz === 'Asia/Makassar' ? 'selected' : '' }}>(UTC+08:00) Waktu Indonesia Tengah</option>
+                            <option value="Asia/Jayapura" {{ $tz === 'Asia/Jayapura' ? 'selected' : '' }}>(UTC+09:00) Waktu Indonesia Timur</option>
                         </select>
                     </div>
 
@@ -617,7 +628,7 @@
                                     Secret Key Manual:</div>
                                 <div
                                     style="display: inline-flex; align-items: center; gap: 8px; background: #0F172A; color: #38BDF8; font-family: monospace; font-size: 13px; font-weight: 700; padding: 7px 12px; border-radius: 6px; letter-spacing: 1px;">
-                                    <i class="fa-regular fa-key"></i>
+                                    <i class=""></i>
                                     <span>JBSW Y3DP EHPK 3PXP</span>
                                 </div>
                                 <div style="font-size: 12px; color: #64748B; margin-top: 8px;">
@@ -681,25 +692,7 @@
             const newPass = document.getElementById('newPass');
             const confirmPass = document.getElementById('confirmPass');
 
-            // Load saved settings from localStorage
-            function loadSavedSettings() {
-                const savedLogo = localStorage.getItem('companyLogo');
-                if (savedLogo && profileAvatar) profileAvatar.src = savedLogo;
-
-                if (localStorage.getItem('companyName') && companyName) companyName.value = localStorage.getItem('companyName');
-                if (localStorage.getItem('companyAddress') && companyAddress) companyAddress.value = localStorage.getItem('companyAddress');
-                if (localStorage.getItem('companyPhone') && companyPhone) companyPhone.value = localStorage.getItem('companyPhone');
-                if (localStorage.getItem('companyEmail') && companyEmail) companyEmail.value = localStorage.getItem('companyEmail');
-                if (localStorage.getItem('companyNpwp') && companyNpwp) companyNpwp.value = localStorage.getItem('companyNpwp');
-                if (localStorage.getItem('companyWebsite') && companyWebsite) companyWebsite.value = localStorage.getItem('companyWebsite');
-                if (localStorage.getItem('currency') && currency) currency.value = localStorage.getItem('currency');
-                if (localStorage.getItem('dateFormat') && dateFormat) dateFormat.value = localStorage.getItem('dateFormat');
-                if (localStorage.getItem('timezone') && timezone) timezone.value = localStorage.getItem('timezone');
-            }
-
-            loadSavedSettings();
-
-            // 1. Real Logo Upload Functionality
+            // 1. Logo Upload via AJAX
             if (btnUploadLogo && logoFileInput) {
                 btnUploadLogo.addEventListener('click', function (e) {
                     e.preventDefault();
@@ -708,57 +701,128 @@
 
                 logoFileInput.addEventListener('change', function (e) {
                     const file = e.target.files[0];
-                    if (file) {
-                        if (file.size > 2 * 1024 * 1024) {
-                            if (window.showAppToast) window.showAppToast('Ukuran berkas melebihi 2MB!', 'error');
-                            return;
-                        }
-                        const reader = new FileReader();
-                        reader.onload = function (evt) {
-                            const dataUrl = evt.target.result;
-                            if (profileAvatar) profileAvatar.src = dataUrl;
-                            localStorage.setItem('companyLogo', dataUrl);
-                            if (window.showAppToast) window.showAppToast('Logo perusahaan berhasil diperbarui!', 'success');
-                        };
-                        reader.readAsDataURL(file);
+                    if (!file) return;
+
+                    if (file.size > 2 * 1024 * 1024) {
+                        if (window.showAppToast) window.showAppToast('Ukuran berkas logo melebihi 2MB!', 'warning');
+                        return;
                     }
+
+                    const originalBtnText = btnUploadLogo.innerHTML;
+                    btnUploadLogo.disabled = true;
+                    btnUploadLogo.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Mengunggah...';
+
+                    const formData = new FormData();
+                    formData.append('logo', file);
+                    formData.append('_token', '{{ csrf_token() }}');
+
+                    fetch('{{ route("pengaturan.logo") }}', {
+                        method: 'POST',
+                        body: formData,
+                        headers: { 'Accept': 'application/json' }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        btnUploadLogo.disabled = false;
+                        btnUploadLogo.innerHTML = originalBtnText;
+
+                        if (data.success && data.logo_url) {
+                            if (profileAvatar) profileAvatar.src = data.logo_url;
+                            document.querySelectorAll('.sidebar-brand-logo, .sidebar-brand img').forEach(img => {
+                                img.src = data.logo_url;
+                            });
+                            if (window.showAppToast) window.showAppToast(data.message || 'Logo berhasil diperbarui!', 'success');
+                        } else {
+                            if (window.showAppToast) window.showAppToast(data.message || 'Gagal mengunggah logo.', 'error');
+                        }
+                    })
+                    .catch(err => {
+                        btnUploadLogo.disabled = false;
+                        btnUploadLogo.innerHTML = originalBtnText;
+                        console.error('Error uploading logo:', err);
+                        if (window.showAppToast) window.showAppToast('Terjadi kesalahan saat mengunggah logo.', 'error');
+                    });
                 });
             }
 
-            // 2. Real Settings Save Functionality
+            // 2. Settings Save via AJAX
             if (btnSave) {
                 btnSave.addEventListener('click', function (e) {
                     e.preventDefault();
 
                     // Check Password matching if filled
-                    if (newPass.value.trim() || confirmPass.value.trim()) {
-                        if (newPass.value !== confirmPass.value) {
+                    const newPasswordVal = newPass ? newPass.value.trim() : '';
+                    const confirmPasswordVal = confirmPass ? confirmPass.value.trim() : '';
+                    const currentPasswordVal = currentPass ? currentPass.value.trim() : '';
+
+                    if (newPasswordVal || confirmPasswordVal) {
+                        if (newPasswordVal !== confirmPasswordVal) {
                             if (window.showAppToast) window.showAppToast('Konfirmasi kata sandi baru tidak cocok!', 'error');
                             return;
                         }
-                        if (newPass.value.length < 6) {
+                        if (newPasswordVal.length < 6) {
                             if (window.showAppToast) window.showAppToast('Kata sandi baru minimal 6 karakter!', 'warning');
                             return;
                         }
-                        currentPass.value = '';
-                        newPass.value = '';
-                        confirmPass.value = '';
                     }
 
-                    // Save settings to localStorage
-                    if (companyName) localStorage.setItem('companyName', companyName.value.trim());
-                    if (companyAddress) localStorage.setItem('companyAddress', companyAddress.value.trim());
-                    if (companyPhone) localStorage.setItem('companyPhone', companyPhone.value.trim());
-                    if (companyEmail) localStorage.setItem('companyEmail', companyEmail.value.trim());
-                    if (companyNpwp) localStorage.setItem('companyNpwp', companyNpwp.value.trim());
-                    if (companyWebsite) localStorage.setItem('companyWebsite', companyWebsite.value.trim());
-                    if (currency) localStorage.setItem('currency', currency.value);
-                    if (dateFormat) localStorage.setItem('dateFormat', dateFormat.value);
-                    if (timezone) localStorage.setItem('timezone', timezone.value);
+                    const originalBtnHtml = btnSave.innerHTML;
+                    btnSave.disabled = true;
+                    btnSave.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Menyimpan...';
 
-                    if (window.showAppToast) {
-                        window.showAppToast('Pengaturan umum berhasil disimpan!', 'success');
+                    const payload = {
+                        company_name: companyName ? companyName.value.trim() : '',
+                        company_address: companyAddress ? companyAddress.value.trim() : '',
+                        company_phone: companyPhone ? companyPhone.value.trim() : '',
+                        company_email: companyEmail ? companyEmail.value.trim() : '',
+                        company_npwp: companyNpwp ? companyNpwp.value.trim() : '',
+                        company_website: companyWebsite ? companyWebsite.value.trim() : '',
+                        currency: currency ? currency.value : 'IDR',
+                        date_format: dateFormat ? dateFormat.value : 'DD/MM/YYYY',
+                        timezone: timezone ? timezone.value : 'Asia/Jakarta',
+                    };
+
+                    if (newPasswordVal) {
+                        payload.current_password = currentPasswordVal;
+                        payload.new_password = newPasswordVal;
                     }
+
+                    fetch('{{ route("pengaturan.update") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json'
+                        },
+                        body: JSON.stringify(payload)
+                    })
+                    .then(res => res.json().then(data => ({ status: res.status, ok: res.ok, data })))
+                    .then(({ ok, data }) => {
+                        btnSave.disabled = false;
+                        btnSave.innerHTML = originalBtnHtml;
+
+                        if (ok && data.success) {
+                            if (currentPass) currentPass.value = '';
+                            if (newPass) newPass.value = '';
+                            if (confirmPass) confirmPass.value = '';
+
+                            // Update sidebar brand name if changed
+                            if (payload.company_name) {
+                                const brandWord = payload.company_name.split(' ')[0] || 'SIPEKAN';
+                                document.querySelectorAll('.brand-name').forEach(el => el.textContent = brandWord);
+                            }
+
+                            if (window.showAppToast) window.showAppToast(data.message || 'Pengaturan berhasil disimpan!', 'success');
+                        } else {
+                            if (window.showAppToast) window.showAppToast(data.message || 'Gagal menyimpan pengaturan.', 'error');
+                        }
+                    })
+                    .catch(err => {
+                        btnSave.disabled = false;
+                        btnSave.innerHTML = originalBtnHtml;
+                        console.error('Error saving settings:', err);
+                        if (window.showAppToast) window.showAppToast('Terjadi kesalahan saat menyimpan pengaturan.', 'error');
+                    });
                 });
             }
 
@@ -766,11 +830,10 @@
             if (btnCancel) {
                 btnCancel.addEventListener('click', function (e) {
                     e.preventDefault();
-                    loadSavedSettings();
                     if (currentPass) currentPass.value = '';
                     if (newPass) newPass.value = '';
                     if (confirmPass) confirmPass.value = '';
-                    if (window.showAppToast) window.showAppToast('Perubahan dibatalkan.', 'info');
+                    window.location.reload();
                 });
             }
         });

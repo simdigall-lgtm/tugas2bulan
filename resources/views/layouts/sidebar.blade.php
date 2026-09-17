@@ -3,9 +3,9 @@
     <div>
         <div class="sidebar-brand" style="display: flex; align-items: center; justify-content: space-between;">
             <a href="{{ route('dashboard') }}" title="Ke Dasbor Utama" style="text-decoration: none; color: inherit; display: flex; align-items: center; gap: 11px;">
-                <img src="{{ asset('assets/images/sipekan-logo.png') }}?v={{ file_exists(public_path('assets/images/sipekan-logo.png')) ? filemtime(public_path('assets/images/sipekan-logo.png')) : time() }}" alt="SIPEKAN Logo" style="height: 44px; width: auto; object-fit: contain; flex-shrink: 0; display: block;">
+                <img class="sidebar-brand-logo" src="{{ asset('assets/images/sipekan-logo.png') }}?v={{ file_exists(public_path('assets/images/sipekan-logo.png')) ? filemtime(public_path('assets/images/sipekan-logo.png')) : time() }}" alt="SIPEKAN Logo" style="height: 44px; width: auto; object-fit: contain; flex-shrink: 0; display: block;">
                 <div style="display: flex; flex-direction: column; justify-content: center; gap: 2px;">
-                    <div class="brand-name" style="line-height: 1.15; font-size: 18.5px; font-weight: 800; margin: 0; letter-spacing: -0.3px;">SIPEKAN</div>
+                    <div class="brand-name" style="line-height: 1.15; font-size: 18.5px; font-weight: 800; margin: 0; letter-spacing: -0.3px;">{{ !empty($companySettings['company_name']) ? explode(' ', trim($companySettings['company_name']))[0] : 'SIPEKAN' }}</div>
                     <div class="brand-tag" style="line-height: 1.2; font-size: 11px; margin: 0; color: #64748B; font-weight: 500;">{{ ($isKasir ?? false) ? 'Konsol Kasir' : 'Konsol Admin' }}</div>
                 </div>
             </a>

@@ -18,4 +18,15 @@ class Produk extends Model
         'deskripsi',
         'status',
     ];
+
+    protected static function booted()
+    {
+        static::saving(function ($produk) {
+            if ($produk->stok <= 0) {
+                $produk->status = 'Habis';
+            } elseif (strtolower($produk->status ?? '') === 'habis' && $produk->stok > 0) {
+                $produk->status = 'Tersedia';
+            }
+        });
+    }
 }

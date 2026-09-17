@@ -77,11 +77,33 @@ class AppServiceProvider extends ServiceProvider
                 $userRole = 'Administrator';
             }
 
+            // Load company settings
+            $settingsPath = storage_path('app/settings.json');
+            $defaultSettings = [
+                'company_name' => 'SIPEKAN (CV Prima Grafika)',
+                'company_address' => 'Jl. Percetakan Negara No. 45, Komplek Ruko Sentra Niaga Blok B2, Jakarta Pusat, DKI Jakarta 10560',
+                'company_phone' => '+62 21 555 0192',
+                'company_email' => 'info@sipekan.co.id',
+                'company_npwp' => '01.234.567.8-012.000',
+                'company_website' => 'https://sipekan.co.id',
+                'currency' => 'IDR',
+                'date_format' => 'DD/MM/YYYY',
+                'timezone' => 'Asia/Jakarta',
+            ];
+            $companySettings = $defaultSettings;
+            if (file_exists($settingsPath)) {
+                $loaded = json_decode(@file_get_contents($settingsPath), true);
+                if (is_array($loaded)) {
+                    $companySettings = array_merge($defaultSettings, $loaded);
+                }
+            }
+
             $view->with([
                 'authUserName' => $displayName,
                 'authUserEmail' => $displayEmail,
                 'authRole' => $userRole,
                 'isKasir' => $isKasir,
+                'companySettings' => $companySettings,
             ]);
         });
     }

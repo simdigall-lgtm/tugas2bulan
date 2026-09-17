@@ -148,6 +148,138 @@
             background: #142F5B;
         }
 
+        /* Export As Dropdown Engine */
+        .export-dropdown-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .export-dropdown-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            right: 0;
+            background: #FFFFFF;
+            border: 1px solid #E2E8F0;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12), 0 8px 10px -6px rgba(15, 23, 42, 0.06);
+            padding: 6px;
+            min-width: 240px;
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            gap: 3px;
+            animation: dropdownFadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes dropdownFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-6px) scale(0.97);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .export-dropdown-menu.show {
+            display: flex;
+        }
+
+        .export-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 10px;
+            border-radius: 8px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+            width: 100%;
+            transition: all 0.15s ease;
+        }
+
+        .export-dropdown-item:hover {
+            background: #F8FAFC;
+        }
+
+        .export-item-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            flex-shrink: 0;
+        }
+
+        .export-item-icon.excel {
+            background: #ECFDF5;
+            color: #059669;
+            border: 1px solid #A7F3D0;
+        }
+
+        .export-item-icon.csv {
+            background: #F0F9FF;
+            color: #0284C7;
+            border: 1px solid #BAE6FD;
+        }
+
+        .export-item-icon.pdf {
+            background: #EEF2FF;
+            color: #4F46E5;
+            border: 1px solid #C7D2FE;
+        }
+
+        .export-item-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .export-item-title {
+            font-size: 12.5px;
+            font-weight: 700;
+            color: #0F172A;
+            line-height: 1.25;
+        }
+
+        .export-item-desc {
+            font-size: 10.5px;
+            color: #64748B;
+            margin-top: 1px;
+        }
+
+        .export-badge {
+            font-size: 10px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            letter-spacing: 0.3px;
+        }
+
+        .export-badge.excel {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        .export-badge.csv {
+            background: #E0F2FE;
+            color: #0369A1;
+        }
+
+        .export-badge.pdf {
+            background: #E0E7FF;
+            color: #3730A3;
+        }
+
+        .export-dropdown-divider {
+            height: 1px;
+            background: #F1F5F9;
+            margin: 3px 0;
+        }
+
         /* Divider between Rows */
         .filter-divider {
             height: 1px;
@@ -738,7 +870,9 @@
             .segmented-filter-container { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); }
             .btn-segmented { justify-content: center; }
             .export-actions-group { width: 100%; display: flex; }
-            .export-actions-group button { flex: 1; justify-content: center; }
+            .export-dropdown-wrapper { width: 100%; }
+            .export-dropdown-wrapper .btn-export { width: 100%; justify-content: center; }
+            .export-dropdown-menu { width: 100%; right: auto; left: 0; min-width: 100%; }
             .filter-date-form { width: 100%; flex-direction: column; align-items: stretch; }
             .date-range-box { width: 100%; justify-content: space-between; }
             .btn-filter-apply { width: 100%; justify-content: center; }
@@ -764,7 +898,7 @@
 
         /* Print Media Styling */
         @media print {
-            .sidebar, .topbar, .filter-card, .table-toolbar, .table-pagination-footer, .btn-export, .brand-tag { display: none !important; }
+            .sidebar, .topbar, .filter-card, .table-toolbar, .table-pagination-footer, .btn-export, .export-dropdown-wrapper, .brand-tag { display: none !important; }
             .main-wrapper { margin-left: 0 !important; width: 100% !important; max-width: 100% !important; }
             .content-body { padding: 0 !important; }
             .card { box-shadow: none !important; border: 1px solid #CBD5E1 !important; break-inside: avoid; margin-bottom: 20px !important; }
@@ -821,15 +955,38 @@
 
                     <!-- Export Actions on Right -->
                     <div class="export-actions-group">
-                        <button class="btn-export" id="btnCetakPdf" title="Cetak Ringkasan Laporan ke PDF">
-                            <i class="fa-solid fa-print"></i> Cetak PDF
-                        </button>
-                        <button class="btn-export" id="btnExportCsv" title="Download Data Transaksi Format CSV (RFC 4180)">
-                            <i class="fa-solid fa-file-csv" style="color: #0284C7;"></i> Export CSV
-                        </button>
-                        <button class="btn-export primary" id="btnExportExcel" title="Download Format Excel Spreadsheet">
-                            <i class="fa-regular fa-file-excel"></i> Export Excel
-                        </button>
+                        <div class="export-dropdown-wrapper" id="exportDropdownWrapper">
+                            <button type="button" class="btn-export primary" id="btnExportAs" title="Export atau Cetak Dokumen Laporan" aria-expanded="false">
+                                <i class="fa-solid fa-file-export"></i> Ekspor <i class="fa-solid fa-chevron-down" id="exportDropdownChevron" style="font-size: 10px; margin-left: 3px; transition: transform 0.2s ease;"></i>
+                            </button>
+                            <div class="export-dropdown-menu" id="exportDropdownMenu">
+                                <button type="button" class="export-dropdown-item" id="btnExportExcel" title="Download Format Excel Spreadsheet (.xls)">
+                                    <div class="export-item-icon excel"><i class="fa-solid fa-file-excel"></i></div>
+                                    <div class="export-item-text">
+                                        <div class="export-item-title">Export Excel</div>
+                                        <div class="export-item-desc">Spreadsheet (.xls)</div>
+                                    </div>
+                                    <span class="export-badge excel">XLS</span>
+                                </button>
+                                <button type="button" class="export-dropdown-item" id="btnExportCsv" title="Download Data Transaksi Format CSV (.csv)">
+                                    <div class="export-item-icon csv"><i class="fa-solid fa-file-csv"></i></div>
+                                    <div class="export-item-text">
+                                        <div class="export-item-title">Export CSV</div>
+                                        <div class="export-item-desc">Data tabular (.csv)</div>
+                                    </div>
+                                    <span class="export-badge csv">CSV</span>
+                                </button>
+                                <div class="export-dropdown-divider"></div>
+                                <button type="button" class="export-dropdown-item" id="btnCetakPdf" title="Unduh Dokumen Laporan Format PDF (.pdf)">
+                                    <div class="export-item-icon pdf"><i class="fa-solid fa-file-pdf"></i></div>
+                                    <div class="export-item-text">
+                                        <div class="export-item-title">Export PDF</div>
+                                        <div class="export-item-desc">Unduh Dokumen PDF (.pdf)</div>
+                                    </div>
+                                    <span class="export-badge pdf">PDF</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -842,7 +999,7 @@
                         <span class="filter-section-title"><i class="fa-regular fa-calendar"></i> Tanggal:</span>
 
                         <div class="date-range-box">
-                            <span class="date-sub-label">Dari</span>
+                            <span class="date-sub-label"></span>
                             <input type="date" 
                                    class="date-input-field" 
                                    id="startDateInput" 
@@ -852,7 +1009,7 @@
                                    max="{{ $latestAllowedDate }}"
                                    title="Pilih tanggal mulai">
                             <span class="date-range-separator">—</span>
-                            <span class="date-sub-label">Sampai</span>
+                            <span class="date-sub-label"></span>
                             <input type="date" 
                                    class="date-input-field" 
                                    id="endDateInput" 
@@ -1159,6 +1316,106 @@
             </div>
         </main>
     </div>
+
+    <!-- Hidden Container for Direct PDF Export -->
+    <div id="laporanPdfExportArea" style="display: none;">
+        <!-- Letterhead -->
+        <div style="border-bottom: 2.5px solid #1e3a8a; padding-bottom: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: flex-start;">
+            <div>
+                <div style="font-size: 20px; font-weight: 800; color: #1e3a8a; letter-spacing: -0.3px;">SIPEKAN DIGITAL PRINTING</div>
+                <div style="font-size: 11px; color: #64748b; margin-top: 2px;">Layanan Cetak Cepat & Berkualitas • Solusi Cetak Digital Terpadu</div>
+                <div style="font-size: 11px; color: #64748b;">Jl. Percetakan No. 45, Jakarta • Telp: (021) 555-0192 • info@sipekan.id</div>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 15px; font-weight: 800; color: #0f172a; text-transform: uppercase; letter-spacing: 0.5px;">LAPORAN TRANSAKSI & STATISTIK</div>
+                <div style="font-size: 11.5px; color: #334155; margin-top: 3px;">
+                    Periode: <strong>{{ \Carbon\Carbon::parse($startDate)->format('d M Y') }}</strong> s/d <strong>{{ \Carbon\Carbon::parse($endDate)->format('d M Y') }}</strong>
+                </div>
+                <div style="font-size: 10.5px; color: #94a3b8; margin-top: 3px;">Dicetak otomatis: {{ date('d M Y, H:i') }} WIB</div>
+            </div>
+        </div>
+
+        <!-- Summary Metrics Grid -->
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 18px;">
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 14px;">
+                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.4px;">Total Pendapatan</div>
+                <div style="font-size: 15px; font-weight: 800; color: #16a34a; margin-top: 3px;">Rp {{ number_format($totalPendapatan ?? 0, 0, ',', '.') }}</div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 14px;">
+                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.4px;">Total Transaksi</div>
+                <div style="font-size: 15px; font-weight: 800; color: #1e3a8a; margin-top: 3px;">{{ number_format($totalTransaksi ?? 0, 0, ',', '.') }} Pesanan</div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 14px;">
+                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.4px;">Rata-rata Transaksi</div>
+                <div style="font-size: 15px; font-weight: 800; color: #7c3aed; margin-top: 3px;">Rp {{ number_format($rataRataTransaksi ?? 0, 0, ',', '.') }}</div>
+            </div>
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 10px 14px;">
+                <div style="font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.4px;">Belum Lunas / Piutang</div>
+                <div style="font-size: 15px; font-weight: 800; color: #ea580c; margin-top: 3px;">Rp {{ number_format($totalPiutang ?? 0, 0, ',', '.') }}</div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <table style="width: 100%; border-collapse: collapse; font-size: 11px;">
+            <thead>
+                <tr style="background: #1e3a8a; color: #ffffff;">
+                    <th style="padding: 8px 10px; text-align: center; font-weight: 700; border: 1px solid #1e3a8a; width: 35px;">No</th>
+                    <th style="padding: 8px 10px; text-align: left; font-weight: 700; border: 1px solid #1e3a8a; width: 110px;">Kode Pesanan</th>
+                    <th style="padding: 8px 10px; text-align: left; font-weight: 700; border: 1px solid #1e3a8a; width: 85px;">Tanggal</th>
+                    <th style="padding: 8px 10px; text-align: left; font-weight: 700; border: 1px solid #1e3a8a;">Pelanggan</th>
+                    <th style="padding: 8px 10px; text-align: left; font-weight: 700; border: 1px solid #1e3a8a;">Produk & Spesifikasi</th>
+                    <th style="padding: 8px 10px; text-align: right; font-weight: 700; border: 1px solid #1e3a8a; width: 110px;">Total Tagihan</th>
+                    <th style="padding: 8px 10px; text-align: center; font-weight: 700; border: 1px solid #1e3a8a; width: 90px;">Status Bayar</th>
+                    <th style="padding: 8px 10px; text-align: center; font-weight: 700; border: 1px solid #1e3a8a; width: 95px;">Status Produksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($pesanans ?? [] as $idx => $pes)
+                    @php
+                        $stBayar = $pes->status_pembayaran ?? (strtolower($pes->status ?? '') === 'selesai' ? 'Lunas' : 'Belum Lunas');
+                        $bgRow = ($idx % 2 === 0) ? '#ffffff' : '#f8fafc';
+                        $sisaTagihan = floatval($pes->sisa_bayar ?? (strtolower($stBayar) === 'lunas' ? 0 : $pes->total_harga));
+                    @endphp
+                    <tr style="background: {{ $bgRow }};">
+                        <td style="padding: 6px 8px; border: 1px solid #cbd5e1; text-align: center;">{{ $idx + 1 }}</td>
+                        <td style="padding: 6px 8px; border: 1px solid #cbd5e1; font-weight: 700; color: #1e3a8a;">{{ $pes->kode_pesanan }}</td>
+                        <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">{{ $pes->tanggal_pesan ? \Carbon\Carbon::parse($pes->tanggal_pesan)->format('d/m/Y') : '-' }}</td>
+                        <td style="padding: 6px 8px; border: 1px solid #cbd5e1; font-weight: 600;">{{ $pes->nama_pelanggan }}</td>
+                        <td style="padding: 6px 8px; border: 1px solid #cbd5e1;">
+                            {{ $pes->nama_produk }}
+                            @if($pes->jumlah_ukuran)
+                                <div style="font-size: 10px; color: #64748b;">{{ $pes->jumlah_ukuran }}</div>
+                            @endif
+                        </td>
+                        <td style="padding: 6px 8px; border: 1px solid #cbd5e1; text-align: right; font-weight: 700;">Rp {{ number_format($pes->total_harga, 0, ',', '.') }}</td>
+                        <td style="padding: 6px 8px; border: 1px solid #cbd5e1; text-align: center;">
+                            @if(strtolower($stBayar) === 'lunas')
+                                <span style="font-weight: 700; color: #16a34a;">Lunas</span>
+                            @elseif(str_contains(strtolower($stBayar), 'dp'))
+                                <span style="font-weight: 700; color: #d97706;">DP (Sisa Rp {{ number_format($sisaTagihan, 0, ',', '.') }})</span>
+                            @else
+                                <span style="font-weight: 700; color: #dc2626;">Belum Lunas</span>
+                            @endif
+                        </td>
+                        <td style="padding: 6px 8px; border: 1px solid #cbd5e1; text-align: center; font-size: 10.5px;">{{ $pes->status ?? 'Antrean Cetak' }}</td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="8" style="padding: 16px; text-align: center; color: #64748b; border: 1px solid #cbd5e1;">Tidak ada data transaksi pada rentang periode ini.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+
+        <!-- Footer Note -->
+        <div style="margin-top: 18px; padding-top: 10px; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 10px; color: #94a3b8;">
+            <span>SIPEKAN — Sistem Informasi Percetakan & Kasir</span>
+            <span>Dokumen ini sah dihasilkan secara digital tanpa tanda tangan basah.</span>
+        </div>
+    </div>
+
+    <!-- html2pdf Library for Direct PDF Downloads -->
+    <script src="{{ asset('assets/js/html2pdf.bundle.min.js') }}"></script>
 
     <!-- Chart.js & Interactive Scripts -->
     <script>
@@ -1610,16 +1867,94 @@
                 });
             }
 
-            // 6. Cetak PDF Handler (Standard Print Layout)
+            // 6. Direct PDF Export Handler using html2pdf
             const btnCetakPdf = document.getElementById('btnCetakPdf');
             if (btnCetakPdf) {
                 btnCetakPdf.addEventListener('click', function() {
-                    if (window.showAppToast) {
-                        window.showAppToast('Menyiapkan tampilan cetak PDF...', 'info');
+                    toggleExportDropdown(false);
+                    const exportArea = document.getElementById('laporanPdfExportArea');
+                    if (!exportArea) {
+                        window.print();
+                        return;
                     }
-                    setTimeout(() => { window.print(); }, 400);
+
+                    if (window.showAppToast) {
+                        window.showAppToast('Menyiapkan berkas PDF laporan...', 'info');
+                    }
+
+                    const opt = {
+                        margin: [8, 8, 8, 8],
+                        filename: `Laporan_Transaksi_SIPEKAN_{{ $startDate }}_{{ $endDate }}.pdf`,
+                        image: { type: 'jpeg', quality: 0.98 },
+                        html2canvas: { scale: 2, useCORS: true, letterRendering: true },
+                        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
+                    };
+
+                    const containerHtml = `
+                        <div style="background: #ffffff; color: #1e293b; padding: 20px 24px; font-family: 'Plus Jakarta Sans', Arial, sans-serif; box-sizing: border-box; width: 100%;">
+                            ${exportArea.innerHTML}
+                        </div>
+                    `;
+
+                    if (typeof html2pdf !== 'undefined') {
+                        html2pdf().set(opt).from(containerHtml).save().then(() => {
+                            if (window.showAppToast) {
+                                window.showAppToast('Laporan PDF berhasil diunduh!', 'success');
+                            }
+                        }).catch(err => {
+                            console.error('Error generating Laporan PDF:', err);
+                            if (window.showAppToast) {
+                                window.showAppToast('Gagal mengunduh PDF laporan', 'error');
+                            }
+                        });
+                    } else {
+                        window.print();
+                    }
                 });
             }
+
+            // Export As Dropdown Toggle & Click-Outside Controller
+            const btnExportAs = document.getElementById('btnExportAs');
+            const exportDropdownMenu = document.getElementById('exportDropdownMenu');
+            const exportDropdownChevron = document.getElementById('exportDropdownChevron');
+            const exportDropdownWrapper = document.getElementById('exportDropdownWrapper');
+
+            function toggleExportDropdown(forceState) {
+                if (!exportDropdownMenu) return;
+                const shouldOpen = forceState !== undefined ? forceState : !exportDropdownMenu.classList.contains('show');
+                if (shouldOpen) {
+                    exportDropdownMenu.classList.add('show');
+                    if (btnExportAs) btnExportAs.setAttribute('aria-expanded', 'true');
+                    if (exportDropdownChevron) exportDropdownChevron.style.transform = 'rotate(180deg)';
+                } else {
+                    exportDropdownMenu.classList.remove('show');
+                    if (btnExportAs) btnExportAs.setAttribute('aria-expanded', 'false');
+                    if (exportDropdownChevron) exportDropdownChevron.style.transform = 'rotate(0deg)';
+                }
+            }
+
+            if (btnExportAs) {
+                btnExportAs.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    toggleExportDropdown();
+                });
+            }
+
+            // Tutup dropdown jika klik di luar area
+            document.addEventListener('click', function(e) {
+                if (exportDropdownWrapper && !exportDropdownWrapper.contains(e.target)) {
+                    toggleExportDropdown(false);
+                }
+            });
+
+            // Tutup dropdown setelah salah satu opsi dipilih
+            [btnExportExcel, btnExportCsv, btnCetakPdf].forEach(btn => {
+                if (btn) {
+                    btn.addEventListener('click', function() {
+                        toggleExportDropdown(false);
+                    });
+                }
+            });
 
             // 7. Interactive Stat Card Scroll & Highlight Handler
             window.scrollToTransactions = function(e, type) {

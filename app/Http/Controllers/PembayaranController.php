@@ -81,14 +81,17 @@ class PembayaranController extends Controller
             return back()->withInput()->with('error', "Gagal: Jumlah bayar (Rp " . number_format($inputJumlah, 0, ',', '.') . ") melebihi sisa tagihan pesanan (Rp " . number_format($remainingBeforeThis, 0, ',', '.') . ")!");
         }
 
-        $uangDiterima = $request->filled('uang_diterima') ? floatval($request->input('uang_diterima')) : $inputJumlah;
-
-        // Validasi Tunai: Uang kasir yang diterima tidak boleh kurang dari jumlah yang disetorkan
-        if ($metode === 'Tunai' && $uangDiterima < $inputJumlah) {
-            return back()->withInput()->with('error', "Gagal: Uang fisik yang diterima (Rp " . number_format($uangDiterima, 0, ',', '.') . ") kurang dari jumlah pembayaran yang dicatat (Rp " . number_format($inputJumlah, 0, ',', '.') . ")! Jika pelanggan membayar DP sebesar Rp " . number_format($uangDiterima, 0, ',', '.') . ", ubah nilai pada kolom 'Jumlah Bayar Masuk'.");
+        if ($metode === 'Tunai') {
+            $uangDiterima = $request->filled('uang_diterima') ? floatval($request->input('uang_diterima')) : $inputJumlah;
+            if ($uangDiterima < $inputJumlah) {
+                return back()->withInput()->with('error', "Gagal: Uang fisik yang diterima (Rp " . number_format($uangDiterima, 0, ',', '.') . ") kurang dari jumlah pembayaran yang dicatat (Rp " . number_format($inputJumlah, 0, ',', '.') . ")!");
+            }
+            $kembalian = max(0, $uangDiterima - $inputJumlah);
+        } else {
+            // Non-tunai (QRIS & Transfer Bank) tidak ada kembalian fisik
+            $uangDiterima = $inputJumlah;
+            $kembalian = 0;
         }
-
-        $kembalian = max(0, $uangDiterima - $inputJumlah);
 
         // LOGIKA BISNIS 1: Tanggal pembayaran tidak boleh mendahului tanggal pemesanan
         if (!empty($pesanan->tanggal_pesan) && $tanggal < $pesanan->tanggal_pesan) {
@@ -104,7 +107,7 @@ class PembayaranController extends Controller
             $statusOtomatis = 'DP (Uang Muka)';
             $pesananStatusBayar = 'DP';
         } else {
-            $statusOtomatis = 'Lunas';
+            $statusOtomatis = 'Sudah Lunas';
             $pesananStatusBayar = 'Lunas';
         }
 

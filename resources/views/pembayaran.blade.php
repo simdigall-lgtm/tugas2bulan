@@ -722,28 +722,25 @@
                                         $alreadyPaid = $paidByOrder[$p->kode_pesanan] ?? 0;
                                         $remaining = max(0, $p->total_harga - $alreadyPaid);
                                         $isAlreadyLunas = in_array($p->kode_pesanan, $lunasOrderCodes ?? []) || $remaining <= 0 || strtolower($p->status_pembayaran ?? '') === 'lunas';
+                                        if ($isAlreadyLunas) {
+                                            continue;
+                                        }
                                         $orderDateVal = $p->tanggal_pesan ? \Carbon\Carbon::parse($p->tanggal_pesan)->format('Y-m-d') : ($p->created_at ? $p->created_at->format('Y-m-d') : date('Y-m-d'));
                                         $orderDateFormatted = $p->tanggal_pesan ? \Carbon\Carbon::parse($p->tanggal_pesan)->format('d M Y') : ($p->created_at ? $p->created_at->format('d M Y') : date('d M Y'));
                                         
-                                        $statusBadgeText = '';
-                                        if ($isAlreadyLunas) {
-                                            $statusBadgeText = ' • Lunas';
-                                        } elseif ($alreadyPaid > 0) {
-                                            $statusBadgeText = ' • Sisa Rp ' . number_format($remaining, 0, ',', '.');
-                                        } else {
-                                            $statusBadgeText = ' (Rp ' . number_format($remaining, 0, ',', '.') . ')';
-                                        }
+                                        $statusBadgeText = ($alreadyPaid > 0)
+                                            ? ' • Sisa Rp ' . number_format($remaining, 0, ',', '.')
+                                            : ' (Rp ' . number_format($remaining, 0, ',', '.') . ')';
                                     @endphp
                                     <option value="{{ $p->kode_pesanan }}" 
                                         data-nama="{{ $p->nama_pelanggan }}"
                                         data-produk="{{ $p->nama_produk }}"
                                         data-harga="{{ $p->total_harga }}" 
                                         data-paid="{{ $alreadyPaid }}"
-                                        data-remaining="{{ $isAlreadyLunas ? 0 : $remaining }}"
+                                        data-remaining="{{ $remaining }}"
                                         data-tanggal="{{ $orderDateVal }}"
-                                        data-tanggal-fmt="{{ $orderDateFormatted }}"
-                                        {{ $isAlreadyLunas ? 'disabled style=color:#94A3B8;background:#F1F5F9;' : '' }}>
-                                        {{ $p->kode_pesanan }} • {{ Str::limit($p->nama_pelanggan, 14) }}{{ $statusBadgeText }}
+                                        data-tanggal-fmt="{{ $orderDateFormatted }}">
+                                        {{ $p->kode_pesanan }} • {{ Str::limit($p->nama_pelanggan, 18) }}{{ $statusBadgeText }}
                                     </option>
                                 @endforeach
                             </select>
@@ -906,7 +903,7 @@
                             <label for="payAmount" style="font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 4px; display: block; white-space: nowrap;">
                                 Nominal DP / Bayar Sebagian (IDR) <span style="color:#DC2626;">*</span>
                             </label>
-                            <input type="number" name="jumlah" id="payAmount" class="form-control" min="1" step="any" placeholder="Masukkan nominal DP..." style="font-size: 13.5px; font-weight: 700; color: #0F172A;">
+                            <input type="number" name="jumlah" id="payAmount" class="form-control" min="1" step="any" placeholder="Masukkan nominal DP..." style="font-size: 13.5px; font-weight: 700; color: #0F172A;" oninput="sanitizeDigits(this, 11)">
                             
                             <!-- Chip Cepat Persentase DP -->
                             <div style="display: flex; align-items: center; gap: 6px; margin-top: 6px; flex-wrap: wrap;">
@@ -928,7 +925,7 @@
                                     <i class="fa-solid fa-money-bill-wave"></i> Uang Pas
                                 </button>
                             </div>
-                            <input type="number" name="uang_diterima" id="uangDiterimaInput" class="form-control" placeholder="Contoh: 100000" min="0" step="any" style="font-size: 13.5px; font-weight: 700; color: #0F172A;">
+                            <input type="number" name="uang_diterima" id="uangDiterimaInput" class="form-control" placeholder="Contoh: 100000" min="0" step="any" style="font-size: 13.5px; font-weight: 700; color: #0F172A;" oninput="sanitizeDigits(this, 11)">
                             
                             <div id="liveKembalianDisplay" style="margin-top: 10px; font-size: 12px; font-weight: 800; color: #16A34A; background: #DCFCE7; border: 1px solid #BBF7D0; padding: 6px 12px; border-radius: 6px; display: none; align-items: center; gap: 6px; white-space: nowrap;">
                             </div>
@@ -1023,15 +1020,6 @@
                                         ]) }})" style="background: #EEF2FF; color: #1E3A8A; border: 1px solid #C7D2FE; width: 30px; height: 30px; padding: 0; border-radius: 6px; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; transition: all 0.15s ease;" title="Cetak Nota Pembayaran">
                                             <i class="fa-solid fa-receipt"></i>
                                         </button>
-                                        @if(!($isKasir ?? false))
-                                            <form action="{{ route('pembayaran.destroy', $pem->id) }}" method="POST" style="display:inline; margin-left: 4px;" onsubmit="return confirm('Apakah Anda yakin ingin menghapus catatan pembayaran {{ $pem->kode_pembayaran }}?');">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" style="background: #FEF2F2; color: #DC2626; border: 1px solid #FECACA; width: 30px; height: 30px; padding: 0; border-radius: 6px; font-size: 11px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;" title="Hapus Pembayaran">
-                                                    <i class="fa-regular fa-trash-can"></i>
-                                                </button>
-                                            </form>
-                                        @endif
                                     </td>
                                 </tr>
                                 @empty
@@ -1130,9 +1118,9 @@
 
             <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 16px;">
                 <button type="button" id="btnBatalReceipt" style="background: #F1F5F9; color: #475569; border: 1px solid #CBD5E1; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer;">Tutup</button>
-                <button type="button" onclick="window.print()" style="background: #1B3B6F; color: #FFFFFF; border: none; padding: 8px 18px; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-                    <i class="fa-solid fa-print"></i>
-                    <span>Cetak Nota</span>
+                <button type="button" id="btnDownloadReceiptPdf" onclick="downloadReceiptPdf()" style="background: #1B3B6F; color: #FFFFFF; border: none; padding: 8px 18px; border-radius: 8px; font-weight: 700; font-size: 12.5px; cursor: pointer; display: flex; align-items: center; gap: 6px;">
+                    <i class="fa-solid fa-file-pdf"></i>
+                    <span>Unduh PDF Nota</span>
                 </button>
             </div>
         </div>
@@ -1186,6 +1174,9 @@
             <button type="button" id="btnTutupQrisModal" style="background: #1B3B6F; color: #FFFFFF; border: none; padding: 9px 24px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; width: 100%;">Tutup</button>
         </div>
     </div>
+
+    <!-- html2pdf for Direct PDF Generation -->
+    <script src="{{ asset('assets/js/html2pdf.bundle.min.js') }}"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
@@ -1257,6 +1248,19 @@
                 });
             };
 
+            // Digit sanitizer helper to prevent typing infinite zeros or broken numbers
+            window.sanitizeDigits = function(el, maxDigits = 11) {
+                if (!el) return;
+                let v = (el.value || '').toString().replace(/[^0-9]/g, '');
+                if (v.length > 1 && v.startsWith('0')) {
+                    v = v.replace(/^0+/, '') || '0';
+                }
+                if (v.length > maxDigits) {
+                    v = v.slice(0, maxDigits);
+                }
+                el.value = v;
+            };
+
             // Payment Type Selector (Full vs DP)
             window.selectPaymentType = function(type) {
                 const btnFull = document.getElementById('btnPayTypeFull');
@@ -1279,8 +1283,9 @@
                     if (dpBox) dpBox.style.display = 'block';
                     if (payAmountInput) {
                         payAmountInput.setAttribute('required', 'true');
-                        if (parseFloat(payAmountInput.value) >= currentOrderRemaining && currentOrderRemaining > 0) {
-                            payAmountInput.value = Math.round(currentOrderRemaining * 0.5);
+                        // Berikan nominal DP awal (50% dari sisa tagihan jika ada sisa)
+                        if (currentOrderRemaining > 0) {
+                            payAmountInput.value = Math.max(1, Math.round(currentOrderRemaining * 0.5));
                         }
                     }
                 }
@@ -1294,7 +1299,7 @@
 
             window.setDpPercent = function(pct) {
                 if (!payAmountInput || currentOrderRemaining <= 0) return;
-                const val = Math.round((currentOrderRemaining * pct) / 100);
+                const val = Math.max(1, Math.round((currentOrderRemaining * pct) / 100));
                 payAmountInput.value = val;
                 if (uangDiterimaInput) {
                     uangDiterimaInput.value = val;
@@ -1308,7 +1313,7 @@
                 if (val === '50percent') {
                     window.setDpPercent(50);
                 } else {
-                    payAmountInput.value = Math.min(currentOrderRemaining, val);
+                    payAmountInput.value = Math.min(currentOrderRemaining, Math.max(1, val));
                     if (uangDiterimaInput) {
                         uangDiterimaInput.value = payAmountInput.value;
                     }
@@ -1326,8 +1331,19 @@
                     return;
                 }
 
-                const val = parseFloat(payAmountInput.value) || 0;
-                if (val <= 0 || currentOrderRemaining <= 0) {
+                let val = parseFloat(payAmountInput.value) || 0;
+                if (val < 0) {
+                    val = 0;
+                    payAmountInput.value = 0;
+                }
+
+                // Jangan izinkan DP melebihi sisa tagihan
+                if (currentOrderRemaining > 0 && val > currentOrderRemaining) {
+                    val = currentOrderRemaining;
+                    payAmountInput.value = currentOrderRemaining;
+                }
+
+                if (val <= 0) {
                     previewEl.style.display = 'none';
                     return;
                 }
@@ -1335,16 +1351,16 @@
                 previewEl.style.display = 'block';
                 const sisaNanti = Math.max(0, currentOrderRemaining - val);
 
-                if (val >= currentOrderRemaining) {
+                if (val >= currentOrderRemaining && currentOrderRemaining > 0) {
                     previewEl.style.background = '#DCFCE7';
                     previewEl.style.color = '#166534';
                     previewEl.style.border = '1px solid #BBF7D0';
-                    previewEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Nominal mencakup <strong>Seluruh Sisa Tagihan (Lunas)</strong>`;
+                    previewEl.innerHTML = `<i class="fa-solid fa-circle-check"></i> Nominal mencakup <strong>Seluruh Sisa Tagihan (Pelunasan Penuh)</strong>`;
                 } else {
                     previewEl.style.background = '#FEF3C7';
                     previewEl.style.color = '#92400E';
                     previewEl.style.border = '1px solid #FDE68A';
-                    previewEl.innerHTML = `<i class="fa-solid fa-clock"></i> DP: <strong>Rp ${val.toLocaleString('id-ID')}</strong> • Sisa: <strong>Rp ${sisaNanti.toLocaleString('id-ID')}</strong>`;
+                    previewEl.innerHTML = `<i class="fa-solid fa-clock"></i> DP: <strong>Rp ${val.toLocaleString('id-ID')}</strong> • Sisa Tagihan Nanti: <strong>Rp ${sisaNanti.toLocaleString('id-ID')}</strong>`;
                 }
             }
 
@@ -1356,9 +1372,19 @@
                 const warnUnderpaid = document.getElementById('cashierWarningUnderpaid');
                 const btnSubmit = document.getElementById('btnSubmitPayment');
 
-                if (diff === 0) {
+                if (bayar === 0 && tagihan === 0) {
                     liveKembalianDisplay.style.display = 'none';
-                    liveKembalianDisplay.innerHTML = '';
+                    if (warnUnderpaid) warnUnderpaid.style.display = 'none';
+                    if (btnSubmit) btnSubmit.disabled = false;
+                    return;
+                }
+
+                if (diff === 0) {
+                    liveKembalianDisplay.style.display = 'inline-flex';
+                    liveKembalianDisplay.style.color = '#166534';
+                    liveKembalianDisplay.style.background = '#DCFCE7';
+                    liveKembalianDisplay.style.border = '1px solid #BBF7D0';
+                    liveKembalianDisplay.innerHTML = '<i class="fa-solid fa-circle-check"></i> <span>Uang Pas (Tanpa Kembalian)</span>';
                     if (warnUnderpaid) warnUnderpaid.style.display = 'none';
                     if (btnSubmit) btnSubmit.disabled = false;
                 } else if (diff > 0) {
@@ -1376,6 +1402,7 @@
                     liveKembalianDisplay.style.border = '1px solid #FECACA';
                     liveKembalianDisplay.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i> <span>Kurang: Rp ' + Math.abs(diff).toLocaleString('id-ID') + '</span>';
                     if (warnUnderpaid) warnUnderpaid.style.display = 'block';
+                    if (btnSubmit) btnSubmit.disabled = true;
                 }
             }
 
@@ -1388,6 +1415,55 @@
                     uangDiterimaInput.value = nominal;
                 }
                 calcKembalian();
+            };
+
+            // Download Receipt PDF using html2pdf
+            window.downloadReceiptPdf = function() {
+                const element = document.getElementById('receiptPrintArea');
+                if (!element) return;
+                const noBayar = (document.getElementById('recNoBayar') ? document.getElementById('recNoBayar').textContent.trim() : '') || 'Nota';
+                const btn = document.getElementById('btnDownloadReceiptPdf');
+                const origHtml = btn ? btn.innerHTML : 'Unduh PDF Nota';
+
+                if (btn) {
+                    btn.disabled = true;
+                    btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Menghasilkan PDF...';
+                }
+
+                if (window.showAppToast) window.showAppToast('Menyiapkan berkas PDF nota pembayaran...', 'info');
+
+                const opt = {
+                    margin: [8, 8, 8, 8],
+                    filename: `Nota_Pembayaran_${noBayar}.pdf`,
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2, useCORS: true },
+                    jsPDF: { unit: 'mm', format: 'a5', orientation: 'portrait' }
+                };
+
+                const containerHtml = `
+                    <div style="background: #ffffff; color: #1e293b; padding: 16px 20px; font-family: 'Plus Jakarta Sans', sans-serif; box-sizing: border-box; width: 100%;">
+                        ${element.innerHTML}
+                    </div>
+                `;
+
+                if (typeof html2pdf !== 'undefined') {
+                    html2pdf().set(opt).from(containerHtml).save().then(() => {
+                        if (btn) {
+                            btn.disabled = false;
+                            btn.innerHTML = origHtml;
+                        }
+                        if (window.showAppToast) window.showAppToast(`Nota (${noBayar}.pdf) berhasil diunduh!`, 'success');
+                    }).catch(err => {
+                        console.error('Error generating PDF:', err);
+                        if (btn) {
+                            btn.disabled = false;
+                            btn.innerHTML = origHtml;
+                        }
+                        if (window.showAppToast) window.showAppToast('Gagal mengunduh berkas PDF nota', 'error');
+                    });
+                } else {
+                    window.print();
+                }
             };
 
             function updatePaymentMethodView() {
