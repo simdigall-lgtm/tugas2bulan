@@ -280,6 +280,8 @@
             grid-template-columns: 335px minmax(0, 1fr);
             gap: 16px;
             align-items: start;
+            min-width: 0;
+            width: 100%;
         }
 
         .card {
@@ -288,6 +290,9 @@
             border: 1px solid #E2E8F0;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
             padding: 16px 18px;
+            min-width: 0;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .card-title {
@@ -640,6 +645,16 @@
         }
 
         @media (max-width: 768px) {
+            .content-body {
+                padding: 16px 12px !important;
+            }
+
+            .card {
+                padding: 14px 12px;
+                border-radius: 10px;
+                overflow: hidden;
+            }
+
             .page-header-row {
                 margin-bottom: 16px;
             }
@@ -649,6 +664,35 @@
                 align-items: stretch;
                 gap: 12px;
                 padding: 14px 16px;
+            }
+
+            .pay-filter-toolbar {
+                flex-direction: column !important;
+                align-items: stretch !important;
+                gap: 10px !important;
+                width: 100% !important;
+            }
+
+            .pay-filter-tabs {
+                width: 100% !important;
+                display: flex !important;
+                justify-content: space-between !important;
+            }
+
+            .pay-tab-btn {
+                flex: 1 !important;
+                text-align: center !important;
+                padding: 6px 8px !important;
+                font-size: 11.5px !important;
+            }
+
+            .filter-search {
+                width: 100% !important;
+                min-width: 100% !important;
+            }
+
+            .filter-search input {
+                width: 100% !important;
             }
 
             .custom-table th,
@@ -948,7 +992,7 @@
                             <h2 class="card-title" style="margin-bottom:2px;">Riwayat Pembayaran</h2>
                             <div style="font-size: 12px; color: #64748B;">Kelola bukti transaksi, tagihan DP, dan status pelunasan.</div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
+                        <div class="pay-filter-toolbar" style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;">
                             <!-- Status Tabs Filter -->
                             <div class="pay-filter-tabs" style="display: inline-flex; background: #F1F5F9; padding: 3px; border-radius: 8px; border: 1px solid #E2E8F0;">
                                 <button type="button" class="pay-tab-btn active" data-filter="all" style="padding: 5px 12px; border-radius: 6px; border: none; background: #FFFFFF; color: #1E3A8A; font-size: 12px; font-weight: 700; cursor: pointer; box-shadow: 0 1px 2px rgba(0,0,0,0.05); transition: all 0.2s ease;">Semua</button>

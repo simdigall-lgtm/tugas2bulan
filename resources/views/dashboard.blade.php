@@ -342,6 +342,8 @@
             grid-template-columns: 1.8fr 1fr;
             gap: 24px;
             margin-bottom: 28px;
+            min-width: 0;
+            width: 100%;
         }
 
         .charts-grid-2col-equal {
@@ -349,6 +351,8 @@
             grid-template-columns: 1fr 1fr;
             gap: 24px;
             margin-bottom: 28px;
+            min-width: 0;
+            width: 100%;
         }
 
         .chart-card {
@@ -359,6 +363,11 @@
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
             display: flex;
             flex-direction: column;
+            min-width: 0;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+            box-sizing: border-box;
         }
 
         .chart-header {
@@ -385,6 +394,14 @@
             flex: 1;
             min-height: 250px;
             width: 100%;
+            max-width: 100%;
+            min-width: 0;
+        }
+
+        .chart-container canvas {
+            width: 100% !important;
+            max-width: 100% !important;
+            box-sizing: border-box;
         }
 
         /* Recent Orders Table */
@@ -495,16 +512,50 @@
         }
 
         @media (max-width: 768px) {
+            .content-body {
+                padding: 16px 12px !important;
+            }
+            .page-header {
+                margin-bottom: 16px;
+            }
+            .page-title {
+                font-size: 20px;
+            }
+            .page-subtitle {
+                font-size: 12px;
+            }
             .metrics-grid {
                 grid-template-columns: 1fr;
+                gap: 12px;
+                margin-bottom: 16px;
             }
-            .charts-grid-2col {
+            .charts-grid-2col,
+            .charts-grid-2col-equal {
                 grid-template-columns: 1fr;
+                gap: 16px;
+                margin-bottom: 16px;
+            }
+            .chart-card {
+                padding: 16px 12px !important;
+                border-radius: 10px;
+            }
+            .chart-header {
+                margin-bottom: 12px;
+            }
+            .chart-title {
+                font-size: 14.5px;
+            }
+            .chart-subtitle {
+                font-size: 11px;
+            }
+            .chart-container {
+                min-height: 220px;
             }
             .table-header {
                 flex-direction: column;
                 align-items: flex-start;
                 gap: 12px;
+                padding: 14px 16px;
             }
         }
     </style>
@@ -736,6 +787,7 @@
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
+                    resizeDelay: 50,
                     interaction: { mode: 'index', intersect: false },
                     plugins: {
                         legend: {
@@ -770,29 +822,32 @@
                             ticks: {
                                 maxRotation: 0,
                                 minRotation: 0,
-                                autoSkip: false,
-                                font: { size: 11, weight: '600' },
+                                autoSkip: true,
+                                maxTicksLimit: (window.innerWidth < 640) ? 6 : 12,
+                                font: { size: (window.innerWidth < 640) ? 10 : 11, weight: '600' },
                                 color: '#64748B'
                             }
                         },
                         y: {
                             grid: { color: '#F1F5F9' },
                             ticks: {
+                                font: { size: (window.innerWidth < 640) ? 9.5 : 11, weight: '600' },
                                 callback: function(val) {
-                                    if (val === 0) return 'Rp 0';
+                                    if (val === 0) return '0';
+                                    const isMobile = window.innerWidth < 640;
                                     if (val >= 1000000000) {
                                         let m = val / 1000000000;
-                                        return 'Rp ' + (m % 1 === 0 ? m : m.toFixed(1).replace('.', ',')) + ' M';
+                                        return (isMobile ? '' : 'Rp ') + (m % 1 === 0 ? m : m.toFixed(1).replace('.', ',')) + ' M';
                                     }
                                     if (val >= 1000000) {
                                         let jt = val / 1000000;
-                                        return 'Rp ' + (jt % 1 === 0 ? jt : jt.toFixed(1).replace('.', ',')) + ' Jt';
+                                        return (isMobile ? '' : 'Rp ') + (jt % 1 === 0 ? jt : jt.toFixed(1).replace('.', ',')) + ' Jt';
                                     }
                                     if (val >= 1000) {
                                         let rb = val / 1000;
-                                        return 'Rp ' + (rb % 1 === 0 ? rb : rb.toFixed(1).replace('.', ',')) + ' Rb';
+                                        return (isMobile ? '' : 'Rp ') + (rb % 1 === 0 ? rb : rb.toFixed(1).replace('.', ',')) + ' Rb';
                                     }
-                                    return 'Rp ' + val.toLocaleString('id-ID');
+                                    return (isMobile ? '' : 'Rp ') + val.toLocaleString('id-ID');
                                 }
                             }
                         }
@@ -821,7 +876,7 @@
                             ],
                             borderRadius: 6,
                             borderSkipped: false,
-                            barThickness: 18
+                            barThickness: (window.innerWidth < 640) ? 14 : 18
                         }]
                     },
                     options: {
@@ -829,6 +884,7 @@
                         indexAxis: 'y',
                         responsive: true,
                         maintainAspectRatio: false,
+                        resizeDelay: 50,
                         plugins: {
                             legend: { display: false },
                             tooltip: {
@@ -848,9 +904,9 @@
                                     maxRotation: 0,
                                     minRotation: 0,
                                     autoSkip: true,
-                                    maxTicksLimit: 7,
+                                    maxTicksLimit: (window.innerWidth < 640) ? 5 : 7,
                                     precision: 0,
-                                    font: { size: 11, weight: '600' },
+                                    font: { size: 10, weight: '600' },
                                     color: '#64748B'
                                 },
                                 beginAtZero: true
@@ -858,8 +914,15 @@
                             y: {
                                 grid: { display: false },
                                 ticks: {
-                                    font: { size: 12, weight: '600' },
-                                    color: '#334155'
+                                    font: { size: (window.innerWidth < 640) ? 10.5 : 12, weight: '600' },
+                                    color: '#334155',
+                                    callback: function(val, index) {
+                                        let label = this.getLabelForValue(val) || '';
+                                        if (window.innerWidth < 640 && label.length > 14) {
+                                            return label.substring(0, 13) + '…';
+                                        }
+                                        return label;
+                                    }
                                 }
                             }
                         }

@@ -5053,12 +5053,26 @@
                             </div>
                         `;
                     } else if (isDrive) {
-                        thumbHtml = `
-                            <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; color:#0284C7; gap:6px;">
-                                <i class="fa-brands fa-google-drive" style="font-size:36px;"></i>
-                                <span style="font-size:11px; font-weight:700;">Google Drive</span>
-                            </div>
-                        `;
+                        const driveMatch = fUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/) || fUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                        const driveThumb = driveMatch && driveMatch[1] ? `https://drive.google.com/thumbnail?id=${driveMatch[1]}&sz=w800` : null;
+
+                        if (driveThumb) {
+                            thumbHtml = `
+                                <img src="${driveThumb}" alt="Desain ${it.nama_produk || 'Item'}" class="gallery-thumb-img" referrerpolicy="no-referrer" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div style="display:none; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; color:#0284C7; gap:6px;">
+                                    <i class="fa-brands fa-google-drive" style="font-size:36px;"></i>
+                                    <span style="font-size:11px; font-weight:700;">Google Drive</span>
+                                    <span style="font-size:9.5px; color:#94A3B8;">(Non-gambar / butuh izin akses)</span>
+                                </div>
+                            `;
+                        } else {
+                            thumbHtml = `
+                                <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; width:100%; height:100%; color:#0284C7; gap:6px;">
+                                    <i class="fa-brands fa-google-drive" style="font-size:36px;"></i>
+                                    <span style="font-size:11px; font-weight:700;">Google Drive</span>
+                                </div>
+                            `;
+                        }
                     } else {
                         const ext = (fPath.split('.').pop() || 'FILE').toUpperCase();
                         thumbHtml = `

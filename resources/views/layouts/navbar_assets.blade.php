@@ -1042,6 +1042,57 @@
             -webkit-overflow-scrolling: touch !important;
         }
 
+        /* Universal Responsive Mobile Table Footer & Pagination */
+        .table-footer {
+            flex-direction: column !important;
+            align-items: center !important;
+            justify-content: center !important;
+            gap: 12px !important;
+            padding: 14px 14px !important;
+            text-align: center !important;
+        }
+
+        .table-footer .entry-info,
+        .entry-info {
+            font-size: 12px !important;
+            color: #64748B !important;
+            text-align: center !important;
+            width: 100% !important;
+            white-space: normal !important;
+            margin: 0 !important;
+        }
+
+        .table-footer .pagination,
+        .pagination {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            flex-wrap: wrap !important;
+            gap: 6px !important;
+            width: 100% !important;
+        }
+
+        .page-select-container {
+            display: inline-flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            font-size: 12px !important;
+            gap: 4px !important;
+        }
+
+        .page-select-dropdown {
+            font-size: 12px !important;
+            padding: 4px 22px 4px 8px !important;
+            height: 32px !important;
+        }
+
+        .page-btn {
+            min-width: 30px !important;
+            height: 30px !important;
+            padding: 0 6px !important;
+            font-size: 12px !important;
+        }
+
         .form-row,
         .form-row-2col,
         .form-row-3col,

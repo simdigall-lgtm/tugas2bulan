@@ -718,6 +718,48 @@
                 white-space: nowrap;
             }
 
+            .table-footer {
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 12px;
+                padding: 14px 16px;
+                text-align: center;
+            }
+
+            .entry-info {
+                text-align: center;
+                width: 100%;
+                font-size: 12px;
+            }
+
+            .pagination {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-wrap: wrap;
+                gap: 6px;
+                width: 100%;
+            }
+
+            .page-select-container {
+                font-size: 12px;
+                gap: 4px;
+            }
+
+            .page-select-dropdown {
+                font-size: 12px;
+                padding: 4px 22px 4px 8px;
+                height: 30px;
+            }
+
+            .page-btn {
+                min-width: 30px;
+                height: 30px;
+                padding: 0 6px;
+                font-size: 12px;
+            }
+
             .modal-box {
                 max-width: 95% !important;
                 padding: 20px 16px;

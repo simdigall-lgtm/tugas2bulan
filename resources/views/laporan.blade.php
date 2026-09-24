@@ -867,16 +867,111 @@
             .active-period-badge { width: 100%; justify-content: space-between; }
         }
         @media (max-width: 768px) {
-            .segmented-filter-container { width: 100%; display: grid; grid-template-columns: repeat(2, 1fr); }
-            .btn-segmented { justify-content: center; }
-            .export-actions-group { width: 100%; display: flex; }
-            .export-dropdown-wrapper { width: 100%; }
-            .export-dropdown-wrapper .btn-export { width: 100%; justify-content: center; }
-            .export-dropdown-menu { width: 100%; right: auto; left: 0; min-width: 100%; }
-            .filter-date-form { width: 100%; flex-direction: column; align-items: stretch; }
-            .date-range-box { width: 100%; justify-content: space-between; }
-            .btn-filter-apply { width: 100%; justify-content: center; }
-            .btn-filter-reset { width: 100%; justify-content: center; }
+            .filter-card {
+                padding: 14px 12px;
+                border-radius: 10px;
+                gap: 12px;
+            }
+            .filter-row-top {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .filter-preset-group {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 6px;
+            }
+            .filter-section-title {
+                font-size: 11px;
+            }
+            .segmented-filter-container {
+                width: 100% !important;
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 4px !important;
+                padding: 3px !important;
+                box-sizing: border-box !important;
+            }
+            .btn-segmented {
+                justify-content: center !important;
+                padding: 7px 8px !important;
+                font-size: 11.5px !important;
+                text-align: center !important;
+                width: 100% !important;
+            }
+            .export-actions-group {
+                width: 100%;
+                display: flex;
+            }
+            .export-dropdown-wrapper {
+                width: 100%;
+            }
+            .export-dropdown-wrapper .btn-export {
+                width: 100%;
+                justify-content: center;
+                height: 38px;
+                font-size: 12.5px;
+            }
+            .export-dropdown-menu {
+                width: 100%;
+                right: auto;
+                left: 0;
+                min-width: 100%;
+            }
+            .filter-row-bottom {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+            }
+            .filter-date-form {
+                width: 100%;
+                flex-direction: column;
+                align-items: stretch;
+                gap: 8px;
+            }
+            .date-range-box {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 0 8px;
+                height: 38px;
+                box-sizing: border-box;
+            }
+            .date-input-field {
+                width: 44%;
+                font-size: 11.5px;
+                text-align: center;
+                padding: 0;
+            }
+            .date-range-separator {
+                font-size: 12px;
+                padding: 0 2px;
+            }
+            .btn-filter-apply {
+                width: 100%;
+                justify-content: center;
+                height: 38px;
+                font-size: 12.5px;
+            }
+            .btn-filter-reset {
+                width: 100%;
+                justify-content: center;
+                height: 34px;
+            }
+            .active-period-badge {
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 4px;
+                padding: 8px 10px;
+                font-size: 11px;
+                text-align: center;
+                box-sizing: border-box;
+            }
             .stats-row { grid-template-columns: 1fr; }
             .table-toolbar { flex-direction: column; align-items: stretch; }
             .table-search-box { max-width: 100%; }
@@ -884,9 +979,6 @@
         }
 
         @media (max-width: 480px) {
-            .segmented-filter-container {
-                grid-template-columns: 1fr;
-            }
             .table-filter-controls {
                 flex-direction: column;
                 gap: 8px;
